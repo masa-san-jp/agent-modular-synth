@@ -1,0 +1,28 @@
+{
+ "sources": [
+  {
+   "id": "SRC-002-01",
+   "title": "makenoise.com トップページ",
+   "publisher": "(MakeNoise: 別組織のスペイン語サイト)",
+   "url": "https://www.makenoise.com/",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "トップページと一覧。モジュラーシンセ関連の記述なし(別組織のサイトと判断)",
+   "link_status": "ok",
+   "license_note": "調査対象と無関係のため利用せず。"
+  },
+  {
+   "id": "SRC-002-02",
+   "title": "Make Noise Maths 製品・マニュアル(makenoisemusic.com)",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoisemusic.com/modules/maths/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "取得不能(プロキシが接続を拒否)",
+   "link_status": "unreachable",
+   "license_note": "未取得。取得できた場合も要約のみ、本文・図は転載しない。"
+  }
+ ]
+}

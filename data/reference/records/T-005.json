@@ -1,0 +1,1431 @@
+{
+ "target_id": "T-005",
+ "entities": [
+  {
+   "id": "REF-005-001",
+   "kind": "system",
+   "name": "VCV Rack (Rack 2, Free)",
+   "maker": "VCV",
+   "version": "2",
+   "function_category": "system",
+   "purpose": "Eurorack風の仮想モジュラー環境のホストアプリ。モジュールをパッチケーブルで接続して音を作る。",
+   "synthesis_method": "モジュール単位のサンプル毎処理(エンジン)によるソフトウェアモジュラー",
+   "features": [
+    {
+     "text": "仮想ユーロラック・モジュラーのホストアプリ",
+     "fact_ids": [
+      "F-005-002"
+     ]
+    },
+    {
+     "text": "任意の出力を任意の入力へ接続可能",
+     "fact_ids": [
+      "F-005-002"
+     ]
+    },
+    {
+     "text": "サンプル毎ステップのエンジン、サンプルレート可変",
+     "fact_ids": [
+      "F-005-003"
+     ]
+    },
+    {
+     "text": "複数ドライバ対応のオーディオ入出力",
+     "fact_ids": [
+      "F-005-004"
+     ]
+    },
+    {
+     "text": "GPLv3+(非商用プラグイン例外あり)",
+     "fact_ids": [
+      "F-005-005"
+     ]
+    },
+    {
+     "text": "Pro版でDAWプラグイン動作(Free版にはない)",
+     "fact_ids": [
+      "F-005-007"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "プラグインはRackのメジャーバージョン一致が必要",
+     "fact_ids": [
+      "F-005-006"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "エンジンサンプルレートで全モジュールを逐次ステップ。オーディオデバイスのレートと異なる場合はレート変換が入る。",
+     "fact_ids": [
+      "F-005-003"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-005-002",
+   "kind": "signal_standard",
+   "name": "VCV Rack 電圧規約",
+   "maker": "VCV",
+   "version": "2",
+   "function_category": "system",
+   "purpose": "ケーブル上の値をボルト単位で扱う信号規約(レベル、トリガー/ゲート、1V/oct、ポリフォニー)。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "値はボルト単位",
+     "fact_ids": [
+      "F-005-008"
+     ]
+    },
+    {
+     "text": "音声±5V、CV 0〜10V/±5V",
+     "fact_ids": [
+      "F-005-009"
+     ]
+    },
+    {
+     "text": "出力は概ね±12V内。範囲外許容も可",
+     "fact_ids": [
+      "F-005-010"
+     ]
+    },
+    {
+     "text": "トリガー10V/1ms、ゲート10V、受信側は0.1V/1-2Vシュミット",
+     "fact_ids": [
+      "F-005-011"
+     ]
+    },
+    {
+     "text": "ケーブルごと1サンプル遅延",
+     "fact_ids": [
+      "F-005-012"
+     ]
+    },
+    {
+     "text": "1V/oct、C4=261.6256Hz基準",
+     "fact_ids": [
+      "F-005-013"
+     ]
+    },
+    {
+     "text": "NaN/Infは0に置換が推奨",
+     "fact_ids": [
+      "F-005-014"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "実機慣習の近似であり厳密標準ではない",
+     "fact_ids": [
+      "F-005-015"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "audio",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-009"
+     ]
+    },
+    {
+     "name": "cv_unipolar",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-009"
+     ]
+    },
+    {
+     "name": "gate",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-011"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "ケーブル1サンプル遅延、トリガーは1ms/10V。",
+     "fact_ids": [
+      "F-005-011",
+      "F-005-012"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-005-003",
+   "kind": "signal_standard",
+   "name": "VCV Rack ポリフォニックケーブル",
+   "maker": "VCV",
+   "version": "2",
+   "function_category": "routing",
+   "purpose": "1本のケーブルに最大16チャンネルの電圧を載せる仕組み。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "最大16チャンネル",
+     "fact_ids": [
+      "F-005-016",
+      "F-005-017"
+     ]
+    },
+    {
+     "text": "単音は1ch、0chは未接続扱い",
+     "fact_ids": [
+      "F-005-018"
+     ]
+    },
+    {
+     "text": "ソースモジュール設定から連鎖的にポリ化",
+     "fact_ids": [
+      "F-005-019"
+     ]
+    },
+    {
+     "text": "副入力: 単音→全体へコピー、不足→0V",
+     "fact_ids": [
+      "F-005-020"
+     ]
+    },
+    {
+     "text": "単音複製よりCPU効率が高い(メーカー記述)",
+     "fact_ids": [
+      "F-005-021"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-005-004",
+   "kind": "module",
+   "name": "VCV VCO",
+   "maker": "VCV",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "サイン/三角/ノコギリ/矩形を出力する汎用VCO。",
+   "synthesis_method": "アンチエイリアス付き波形生成,リニアFM,ハード/ソフトシンク",
+   "features": [
+    {
+     "text": "4波形(SIN/TRI/SAW/SQR)",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    },
+    {
+     "text": "ハード/ソフトシンク",
+     "fact_ids": [
+      "F-005-024"
+     ]
+    },
+    {
+     "text": "リニアFM",
+     "fact_ids": [
+      "F-005-025"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "帯域制限によるギブスリップルが生じる",
+     "fact_ids": [
+      "F-005-026"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "V/OCT",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-023"
+     ]
+    },
+    {
+     "name": "FM",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-023"
+     ]
+    },
+    {
+     "name": "SYNC",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-024"
+     ]
+    },
+    {
+     "name": "PWM",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    },
+    {
+     "name": "SIN",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    },
+    {
+     "name": "TRI",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    },
+    {
+     "name": "SAW",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    },
+    {
+     "name": "SQR",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "FREQ",
+     "unit": "octave",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-023"
+     ]
+    },
+    {
+     "name": "PULSE WIDTH",
+     "unit": "%",
+     "range": null,
+     "default": 50,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-005-022"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-005-005",
+   "kind": "module",
+   "name": "VCV VCF",
+   "maker": "VCV",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "ローパス/ハイパスを同時に出す電圧制御フィルタ。",
+   "synthesis_method": "4ポール・トランジスタラダーのモデル",
+   "features": [
+    {
+     "text": "LPF/HPF同時、自己発振、ドライブ",
+     "fact_ids": [
+      "F-005-027",
+      "F-005-028"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "IN",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-027"
+     ]
+    },
+    {
+     "name": "CUTOFF CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-027"
+     ]
+    },
+    {
+     "name": "LPF",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-027"
+     ]
+    },
+    {
+     "name": "HPF",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-027"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "CUTOFF",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-028"
+     ]
+    },
+    {
+     "name": "RES",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-028"
+     ]
+    },
+    {
+     "name": "DRIVE",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-028"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-005-006",
+   "kind": "module",
+   "name": "VCV ADSR EG",
+   "maker": "VCV",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "ゲートからADSRエンベロープCVを生成。",
+   "synthesis_method": "ADSRエンベロープ生成",
+   "features": [
+    {
+     "text": "ENV出力は0〜10V、RETRで再トリガー",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "GATE",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    },
+    {
+     "name": "RETR",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    },
+    {
+     "name": "ENV",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "ATT",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    },
+    {
+     "name": "DEC",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    },
+    {
+     "name": "SUS",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    },
+    {
+     "name": "REL",
+     "unit": "-",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-029"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-005-007",
+   "kind": "module",
+   "name": "VCV Noise",
+   "maker": "VCV",
+   "version": null,
+   "function_category": "noise",
+   "purpose": "7種のカラードノイズを出力。",
+   "synthesis_method": "ホワイト/ピンク/レッド/ブルー/バイオレット/グレー/一様分布ノイズ",
+   "features": [
+    {
+     "text": "7種カラードノイズ",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "一様ノイズはエイリアシングを含む",
+     "fact_ids": [
+      "F-005-031"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "WHT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "PINK",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "RED",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "VIOL",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "BLUE",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "GRAY",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    },
+    {
+     "name": "BLK",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-030"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-005-008",
+   "kind": "module",
+   "name": "MIDI-CV (Core)",
+   "maker": "VCV",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "MIDI入力をV/OCT、ゲート、ベロシティ等のCVに変換。",
+   "synthesis_method": "MIDI→CV変換",
+   "features": [
+    {
+     "text": "ポリ割当3モード",
+     "fact_ids": [
+      "F-005-034"
+     ]
+    },
+    {
+     "text": "MIDIクロック(24PPQN)をCV化",
+     "fact_ids": [
+      "F-005-033"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "V/OCT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-032"
+     ]
+    },
+    {
+     "name": "GATE",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-032"
+     ]
+    },
+    {
+     "name": "VEL",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-032"
+     ]
+    },
+    {
+     "name": "PW",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-005-032"
+     ]
+    },
+    {
+     "name": "CLK",
+     "direction": "out",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-005-033"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-005-009",
+   "kind": "patch_storage",
+   "name": "VCV Rack パッチ保存(.vcv)",
+   "maker": "VCV",
+   "version": "2",
+   "function_category": "system",
+   "purpose": "パッチを.vcvファイルとして保存・読込し、自動保存も行う。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "Zstandard圧縮tar内のpatch.json",
+     "fact_ids": [
+      "F-005-036",
+      "F-005-037"
+     ]
+    },
+    {
+     "text": "15秒ごと自動保存",
+     "fact_ids": [
+      "F-005-035"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": ".vcv(tar+zstd, patch.json)に保存。自動保存とテンプレートあり。",
+     "fact_ids": [
+      "F-005-035",
+      "F-005-036"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-005-010",
+   "kind": "control_interface",
+   "name": "VCV Rack 外部制御(MIDI/ヘッドレス/プラグインAPI)",
+   "maker": "VCV",
+   "version": "2",
+   "function_category": "io_utility",
+   "purpose": "MIDI入出力モジュール、ヘッドレス起動、C++プラグインAPIによる制御・拡張。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "MIDI入出力モジュール",
+     "fact_ids": [
+      "F-005-038",
+      "F-005-039"
+     ]
+    },
+    {
+     "text": "ヘッドレス起動",
+     "fact_ids": [
+      "F-005-040"
+     ]
+    },
+    {
+     "text": "C++プラグインAPI",
+     "fact_ids": [
+      "F-005-041"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "MIDI(CC/Note/Clock)とC++プラグインAPI。ヘッドレスでMIDI制御可。",
+     "fact_ids": [
+      "F-005-038",
+      "F-005-040",
+      "F-005-041"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-005-001",
+   "entity_id": "REF-005-001",
+   "topic": "概要",
+   "statement": "Rackは仮想ユーロラック・モジュラープラットフォームのホストアプリケーションである。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-005-03",
+   "locator": "README.md 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-002",
+   "entity_id": "REF-005-001",
+   "topic": "接続",
+   "statement": "どの出力もどの入力へも接続でき、ケーブルが運ぶ信号の種類に制約はない。複数ケーブルを出力に重ねられる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "GettingStarted 'Signals can be connected...'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-003",
+   "entity_id": "REF-005-001",
+   "topic": "エンジン",
+   "statement": "エンジンは各モジュールを1/サンプルレート秒ずつ進めて各出力に1サンプルを作る。エンジンのサンプルレートはメニューで設定し、CPU使用量はほぼ比例する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "MenuBar 'Sample rate'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-004",
+   "entity_id": "REF-005-001",
+   "topic": "オーディオ入出力",
+   "statement": "Coreのaudioモジュールは実機オーディオデバイスと接続し、ドライバ(Core Audio/WASAPI/ASIO/ALSA/JACK)・デバイス・サンプルレート・ブロックサイズを選べる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'Audio'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-005",
+   "entity_id": "REF-005-001",
+   "topic": "ライセンス",
+   "statement": "Rack Freeのソース/バイナリはGPLv3以降で提供され、非商用プラグイン向け例外と商用ライセンスの選択肢がある。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-005-03",
+   "locator": "LICENSE.md",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-006",
+   "entity_id": "REF-005-001",
+   "topic": "版管理",
+   "statement": "Rackのメジャーバージョンごとにgitブランチがあり(v1,v2)、プラグインはメジャーバージョンが一致する場合のみ読み込まれる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Version 'Git branches and tags'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-007",
+   "entity_id": "REF-005-001",
+   "topic": "Pro版",
+   "statement": "Rack ProはDAW内プラグインとして使え、Pro限定モジュールを含む。Free版との差が存在する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "RackPro 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-008",
+   "entity_id": "REF-005-002",
+   "topic": "単位",
+   "statement": "ケーブル上の入出力値はボルト単位で扱われる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-009",
+   "entity_id": "REF-005-002",
+   "topic": "レベル",
+   "statement": "オシレータ/CV源は10Vpp。音声は約±5V、CVは0〜10V(単極)または±5V(双極)が典型。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Levels'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-010",
+   "entity_id": "REF-005-002",
+   "topic": "飽和",
+   "statement": "ユーロラック電源は±12Vなので、これを超える電圧は生成すべきでない。ただしハードクリップより範囲外電圧の許容が推奨される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Output Saturation'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-011",
+   "entity_id": "REF-005-002",
+   "topic": "トリガー/ゲート",
+   "statement": "トリガー入力はシュミットトリガ(低閾値約0.1V、高閾値約1〜2V)で検出する。トリガー源は10V・1ms、ゲートはアクティブ時10V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Triggers and Gates'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-012",
+   "entity_id": "REF-005-002",
+   "topic": "遅延",
+   "statement": "各ケーブルは信号に1サンプル遅延を与える。CLOCKとRESETを持つモジュールは、RESET後1msの間CLOCKを無視すべきとされる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Timing'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-013",
+   "entity_id": "REF-005-002",
+   "topic": "ピッチ",
+   "statement": "周波数制御は1V/oct。オシレータの基準はC4(261.6256Hz)、LFO/クロックは120BPM(2Hz)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Pitch and Frequencies'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-014",
+   "entity_id": "REF-005-002",
+   "topic": "数値安全",
+   "statement": "有限入力でNaN/無限大が出得るモジュールは0を返すべきとされる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'NaNs and Infinity'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-015",
+   "entity_id": "REF-005-002",
+   "topic": "位置づけ",
+   "statement": "規約は厳密な標準ではなく、ユーロラックの慣習の近似であり、例外モジュールがあり得る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-016",
+   "entity_id": "REF-005-003",
+   "topic": "チャンネル数",
+   "statement": "ポリフォニックケーブルは最大16チャンネル(音声・CV・ゲート等)を運ぶ。API上の上限はPORT_MAX_CHANNELS=16。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Polyphony 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-017",
+   "entity_id": "REF-005-003",
+   "topic": "チャンネル数",
+   "statement": "ポートのチャンネル数上限を示す定数PORT_MAX_CHANNELSは16である。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-005-04",
+   "locator": "include/engine/Port.hpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-018",
+   "entity_id": "REF-005-003",
+   "topic": "内部表現",
+   "statement": "単音ケーブルは1チャンネルの特殊ケースで、ケーブル種別は1種類のみ。0チャンネルのケーブルは未接続扱いになる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Polyphony 'Technical details'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-019",
+   "entity_id": "REF-005-003",
+   "topic": "伝播",
+   "statement": "ポリフォニー対応モジュールはPolyphonicタグを持ち、ポリ信号が入力されると出力もポリになる。MIDI-CV等のソース設定で連鎖的にパッチ全体がポリ化する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Polyphony 'Example'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-020",
+   "entity_id": "REF-005-003",
+   "topic": "入力規則",
+   "statement": "主入力のチャンネル数Nがエンジン数を決め、副入力は単音なら全エンジンへコピー、十分なポリなら各チャンネル対応、不足なら範囲外は0V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "VoltageStandards 'Polyphony'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-021",
+   "entity_id": "REF-005-003",
+   "topic": "性能",
+   "statement": "ポリ対応モジュールはSIMD等により、単音モジュールの複製より最大4倍程度CPU効率が良いとされる(メーカー記述)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-005-01",
+   "locator": "Polyphony 'Technical details'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-022",
+   "entity_id": "REF-005-004",
+   "topic": "波形",
+   "statement": "SIN/TRI/SAW/SQRの4波形を出力し、矩形のパルス幅はノブとPWM CV入力で変更できる(既定50%)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCO'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-023",
+   "entity_id": "REF-005-004",
+   "topic": "ピッチ",
+   "statement": "FREQノブは9オクターブ範囲で、既定位置でC4を出す。V/OCTは1V/oct、FM入力は減衰器付き。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCO'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-024",
+   "entity_id": "REF-005-004",
+   "topic": "シンク",
+   "statement": "SYNC入力でハードシンク、SOFTボタンでソフトシンク(位相反転)に切替。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCO'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-025",
+   "entity_id": "REF-005-004",
+   "topic": "FM",
+   "statement": "LFMボタンでリニアFMモードに切替できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCO'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-026",
+   "entity_id": "REF-005-004",
+   "topic": "アンチエイリアス",
+   "statement": "鋸歯/矩形はエイリアシング抑制のためギブス現象によるリップルが見える。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCO' Notes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-027",
+   "entity_id": "REF-005-005",
+   "topic": "回路",
+   "statement": "4ポール・トランジスタラダーをモデル化し、ローパスとハイパスを並行して出力する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCF'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-028",
+   "entity_id": "REF-005-005",
+   "topic": "制御",
+   "statement": "カットオフはCV入力と減衰器で変調でき、減衰器100%で1V/oct。RESはレゾナンスで、高い値で自己発振する。DRIVEで入力を飽和させる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV VCF'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-029",
+   "entity_id": "REF-005-006",
+   "topic": "動作",
+   "statement": "GATE入力(またはPUSHボタン)でA/D/S/Rのエンベロープを生成し、ENV出力は0〜10V。RETR入力で再トリガーしAttackへ戻せる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV ADSR EG'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-030",
+   "entity_id": "REF-005-007",
+   "topic": "出力",
+   "statement": "白、ピンク(-3dB/oct)、赤(-6dB/oct)、青(+3dB/oct)、バイオレット(+6dB/oct)、グレー(逆A特性)、ブラック(一様分布)の7出力を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV Noise'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-031",
+   "entity_id": "REF-005-007",
+   "topic": "一様ノイズ",
+   "statement": "ブラックは一様分布の電圧で、エイリアシングを含むため音声よりS&H源など非音声用途に向く。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-02",
+   "locator": "fund 'VCV Noise'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-032",
+   "entity_id": "REF-005-008",
+   "topic": "出力",
+   "statement": "V/OCTは最後に押したノートの1V/oct、GATEは押下中10V(レガート時再トリガーなし)、VELは0〜10V、PWは-5〜+5V、RTRGは新規ノートごとのトリガー。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'MIDI-CV'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-033",
+   "entity_id": "REF-005-008",
+   "topic": "クロック",
+   "statement": "24PPQNのMIDIクロックをCLKに出力し、CLK/Nで分周クロックを出す。START/STOP/CONTINUEもトリガー化される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'MIDI-CV'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-034",
+   "entity_id": "REF-005-008",
+   "topic": "ポリフォニー",
+   "statement": "パネル右クリックでポリ有効化とチャンネル数選択ができ、割当はRotate/Reuse/Resetの3モードがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'MIDI-CV'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-035",
+   "entity_id": "REF-005-009",
+   "topic": "保存形式",
+   "statement": "パッチは.vcvファイルとして保存・読込される。Rackは約15秒ごとに自動保存し、新規作成用テンプレートはtemplate.vcvとして保存できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "MenuBar 'File'(New/Open/Save/Autosave)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-036",
+   "entity_id": "REF-005-009",
+   "topic": "アーカイブ形式",
+   "statement": "現行の.vcvはZstandard圧縮のtarアーカイブで、内部にpatch.jsonを含む。先頭がzstdマジックでなければ旧形式(JSONのみ)として扱う。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-005-04",
+   "locator": "src/patch.cpp (isPatchLegacyV1, load, save)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-037",
+   "entity_id": "REF-005-009",
+   "topic": "JSON内容",
+   "statement": "patch.jsonはRackバージョン、ズーム、グリッドオフセット、エンジン状態(モジュール・ケーブル)を含む。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-005-04",
+   "locator": "src/patch.cpp (Manager::toJson)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-038",
+   "entity_id": "REF-005-010",
+   "topic": "MIDI入力",
+   "statement": "Coreに MIDI-CV/CC/Gate/Map があり、ドライバはCore MIDI/Windows MIDI/ALSA/JACK/ゲームパッド/PCキーボード。MIDI-MapでMIDI CCを他モジュールのパラメータに割当てる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'MIDI input modules', 'MIDI-Map'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-039",
+   "entity_id": "REF-005-010",
+   "topic": "MIDI出力",
+   "statement": "CV-MIDI/CV-CC/CV-GateがRack内CVを外部ハードのMIDIに変換する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Core 'MIDI output modules'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-040",
+   "entity_id": "REF-005-010",
+   "topic": "ヘッドレス",
+   "statement": "--headlessで自動保存パッチをウィンドウなしで起動でき、そのパッチはMIDIで制御できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "Installing 'Command line'(-h/--headless)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-041",
+   "entity_id": "REF-005-010",
+   "topic": "プラグインAPI",
+   "statement": "プラグインはC++でModuleのprocess()を実装し、dataToJson()で状態保存する。プラグインはRack SDKに対しリンクされる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-005-05",
+   "locator": "include/engine/Module.hpp (process, dataToJson)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-042",
+   "entity_id": "REF-005-010",
+   "topic": "DAW連携",
+   "statement": "Rack ProではDAWのプラグインパラメータ自動化、MIDI入出力が使える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-005-01",
+   "locator": "RackPro 'MIDI input/output'",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-005-009",
+   "item": "patch.jsonのモジュール/ケーブルの詳細スキーマ(キー名・型)",
+   "tried_sources": [
+    "SRC-005-04"
+   ],
+   "impact_on_spec": "本DBでは保存形式の概要のみ。自前形式設計の参考範囲では十分だが、互換読込を目指すなら追加調査が必要。"
+  },
+  {
+   "entity_id": "REF-005-010",
+   "item": "OSCによる外部制御(Core/Fundamentalに該当モジュールが見当たらない。サードパーティ前提の可能性)",
+   "tried_sources": [
+    "SRC-005-01",
+    "SRC-005-05"
+   ],
+   "impact_on_spec": "外部制御をOSC前提で設計する場合、Rack本体の根拠がない。MIDI/APIを根拠にする。"
+  },
+  {
+   "entity_id": "REF-005-010",
+   "item": "スクリプト/リモートAPI(WebSocket等)の公式機能の有無",
+   "tried_sources": [
+    "SRC-005-01",
+    "SRC-005-04"
+   ],
+   "impact_on_spec": "プログラム制御はC++プラグイン経由に限られる可能性。確証なし。"
+  },
+  {
+   "item": "Rack Pro/VCV+価格・配布条件の詳細(仕様化に不要のため未調査)",
+   "tried_sources": [
+    "SRC-005-01"
+   ],
+   "impact_on_spec": "影響小。"
+  },
+  {
+   "entity_id": "REF-005-005",
+   "item": "VCF各ノブの数値範囲・既定値",
+   "tried_sources": [
+    "SRC-005-02"
+   ],
+   "impact_on_spec": "パラメータrangeは未記録。実装時に別途調査が必要。"
+  },
+  {
+   "entity_id": "REF-005-004",
+   "item": "VCOの周波数ノブの絶対範囲(Hz)とPWM範囲",
+   "tried_sources": [
+    "SRC-005-02"
+   ],
+   "impact_on_spec": "範囲を数値化できない。"
+  }
+ ]
+}

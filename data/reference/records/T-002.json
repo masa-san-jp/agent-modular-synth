@@ -1,0 +1,31 @@
+{
+ "target_id": "T-002",
+ "entities": [],
+ "facts": [],
+ "unconfirmed": [
+  {
+   "item": "Maths の仕様・マニュアル全般",
+   "tried_sources": [
+    "SRC-002-01",
+    "SRC-002-02"
+   ],
+   "impact_on_spec": "Mathsの機能・電圧範囲・入出力が未確認のため仕様化に使えない。"
+  },
+  {
+   "item": "Maths以外の代表モジュール1〜2件",
+   "tried_sources": [
+    "SRC-002-01",
+    "SRC-002-02"
+   ],
+   "impact_on_spec": "多機能統合設計の比較材料なし。"
+  },
+  {
+   "item": "Make Noise の信号規約・パッチ保存・外部制御",
+   "tried_sources": [
+    "SRC-002-01",
+    "SRC-002-02"
+   ],
+   "impact_on_spec": "Eurorack標準以外の独自規約の有無が不明。"
+  }
+ ]
+}
