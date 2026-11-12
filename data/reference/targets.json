@@ -101,7 +101,7 @@
       "era": "current",
       "selection_reason": "商用データフロー環境の代表。信号/メッセージの区別と外部制御の公式資料が公開されている。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "一次情報は docs.cycling74.com のユーザガイド/リファレンスで確認。.maxpat内部スキーマ・既定OSCポート・利用条件(/legalは404)は未確認としてunconfirmedに記録。gen~/RNBOは範囲限定。"
     }
   ],
   "out_of_scope": [
