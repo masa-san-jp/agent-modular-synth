@@ -91,7 +91,7 @@
       "era": "current",
       "selection_reason": "サーバー/クライアント分離とOSC制御により、プログラムによる制御の代表例。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "一次情報は doc.sccode.org(3.14.0ヘルプ)と公式GitHubで確認。Pdほか他ツールとの比較に必要なクライアント/サーバ分離・OSC・ノード順序・SynthDef形式を取得。電圧規約相当や状態保存機構は未確認としてunconfirmedに記録。"
     },
     {
       "id": "T-010",
