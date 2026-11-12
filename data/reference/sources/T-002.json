@@ -2,27 +2,63 @@
  "sources": [
   {
    "id": "SRC-002-01",
-   "title": "makenoise.com トップページ",
-   "publisher": "(MakeNoise: 別組織のスペイン語サイト)",
+   "title": "makenoise.com トップページ(別組織のサイト)",
+   "publisher": "MakeNoise(別組織・スペイン語SNSサービス)",
    "url": "https://www.makenoise.com/",
    "doc_version": "unknown",
    "doc_type": "other",
    "accessed_on": "2026-11-12",
-   "checked_scope": "トップページと一覧。モジュラーシンセ関連の記述なし(別組織のサイトと判断)",
+   "checked_scope": "トップページ。モジュラー関連の記述なし。調査対象と無関係で事実は採用しない",
    "link_status": "ok",
-   "license_note": "調査対象と無関係のため利用せず。"
+   "license_note": "事実を採用しない。"
   },
   {
    "id": "SRC-002-02",
-   "title": "Make Noise Maths 製品・マニュアル(makenoisemusic.com)",
+   "title": "MATHS product page",
    "publisher": "Make Noise",
    "url": "https://www.makenoisemusic.com/modules/maths/",
    "doc_version": "unknown",
    "doc_type": "manufacturer_manual",
    "accessed_on": "2026-11-12",
-   "checked_scope": "取得不能(プロキシが接続を拒否)",
+   "checked_scope": "製品ページ全体(機能一覧・仕様行・マニュアルリンク)",
+   "link_status": "ok",
+   "license_note": "Make Noise公式Webページ。事実のみ自分の言葉で要約し、本文・図は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-03",
+   "title": "Wogglebug product page",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoisemusic.com/modules/wogglebug/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "製品ページ全体",
+   "link_status": "ok",
+   "license_note": "Make Noise公式Webページ。事実のみ自分の言葉で要約し、本文・図は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-04",
+   "title": "Mimeophon product page",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoisemusic.com/modules/mimeophon/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "製品ページ全体",
+   "link_status": "ok",
+   "license_note": "Make Noise公式Webページ。事実のみ自分の言葉で要約し、本文・図は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-05",
+   "title": "MATHS Manual (HTML/PDF)",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoise-manuals.com/maths/maths-manual.html",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "取得不能(makenoise-manuals.com はプロキシが403で拒否)",
    "link_status": "unreachable",
-   "license_note": "未取得。取得できた場合も要約のみ、本文・図は転載しない。"
+   "license_note": "Make Noise公式Webページ。事実のみ自分の言葉で要約し、本文・図は転載しない。ソースコード・アセットは再利用しない。"
   }
  ]
 }

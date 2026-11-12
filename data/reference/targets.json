@@ -21,7 +21,7 @@
       "era": "current",
       "selection_reason": "多機能モジュールの現行例。エンベロープ/LFO/関数発生器の統合設計の参考。",
       "status": "insufficient_sources",
-      "status_note": "指定のmakenoise.comは別組織のサイトで、Make Noise公式のmakenoisemusic.comはプロキシに拒否され取得不能。Maths等の資料を一切確認できていない。"
+      "status_note": "製品ページ(makenoisemusic.com)はMaths/Wogglebug/Mimeophonを確認したが、マニュアル(makenoise-manuals.com)が403で取得不能のためポート・電圧範囲・信号規約・パッチ保存・外部制御は未確認。指定のmakenoise.comは別組織のサイトで不採用。"
     },
     {
       "id": "T-003",

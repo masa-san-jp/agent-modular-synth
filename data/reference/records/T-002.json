@@ -1,31 +1,369 @@
 {
  "target_id": "T-002",
- "entities": [],
- "facts": [],
+ "entities": [
+  {
+   "id": "REF-002-001",
+   "kind": "system",
+   "name": "Make Noise(Eurorackモジュール群)",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Make Noiseは製品ページにモジュール群を掲載するEurorackメーカー。マニュアルは別ホストで、今回は閲覧できていない。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "モジュールは+12V/-12V電源とhp幅で仕様表記",
+     "fact_ids": [
+      "F-002-002"
+     ]
+    },
+    {
+     "text": "多数のモジュールを製品ページに掲載",
+     "fact_ids": [
+      "F-002-001"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-002",
+   "kind": "module",
+   "name": "Maths",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "modulation_other",
+   "purpose": "2チャンネルを中心に、関数発生・スルー・加算/OR/減算を行うアナログ演算モジュール(メーカーは「音楽向けアナログコンピュータ」と呼ぶ)。",
+   "synthesis_method": "関数発生器(リニア/対数/指数)によるアナログ演算",
+   "features": [
+    {
+     "text": "関数発生・積分・最大4信号の加算/OR・ゲート変換(メーカー主張)",
+     "fact_ids": [
+      "F-002-003"
+     ]
+    },
+    {
+     "text": "エンベロープ/LFO用途、約25分〜1kHz(メーカー主張)",
+     "fact_ids": [
+      "F-002-004"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅20hp、+60mA/-50mA",
+     "fact_ids": [
+      "F-002-005"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "サイクル時間は約25分〜1kHz(広告上の主張、マニュアル未確認)。",
+     "fact_ids": [
+      "F-002-004"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-003",
+   "kind": "module",
+   "name": "Wogglebug",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "ランダム電圧発生器。ステップ、スムーズ、ウォグル等の複数のランダム信号を出し、マスタークロックに同期できる。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "7種のランダム信号を同時生成、マスタークロック同期(メーカー主張)",
+     "fact_ids": [
+      "F-002-006"
+     ]
+    },
+    {
+     "text": "外部入力としてHeart IN(S&H)とInfluence(リングモジュレーション)",
+     "fact_ids": [
+      "F-002-006"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅10hp、+50mA/-40mA",
+     "fact_ids": [
+      "F-002-007"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "電圧制御可能なマスタークロックにランダム信号を同期(広告上の主張)。",
+     "fact_ids": [
+      "F-002-006"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-004",
+   "kind": "module",
+   "name": "Mimeophon",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "time_effect",
+   "purpose": "ステレオのマルチゾーン・オーディオリピータ(エコー系)。Make Noiseとsoundhackの共同、実装はTom Erbe。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ステレオ入出力、Zone/Rate/Repeatsによるリピート制御(メーカー主張)",
+     "fact_ids": [
+      "F-002-009"
+     ]
+    },
+    {
+     "text": "ファームウェア更新が可能(MP86が公開)",
+     "fact_ids": [
+      "F-002-010"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅16hp、+100mA/-10mA",
+     "fact_ids": [
+      "F-002-010"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-002-001",
+   "entity_id": "REF-002-001",
+   "topic": "製品ラインアップ",
+   "statement": "modulesページにMaths、Wogglebug、Mimeophon、QPAS、Tempi等の多数のモジュールが並ぶ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "https://www.makenoisemusic.com/modules/ 一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-002",
+   "entity_id": "REF-002-001",
+   "topic": "電源表記",
+   "statement": "製品ページの電源仕様は+12V/-12Vの電流値で示され、幅はhp単位。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-003",
+   "entity_id": "REF-002-002",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では、直線・対数・指数の関数をトリガ型や連続で生成、入力信号の積分、最大4信号の加算・減算・OR、ゲート/クロックとアナログ信号の相互変換、ゲート遅延ができる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-004",
+   "entity_id": "REF-002-002",
+   "topic": "用途(広告)",
+   "statement": "メーカーはエンベロープ/LFO(約25分〜1kHz)、ラグ/スルー/ポルタメント、複数CVの合成などの用途を挙げる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-005",
+   "entity_id": "REF-002-002",
+   "topic": "物理仕様",
+   "statement": "幅20hp、電源は+12Vで60mA、-12Vで50mA、最大深さ32mm(電源ケーブル込み)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-006",
+   "entity_id": "REF-002-003",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では7種のランダム信号(Smooth VCO、Woggle VCO、Ring Mod、Stepped、Smooth、Woggle、Burst)を同時に生成し、電圧制御可能なマスタークロックを持つ。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-007",
+   "entity_id": "REF-002-003",
+   "topic": "物理仕様",
+   "statement": "幅10hp、電源は+12Vで50mA、-12Vで40mA、最大深さ32mm。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-008",
+   "entity_id": "REF-002-003",
+   "topic": "来歴",
+   "statement": "Grant Richter(Wiard)の設計で、Buchla 265の系譜と説明されている。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-009",
+   "entity_id": "REF-002-004",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では、ステレオ入出力、Rate/Skew/Repeatsなどによるリピート制御、Zoneの反転、Holdを持ち、Time/Space/Colorを電圧制御できる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-04",
+   "locator": "Mimeophon product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-010",
+   "entity_id": "REF-002-004",
+   "topic": "物理仕様とファーム",
+   "statement": "幅16hp、電源は+12Vで100mA、-12Vで10mA、最大深さ45mm。ファームウェアMP86が配布されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-04",
+   "locator": "Mimeophon product page SPECIFICATIONS/FIRMWARE",
+   "verified_on": "2026-11-12"
+  }
+ ],
  "unconfirmed": [
   {
-   "item": "Maths の仕様・マニュアル全般",
+   "entity_id": "REF-002-002",
+   "item": "Mathsの入出力・電圧範囲・チャンネル構成・サイクル時間の数値",
    "tried_sources": [
-    "SRC-002-01",
-    "SRC-002-02"
+    "SRC-002-02",
+    "SRC-002-05"
    ],
-   "impact_on_spec": "Mathsの機能・電圧範囲・入出力が未確認のため仕様化に使えない。"
+   "impact_on_spec": "マニュアル(makenoise-manuals.com)が403で取得できず、ポート仕様を作れない。"
   },
   {
-   "item": "Maths以外の代表モジュール1〜2件",
+   "entity_id": "REF-002-003",
+   "item": "Wogglebugの出力電圧範囲とクロック仕様",
    "tried_sources": [
-    "SRC-002-01",
-    "SRC-002-02"
+    "SRC-002-03"
    ],
-   "impact_on_spec": "多機能統合設計の比較材料なし。"
+   "impact_on_spec": "マニュアル未取得。ランダム源の電圧範囲を仕様化できない。"
   },
   {
-   "item": "Make Noise の信号規約・パッチ保存・外部制御",
+   "entity_id": "REF-002-004",
+   "item": "Mimeophonの入出力レベルとCV範囲",
    "tried_sources": [
-    "SRC-002-01",
-    "SRC-002-02"
+    "SRC-002-04"
    ],
-   "impact_on_spec": "Eurorack標準以外の独自規約の有無が不明。"
+   "impact_on_spec": "マニュアル未取得。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "Make Noise独自の信号規約(電圧範囲、ゲート閾値)",
+   "tried_sources": [
+    "SRC-002-02",
+    "SRC-002-05"
+   ],
+   "impact_on_spec": "signal_standardエンティティを作れない。Eurorack一般規約はT-001を参照。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "パッチ保存(本体側の保存機能)の有無",
+   "tried_sources": [
+    "SRC-002-02",
+    "SRC-002-05"
+   ],
+   "impact_on_spec": "patch_storageを作れない。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "外部制御(MIDI等)",
+   "tried_sources": [
+    "SRC-002-02",
+    "SRC-002-05"
+   ],
+   "impact_on_spec": "MIDI Inletの製品ページ等は未調査のためcontrol_interfaceを作っていない。"
+  },
+  {
+   "item": "makenoise.com は調査対象と別組織のサイトだった(経緯記録)",
+   "tried_sources": [
+    "SRC-002-01"
+   ],
+   "impact_on_spec": "出典として採用しない。"
   }
  ]
 }
