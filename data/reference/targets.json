@@ -51,7 +51,7 @@
       "era": "current",
       "selection_reason": "ソフトのモジュラーとして電圧規約・ポリフォニー・パッチ保存・公開APIが公開されている主要例。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "確認済み。公式マニュアル(電圧規約・ポリフォニー・Core・メニュー)とGitHub v2のソースを読んだ。OSC等の外部制御は本体に確認できず未確認項目に記録。"
     },
     {
       "id": "T-006",
@@ -61,7 +61,7 @@
       "era": "current",
       "selection_reason": "VCV Rack由来のプラグイン形式実装。ホスト統合・ライセンス構成の比較対象。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "確認済み(一部)。README/LICENSES/FAQ/DIFFERENCESを読んだ。GitHub APIは接続拒否のためバージョン未確認。パッチ保存形式とOSCは未確認。"
     },
     {
       "id": "T-007",
@@ -71,7 +71,7 @@
       "era": "current",
       "selection_reason": "ライブコーディング/スクリプトを備えたソフトのモジュラー。プログラムによる制御の参考。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "確認済み(ソース中心)。公式ドキュメントサイト(bespokesynth.com/docs)は接続拒否のため未取得。README・GPLソース(raw.githubusercontent.com)で確認。モジュール別の公式パラメータ記述は未確認。"
     },
     {
       "id": "T-008",
@@ -81,7 +81,7 @@
       "era": "historical",
       "selection_reason": "データフロー型パッチング環境の歴史的代表。パッチ保存形式と制御/信号レートの区別の参考。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "一次情報はGitHub(pure-data/pure-data)のマニュアル/ヘルプ/ソースで確認。msp.ucsd.eduはアクセス不能(unreachable)でpuredata.infoは根拠未使用。FUDI厳密形式・.pd完全文法・OSC送出側は未確認としてunconfirmedに記録。"
     },
     {
       "id": "T-009",
