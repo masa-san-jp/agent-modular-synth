@@ -61,7 +61,7 @@
     },
     {
       "topic": "再利用制約",
-      "value": "公式案内はRackのGPLv3+、非商用プラグイン例外と別途商用条件を区別し、パネル等の複製にも制約を案内。個別コード・資産の使用前に実ライセンス確認が必要。",
+      "value": "公式案内はRackのGPLv3+、非商用プラグイン例外と別途商用条件を区別する。Ethics Guidelinesのブランド・パネル等を複製しない方針は一般的な法的義務とは説明されず、VCV Library配布・商用プラグインライセンスの条件として案内される。個別コード・資産の使用前に実ライセンス確認が必要。",
       "evidence": {
         "source_id": "S010",
         "section": "GPLv3; other licenses; Ethics Guidelines"
