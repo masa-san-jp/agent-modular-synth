@@ -4,6 +4,7 @@
 
 ## 調査・設計の入口
 
+- [リファレンスDB初期版](references/index.md)（確認範囲・未確認事項を区別）
 - [リポジトリ構成案](docs/repository-structure.md)（提案。実装用の構成は設計後に決定）
 - [#1 リファレンス調査・出典付きDB](https://github.com/masa-san-jp/agent-modular-synth/issues/1)
 - [#2 機能別モジュール仕様](https://github.com/masa-san-jp/agent-modular-synth/issues/2)

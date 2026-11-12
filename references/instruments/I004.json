@@ -1,0 +1,39 @@
+{
+  "id": "I004",
+  "name": "SYSTEM-500 / SYSTEM-100m lineage",
+  "maker": "Roland / Malekko",
+  "kind": "hardware_modular",
+  "version": "SYSTEM-500（2015/2018公式紹介）",
+  "parent_id": null,
+  "categories": [
+    "oscillator",
+    "filter",
+    "amplifier",
+    "history"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "歴史と境界",
+      "value": "メーカーはSYSTEM-500を2015年に導入し、SYSTEM-100mを基にしたモジュール群と説明。SYSTEM-100m実機とSYSTEM-500を同一レコードの同一仕様とは扱わない。",
+      "evidence": {
+        "source_id": "S011",
+        "section": "Introduction; The Stuff of Legend"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "構成例",
+      "value": "SYSTEM-500はアナログEurorackモジュール群。510はOSC/VCF/VCAの事前接続されたvoiceとして紹介される。",
+      "evidence": {
+        "source_id": "S011",
+        "section": "The New Classic; Experimentation is Rewarded"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "SYSTEM-100m原機の電圧・回路・年代の詳細、SYSTEM-500各型番のポート範囲は未確認。歴史的代表の原マニュアル調査は不足。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "I001",
+  "name": "A-100",
+  "maker": "Doepfer",
+  "kind": "hardware_modular",
+  "version": "モジュール群（単一版なし）",
+  "parent_id": null,
+  "categories": [
+    "oscillator",
+    "filter",
+    "amplifier",
+    "modulation",
+    "sequencer",
+    "interface"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "構成",
+      "value": "音源・フィルタ・VCA・ミキサー・変調・シーケンサー・クロック/ゲート・インターフェースを独立モジュールとして分類する。",
+      "evidence": {
+        "source_id": "S001",
+        "section": "Modules Overview"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "系全体の保存・外部API・互換電圧の一律規約は未確認。個別モデルへ分解して判断する。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

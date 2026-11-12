@@ -1,0 +1,17 @@
+{
+  "id": "I005",
+  "name": "Music Easel Modern（候補）",
+  "maker": "Buchla",
+  "kind": "hardware_patchable_candidate",
+  "version": "未確認",
+  "parent_id": null,
+  "categories": [
+    "historical_candidate"
+  ],
+  "status": "unavailable",
+  "facts": [],
+  "unknowns": [
+    "S012のページ・PDFが取得不能。種別の厳密分類、旧版との関係、信号規約・機能とも未確認。確認済み仕様の根拠には使わない。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}
