@@ -1,0 +1,21 @@
+{
+ "target_id": "T-016",
+ "entities": [],
+ "facts": [],
+ "unconfirmed": [
+  {
+   "item": "All Serge Modular and Random*Source Serge facts (module catalogue, Serge signal conventions, patch cords/shorting plugs, panel types, current production)",
+   "tried_sources": [
+    "SRC-016-01"
+   ],
+   "impact_on_spec": "Serge-specific signal conventions and module philosophy cannot be compared; no entities recorded."
+  },
+  {
+   "item": "Relationship between original Serge (Serge Tcherepnin) modules and Random*Source reissues",
+   "tried_sources": [
+    "SRC-016-01"
+   ],
+   "impact_on_spec": "Original-vs-reissue lineage not recorded."
+  }
+ ]
+}

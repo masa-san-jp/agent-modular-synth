@@ -1,0 +1,28 @@
+{
+ "sources": [
+  {
+   "id": "SRC-015-01",
+   "title": "EMS VCS3 / Synthi 100 official site (candidate host)",
+   "publisher": "EMS (current rights holder; exact official host unconfirmed)",
+   "url": "https://www.ems-synthi.demon.co.uk/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: connection refused by the egress proxy (403 on CONNECT)",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  },
+  {
+   "id": "SRC-015-02",
+   "title": "EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com, emssynthesisers.co.uk)",
+   "publisher": "EMS (unconfirmed)",
+   "url": "https://www.vcs3.com/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: every candidate host refused by the egress proxy (403 on CONNECT) or failed name resolution",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  }
+ ]
+}

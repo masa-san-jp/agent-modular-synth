@@ -111,7 +111,7 @@
       "era": "historical",
       "selection_reason": "歴史的な大型モジュラーの代表系譜。原機(Moog)と再発売(Behringer)の関係を比較できる。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status_note": "Behringer SYSTEM 55/35/15と代表モジュールは公式製品ページで確認済み。Moog原機・Moog再発売品の公式資料(moogmusic.com)は該当ページ無く未確認(unconfirmed記録)。BehringerのQSG PDFはcdn-media.empowertribe.com 403で未取得。(2026-11-12 調査)"
     },
     {
       "id": "T-012",
@@ -121,7 +121,7 @@
       "era": "historical",
       "selection_reason": "Moogと異なる設計思想(電圧規約・ペンタ/ファンクション系)の歴史的代表系譜と現行再発売。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status_note": "Buchla公式の沿革・200e取扱説明書・Classic Reissue製品ページ、TipTop 200tマニュアルで確認済み。原機100/200の一次仕様は未入手で、ピッチ電圧規約(1.2V/oct対2.4V/oct)に資料間の食い違いあり(unconfirmed記録)。(2026-11-12 調査)"
     },
     {
       "id": "T-013",
@@ -131,7 +131,7 @@
       "era": "historical",
       "selection_reason": "マトリクス式パッチ(2500)とセミモジュラー(2600)の歴史的代表。再発売との関係を比較できる。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status_note": "2026-11-12確認済み。Korg公式(2600 FS/M の製品ページ・仕様・取扱説明書・MIDI表)とBehringer 2500系の製品ページを読了。ARP 2500/2600原機の一次仕様は未取得(原機2600取扱説明書は画像スキャンで未読)、Behringer QSG PDFは接続拒否で未取得。(2026-11-12 オーナー指示により追加)"
     },
     {
       "id": "T-014",
@@ -141,7 +141,7 @@
       "era": "historical",
       "selection_reason": "国産モジュラーの歴史的系譜と現行のEurorack展開(System-500)・再発売の比較。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status_note": "2026-11-12確認済み。Roland公式のSYSTEM-500(製品ページ・取扱説明書・各パラメータガイド)とBehringer System 100の4製品ページを読了。SYSTEM-100M/700原機の一次資料は未取得(700の取扱説明書は公式アーカイブ記載のみでPDFがホスト名解決不能)、BehringerのQSG PDFは接続拒否。(2026-11-12 オーナー指示により追加)"
     },
     {
       "id": "T-015",
@@ -150,8 +150,8 @@
       "category": "semi_modular",
       "era": "historical",
       "selection_reason": "ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。",
-      "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status": "insufficient_sources",
+      "status_note": "EMS(VCS3・Synthi 100)の公式・現行権利者サイトに到達できず(候補ホストはプロキシが403または名前解決失敗)、事実を1件も確認できていない。公式ホスト名の確認と許可が必要。"
     },
     {
       "id": "T-016",
@@ -160,8 +160,8 @@
       "category": "hardware_modular",
       "era": "historical",
       "selection_reason": "Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。",
-      "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status": "insufficient_sources",
+      "status_note": "randomsource.net は応答するが serge-modular.com へ301転送され、転送先がプロキシで拒否(403)されたため資料を読めていない。serge-modular.com の許可が必要。"
     },
     {
       "id": "T-017",
@@ -171,7 +171,7 @@
       "era": "current",
       "selection_reason": "歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+      "status_note": "AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXのクイックスタートPDFはホスト(cdn-media.empowertribe.com)が拒否され未取得で、パラメータ範囲・保存・外部制御は未確認。Korgasmatron IIの公式マニュアルは未取得。"
     }
   ],
   "out_of_scope": [

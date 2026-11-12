@@ -1,0 +1,172 @@
+{
+ "sources": [
+  {
+   "id": "SRC-017-01",
+   "title": "MiniMod VCO User Guide",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/pdf/MiniMod%20VCO%20User%20Manual.pdf",
+   "doc_version": "Copyright 2016 (no version number)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read whole PDF text: description, controls/inputs/outputs list, calibration notes",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-02",
+   "title": "MiniMod VCF User Guide",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/pdf/MiniMod%20VCF%20User%20Manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read text of intro and controls/inputs/outputs list (items 1-14); calibration section not used",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-03",
+   "title": "MiniMod Dual Contour User Guide",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/pdf/MiniMod%20Dual%20Contour%20User%20Manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read intro and controls/inputs/outputs list (items 1-16)",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-04",
+   "title": "MiniMod Glide + Noise User Guide",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/pdf/MiniMod%20Glide%20User%20Manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read intro and controls/inputs/outputs list (items 1-9) and notes on long glides",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-05",
+   "title": "Ring SM Module page and User Manual",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/Ring_SM.html",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read the product web page text and the intro/overview text of https://ajhsynth.com/pdf/Ring%20SM%20User%20Manual.pdf (controls list only partly read)",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-06",
+   "title": "MiniMod Discrete Cascaded VCA product page",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/VCA.html",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read the web page text up to the distortion section; PDF manual not fetched",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-07",
+   "title": "AJH Synth site: MiniMod system page, Keyboard page, FAQ, Downloads",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read Minimod.html, Keyboard.html, faq.html (first questions), downloads.html (file list only); MiniMod Blank Patch Chart PDF not opened",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  },
+  {
+   "id": "SRC-017-08",
+   "title": "Morgasmatron Manual (English)",
+   "publisher": "Intellijel Designs, Inc.",
+   "url": "https://intellijel.com/downloads/manuals/morgasmatron_manual_2021.08.03.pdf",
+   "doc_version": "Revision 2021.08.03",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read all text: overview, front panel controls and jacks, patch examples, technical specifications; signal flow diagram is an image and was not interpreted",
+   "link_status": "ok",
+   "license_note": "Intellijel copyrighted material; only short own-words summaries and facts recorded. No text, figures or assets are reused; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-017-09",
+   "title": "Morgasmatron product page and Support page (manual index)",
+   "publisher": "Intellijel Designs, Inc.",
+   "url": "https://intellijel.com/shop/eurorack/morgasmatron/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read product page text (overview, features start) and the support page manual list",
+   "link_status": "ok",
+   "license_note": "Intellijel copyrighted material; only short own-words summaries and facts recorded. No text, figures or assets are reused; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-017-10",
+   "title": "Korgasmatron II Illustrated supplement (by Demonam), hosted by Intellijel",
+   "publisher": "Intellijel Designs, Inc. (supplement author credited as Demonam)",
+   "url": "https://intellijel.com/downloads/manuals/korgasmatron-ii_illustrated_supplement.pdf",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read index and the first patch pages (LP2, LP1, dual sine oscillator, normalled inputs); remaining pages skipped",
+   "link_status": "ok",
+   "license_note": "Third-party supplement hosted on Intellijel's site; copyright status unclear. Only short own-words facts recorded, no text or figures reproduced."
+  },
+  {
+   "id": "SRC-017-11",
+   "title": "Intellijel Legacy Modules page (Korgasmatron listings)",
+   "publisher": "Intellijel Designs, Inc.",
+   "url": "https://intellijel.com/shop/eurorack/legacy/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read page text; the Korgasmatron II legacy product page URL redirects to this listing, so no dedicated page was read",
+   "link_status": "ok",
+   "license_note": "Intellijel copyrighted material; only short own-words summaries and facts recorded. No text, figures or assets are reused; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-017-12",
+   "title": "SPACE FX product page (model 0720-ABQ)",
+   "publisher": "Behringer (Music Tribe)",
+   "url": "https://www.behringer.com/en/products/0720-ABQ",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read full product page text (overview, features, Eurorack specs, downloads list)",
+   "link_status": "ok",
+   "license_note": "Behringer copyrighted web page; only short own-words summaries recorded. No text, images or firmware reused."
+  },
+  {
+   "id": "SRC-017-13",
+   "title": "SPACE FX Quick Start Guide (WW)",
+   "publisher": "Behringer (Music Tribe)",
+   "url": "https://cdn-media.empowertribe.com/6115294ad85b4ae5b25f022376f1d687/QSG_BE_0720-ABQ_SPACE-FX_WW.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: host cdn-media.empowertribe.com refused by the egress proxy (403 on CONNECT)",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  },
+  {
+   "id": "SRC-017-14",
+   "title": "MiniMod VCF product page",
+   "publisher": "AJH Synth",
+   "url": "https://ajhsynth.com/VCF.html",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read text of the web page (intro and core voltages section)",
+   "link_status": "ok",
+   "license_note": "AJH Synth copyrighted material; only short own-words summaries and facts recorded. No text, figures, schematics, circuit designs or assets are reused; PDFs/pages are not stored in the repository."
+  }
+ ]
+}

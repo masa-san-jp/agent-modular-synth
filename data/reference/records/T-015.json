@@ -1,0 +1,23 @@
+{
+ "target_id": "T-015",
+ "entities": [],
+ "facts": [],
+ "unconfirmed": [
+  {
+   "item": "All EMS VCS3 and Synthi 100 facts (pin matrix layout, module list, voltage and signal conventions, patch storage, control interfaces, history and current rights holder)",
+   "tried_sources": [
+    "SRC-015-01",
+    "SRC-015-02"
+   ],
+   "impact_on_spec": "Pin-matrix patching cannot be compared with other patch methods; no entities recorded."
+  },
+  {
+   "item": "Relationship between the original EMS instruments and current reissue/rights holder products",
+   "tried_sources": [
+    "SRC-015-01",
+    "SRC-015-02"
+   ],
+   "impact_on_spec": "Original-vs-reissue lineage not recorded."
+  }
+ ]
+}

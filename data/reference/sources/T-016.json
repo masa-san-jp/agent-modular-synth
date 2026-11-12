@@ -1,0 +1,16 @@
+{
+ "sources": [
+  {
+   "id": "SRC-016-01",
+   "title": "Random*Source Serge (randomsource.net)",
+   "publisher": "Random*Source",
+   "url": "https://randomsource.net/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: the host answers 301 redirecting to serge-modular.com, which the egress proxy refuses (403 on CONNECT); paths tried: /, /index.html, /serge/, /products/",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  }
+ ]
+}
