@@ -16,6 +16,13 @@
 | T-008 Pure Data(Pd) | 確認済み | 一次情報はGitHub(pure-data/pure-data)のマニュアル/ヘルプ/ソースで確認。msp.ucsd.eduはアクセス不能(unreachable)でpuredata.infoは根拠未使用。FUDI厳密形式・.pd完全文法・OSC送出側は未確認としてunconfirmedに記録。 |
 | T-009 SuperCollider | 確認済み | 一次情報は doc.sccode.org(3.14.0ヘルプ)と公式GitHubで確認。Pdほか他ツールとの比較に必要なクライアント/サーバ分離・OSC・ノード順序・SynthDef形式を取得。電圧規約相当や状態保存機構は未確認としてunconfirmedに記録。 |
 | T-010 Max / MSP | 確認済み | 一次情報は docs.cycling74.com のユーザガイド/リファレンスで確認。.maxpat内部スキーマ・既定OSCポート・利用条件(/legalは404)は未確認としてunconfirmedに記録。gen~/RNBOは範囲限定。 |
+| T-011 Moog 大型モジュラー系(System 15/35/55、Behringer System 55) | 確認済み | Behringer SYSTEM 55/35/15と代表モジュールは公式製品ページで確認済み。Moog原機・Moog再発売品の公式資料(moogmusic.com)は該当ページ無く未確認(unconfirmed記録)。BehringerのQSG PDFはcdn-media.empowertribe.com 403で未取得。(2026-11-12 調査) |
+| T-012 Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue) | 確認済み | Buchla公式の沿革・200e取扱説明書・Classic Reissue製品ページ、TipTop 200tマニュアルで確認済み。原機100/200の一次仕様は未入手で、ピッチ電圧規約(1.2V/oct対2.4V/oct)に資料間の食い違いあり(unconfirmed記録)。(2026-11-12 調査) |
+| T-013 ARP 系(ARP 2500、ARP 2600、Behringer 2500) | 確認済み | 2026-11-12確認済み。Korg公式(2600 FS/M の製品ページ・仕様・取扱説明書・MIDI表)とBehringer 2500系の製品ページを読了。ARP 2500/2600原機の一次仕様は未取得(原機2600取扱説明書は画像スキャンで未読)、Behringer QSG PDFは接続拒否で未取得。(2026-11-12 オーナー指示により追加) |
+| T-014 Roland System 系(System-100m、System-700、System-500、Behringer System 100) | 確認済み | 2026-11-12確認済み。Roland公式のSYSTEM-500(製品ページ・取扱説明書・各パラメータガイド)とBehringer System 100の4製品ページを読了。SYSTEM-100M/700原機の一次資料は未取得(700の取扱説明書は公式アーカイブ記載のみでPDFがホスト名解決不能)、BehringerのQSG PDFは接続拒否。(2026-11-12 オーナー指示により追加) |
+| T-015 EMS 系(VCS3、Synthi 100) | 確認済み | emssynthesisers.co.uk(EMS公式)のトップ・製品ガイド・沿革(Graham Hinton執筆)を確認し、VCS3/Synthi 100/Synthi Aのモジュール構成、ピンマトリクス(Synthi 100は60x60二枚)、シーケンサ、権利者の変遷を記録。公式の操作・保守マニュアルは見つからず、信号電圧規約・VCS3マトリクス寸法・個別モジュール仕様は未確認。製品ガイドは個人執筆の史料としてthird_party扱い。 |
+| T-016 Serge 系(Serge Modular、Random*Source Serge) | 確認済み | serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。 |
+| T-017 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | 確認済み | AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXはクイックスタートガイド(V 2.0)を取得し、パラメータ範囲・入出力仕様を記録(電圧範囲・保存・外部制御は記載なしで未確認、消費電流は製品ページと不一致)。Korgasmatron IIの公式マニュアルは未取得。 |
 
 ## 未確認項目
 
@@ -144,6 +151,100 @@
 | REF-010-008 | 最大精度・ジッタ | SRC-010-10, SRC-010-04 | クロック精度を仕様化できない |
 | REF-010-011 | Gen/RNBOの個別演算子と書き出しコードのライセンス条件(範囲外) | SRC-010-09, SRC-010-13 | gen~/RNBOの利用範囲を限定した調査にとどまる |
 
+### T-011 Moog 大型モジュラー系(System 15/35/55、Behringer System 55)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-011-004 | Moog原機System 55の一次仕様(モジュール構成・寸法・電源・信号電圧規約) | SRC-011-11, SRC-011-12 | 原機の仕様をモデル化できず、再現品との差分を比較できない |
+| REF-011-005 | Moog原機System 35の一次仕様 | SRC-011-11, SRC-011-12 | 同上 |
+| REF-011-006 | Moog原機System 15の一次仕様 | SRC-011-11, SRC-011-12 | 同上 |
+| (対象全体) | Moog Musicによる2015年前後の再発売品(System 15/35/55)の現行公式資料(マニュアル・仕様)。moogmusic.comのサイトマップに該当製品ページなし | SRC-011-11, SRC-011-12 | 再発売品を独立したsystemエンティティとして記録できない。系譜の中間(原機→Moog再発売→Behringer)が欠ける |
+| REF-011-013 | ピッチCV規約(1V/oct等)・CV範囲・トリガ電圧レベル(V-trig/S-trigの具体値) | SRC-011-01, SRC-011-10 | 信号規約の数値化ができない。Behringer QSG(PDF)が取得不能のため |
+| REF-011-001 | Behringer System 55 クイックスタートガイド全文(パッチ手順・コントロール範囲) | SRC-011-10 | 個別パラメータの範囲・既定値が未確認 |
+| REF-011-007 | 921B各出力のレベル・周波数範囲 | SRC-011-04, SRC-011-10 | ポートrangeを記録できない |
+| REF-011-008 | 904Aのカットオフ周波数範囲・CV感度 | SRC-011-05, SRC-011-10 | パラメータ範囲を記録できない |
+| REF-011-010 | 960の各行CVレンジ値・クロック周波数範囲 | SRC-011-07, SRC-011-10 | CV出力範囲を記録できない |
+
+### T-012 Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-012-001 | 原機200シリーズの電圧規約・モジュール仕様(1次資料。1970年代当時のマニュアル) | SRC-012-01, SRC-012-07, SRC-012-14, SRC-012-15 | 原機のピッチ規約等を確定できない。再発売/200e/200tの記述に依拠 |
+| REF-012-002 | 100シリーズの個別モジュール仕様・電圧規約 | SRC-012-01 | 100シリーズは来歴以外の仕様を記録できない |
+| REF-012-006 | 266再発売の個別ジャック名・出力電圧範囲・電源(HP/電流) | SRC-012-03 | ポート範囲・電源要件を記録できない(製品ページに記載なし) |
+| REF-012-013 | 原機(200系)のピッチ電圧規約。200eガイドは1.2V/octと記し、248tマニュアルは原機が2.4V/octと述べ、記述が食い違う | SRC-012-07, SRC-012-14, SRC-012-15 | ピッチ規約を単一値に確定できない。系列ごと(200e=1.2V/oct、200t=1V/oct)で別記する |
+| REF-012-013 | Classic Reissue(258/266等)のピッチ入力規約(1V/octか1.2V/octか) | SRC-012-02, SRC-012-03, SRC-012-04 | 再発売品とEurorack版の相互接続仕様が確定できない |
+| (対象全体) | Buchla 100/200原機の公式マニュアル(1963-1970年代)。buchla.comは歴史ページのみ。248の1977年マニュアルはスキャン画像でテキスト抽出不可 | SRC-012-01, SRC-012-15 | 原機の個別モジュール仕様は記録できない |
+| REF-012-004 | Classic Reissue各機の電源要件・サイズ・端子電圧(buchla.comの製品ページに記載なし) | SRC-012-02, SRC-012-03, SRC-012-04, SRC-012-05, SRC-012-06 | Eurorack/ケース互換性などの設計制約が不明 |
+| REF-012-005 | 200tの266t以外の機種の詳細(207t〜296tの大半) | SRC-012-09 | 200tは一覧のみ記録、個別の機能は代表機のみ |
+
+### T-013 ARP 系(ARP 2500、ARP 2600、Behringer 2500)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-013-001 | 原機ARP 2600の電圧規約・各モジュール仕様(原機取扱説明書はPDFを取得したが画像スキャンでテキスト層がなく、内容未読) | SRC-013-14, SRC-013-03 | 原機固有の仕様・電圧は再発売品(FS/M)の資料の範囲に限って記録。原機そのものを仕様の根拠にはできない |
+| REF-013-004 | ARP 2500原機のモジュール構成、マトリクススイッチの仕様(行列数・接続方式)、電圧規約 | SRC-013-04, SRC-013-08 | マトリクス式パッチの具体仕様を定義できない。Korgの財団紹介文とBehringer販促ページの断片的記述のみ |
+| REF-013-005 | Behringer 2500系のQuick Start Guide(PDF) | SRC-013-13 | ポート単位の電圧範囲・ゲート閾値・信号レベルなどの詳細仕様が取得不能(cdn-media.empowertribe.com が403で接続拒否)。製品ページの記述のみで記録 |
+| REF-013-005 | Behringer 2500系にマトリクス式パッチを再現する製品があるか | SRC-013-08, SRC-013-09 | 製品ページに記載なし。確認できたのはケーブル/Eurorack方式のモジュールのみ |
+| REF-013-005 | 1033 Dual Envelope Generator Moduleの詳細仕様 | SRC-013-15 | 見出しの説明文のみ確認し機能詳細は未読のため、エンティティ化していない |
+| REF-013-002 | 2600 FS/Mのパッチ保存機能の有無 | SRC-013-03, SRC-013-06 | 取扱説明書にデジタルなパッチ保存機能の記載は確認していないが、無いことの明記も確認していない |
+| REF-013-003 | 2600 Mの取扱説明書本文による各モジュール詳細(FSと差異のある点) | SRC-013-06, SRC-013-05 | MIDI節とスピーカー節以外はFS資料との差を精査していない。VCO等の仕様はスペック表上FSと同一 |
+| REF-013-015 | MIDI CC#01の受信がMIDI実装表に載っていない理由、MIDIチャンネルのデフォルト | SRC-013-06, SRC-013-07 | CC受信の仕様を断定できない |
+
+### T-014 Roland System 系(System-100m、System-700、System-500、Behringer System 100)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-014-001 | SYSTEM-100M原機のモジュール構成・電圧規約・仕様(Roland公式の原機資料) | SRC-014-01, SRC-014-13 | roland.com/global/products/system-100m は404で原機の公式製品ページ未確認。SYSTEM-500/Behringer側の記述から関係を示すのみ |
+| REF-014-002 | SYSTEM-700原機の取扱説明書(PDF)の内容 | SRC-014-14, SRC-014-13 | 公式アーカイブ(lib.roland.co.jp)のホスト名が解決できず取得不能。原機のモジュール構成と信号規約は記録不能 |
+| REF-014-004 | SYSTEM-500のゲート/トリガ閾値電圧、CV出力電圧範囲、オーディオ出力レベル | SRC-014-07, SRC-014-01, SRC-014-08 | 取扱説明書とパラメータガイドに数値の記載なし。ゲート検出の仕様化に影響 |
+| REF-014-005 | 512の『8'で2V印加で中央C』の対象ジャック(KEY INか他か)とピッチ基準の厳密値 | SRC-014-08 | 注記が簡略で対象ジャックが不明。ピッチ基準の定義に影響 |
+| REF-014-010 | System 100のうち121/130/150/172/173/297/305の詳細仕様 | SRC-014-15 | 検索結果の存在のみ確認し製品ページ本文は未読のため、エンティティ化していない |
+| REF-014-013 | 140 Dual Envelope/LFOの消費電流 | SRC-014-17 | 同一ページの概要欄(各レール40mA)と仕様欄(+12V 50mA/-12V 50mA)で数値が異なるため記録しない |
+| REF-014-010 | Behringer System 100各モジュールのQuick Start Guide(PDF)の内容(ポート電圧範囲等) | SRC-014-19 | cdn-media.empowertribe.com が403で接続拒否。ポート単位の電圧・閾値は取得不能 |
+| REF-014-015 | SYSTEM-500/System 100にデジタルなパッチ保存・MIDI機能があるか | SRC-014-01, SRC-014-07 | 仕様欄に該当の記載は確認できなかったが、無いことの明記はない |
+
+### T-015 EMS 系(VCS3、Synthi 100)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-015-001 | VCS3 matrix size, line assignments, voltage levels, oscillator and filter specifications | SRC-015-03, SRC-015-04, SRC-015-05 | Pin-matrix voltage conventions cannot be compared with other signal standards; the product guide gives module lists only. |
+| REF-015-005 | Official EMS operating manual or service manual with signal levels | SRC-015-03, SRC-015-04 | Matrix patching is recorded structurally only; electrical conventions are unspecified. |
+| REF-015-002 | Current production specification and a dated current price/availability | SRC-015-03 | Home page dated May 2020; reissue vs. original differences cannot be listed. |
+| REF-015-011 | Patch recall methods (removable boards, documentation charts) | SRC-015-04 | Patch storage for pin-matrix instruments is recorded as absent-from-documentation, not confirmed absent. |
+| REF-015-003 | Computer Synthi / Synthi E / Spectron details (guide sections not read) | SRC-015-04 | Digital-control variants of the Synthi 100 line not recorded. |
+| REF-015-001 | Official emssynthesisers.co.uk owner-run pages besides home/products/history/adverts (manuals, modification page at hinton-instruments.co.uk) | SRC-015-01, SRC-015-02 | hinton-instruments.co.uk is not an allowed host; servicing/modification data not read. |
+
+### T-016 Serge 系(Serge Modular、Random*Source Serge)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-016-001 | Original 1970s Serge module specifications and 1979 catalogue data | SRC-016-06 | Original-vs-reissue differences are limited to the manual's remarks (improved tracking, 2022-23 revisions). |
+| REF-016-003 | Per-module input/output impedance and precise CV range across modules; 1V/Oct scale only on VCO | SRC-016-06, SRC-016-07 | Typical ranges known (+/-12 V limit); module-specific CV scaling must be read from each manual. |
+| REF-016-005 | NTO frequency range, waveform outputs and calibration | SRC-016-11 | Oscillator spec incomplete; page gives no technical table. |
+| REF-016-006 | DSG time ranges and CV scaling | SRC-016-10 | Slope times not numerically specified. |
+| REF-016-008 | 1973 filter frequency range and CV scaling | SRC-016-06 | Filter range unspecified. |
+| REF-016-010 | Whether any Serge sequencer/programmer module stores patterns non-volatilely (Sequencer 8, SEQ4, SEQQ) | SRC-016-06, SRC-016-07 | Pattern storage is unknown; Paperface manual sequencer sections not read in detail. |
+| REF-016-002 | Manuals for Mantra II, La Bestia III, Tantra, Yantra (PDF links on the panels page); Serge 4x4 page (connection reset on fetch) | SRC-016-07 | Panel-level module details not read; serge_4x4 page unreachable at attempt. |
+
+### T-017 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-017-002 | Octave switch positions and absolute frequency range of the oscillator | SRC-017-01 | Frequency range per octave setting is unknown; the pitch scale in Hz cannot be specified. |
+| REF-017-003 | Cutoff frequency range in Hz and CV input voltage ranges (Freq, 1/3, 2/3, Emphasis CV, output level) | SRC-017-02 | CV input ranges and output voltage cannot be specified; the output stage level is only stated in the web page as bringing signals to +/-5 V pp. |
+| REF-017-005 | Glide time range in seconds | SRC-017-04 | Maximum and minimum glide times are not given numerically in the manual text read. |
+| REF-017-006 | Per-jack voltage ranges for X/Y/Z inputs and output; sub-bass tracking limits | SRC-017-05 | Only partial ranges known; full port range table not specified. |
+| REF-017-007 | CV input voltage ranges and gain scaling | SRC-017-06 | CV ranges not captured from the web page read; PDF manual not fetched. |
+| REF-017-009 | Whether any MiniMod module has electronic preset or CV-controlled memory | SRC-017-07, SRC-017-01, SRC-017-02, SRC-017-03, SRC-017-04 | All modules read are fully analog with knobs and switches; storage is assumed absent but not stated. |
+| REF-017-010 | CV input voltage ranges, output levels, cutoff frequency range | SRC-017-08, SRC-017-09 | Port voltage ranges cannot be specified beyond the typical 10 Vp-p reference. |
+| REF-017-010 | Signal flow diagram contents (image only in the manual) | SRC-017-08 | Exact internal routing beyond the textual description is not captured. |
+| REF-017-011 | Original Korgasmatron II manual, specs (HP width, current draw, voltage ranges), release years, Korgasmatron I details | SRC-017-10, SRC-017-11 | Only functional layout from a supplement; no official spec table. Generation order (I, II, III=Morgasmatron) rests on one Intellijel sentence. |
+| REF-017-011 | Hardware relationship to the Korg MS-20 filter (circuit lineage claim) | SRC-017-08, SRC-017-10 | Only the Morgasmatron manual mentions the MS-20 filter's behaviour; no statement that Korgasmatron copies its circuit was read. |
+| REF-017-012 | Release date and firmware/version | SRC-017-12 | Version unknown. |
+| (対象全体) | Intellijel Morgasmatron/Korgasmatron and AJH MiniMod voltage references for modules not read (Gemini 2412, Sonic XV, V-Shape etc.) | SRC-017-07 | Only a subset of the MiniMod range was read; other modules are not covered. |
+| REF-017-012 | Port voltage ranges, parameter defaults, whether settings persist after power-off, and external control beyond the front panel | SRC-017-12, SRC-017-13 | The Quick Start Guide gives parameter ranges and impedances but no voltage levels, defaults or storage statement; persistence is unknown. |
+
 ## アクセス不能だった資料
 
 | 出典ID | 資料 | URL |
@@ -153,3 +254,10 @@
 | SRC-007-17 | BespokeSynth 公式ドキュメント | https://www.bespokesynth.com/docs/ |
 | SRC-008-05 | Pd Documentation(msp.ucsd.edu) | https://msp.ucsd.edu/Pd_documentation/index.htm |
 | SRC-010-13 | Legal / 利用条件ページ | https://docs.cycling74.com/legal |
+| SRC-011-10 | SYSTEM 55 クイックスタートガイド(WW版PDF) | https://cdn-media.empowertribe.com/634690dab10a4e7389634d344473791d/QSG_BE_0720-ACU_System-55_WW.pdf |
+| SRC-011-12 | Moog Music Forum(再発売品マニュアル等のスレッド) | https://forum.moogmusic.com/viewtopic.php?t=24268 |
+| SRC-013-13 | Quick Start Guide FILTAMP MODULE 1006 (PDF) | https://cdn-media.empowertribe.com/7f580bcc2111431283fe25108aba228f/QSG_BE_0720-ABU_FILTAMP-MODULE-1006_WW.pdf |
+| SRC-014-14 | SYSTEM700 Owner's Manual (archive PDF) | http://lib.roland.co.jp/support/en/manuals/res/62960132/SYSTEM700_e.pdf |
+| SRC-014-19 | Quick Start Guide 182 SEQUENCER (PDF) | https://cdn-media.empowertribe.com/83cf9a369bae492ba6f23668e7ec9f90/QSG_BE_0720-AAE_182-SEQUENCER_WW.pdf |
+| SRC-015-01 | EMS VCS3 / Synthi 100 official site (candidate host) | https://www.ems-synthi.demon.co.uk/ |
+| SRC-015-02 | EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com) | https://www.vcs3.com/ |

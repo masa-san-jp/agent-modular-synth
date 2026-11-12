@@ -149,12 +149,12 @@
    "title": "SPACE FX Quick Start Guide (WW)",
    "publisher": "Behringer (Music Tribe)",
    "url": "https://cdn-media.empowertribe.com/6115294ad85b4ae5b25f022376f1d687/QSG_BE_0720-ABQ_SPACE-FX_WW.pdf",
-   "doc_version": "unknown",
+   "doc_version": "V 2.0",
    "doc_type": "manufacturer_manual",
    "accessed_on": "2026-11-12",
-   "checked_scope": "Not read: host cdn-media.empowertribe.com refused by the egress proxy (403 on CONNECT)",
-   "link_status": "unreachable",
-   "license_note": "Not obtained; no content reproduced."
+   "checked_scope": "Read text of the 21-page multilingual Quick Start Guide (V 2.0): controls list, power connection, effects/parameters table, specifications table",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, tables or images reproduced; Behringer/Music Tribe copyright and trademarks."
   },
   {
    "id": "SRC-017-14",

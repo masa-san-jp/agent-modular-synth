@@ -1531,6 +1531,12 @@
      "fact_ids": [
       "F-017-055"
      ]
+    },
+    {
+     "text": "Parameter ranges documented per program in the Quick Start Guide",
+     "fact_ids": [
+      "F-017-059"
+     ]
     }
    ],
    "constraints": [
@@ -1538,6 +1544,13 @@
      "text": "Only front-panel control is documented; no CV control or preset storage found",
      "fact_ids": [
       "F-017-054"
+     ]
+    },
+    {
+     "text": "Quick Start Guide documents no CV, MIDI or preset memory; current draw differs between page and guide",
+     "fact_ids": [
+      "F-017-062",
+      "F-017-061"
      ]
     }
    ],
@@ -1549,7 +1562,8 @@
      "range": null,
      "range_status": "unconfirmed",
      "fact_ids": [
-      "F-017-055"
+      "F-017-055",
+      "F-017-060"
      ]
     },
     {
@@ -1559,7 +1573,8 @@
      "range": null,
      "range_status": "unconfirmed",
      "fact_ids": [
-      "F-017-055"
+      "F-017-055",
+      "F-017-060"
      ]
     },
     {
@@ -1569,7 +1584,8 @@
      "range": null,
      "range_status": "unconfirmed",
      "fact_ids": [
-      "F-017-055"
+      "F-017-055",
+      "F-017-060"
      ]
     },
     {
@@ -1579,7 +1595,8 @@
      "range": null,
      "range_status": "unconfirmed",
      "fact_ids": [
-      "F-017-055"
+      "F-017-055",
+      "F-017-060"
      ]
     }
    ],
@@ -1608,6 +1625,21 @@
      "default_status": "unconfirmed",
      "fact_ids": [
       "F-017-053"
+     ]
+    },
+    {
+     "name": "Delay/echo tempo",
+     "unit": "bpm",
+     "range": {
+      "min": 72,
+      "max": 500,
+      "unit": "bpm"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-059"
      ]
     }
    ],
@@ -2269,6 +2301,50 @@
    "source_id": "SRC-017-12",
    "locator": "Product page features list",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-059",
+   "entity_id": "REF-017-012",
+   "topic": "parameters",
+   "statement": "Each of the 32 programs has up to three parameters: reverbs mostly Decay plus Pre-Delay/Damping (Bright or Dark); delay and echo Feedback 0-100% plus Tempo 72-500 bpm or tap; chorus Depth -20 to +20 and LFO speed 0.05-5 Hz; flanger and phaser Tempo 5-400 bpm or tap.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, 'SPACE FX Effects and Parameters' table (EN)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-060",
+   "entity_id": "REF-017-012",
+   "topic": "io_specs",
+   "statement": "Two unbalanced 3.5 mm inputs (impedance above 22 kOhm), two unbalanced 3.5 mm outputs (330 Ohm output impedance); input gain switch is +2 dB (high) or -6 dB (low).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, specifications table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-061",
+   "entity_id": "REF-017-012",
+   "topic": "power",
+   "statement": "QSG states power consumption 90 mA (+12 V) / 25 mA (-12 V), 14 HP, 71 x 129 x 41 mm; this differs from the product page (100 mA / 30 mA), so the current draw is recorded as inconsistent between Behringer documents.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, specifications table; compare F-017-056",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-062",
+   "entity_id": "REF-017-012",
+   "topic": "controls",
+   "statement": "Controls are the display, a Parameter 1/2 button, a Parameter 3/Tap button, FX SEND knob, PROGRAM/VALUE encoder and an INPUT LEVEL switch; the guide lists no CV input, MIDI or preset-save function.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, 'SPACE FX Controls' (EN)",
+   "verified_on": "2026-11-12"
   }
  ],
  "unconfirmed": [
@@ -2361,15 +2437,6 @@
   },
   {
    "entity_id": "REF-017-012",
-   "item": "Quick Start Guide / user manual contents (ports voltage, parameter table, preset save, CV/MIDI control)",
-   "tried_sources": [
-    "SRC-017-12",
-    "SRC-017-13"
-   ],
-   "impact_on_spec": "Parameter ranges, whether settings persist, and any external control are unknown; the QSG host is blocked."
-  },
-  {
-   "entity_id": "REF-017-012",
    "item": "Release date and firmware/version",
    "tried_sources": [
     "SRC-017-12"
@@ -2382,6 +2449,15 @@
     "SRC-017-07"
    ],
    "impact_on_spec": "Only a subset of the MiniMod range was read; other modules are not covered."
+  },
+  {
+   "entity_id": "REF-017-012",
+   "item": "Port voltage ranges, parameter defaults, whether settings persist after power-off, and external control beyond the front panel",
+   "tried_sources": [
+    "SRC-017-12",
+    "SRC-017-13"
+   ],
+   "impact_on_spec": "The Quick Start Guide gives parameter ranges and impedances but no voltage levels, defaults or storage statement; persistence is unknown."
   }
  ]
 }

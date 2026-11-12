@@ -4,20 +4,21 @@
 
 ## 1. 機能カテゴリ別: 調査済みモジュール
 
-| 機能カテゴリ | T-001 | T-002 | T-003 | T-004 | T-005 | T-006 | T-007 | T-008 | T-009 | T-010 |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 発振 | A-110-1 Standard VCO (REF-001-005) | - | VCO (REF-003-003) | VCO 1 / VCO 2 (REF-004-004) | VCV VCO (REF-005-004) | - | SingleOscillator (oscillator) (REF-007-003) | osc~ (REF-008-005) | SinOsc (REF-009-008) | cycle~ (REF-010-005) |
-| ノイズ | - | - | - | - | VCV Noise (REF-005-007) | - | - | - | - | noise~ (REF-010-010) |
-| フィルタ | A-120 24dB Low Pass (Transistor Ladder) (REF-001-006) | - | VCF (REF-003-004) | VCHPF + VCLPF (REF-004-005) | VCV VCF (REF-005-005) | - | - | lop~ (REF-008-006) | LPF (REF-009-009) | lores~ (REF-010-006) |
-| 増幅・ミックス | A-138s Mini Stereo Mixer (REF-001-009) | - | Voltage controlled mixer (REF-003-008) | - | - | - | - | - | - | - |
-| エンベロープ | A-140-1 ADSR Envelope Generator (REF-001-007) | - | Envelope (EG) (REF-003-005) | Envelope Generator 2 (EG-2) (REF-004-006) | VCV ADSR EG (REF-005-006) | - | EnvelopeModulator (envelope) (REF-007-004) | line~ (REF-008-007) | EnvGen (REF-009-010) | line~ (REF-010-007) |
-| LFO | A-145-1 Low Frequency Oscillator (REF-001-008) | - | LFO (REF-003-006) | Modulation Generator (MG) (REF-004-007) | - | - | - | - | - | - |
-| その他変調 | - | Maths (REF-002-002) | - | - | - | - | - | - | - | - |
-| クロック・シーケンス | A-160-1 Clock/Trigger Divider (REF-001-010) | - | 32-step sequencer (REF-003-007) | - | - | Host Time (REF-006-004) | NoteStepSequencer (notesequencer) (REF-007-005) | metro (REF-008-008) | Impulse (REF-009-011) | metro (REF-010-008) |
-| ランダム・論理 | - | Wogglebug (REF-002-003) | - | Sample and Hold (S/H) (REF-004-009) | - | - | PulseChance (pulsechance) (REF-007-006) | random (REF-008-009) | Dust (REF-009-012) | random (REF-010-009) |
-| 時間系 | - | Mimeophon (REF-002-004) | - | - | - | - | - | - | - | - |
-| 入出力・ユーティリティ | - | - | - | External Signal Processor (ESP) (REF-004-008) | MIDI-CV (Core) (REF-005-008) | Host Parameters (REF-006-003)<br>Audio to CV Pitch (REF-006-005) | OSCOutput (oscoutput) (REF-007-007) | - | Out (REF-009-013) | - |
-| ルーティング | - | - | - | - | - | Carla Plugin Host / Ildaeil Host (REF-006-006) | - | - | - | - |
+| 機能カテゴリ | T-001 | T-002 | T-003 | T-004 | T-005 | T-006 | T-007 | T-008 | T-009 | T-010 | T-011 | T-012 | T-013 | T-014 | T-015 | T-016 | T-017 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 発振 | A-110-1 Standard VCO (REF-001-005) | - | VCO (REF-003-003) | VCO 1 / VCO 2 (REF-004-004) | VCV VCO (REF-005-004) | - | SingleOscillator (oscillator) (REF-007-003) | osc~ (REF-008-005) | SinOsc (REF-009-008) | cycle~ (REF-010-005) | Behringer 921B OSCILLATOR (REF-011-007) | Buchla 258 Classic Reissue - Dual Oscillator (REF-012-007) | ARP 2600 FS VCO-1/2/3 (REF-013-007)<br>Behringer 1004 OSCILLATOR MODULE (REF-013-016) | Roland SYSTEM-500 512 Dual VCO (REF-014-005)<br>Behringer System 100 110 VCO/VCF/VCA (REF-014-011)<br>Behringer System 100 112 Dual VCO (REF-014-012) | VCS3 voltage controlled oscillator (REF-015-006) | New Timbral Oscillator (NTO) (REF-016-005)<br>Paperface VCO / VCO+ (REF-016-009) | MiniMod VCO (REF-017-002) |
+| ノイズ | - | - | - | - | VCV Noise (REF-005-007) | - | - | - | - | noise~ (REF-010-010) | Behringer 903A RANDOM SIGNAL GENERATOR (REF-011-012) | - | - | - | - | - | MiniMod Glide + Noise (REF-017-005) |
+| フィルタ | A-120 24dB Low Pass (Transistor Ladder) (REF-001-006) | - | VCF (REF-003-004) | VCHPF + VCLPF (REF-004-005) | VCV VCF (REF-005-005) | - | - | lop~ (REF-008-006) | LPF (REF-009-009) | lores~ (REF-010-006) | Behringer 904A VOLTAGE CONTROLLED LOW PASS FILTER (REF-011-008) | - | ARP 2600 FS VCF (REF-013-008)<br>Behringer 1006 FILTAMP MODULE (REF-013-018)<br>Behringer 1047 MULTIMODE FILTER / RESONATOR MODULE (REF-013-020) | Roland SYSTEM-500 521 Dual VCF (REF-014-006) | VCS3 voltage controlled low-pass filter (REF-015-007) | 1973 Filter (VCF) with Balanced Output (REF-016-008) | MiniMod VCF (Transistor Ladder Filter) (REF-017-003)<br>Morgasmatron (REF-017-010)<br>Korgasmatron II (REF-017-011) |
+| 波形整形 | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | Triple Waveshaper (REF-016-007) | - |
+| 増幅・ミックス | A-138s Mini Stereo Mixer (REF-001-009) | - | Voltage controlled mixer (REF-003-008) | - | - | - | - | - | - | - | - | Buchla 292 Classic Reissue - Quad Lopass Gate (REF-012-009) | ARP 2600 FS VCA / Mixer (REF-013-011)<br>Behringer 1005 MODAMP MODULE (REF-013-019) | Roland SYSTEM-500 530 Dual VCA (REF-014-007) | - | - | MiniMod Discrete Cascaded VCA (REF-017-007) |
+| エンベロープ | A-140-1 ADSR Envelope Generator (REF-001-007) | - | Envelope (EG) (REF-003-005) | Envelope Generator 2 (EG-2) (REF-004-006) | VCV ADSR EG (REF-005-006) | - | EnvelopeModulator (envelope) (REF-007-004) | line~ (REF-008-007) | EnvGen (REF-009-010) | line~ (REF-010-007) | Behringer 911 ENVELOPE GENERATOR (REF-011-009) | Buchla 281 Classic Reissue - Quad Function Generator (REF-012-008)<br>TipTop Buchla 281t Quad Function Generator (REF-012-012) | ARP 2600 FS ADSR/AR EG (REF-013-009)<br>Behringer 1003 DUAL ENVELOPE GENERATOR MODULE (REF-013-017) | Roland SYSTEM-500 540 Dual Envelope + LFO (REF-014-008)<br>Behringer System 100 140 Dual Envelope/LFO (REF-014-013) | VCS3 trapezoid envelope generator (REF-015-008) | Dual Universal Slope Generator (DSG mk2) (REF-016-006) | MiniMod Dual Contour (REF-017-004) |
+| LFO | A-145-1 Low Frequency Oscillator (REF-001-008) | - | LFO (REF-003-006) | Modulation Generator (MG) (REF-004-007) | - | - | - | - | - | - | - | - | - | - | - | - | - |
+| その他変調 | - | Maths (REF-002-002) | - | - | - | - | - | - | - | - | - | - | - | - | - | Smooth & Stepped Generator (SSG) (REF-016-004) | Ring SM (REF-017-006) |
+| クロック・シーケンス | A-160-1 Clock/Trigger Divider (REF-001-010) | - | 32-step sequencer (REF-003-007) | - | - | Host Time (REF-006-004) | NoteStepSequencer (notesequencer) (REF-007-005) | metro (REF-008-008) | Impulse (REF-009-011) | metro (REF-010-008) | Behringer 960 SEQUENTIAL CONTROLLER (REF-011-010) | TipTop Buchla 245t Sequential Voltage Source (REF-012-010) | - | Behringer System 100 182 Sequencer (REF-014-014) | Synthi Sequencer 256 (REF-015-010) | - | - |
+| ランダム・論理 | - | Wogglebug (REF-002-003) | - | Sample and Hold (S/H) (REF-004-009) | - | - | PulseChance (pulsechance) (REF-007-006) | random (REF-008-009) | Dust (REF-009-012) | random (REF-010-009) | - | Buchla 266 Classic Reissue - Source of Uncertainty (REF-012-006)<br>TipTop Buchla 266t Source of Uncertainty (REF-012-011) | ARP 2600 FS Sample & Hold / Clock / Electronic Switch (REF-013-010) | - | - | - | - |
+| 時間系 | - | Mimeophon (REF-002-004) | - | - | - | - | - | - | - | - | - | - | ARP 2600 スプリングリバーブ (REF-013-012) | Roland SYSTEM-500 572 Phase Shifter/Delay/LFO (REF-014-009) | VCS3 voltage controlled reverberation (REF-015-009) | - | SPACE FX (REF-017-012) |
+| 入出力・ユーティリティ | - | - | - | External Signal Processor (ESP) (REF-004-008) | MIDI-CV (Core) (REF-005-008) | Host Parameters (REF-006-003)<br>Audio to CV Pitch (REF-006-005) | OSCOutput (oscoutput) (REF-007-007) | - | Out (REF-009-013) | - | Behringer 961 INTERFACE (REF-011-011) | - | - | - | - | - | - |
+| ルーティング | - | - | - | - | - | Carla Plugin Host / Ildaeil Host (REF-006-006) | - | - | - | - | - | - | - | - | - | - | - |
 
 ## 2. 横断項目
 
@@ -33,6 +34,13 @@
 | T-008 Pure Data(Pd) | ソフト 環境 | REF-008-002 Pd メッセージ/音声信号規約 | REF-008-003 Pd パッチファイル(.pd) | REF-008-004 Pd 外部制御(FUDI/netsend/pdsend/起動フラグ/OSC解析) |
 | T-009 SuperCollider | ソフト 環境 | REF-009-004 SuperCollider 信号・バス・ノード規約 | REF-009-005 SynthDef ファイル(.scsyndef, SCgf形式) | REF-009-006 scsynth OSCコマンド<br>REF-009-007 外部アプリとのOSC通信(sclang側) |
 | T-010 Max / MSP | ソフト 環境 | REF-010-002 Max メッセージ/MSP信号規約 | REF-010-003 Max パッチ(.maxpat)と状態保存 | REF-010-004 Max 外部制御(OSC/UDP/パラメータ) |
+| T-011 Moog 大型モジュラー系(System 15/35/55、Behringer System 55) | ハード モジュラー | REF-011-013 Behringer SYSTEM 55 トリガ/信号規約 | REF-011-014 Behringer SYSTEM 55 パッチ保存 | REF-011-015 Behringer CM1A MIDI-to-CV インターフェース |
+| T-012 Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue) | ハード モジュラー | REF-012-013 Buchla 200e 信号規約<br>REF-012-014 TipTop Buchla 200t 信号規約 | REF-012-015 Buchla 200e Remote Enable/プリセット管理<br>REF-012-016 TipTop Buchla 248t プリセット | REF-012-017 Buchla 225e MIDI Decoder |
+| T-013 ARP 系(ARP 2500、ARP 2600、Behringer 2500) | セミモジュラー | REF-013-006 ARP 2600 FS 信号・電圧規約 | REF-013-013 ARP 2600 FS 状態保存(3620アルペジオ/ボイスアサイン) | REF-013-014 ARP 2600 FS MIDI/USB<br>REF-013-015 ARP 2600 M MIDI/USB |
+| T-014 Roland System 系(System-100m、System-700、System-500、Behringer System 100) | ハード モジュラー | REF-014-004 Roland SYSTEM-500 信号・電圧規約 | REF-014-015 Roland SYSTEM-500 パッチ記録(Patch Memo) | REF-014-016 Behringer 182 Sequencer 外部同期/制御 |
+| T-015 EMS 系(VCS3、Synthi 100) | セミモジュラー | REF-015-005 EMS pin-matrix patching convention | REF-015-011 EMS patch state (pin positions) and sequence memory | REF-015-012 EMS external control add-ons |
+| T-016 Serge 系(Serge Modular、Random*Source Serge) | ハード モジュラー | REF-016-003 Serge signal conventions (jack-colour system) | REF-016-010 Serge patching and patch retention | REF-016-011 Serge external control and format interop |
+| T-017 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | ハード モジュラー | REF-017-008 AJH MiniMod signal conventions | REF-017-009 MiniMod patch recording (paper chart) | 未記録 |
 
 ## 3. 共通点と機種固有の差(DBから抽出した要約)
 
@@ -69,3 +77,26 @@
 - **REF-010-002 Max メッセージ/MSP信号規約**: イベント(メッセージ)と信号(音声)とMCなど複数種のパッチコード規約 (根拠: F-010-008, F-010-011, F-010-012)
 - **REF-010-003 Max パッチ(.maxpat)と状態保存**: パッチ構造のJSON保存と、状態を別途保存するpattr系 (根拠: F-010-014, F-010-015, F-010-016, F-010-017)
 - **REF-010-004 Max 外部制御(OSC/UDP/パラメータ)**: OSC/UDPでMaxを制御・外部へ送信する手段 (根拠: F-010-018, F-010-019, F-010-020, F-010-021, F-010-022, F-010-023)
+- **REF-011-013 Behringer SYSTEM 55 トリガ/信号規約**: V-trig・S-trig系のトリガ形式とEurorack電源。電圧値やピッチ規約は資料未入手。 (根拠: F-011-039, F-011-040)
+- **REF-011-014 Behringer SYSTEM 55 パッチ保存**: システムとしてのパッチ保存機能の有無。製品ページでは保存機能の言及なし。 (根拠: F-011-042)
+- **REF-011-015 Behringer CM1A MIDI-to-CV インターフェース**: 外部MIDIキーボード/DAWからピッチとトリガを供給するMIDI-CV変換器。 (根拠: F-011-043, F-011-044)
+- **REF-012-013 Buchla 200e 信号規約**: 200e/200h系の制御電圧・パルス・オーディオ信号の取り決め。 (根拠: F-012-032, F-012-033, F-012-034, F-012-035, F-012-036)
+- **REF-012-014 TipTop Buchla 200t 信号規約**: Eurorack版の電圧規約。ピッチは1V/oct、パルスやCVは0〜10V系。 (根拠: F-012-037, F-012-038, F-012-039)
+- **REF-012-015 Buchla 200e Remote Enable/プリセット管理**: 200e/hのプリセット管理(206e/225eのPreset Manager)とモジュール単位のRemote Enable。 (根拠: F-012-040, F-012-041, F-012-042)
+- **REF-012-016 TipTop Buchla 248t プリセット**: 248tは12のプリセットを不揮発メモリに保存できる。 (根拠: F-012-043)
+- **REF-012-017 Buchla 225e MIDI Decoder**: MIDIをアナログ電圧とパルスに変換し、200e系へ配るMIDIデコーダ。 (根拠: F-012-044, F-012-045)
+- **REF-013-006 ARP 2600 FS 信号・電圧規約**: ARP 2600 FS(および一部2600 M)のピッチCV・ゲート/トリガ・LFO出力の電圧規約。 (根拠: F-013-020, F-013-021, F-013-022, F-013-023, F-013-024, F-013-025)
+- **REF-013-013 ARP 2600 FS 状態保存(3620アルペジオ/ボイスアサイン)**: 電源断後に保持される設定と保持されないシーケンスの扱い。 (根拠: F-013-041, F-013-042)
+- **REF-013-014 ARP 2600 FS MIDI/USB**: 外部MIDI機器やPCからのノート制御。 (根拠: F-013-043, F-013-044)
+- **REF-013-015 ARP 2600 M MIDI/USB**: 外部MIDIコントローラーによるノート/ピッチベンド/モジュレーション/ポルタメント制御。 (根拠: F-013-045, F-013-046, F-013-047)
+- **REF-014-004 Roland SYSTEM-500 信号・電圧規約**: SYSTEM-500のCV入力レベル、ピッチ規約、ジャック形式、電源。 (根拠: F-014-010, F-014-011, F-014-012, F-014-013, F-014-014)
+- **REF-014-015 Roland SYSTEM-500 パッチ記録(Patch Memo)**: 音色(パッチ)の記録・再現手段。 (根拠: F-014-047)
+- **REF-014-016 Behringer 182 Sequencer 外部同期/制御**: 182の外部クロック入力、テンポCV、スタート/ストップ。 (根拠: F-014-048)
+- **REF-015-005 EMS pin-matrix patching convention**: How EMS instruments interconnect modules with pins in a matrix. (根拠: F-015-007, F-015-014)
+- **REF-015-011 EMS patch state (pin positions) and sequence memory**: How patches and sequences are retained. (根拠: F-015-022)
+- **REF-015-012 EMS external control add-ons**: Keyboards and sequencers used to control VCS3/Synthi systems. (根拠: F-015-004, F-015-023)
+- **REF-016-003 Serge signal conventions (jack-colour system)**: Three signal families by jack colour within +/-12 V. (根拠: F-016-008, F-016-009, F-016-010)
+- **REF-016-010 Serge patching and patch retention**: Cord-based patching; no memory documented. (根拠: F-016-022, F-016-023)
+- **REF-016-011 Serge external control and format interop**: 1V/Oct input, sync, balanced out, FX interface, Eurorack/4U bridging. (根拠: F-016-024, F-016-025, F-016-026)
+- **REF-017-008 AJH MiniMod signal conventions**: Voltage conventions observed across MiniMod modules. (根拠: F-017-023, F-017-038, F-017-039)
+- **REF-017-009 MiniMod patch recording (paper chart)**: Settings are recorded by hand; no digital preset memory is described in the pages read. (根拠: F-017-040)

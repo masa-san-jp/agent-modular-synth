@@ -3,7 +3,7 @@
   {
    "id": "SRC-015-01",
    "title": "EMS VCS3 / Synthi 100 official site (candidate host)",
-   "publisher": "EMS (current rights holder; exact official host unconfirmed)",
+   "publisher": "EMS (exact official host unconfirmed)",
    "url": "https://www.ems-synthi.demon.co.uk/",
    "doc_version": "unknown",
    "doc_type": "manufacturer_manual",
@@ -14,15 +14,51 @@
   },
   {
    "id": "SRC-015-02",
-   "title": "EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com, emssynthesisers.co.uk)",
+   "title": "EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com)",
    "publisher": "EMS (unconfirmed)",
    "url": "https://www.vcs3.com/",
    "doc_version": "unknown",
    "doc_type": "manufacturer_manual",
    "accessed_on": "2026-11-12",
-   "checked_scope": "Not read: every candidate host refused by the egress proxy (403 on CONNECT) or failed name resolution",
+   "checked_scope": "Not read: every candidate host refused by the egress proxy or failed name resolution (emssynthesisers.co.uk was later reachable, see SRC-015-03)",
    "link_status": "unreachable",
    "license_note": "Not obtained; no content reproduced."
+  },
+  {
+   "id": "SRC-015-03",
+   "title": "Electronic Music Studios home page",
+   "publisher": "Electronic Music Studios (Cornwall)",
+   "url": "https://emssynthesisers.co.uk/",
+   "doc_version": "Last updated 5th May 2020",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read whole page text (production statement, price list, links); page dated 5 May 2020",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright and trademarks belong to the rights holder."
+  },
+  {
+   "id": "SRC-015-04",
+   "title": "EMS Synthi Range 1969-1979: A Guide to the EMS Product Range (Graham Hinton)",
+   "publisher": "Graham Hinton, hosted on emssynthesisers.co.uk",
+   "url": "https://emssynthesisers.co.uk/emsprods.html",
+   "doc_version": "Last updated 17 June 2001",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read product index and the sections VCS3, DK1, Synthi 100, Sequencers, Synthi A/AKS, KS, VCS3 II, matrix boards, Spectron; later sections (vocoders, PolySynthi etc.) not used",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright and trademarks belong to the rights holder. Author-written history guide, so treated as third_party despite official hosting."
+  },
+  {
+   "id": "SRC-015-05",
+   "title": "EMS: The Inside Story (Graham Hinton)",
+   "publisher": "Graham Hinton, hosted on emssynthesisers.co.uk",
+   "url": "https://emssynthesisers.co.uk/emsstory.html",
+   "doc_version": "Last updated 27th December 2002",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read intro, non-products list and 'The Inbetween Years'; studio and people sections skimmed only",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright and trademarks belong to the rights holder. Author-written history, treated as third_party."
   }
  ]
 }

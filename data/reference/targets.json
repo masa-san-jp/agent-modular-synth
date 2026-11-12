@@ -150,8 +150,8 @@
       "category": "semi_modular",
       "era": "historical",
       "selection_reason": "ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。",
-      "status": "insufficient_sources",
-      "status_note": "EMS(VCS3・Synthi 100)の公式・現行権利者サイトに到達できず(候補ホストはプロキシが403または名前解決失敗)、事実を1件も確認できていない。公式ホスト名の確認と許可が必要。"
+      "status": "confirmed",
+      "status_note": "emssynthesisers.co.uk(EMS公式)のトップ・製品ガイド・沿革(Graham Hinton執筆)を確認し、VCS3/Synthi 100/Synthi Aのモジュール構成、ピンマトリクス(Synthi 100は60x60二枚)、シーケンサ、権利者の変遷を記録。公式の操作・保守マニュアルは見つからず、信号電圧規約・VCS3マトリクス寸法・個別モジュール仕様は未確認。製品ガイドは個人執筆の史料としてthird_party扱い。"
     },
     {
       "id": "T-016",
@@ -160,8 +160,8 @@
       "category": "hardware_modular",
       "era": "historical",
       "selection_reason": "Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。",
-      "status": "insufficient_sources",
-      "status_note": "randomsource.net は応答するが serge-modular.com へ301転送され、転送先がプロキシで拒否(403)されたため資料を読めていない。serge-modular.com の許可が必要。"
+      "status": "confirmed",
+      "status_note": "serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。"
     },
     {
       "id": "T-017",
@@ -171,7 +171,7 @@
       "era": "current",
       "selection_reason": "歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。",
       "status": "confirmed",
-      "status_note": "AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXのクイックスタートPDFはホスト(cdn-media.empowertribe.com)が拒否され未取得で、パラメータ範囲・保存・外部制御は未確認。Korgasmatron IIの公式マニュアルは未取得。"
+      "status_note": "AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXはクイックスタートガイド(V 2.0)を取得し、パラメータ範囲・入出力仕様を記録(電圧範囲・保存・外部制御は記載なしで未確認、消費電流は製品ページと不一致)。Korgasmatron IIの公式マニュアルは未取得。"
     }
   ],
   "out_of_scope": [
