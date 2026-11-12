@@ -32,6 +32,7 @@ NULLABLE = {"version","range","default","relations","mechanisms"}
 
 def main():
     targets = load(os.path.join(ROOT, "targets.json"))["targets"]
+    only = set(sys.argv[1:])  # 引数があればその対象のみ検査(作業中用)
     tids = [t["id"] for t in targets]
     for d, c in Counter(tids).items():
         if c > 1: err(f"対象ID重複: {d}")
@@ -46,6 +47,7 @@ def main():
     stats = Counter()
     for t in targets:
         tid = t["id"]; num = tid[2:]
+        if only and tid not in only: continue
         rp = os.path.join(ROOT,"records",f"{tid}.json"); sp = os.path.join(ROOT,"sources",f"{tid}.json")
         if t["status"] == "out_of_scope" and not os.path.exists(rp):
             continue
