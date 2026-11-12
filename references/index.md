@@ -28,3 +28,12 @@
 |一般名と独自呼称|I002 OVERTONE/MULTIPLY/DYNAMICS|M003 RTRGなど|見た目や商標の模倣ではなく振る舞いの理解に限る|
 
 これは調査DBであり、機能別仕様(#2)・採用設計(#3)・実装完成ではない。
+
+## 第2回拡充（2026-11-12）
+
+- [M004 A-120 filter](modules/M004.json): cutoff CV加算と共振。数値的な再現式は未確認。
+- [M005 A-130-1 VCA](modules/M005.json): 利得CVと信号入力の加算、DC/AC結合の版差。
+- [M006 A-155 sequencer](modules/M006.json): step/reset、triggerとgate、Glide/S&H。
+- [I006 2017 Easel文脈](instruments/I006.json) / [M007 Aux Card](modules/M007.json): 取得できた旧版公式資料による歴史・拡張・1.2 V/oct。I005 Modernの代用仕様ではない。
+
+比較の追加: filter cutoffへのCV加算（M004）とVCA利得へのCV加算（M005）は制御先が異なる。M006のtrigger幅はclockに依存し、I003の1 ms推奨とは同じ規約ではない。M007の1.2 V/octをVCVの1 V/octへ接続するには変換を検討する必要がある（これは本調査からの設計上の示唆であり製品採用決定ではない）。

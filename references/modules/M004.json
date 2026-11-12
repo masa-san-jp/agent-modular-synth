@@ -1,0 +1,37 @@
+{
+  "id": "M004",
+  "name": "A-120 24dB Low Pass",
+  "maker": "Doepfer",
+  "kind": "hardware_module",
+  "version": "A-120（2009年にtransistor arraysへ改訂）",
+  "parent_id": "I001",
+  "categories": [
+    "filter",
+    "resonance"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "機能・ポート",
+      "value": "transistor ladder型low-pass。cutoffは手動および3 CV入力の合計で制御。傾きは−24 dB/octaveと説明。",
+      "evidence": {
+        "source_id": "S013",
+        "section": "English description"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "共振・版差",
+      "value": "resonanceを上げるとself-oscillationに至りsine oscillatorとして振る舞うと説明。2009年の部品変更後もladder方式を維持。音質広告は検証事実として採用しない。",
+      "evidence": {
+        "source_id": "S013",
+        "section": "English description / Technical note"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "cutoff上下限、入力許容値、共振閾値、既定値、係数・非線形回路式、発振時の精度は未確認。"
+  ],
+  "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。"
+}

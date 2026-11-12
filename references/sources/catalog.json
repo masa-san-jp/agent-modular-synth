@@ -154,5 +154,83 @@
     "access_status": "unavailable",
     "evidence_type": "manufacturer_documentation",
     "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S013",
+    "publisher": "Doepfer",
+    "title": "A-120 24dB Low Pass",
+    "url": "https://doepfer.de/a120.htm",
+    "version": "A-120、2009年回路改訂あり",
+    "sections": "English description / Technical note",
+    "checked_on": "2026-11-12",
+    "scope": "本文のみ。PDF・実測なし",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S014",
+    "publisher": "Doepfer",
+    "title": "A-130-1/131 Voltage Controlled Amplifiers",
+    "url": "https://doepfer.de/a130.htm",
+    "version": "A-130-1、3世代の区別を記述",
+    "sections": "English description; Version 1–3",
+    "checked_on": "2026-11-12",
+    "scope": "英独本文の利得、CV、結合方式の版差。PDF・実測なし",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S015",
+    "publisher": "Doepfer",
+    "title": "A-155 Analog/Trigger Sequencer",
+    "url": "https://doepfer.de/a155.htm",
+    "version": "A-155、ページ改訂日なし",
+    "sections": "Features of analog rows / trigger rows / Control inputs",
+    "checked_on": "2026-11-12",
+    "scope": "英独本文。PDF・実測なし",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S016",
+    "publisher": "Buchla / Joel Davel",
+    "title": "Music Easel Aux Card User’s Guide",
+    "url": "https://buchla.com/wp-content/uploads/2017/01/AuxCard-Manual-v1_0.pdf",
+    "version": "v1.0, 2017-01-15",
+    "sections": "PDF pp.1,4,7（1始まり）",
+    "checked_on": "2026-11-12",
+    "scope": "全7頁の抽出テキストを取得。記録根拠は歴史・pitch・bus節。図の視覚検証なし。Modern版全体に一般化しない",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S017",
+    "publisher": "Buchla USA Documentation",
+    "title": "Easel Module / Music Easel",
+    "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/module",
+    "version": "版不明（copyright 2023）",
+    "sections": "Easel Module; Music Easel",
+    "checked_on": "2026-11-12",
+    "scope": "本文取得。https://buchlausa.github.io/buchla_doc/docs/easel-family/easel も確認。placeholder的な説明が多く数値仕様根拠には不採用",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+  },
+  {
+    "id": "S018",
+    "publisher": "Buchla USA Documentation",
+    "title": "Buchla 208MIDI",
+    "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/208midi",
+    "version": "208C対象、改訂日不明",
+    "sections": "Introduction; MIDI sections",
+    "checked_on": "2026-11-12",
+    "scope": "本文取得。Modern製品との対応版・誤記らしき箇所の確認が必要なため今回の確認済み仕様へ採用しない",
+    "access_status": "accessed",
+    "evidence_type": "manufacturer_documentation",
+    "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
   }
 ]

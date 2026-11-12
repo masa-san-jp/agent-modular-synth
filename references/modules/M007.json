@@ -1,0 +1,38 @@
+{
+  "id": "M007",
+  "name": "Music Easel Auxiliary Card",
+  "maker": "Buchla",
+  "kind": "hardware_accessory",
+  "version": "User’s Guide v1.0（2017-01-15）",
+  "parent_id": "I006",
+  "categories": [
+    "oscillator",
+    "cv_routing",
+    "internal_bus"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "音高・範囲",
+      "value": "mod amt最大時は1.2 V/oct、反対端は負方向。oscillator low範囲0.12–64 Hz、high範囲16.35–5274 Hzと記述。1 V/oct規約へ自動で同一視できない。",
+      "evidence": {
+        "source_id": "S016",
+        "section": "PDF p.4 The Oscillator pitch controls"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "busと保存",
+      "value": "Aux Cardのinternal bus既定はC。対応218eでのbus出力設定は起動後に再設定が必要と記述。すべての設定やModern版へ一般化しない。",
+      "evidence": {
+        "source_id": "S016",
+        "section": "PDF p.7 Appendix A"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "各入力の最大許容値、全状態保存、Modern版への対応、波形誤差、デジタル処理の詳細は未確認。"
+  ],
+  "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。"
+}
