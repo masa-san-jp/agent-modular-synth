@@ -50,15 +50,51 @@
   },
   {
    "id": "SRC-002-05",
-   "title": "MATHS Manual (HTML/PDF)",
+   "title": "MATHS/Wogglebug/Mimeophon Manual (HTML版)",
    "publisher": "Make Noise",
    "url": "https://www.makenoise-manuals.com/maths/maths-manual.html",
    "doc_version": "unknown",
    "doc_type": "manufacturer_manual",
    "accessed_on": "2026-11-12",
-   "checked_scope": "取得不能(makenoise-manuals.com はプロキシが403で拒否)",
-   "link_status": "unreachable",
+   "checked_scope": "HTML版は取得できたが画像参照のみの殻で本文なし。本文はPDF版(SRC-002-06〜08)を使用",
+   "link_status": "ok",
    "license_note": "Make Noise公式Webページ。事実のみ自分の言葉で要約し、本文・図は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-06",
+   "title": "MATHS Manual (PDF)",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoise-manuals.com/maths/maths-manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "PDF全文を pdftotext で通読(パネル説明・概要・パッチ例の見出し)",
+   "link_status": "ok",
+   "license_note": "Make Noise公式マニュアル(PDF)。事実のみ自分の言葉で要約し、本文・図・パッチ例は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-07",
+   "title": "Wogglebug Manual (PDF)",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoise-manuals.com/wogglebug/wogglebug-manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "PDF全文を pdftotext で通読(パネル説明・概要・パッチ例の見出し)",
+   "link_status": "ok",
+   "license_note": "Make Noise公式マニュアル(PDF)。事実のみ自分の言葉で要約し、本文・図・パッチ例は転載しない。ソースコード・アセットは再利用しない。"
+  },
+  {
+   "id": "SRC-002-08",
+   "title": "Mimeophon Manual (PDF)",
+   "publisher": "Make Noise",
+   "url": "https://www.makenoise-manuals.com/mimeophon/mimeophon-manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "PDF全文を pdftotext で通読(パネル説明・概要・パッチ例の見出し)",
+   "link_status": "ok",
+   "license_note": "Make Noise公式マニュアル(PDF)。事実のみ自分の言葉で要約し、本文・図・パッチ例は転載しない。ソースコード・アセットは再利用しない。"
   }
  ]
 }

@@ -20,8 +20,8 @@
       "category": "hardware_modular",
       "era": "current",
       "selection_reason": "多機能モジュールの現行例。エンベロープ/LFO/関数発生器の統合設計の参考。",
-      "status": "insufficient_sources",
-      "status_note": "製品ページ(makenoisemusic.com)はMaths/Wogglebug/Mimeophonを確認したが、マニュアル(makenoise-manuals.com)が403で取得不能のためポート・電圧範囲・信号規約・パッチ保存・外部制御は未確認。指定のmakenoise.comは別組織のサイトで不採用。"
+      "status": "confirmed",
+      "status_note": "makenoisemusic.com の製品ページと makenoise-manuals.com のPDFマニュアル(Maths、Wogglebug、Mimeophon)を確認。ポート電圧と主要仕様は確認済み。つまみの数値範囲・MIDI系モジュール・メーカー全体の規約は未確認。指定のmakenoise.comは別組織のサイトで不採用。"
     },
     {
       "id": "T-003",
@@ -30,8 +30,8 @@
       "category": "semi_modular",
       "era": "current",
       "selection_reason": "現行セミモジュラーの代表。正規化接続とパッチ点の関係を比較できる。",
-      "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status": "insufficient_sources",
+      "status_note": "公式ユーザーマニュアルPDFを取得できず(ダウンロード一覧はクライアント描画、PDFホストはプロキシで拒否)。moogmusic.com製品ページのSpecs表(パッチベイ32点、正規化、32ステップ/64シーケンス、MIDI/アサイナブル出力)のみ確認。電圧・ゲート規約、パッチ点名、サウンド保存の有無は未確認。"
     },
     {
       "id": "T-004",
@@ -41,7 +41,7 @@
       "era": "historical",
       "selection_reason": "歴史的な代表的セミモジュラー(原機1978年)の系譜。現行再発版のマニュアルを根拠にする。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。"
+      "status_note": "korg.comの公式マニュアル(原機オーナーズマニュアル復刻、MS-20 miniオーナーズマニュアル、MIDI Implementation、Patch Book)を確認。原機1978年との関係はminiマニュアルの記述の範囲のみ。miniのパッチパネルのジャック数・電圧表の再掲、音色メモリの明示的有無は未確認。"
     },
     {
       "id": "T-005",

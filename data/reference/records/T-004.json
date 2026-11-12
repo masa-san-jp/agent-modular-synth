@@ -1,0 +1,1731 @@
+{
+ "target_id": "T-004",
+ "entities": [
+  {
+   "id": "REF-004-001",
+   "kind": "system",
+   "name": "MS-20 mini",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Reissue of the 1978 MS-20 semi-modular monophonic analog synthesizer with a patch panel, normalled internal routing and added MIDI/USB.",
+   "synthesis_method": "analog subtractive, two VCOs, HPF+LPF, patchable modulation",
+   "features": [
+    {
+     "text": "Described as a faithful analog recreation of the 1978 MS-20, with MIDI IN and USB added",
+     "fact_ids": [
+      "F-004-001",
+      "F-004-002"
+     ]
+    },
+    {
+     "text": "Internal normalled routing plus a patch panel with mini-plug cables",
+     "fact_ids": [
+      "F-004-002",
+      "F-004-007"
+     ]
+    },
+    {
+     "text": "Monophonic, highest-note priority",
+     "fact_ids": [
+      "F-004-005"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Original manual specs are 1978-era and may differ from the mini",
+     "fact_ids": [
+      "F-004-004"
+     ]
+    },
+    {
+     "text": "Mini manual does not reprint the patch-panel voltage table",
+     "fact_ids": [
+      "F-004-025"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Normalled internal paths with a patch panel to override or extend them; mini-plug cables included",
+     "fact_ids": [
+      "F-004-002",
+      "F-004-007"
+     ]
+    },
+    "timing": null,
+    "state_save": {
+     "summary": "No sound memory described; only auto power-off flag persists",
+     "fact_ids": [
+      "F-004-006",
+      "F-004-047"
+     ]
+    },
+    "external_control": {
+     "summary": "MIDI IN and USB MIDI notes on channel 1",
+     "fact_ids": [
+      "F-004-048",
+      "F-004-049"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": "REF-004-002",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-002",
+   "kind": "system",
+   "name": "MS-20 (original)",
+   "maker": "Korg",
+   "version": "1978 release (per mini manual)",
+   "function_category": "system",
+   "purpose": "The 1978 original semi-modular monophonic synthesizer, documented by the reprinted original owner's manual.",
+   "synthesis_method": "analog subtractive, two VCOs, HPF+LPF, patchable modulation",
+   "features": [
+    {
+     "text": "Signal path VCO1/2, mixer, HPF, LPF, VCA with MG, EG1, EG2, noise and S/H modulation",
+     "fact_ids": [
+      "F-004-010"
+     ]
+    },
+    {
+     "text": "Internal patches supplemented by a patch panel",
+     "fact_ids": [
+      "F-004-011"
+     ]
+    },
+    {
+     "text": "ESP section for external instruments",
+     "fact_ids": [
+      "F-004-039"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Release date comes only from the mini manual",
+     "fact_ids": [
+      "F-004-016"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Internal patches with a patch panel; plugging a cable overrides the default source",
+     "fact_ids": [
+      "F-004-011",
+      "F-004-013"
+     ]
+    },
+    "timing": null,
+    "state_save": {
+     "summary": "Setting charts only; no memory seen in pages read",
+     "fact_ids": [
+      "F-004-045"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-004-003",
+   "kind": "signal_standard",
+   "name": "MS-20 patch panel voltage conventions",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Records the voltage ranges and trigger types printed for MS-20 patch jacks.",
+   "synthesis_method": "control voltage and ground-closure triggers",
+   "features": [
+    {
+     "text": "Keyboard CV exponential 0 to +8 V; VCO CV inputs linear 0 to +8 V",
+     "fact_ids": [
+      "F-004-017",
+      "F-004-018"
+     ]
+    },
+    {
+     "text": "Filter, T.EXT and CV ranges in -5..+5 V; trigger jacks are ground-closure",
+     "fact_ids": [
+      "F-004-019",
+      "F-004-020",
+      "F-004-021",
+      "F-004-023"
+     ]
+    },
+    {
+     "text": "Mini manual says internal voltage specs match the original",
+     "fact_ids": [
+      "F-004-025"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Out-of-range portions of a CV have no effect",
+     "fact_ids": [
+      "F-004-024"
+     ]
+    },
+    {
+     "text": "'20CT/V' unit meaning not explained",
+     "fact_ids": [
+      "F-004-019"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "KBD CV OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-017"
+     ]
+    },
+    {
+     "name": "VCO 1+2 CV IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    },
+    {
+     "name": "VCO 2 CV IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    },
+    {
+     "name": "VCO1+2 EXT FREQ IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -3,
+      "max": 3,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    },
+    {
+     "name": "TOTAL EXT",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-020"
+     ]
+    },
+    {
+     "name": "INITIAL GAIN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-020"
+     ]
+    },
+    {
+     "name": "KBD TRIG OUT",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-017"
+     ]
+    },
+    {
+     "name": "TRIG IN",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-021"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Ground-closure triggers and 0..+8 / -5..+5 V CVs",
+     "fact_ids": [
+      "F-004-017",
+      "F-004-021",
+      "F-004-023"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-004",
+   "kind": "module",
+   "name": "VCO 1 / VCO 2",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "Two wide-range oscillators setting pitch and base timbre.",
+   "synthesis_method": "analog VCO with ring modulation",
+   "features": [
+    {
+     "text": "VCO1 32'-4', VCO2 16'-2'; waveforms triangle/saw/PW/noise and saw/square/pulse/ring",
+     "fact_ids": [
+      "F-004-026"
+     ]
+    },
+    {
+     "text": "Selectable modulation sources by FM depth knobs and jacks",
+     "fact_ids": [
+      "F-004-028"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Master tune range stated inconsistently",
+     "fact_ids": [
+      "F-004-030"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "VCO 1+2 CV IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    },
+    {
+     "name": "VCO 2 CV IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    },
+    {
+     "name": "VCO1+2 EXT FREQ IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -3,
+      "max": 3,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-018"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Scale VCO1",
+     "unit": "feet",
+     "range": {
+      "min": 4,
+      "max": 32,
+      "unit": "ft"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-026"
+     ]
+    },
+    {
+     "name": "Scale VCO2",
+     "unit": "feet",
+     "range": {
+      "min": 2,
+      "max": 16,
+      "unit": "ft"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-026"
+     ]
+    },
+    {
+     "name": "Pitch (VCO2)",
+     "unit": "octave",
+     "range": {
+      "min": -1,
+      "max": 1,
+      "unit": "oct"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-027"
+     ]
+    },
+    {
+     "name": "PW",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-027"
+     ]
+    },
+    {
+     "name": "Portamento",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-027"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "CV inputs replace keyboard pitch; FM jacks replace MG/EG1 sources",
+     "fact_ids": [
+      "F-004-028",
+      "F-004-029"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-005",
+   "kind": "module",
+   "name": "VCHPF + VCLPF",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "Series high-pass and low-pass voltage-controlled filters.",
+   "synthesis_method": "analog filters with self-oscillation",
+   "features": [
+    {
+     "text": "Each filter has cutoff, peak and two modulation depth knobs",
+     "fact_ids": [
+      "F-004-031",
+      "F-004-032"
+     ]
+    },
+    {
+     "text": "Self-oscillation at maximum peak",
+     "fact_ids": [
+      "F-004-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Cutoff CV sensitivity printed as 20CT/V; meaning unconfirmed",
+     "fact_ids": [
+      "F-004-019"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "HPF CUTOFF FREQ IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-019"
+     ]
+    },
+    {
+     "name": "LPF CUTOFF FREQ IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-019"
+     ]
+    },
+    {
+     "name": "EXT SIGNAL IN",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": 0,
+      "max": 3,
+      "unit": "Vpp"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-019",
+      "F-004-033"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Cutoff depth knobs use internal MG/EG2 unless a jack is patched",
+     "fact_ids": [
+      "F-004-032"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-006",
+   "kind": "module",
+   "name": "Envelope Generator 2 (EG-2)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "Five-stage envelope driving the VCA and filter cutoff.",
+   "synthesis_method": "HADSR envelope",
+   "features": [
+    {
+     "text": "Hold, Attack, Decay, Sustain, Release",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    },
+    {
+     "text": "Normalled to VCA and filter modulation",
+     "fact_ids": [
+      "F-004-035"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "EG1+EG2 TRIG IN",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-036"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Hold",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    },
+    {
+     "name": "Attack",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    },
+    {
+     "name": "Decay",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    },
+    {
+     "name": "Sustain",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    },
+    {
+     "name": "Release",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-034"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Keyboard, momentary switch or external trigger starts the cycle",
+     "fact_ids": [
+      "F-004-036"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-007",
+   "kind": "module",
+   "name": "Modulation Generator (MG)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "lfo",
+   "purpose": "LFO with simultaneous triangle and rectangle outputs.",
+   "synthesis_method": "analog LFO",
+   "features": [
+    {
+     "text": "Triangle and rectangle at once; shape set by Waveform knob",
+     "fact_ids": [
+      "F-004-037"
+     ]
+    },
+    {
+     "text": "Triangle normalled to VCO/VCF depth knobs",
+     "fact_ids": [
+      "F-004-038"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "MG triangle out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "Vpp"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-022"
+     ]
+    },
+    {
+     "name": "MG rectangle out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-022"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Frequency",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-037"
+     ]
+    },
+    {
+     "name": "Waveform",
+     "unit": "knob",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-037"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "T.EXT input replaces MG source for all three depth controls",
+     "fact_ids": [
+      "F-004-038"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-008",
+   "kind": "module",
+   "name": "External Signal Processor (ESP)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Converts external audio into pitch CV, envelope and trigger for the MS-20.",
+   "synthesis_method": "preamp, band-pass, F-V converter, envelope follower",
+   "features": [
+    {
+     "text": "Pitch, envelope and trigger extraction",
+     "fact_ids": [
+      "F-004-039",
+      "F-004-040"
+     ]
+    },
+    {
+     "text": "Mini manual defers to original for ESP",
+     "fact_ids": [
+      "F-004-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Requires level, threshold and CV adjust setup",
+     "fact_ids": [
+      "F-004-041"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "F-V CV OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-040"
+     ]
+    },
+    {
+     "name": "ENV OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-040"
+     ]
+    },
+    {
+     "name": "TRIG OUT",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-040"
+     ]
+    },
+    {
+     "name": "SIGNAL IN",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-041"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Outputs are patched to VCO CV IN, trigger in and VCA initial gain",
+     "fact_ids": [
+      "F-004-041"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-009",
+   "kind": "module",
+   "name": "Sample and Hold (S/H)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "random_logic",
+   "purpose": "Samples an input on each trigger and holds the value.",
+   "synthesis_method": "sample and hold",
+   "features": [
+    {
+     "text": "Used for random note and arpeggio effects",
+     "fact_ids": [
+      "F-004-043"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "CLOCK IN",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-044"
+     ]
+    },
+    {
+     "name": "S/H IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "Vpp"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-044"
+     ]
+    },
+    {
+     "name": "S/H OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "Vpp"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-004-044"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Clock from MG rectangle or any ground-closure source",
+     "fact_ids": [
+      "F-004-043",
+      "F-004-044"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-010",
+   "kind": "patch_storage",
+   "name": "MS-20 mini sound recall (charts and patch book)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Describes how sounds are recalled: by manual knob/cable setups from charts and a patch book.",
+   "synthesis_method": "manual setup",
+   "features": [
+    {
+     "text": "30-patch patch book and setting charts",
+     "fact_ids": [
+      "F-004-045",
+      "F-004-046"
+     ]
+    },
+    {
+     "text": "Only auto power-off flag persists",
+     "fact_ids": [
+      "F-004-047"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No sound memory found in the documents read",
+     "fact_ids": [
+      "F-004-045"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "No patch memory documented; recall is by manual settings",
+     "fact_ids": [
+      "F-004-045",
+      "F-004-046",
+      "F-004-047"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-004-011",
+   "kind": "control_interface",
+   "name": "MS-20 mini MIDI IN / USB MIDI",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Note-only MIDI over DIN and USB.",
+   "synthesis_method": "MIDI note input",
+   "features": [
+    {
+     "text": "Channel 1 fixed, notes only, velocity disabled on input",
+     "fact_ids": [
+      "F-004-048",
+      "F-004-049"
+     ]
+    },
+    {
+     "text": "USB also transmits keyboard notes",
+     "fact_ids": [
+      "F-004-049",
+      "F-004-050"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No pitch bend/mod transmitted",
+     "fact_ids": [
+      "F-004-049"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "MIDI IN",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-048"
+     ]
+    },
+    {
+     "name": "USB MIDI",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-004-049"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "Notes via MIDI IN/USB; CV via KBD CV OUT",
+     "fact_ids": [
+      "F-004-048",
+      "F-004-049",
+      "F-004-050",
+      "F-004-051"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-004-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-004-001",
+   "entity_id": "REF-004-001",
+   "topic": "relation to original",
+   "statement": "The mini manual calls the MS-20 mini a reincarnation of the original MS-20 (released 1978) that uses analog circuitry to recreate its sound; it points readers to the reprinted original Owner's Manual.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual (2015.06.01), section 'About the MS-20 mini' (EN)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-002",
+   "entity_id": "REF-004-001",
+   "topic": "differences from original",
+   "statement": "Listed differences: compact size with mini-plug patch cables, added MIDI IN and USB port, VCA redesigned for better S/N, AC-adapter power. VCO and VCF are stated to be faithful reproductions; internal voltage specs are said to match the original.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'About the MS-20 mini'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-003",
+   "entity_id": "REF-004-001",
+   "topic": "specifications",
+   "statement": "37-key mini keyboard, control wheel and momentary switch; mono 1/8in SIGNAL IN/OUT (OUT 2 Vp-p, 3.5 kohm); stereo PHONES; DC9V jack, MIDI IN, USB type B; 493x257x208 mm, 4.8 kg; 10 patch cords and AC adapter included.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'Specifications'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-004",
+   "entity_id": "REF-004-001",
+   "topic": "caveat on original specs",
+   "statement": "The mini manual warns that the original manual's wording and its specification figures date from 1978 and may differ from the mini.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'About the MS-20 mini' note",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-005",
+   "entity_id": "REF-004-001",
+   "topic": "voice behaviour",
+   "statement": "Monophonic: with several keys held, only the highest note sounds.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'Producing sounds'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-006",
+   "entity_id": "REF-004-001",
+   "topic": "power",
+   "statement": "Auto power-off is on by default and triggers after 4 hours without keyboard, MIDI/USB note-on or TRIG IN activity; the on/off setting is retained across power cycles and changed with a key-hold power-on combination.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'Auto power off function'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-007",
+   "entity_id": "REF-004-001",
+   "topic": "signal flow",
+   "statement": "The mini manual refers to the original manual for basic operation and ESP use, and shows a 'Normal Setting' diagram and patching examples.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'Normal Setting', 'Patching to add variations to timbre'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-008",
+   "entity_id": "REF-004-002",
+   "topic": "overview",
+   "statement": "The original manual presents the MS-20 as a Korg monophonic synthesizer built with the same technology as the PS-3100 and PS-3300 polyphonic models.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.1, 1) Introduction",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-009",
+   "entity_id": "REF-004-002",
+   "topic": "specifications",
+   "statement": "37 keys (C to C, 3 octaves); 10 W power consumption; 569x309x249 mm; 7.7 kg; patch cords and stand/case listed as accessory/option.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.8, 10) Specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-010",
+   "entity_id": "REF-004-002",
+   "topic": "architecture",
+   "statement": "Signal path: VCO1 and VCO2 into VCO mixer, then high-pass VCF, then low-pass VCF, then VCA, then volume. Modulation sources: MG, EG1, EG2, noise, S/H; plus an external signal processor section.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.2-3, block diagram and signal flowchart",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-011",
+   "entity_id": "REF-004-002",
+   "topic": "internal patching",
+   "statement": "The flowchart distinguishes audio paths from control-voltage paths; control signals reach VCO, VCF and VCA through internal patches that the patch panel can supplement.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.3, 3-2 Signal Flowchart",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-012",
+   "entity_id": "REF-004-002",
+   "topic": "normal setting",
+   "statement": "A 'Normal Setting' diagram gives a reference knob layout with all modulation off; the manual advises returning to it when starting a new sound.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.4, 4) Normal Setting",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-013",
+   "entity_id": "REF-004-002",
+   "topic": "patching practice",
+   "statement": "Patching guidance: decide the effect, then the control signal needed, then its source. A key press yields both a CV and a trigger. Patching a cable into an input breaks the internal connection of that input (e.g. second synth keyboard disabled when KBD CV/TRIG outputs feed it).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.7, 6) About Patching and 7) Expanding Your System",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-014",
+   "entity_id": "REF-004-002",
+   "topic": "expansion",
+   "statement": "Examples pair the MS-20 with the SQ-10 analog sequencer and the MS-10 using patch cords (KBD CV OUT and TRIG OUT to the other unit's CV and trigger inputs).",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.7, 7) Expanding Your System",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-015",
+   "entity_id": "REF-004-002",
+   "topic": "setting charts",
+   "statement": "The original manual includes a section of setting charts (section 11, from p.25) for recalling sounds by knob positions.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.i Index (11 Setting Charts)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-016",
+   "entity_id": "REF-004-002",
+   "topic": "release date",
+   "statement": "The original owner's manual pages read carry no release date; the 1978 date comes only from the mini manual.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual (pages 1-8 read); see also SRC-004-02",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-017",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "Keyboard CV output is exponential, 0 to +8 V; KBD trigger output is a ground-closure type marked GND.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, Patch panel section 1 Keyboard",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-018",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "VCO 1+2 CV IN and VCO 2 CV IN take 0 to +8 V with linear response; a separate VCO 1+2 external frequency input is specified as octave-per-volt over -3 to +3 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, Patch panel section 2 VCO",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-019",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "External cutoff CV inputs for the high-pass and low-pass VCFs are -5 to +5 V, printed with a '20CT/V' sensitivity (unit meaning not explained in pages read); EXT SIGNAL IN is 3 Vpp max.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, Patch panel section 3 VCF",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-020",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "Total external modulation input (T.EXT) is -5 to +5 V; VCA initial gain input is 0 to +5 V; modulation VCA control input is 0 to +5 V with audio in/out -5 to +5 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, sections 4, 5, 10",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-021",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "EG1 normal output swings -5 V to 0 V and its reverse output +5 V to 0 V; EG1+EG2 and EG1 trigger inputs are ground-closure type.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, section 6 EG",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-022",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "MG triangle output is 5 Vpp and rectangle output is 0 to +5 V; noise outputs and S/H signal I/O are 5 Vpp; S/H clock input is ground-closure.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, sections 7-9",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-023",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "Control wheel output spans -5 V through 0 V to +5 V; momentary switch output is ground-closure; signal output is 2 Vpp.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 Specifications, sections 11-12",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-024",
+   "entity_id": "REF-004-003",
+   "topic": "voltage convention",
+   "statement": "A -5..+5 V signal patched into a 0..+5 V input only has effect in the 0..+5 V part; the manual tells users to check each jack's range and whether a signal is analog or trigger-type.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "p.8 9) Caution (2)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-025",
+   "entity_id": "REF-004-003",
+   "topic": "mini voltage claim",
+   "statement": "The mini manual says its internal voltage specifications are identical to the original design, but does not reprint the panel voltage table.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'About the MS-20 mini' (AC adapter bullet)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-026",
+   "entity_id": "REF-004-004",
+   "topic": "scale and waveforms",
+   "statement": "VCO1 scale spans 32' to 4' with triangle, sawtooth, pulse-width rectangle and white noise; VCO2 spans 16' to 2' with sawtooth, square, pulse and a ring-modulator mode.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5, VCO (1)-(2) and p.8 Specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-027",
+   "entity_id": "REF-004-004",
+   "topic": "controls",
+   "statement": "PW varies VCO1 rectangle width (0 = square); Pitch shifts VCO2 by +/- one octave; Portamento sets glide time; Master Tune adjusts both VCOs.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5 (3)-(6)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-028",
+   "entity_id": "REF-004-004",
+   "topic": "frequency modulation",
+   "statement": "Frequency modulation intensity knobs take the MG triangle (MG/T.EXT) or EG1 (EG1/EXT); a cable in the respective patch jack replaces the internal source with the external signal.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5 (7)-(8)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-029",
+   "entity_id": "REF-004-004",
+   "topic": "CV inputs",
+   "statement": "VCO 1+2 CV IN and VCO 2 CV IN let an external controller replace keyboard pitch control; VCO 2 CV IN affects VCO2 only.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6, Patch Panel (29)-(30)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-030",
+   "entity_id": "REF-004-004",
+   "topic": "master tune range discrepancy",
+   "statement": "Text says Master Tune covers about +/- 2 semitones while the spec list prints +/- 1/2 octave.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5 (6) vs p.8 Specifications item 4",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-031",
+   "entity_id": "REF-004-005",
+   "topic": "structure",
+   "statement": "Separate voltage-controlled high-pass and low-pass filters in series, each with cutoff and peak (resonance); at maximum peak each filter self-oscillates.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5, VCHPF and VCLPF (10)-(13)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-032",
+   "entity_id": "REF-004-005",
+   "topic": "cutoff modulation",
+   "statement": "Each filter's cutoff has two modulation depth knobs, MG/T.EXT and EG-2/EXT; with nothing patched they use MG triangle and EG2, otherwise the external jack source.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.5 (14)-(15)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-033",
+   "entity_id": "REF-004-005",
+   "topic": "external input",
+   "statement": "External sound enters the filter and VCA path via EXT SIGNAL IN (3 Vpp max) and can be mixed with the VCOs using the VCO mixer.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6 (35), p.5 VCO Mixer, p.8",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-034",
+   "entity_id": "REF-004-006",
+   "topic": "stages",
+   "statement": "EG2 has five stages: Hold, Attack, Decay, Sustain, Release; hold extends the trigger by a set time.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6, Envelope Generator 2 (20)-(24)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-035",
+   "entity_id": "REF-004-006",
+   "topic": "internal routing",
+   "statement": "EG2 is internally patched to the VCA and also modulates both filter cutoffs via the EG-2/EXT knobs.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-036",
+   "entity_id": "REF-004-006",
+   "topic": "trigger",
+   "statement": "The envelope is triggered by the keyboard, the momentary switch or external TRIG IN jacks (EG1+2 TRIG IN); the trigger diagram shows 'on' as the low state.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6 (31)-(32), EG-2 diagram",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-037",
+   "entity_id": "REF-004-007",
+   "topic": "outputs",
+   "statement": "The MG outputs triangle and rectangle waves simultaneously; one Waveform knob varies their shape continuously and Frequency is shown by an LED.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6, Modulation Generator (25)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-038",
+   "entity_id": "REF-004-007",
+   "topic": "internal use",
+   "statement": "The MG triangle feeds the VCO and VCF modulation depth knobs internally; patching into T.EXT replaces that source for all three.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6 and p.7 (36)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-039",
+   "entity_id": "REF-004-008",
+   "topic": "contents",
+   "statement": "The ESP contains a preamp, variable band-pass filter, envelope follower with trigger detector, and pitch-to-voltage converter, letting an external instrument drive MS-20 pitch, volume and envelope.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.7, (42) External Signal Processor",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-040",
+   "entity_id": "REF-004-008",
+   "topic": "outputs",
+   "statement": "ESP outputs: amplifier out (0..+8 V), band-pass out, F-V CV out (0..+8 V), envelope out (0..+5 V), trigger out (ground-closure); front panel has signal level, low cut, high cut, CV adjust, threshold controls.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.8 Specifications, External Signal Processor",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-041",
+   "entity_id": "REF-004-008",
+   "topic": "use",
+   "statement": "Use steps: connect source to SIGNAL IN, set level, set threshold, route F-V CV to VCO CV IN, TRIG OUT to trigger in, ENV OUT to VCA initial gain, then adjust band-pass and CV adjust to track pitch.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.7-8, 8) Using the ESP",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-042",
+   "entity_id": "REF-004-008",
+   "topic": "mini",
+   "statement": "The mini manual says the SIGNAL IN jack is for guitar or mic when using the ESP and refers to the original manual for ESP details.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, Basic Operation 1. Connections item 4",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-043",
+   "entity_id": "REF-004-009",
+   "topic": "function",
+   "statement": "S/H samples a patched-in signal each time it is triggered and holds the value until the next trigger; clock can be the MG rectangle or another source; used for random notes and arpeggio-like effects.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.7 (40)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-044",
+   "entity_id": "REF-004-009",
+   "topic": "levels",
+   "statement": "S/H clock input is ground-closure; sample input and output are 5 Vpp.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.8 Specifications section 9",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-045",
+   "entity_id": "REF-004-010",
+   "topic": "recall method",
+   "statement": "The original manual provides setting charts (knob-position diagrams) for sounds; no memory function appears in the pages read.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.i Index (11 Setting Charts); pp.1-8 read",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-046",
+   "entity_id": "REF-004-010",
+   "topic": "patch book",
+   "statement": "The MS-20 Patch Book lists 30 patches across Bass, Drum, Keyboard, Lead and Sound Effect categories, flags which need a mod wheel or switch, and says they derive from the iMS-20 iOS app with a note that results will differ from hardware.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-04",
+   "locator": "Patch book, contents list and 'Using this Patchbook'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-047",
+   "entity_id": "REF-004-010",
+   "topic": "persisted setting",
+   "statement": "The only user setting the mini manual says persists across power-off is the auto power-off on/off flag.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 'Auto power off function'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-048",
+   "entity_id": "REF-004-011",
+   "topic": "MIDI IN",
+   "statement": "MIDI IN accepts only note messages on MIDI channel 1 (fixed) with velocity disabled; note number 92 or above stops the sound as invalid; 11 or below is ignored.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 4. About MIDI, MIDI IN connector",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-049",
+   "entity_id": "REF-004-011",
+   "topic": "USB",
+   "statement": "USB carries note messages on channel 1 in both directions; transmitted velocity is fixed at 64; pitch bend and modulation are not transmitted; KORG USB-MIDI driver is required.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-02",
+   "locator": "Owner's Manual, 4. About MIDI, Connecting a computer",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-050",
+   "entity_id": "REF-004-011",
+   "topic": "MIDI implementation",
+   "statement": "Implementation rev 1.0 (2012.10.25): transmitted notes 48-84 (37 keys), note on/off only; receives note on/off, All Sound Off, All Note Off and Omni/Mono/Poly mode messages.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-004-03",
+   "locator": "MS-20 mini MIDI Implementation, sections 1 and 2-1",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-004-051",
+   "entity_id": "REF-004-011",
+   "topic": "CV/gate path",
+   "statement": "Keyboard CV/trigger can be sent to other gear via KBD CV OUT and KBD TRIG OUT; the manual says MIDI notes also count as activity for auto power-off.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-004-01",
+   "locator": "Original Owner's Manual p.6 (33)-(34); mini manual 'Auto power off function'",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-004-001",
+   "item": "Number and layout of patch-panel jacks on the mini, and whether every printed voltage matches the original",
+   "tried_sources": [
+    "SRC-004-02",
+    "SRC-004-01"
+   ],
+   "impact_on_spec": "Port list for the mini is taken from the original manual; verify against the mini panel before implementing."
+  },
+  {
+   "entity_id": "REF-004-002",
+   "item": "Original MS-20 release date in the original manual itself",
+   "tried_sources": [
+    "SRC-004-01"
+   ],
+   "impact_on_spec": "Only the mini manual's 1978 statement is available as an official source."
+  },
+  {
+   "entity_id": "REF-004-010",
+   "item": "Whether the mini has any sound or patch memory (explicit statement)",
+   "tried_sources": [
+    "SRC-004-02",
+    "SRC-004-01",
+    "SRC-004-04"
+   ],
+   "impact_on_spec": "Treated as no memory (manual recall) but not explicitly stated."
+  },
+  {
+   "entity_id": "REF-004-004",
+   "item": "Master Tune range (+/-2 semitones vs +/-1/2 octave)",
+   "tried_sources": [
+    "SRC-004-01"
+   ],
+   "impact_on_spec": "Do not hard-code tuning range from this source alone."
+  },
+  {
+   "entity_id": "REF-004-003",
+   "item": "Meaning of '20CT/V' for filter cutoff CV; exact trigger thresholds",
+   "tried_sources": [
+    "SRC-004-01"
+   ],
+   "impact_on_spec": "Filter CV scaling cannot be specified numerically."
+  },
+  {
+   "entity_id": "REF-004-001",
+   "item": "MS-20 mini Setting Examples PDF and setting charts",
+   "tried_sources": [
+    "SRC-004-01"
+   ],
+   "impact_on_spec": "Example sound settings not captured; image-only PDFs not reviewed."
+  },
+  {
+   "entity_id": "REF-004-011",
+   "item": "MIDI implementation chart table in the mini manual (text extraction garbled)",
+   "tried_sources": [
+    "SRC-004-02",
+    "SRC-004-03"
+   ],
+   "impact_on_spec": "MIDI behaviour taken from the manual's text and the MIDI Implementation file only."
+  }
+ ]
+}
