@@ -1,7 +1,7 @@
 {
   "version": "0.1",
   "fixed_on": "2026-11-12",
-  "note": "初期版の調査対象。途中の追加・除外は理由をstatus_noteに追記する。件数充足ではなく、種別・時代・信号規約・パッチ保存・外部制御の比較に必要な範囲で選定。",
+  "note": "初期版の調査対象。途中の追加・除外は理由をstatus_noteに追記する。件数充足ではなく、種別・時代・信号規約・パッチ保存・外部制御の比較に必要な範囲で選定。 2026-11-12: オーナー指示で歴史的・再発売系のT-011〜T-017を追加。",
   "targets": [
     {
       "id": "T-001",
@@ -102,13 +102,79 @@
       "selection_reason": "商用データフロー環境の代表。信号/メッセージの区別と外部制御の公式資料が公開されている。",
       "status": "confirmed",
       "status_note": "一次情報は docs.cycling74.com のユーザガイド/リファレンスで確認。.maxpat内部スキーマ・既定OSCポート・利用条件(/legalは404)は未確認としてunconfirmedに記録。gen~/RNBOは範囲限定。"
+    },
+    {
+      "id": "T-011",
+      "name": "Moog 大型モジュラー系(System 15/35/55、Behringer System 55)",
+      "maker": "Moog Music / Behringer",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "歴史的な大型モジュラーの代表系譜。原機(Moog)と再発売(Behringer)の関係を比較できる。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-012",
+      "name": "Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue)",
+      "maker": "Buchla / TipTop Audio",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "Moogと異なる設計思想(電圧規約・ペンタ/ファンクション系)の歴史的代表系譜と現行再発売。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-013",
+      "name": "ARP 系(ARP 2500、ARP 2600、Behringer 2500)",
+      "maker": "ARP / Korg / Behringer",
+      "category": "semi_modular",
+      "era": "historical",
+      "selection_reason": "マトリクス式パッチ(2500)とセミモジュラー(2600)の歴史的代表。再発売との関係を比較できる。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-014",
+      "name": "Roland System 系(System-100m、System-700、System-500、Behringer System 100)",
+      "maker": "Roland / Behringer",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "国産モジュラーの歴史的系譜と現行のEurorack展開(System-500)・再発売の比較。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-015",
+      "name": "EMS 系(VCS3、Synthi 100)",
+      "maker": "EMS",
+      "category": "semi_modular",
+      "era": "historical",
+      "selection_reason": "ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-016",
+      "name": "Serge 系(Serge Modular、Random*Source Serge)",
+      "maker": "Serge / Random*Source",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
+    },
+    {
+      "id": "T-017",
+      "name": "現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX)",
+      "maker": "AJH Synth / Intellijel / Behringer",
+      "category": "hardware_modular",
+      "era": "current",
+      "selection_reason": "歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。",
+      "status": "confirmed",
+      "status_note": "初期状態。調査後に更新。(2026-11-12 オーナー指示により追加)"
     }
   ],
   "out_of_scope": [
-    {
-      "name": "Buchla 200系・Serge・Roland System-100M等の原機",
-      "reason": "公式一次資料の公開入手性が不確実で、初期版では現行再発・関連規格の資料を優先。後続追加候補。"
-    },
     {
       "name": "Web Audio API / AudioWorklet等の技術基盤",
       "reason": "#3で技術スタック選定の際に調べる。#1は技術スタックを先に固定しない方針。"
