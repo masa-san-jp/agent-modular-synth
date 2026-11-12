@@ -1,0 +1,39 @@
+{
+  "id": "M003",
+  "name": "Core MIDI-CV",
+  "maker": "VCV",
+  "kind": "software_module",
+  "version": "Rack 2 Core online manual",
+  "parent_id": "I003",
+  "categories": [
+    "midi",
+    "pitch",
+    "gate",
+    "clock"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "イベント変換",
+      "value": "V/OCTは1 V/oct。押鍵時GATEは10 Vでlegato時再トリガしない一方、RTRGは新規押鍵で発生。",
+      "evidence": {
+        "source_id": "S008",
+        "section": "MIDI-CV"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "ポート値と時間",
+      "value": "VELは0–10 V、pitch wheelは−5–5 V。CLKはMIDI 24-PPQNクロックに反応する。",
+      "evidence": {
+        "source_id": "S008",
+        "section": "MIDI-CV"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "MIDI競合の順序・全パラメータ初期値・note-off時のpitch保持規則・外部エージェント接続は未確認。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

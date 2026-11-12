@@ -1,0 +1,47 @@
+{
+  "id": "M001",
+  "name": "A-110-1 Standard VCO",
+  "maker": "Doepfer",
+  "kind": "hardware_module",
+  "version": "A-110-1",
+  "parent_id": "I001",
+  "categories": [
+    "oscillator",
+    "fm",
+    "pwm"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "音源",
+      "value": "saw-coreからpulse/saw/triangle/sineを同時出力。周波数は概ね15 Hz–8 kHz。波形の非理想性をメーカー自身が注意する。",
+      "evidence": {
+        "source_id": "S002",
+        "section": "製品説明"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "出力",
+      "value": "typical peak-to-peak値はsaw/pulse 8 V、triangle/sine 10 V。保証された上下限ではない。",
+      "evidence": {
+        "source_id": "S002",
+        "section": "製品説明"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "接続とパラメータ",
+      "value": "Range/TuneとCVで音高を制御しpulse widthを手動/CVで制御。CV1への挿入は内部bus CV接続を切る。Tune幅には2015年頃の版差がある。",
+      "evidence": {
+        "source_id": "S002",
+        "section": "製品説明・Technical notes"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "各入力の許容上下限・既定値・同期/リセット条件・チューニング精度は未確認。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

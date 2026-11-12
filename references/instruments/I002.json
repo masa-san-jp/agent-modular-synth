@@ -1,0 +1,48 @@
+{
+  "id": "I002",
+  "name": "0-COAST",
+  "maker": "Make Noise",
+  "kind": "hardware_semi_modular",
+  "version": "製品ページ（firmware案内1.6.8）",
+  "parent_id": null,
+  "categories": [
+    "oscillator",
+    "waveshaping",
+    "lowpass_gate",
+    "midi"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "接続",
+      "value": "単声で、内部接続によりケーブルなしでも発音でき、外部パッチで接続を変更できる。",
+      "evidence": {
+        "source_id": "S004",
+        "section": "Introduction"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "音源・音色",
+      "value": "triangle-core VCO、OVERTONE/MULTIPLY、DYNAMICS low-pass gateを持つ。独自呼称と一般機能は同一と決めつけない。",
+      "evidence": {
+        "source_id": "S004",
+        "section": "FEATURES"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "外部制御",
+      "value": "MIDI-CV/Gateは2チャンネル、MIDI Clock同期を案内。13 sourcesと14 destinationsを案内。",
+      "evidence": {
+        "source_id": "S004",
+        "section": "FEATURES"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "各ジャックの電圧・既定値・内部接続の正確な切断条件・全状態保存・遠隔読み取りは未確認（S005取得不能）。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

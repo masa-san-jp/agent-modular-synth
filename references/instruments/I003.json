@@ -1,0 +1,76 @@
+{
+  "id": "I003",
+  "name": "VCV Rack",
+  "maker": "VCV",
+  "kind": "software_modular",
+  "version": "Rack 2オンライン手引き",
+  "parent_id": null,
+  "categories": [
+    "patch_graph",
+    "signal_conventions",
+    "persistence",
+    "midi",
+    "plugin_api"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "信号規約",
+      "value": "仮想ケーブル値はV単位。標準的音声は±5 V、単極CVは0–10 V、双極CVは±5 Vを推奨。実機全体の必須規格ではない。",
+      "evidence": {
+        "source_id": "S006",
+        "section": "Levels"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "トリガ・ゲート",
+      "value": "推奨トリガは10 V/1 ms、active gateは10 V。再検出防止に低閾値約0.1 V・高閾値約1–2 Vのヒステリシス検出を推奨。",
+      "evidence": {
+        "source_id": "S006",
+        "section": "Triggers and Gates"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "時間・音高",
+      "value": "各ケーブルは1 sample遅延。周波数CVは1 V/octを推奨。これは仮想エンジンの規約であり実機配線の遅延ではない。",
+      "evidence": {
+        "source_id": "S006",
+        "section": "Timing; Pitch and Frequencies"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "保存",
+      "value": "パッチは.vcvとして保存。エンジンは1/sampleRate秒ずつ状態更新する。",
+      "evidence": {
+        "source_id": "S007",
+        "section": "File / Open Save; Engine / Sample rate"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "プログラム・状態",
+      "value": "configParamは範囲・既定値・単位・表示変換を定義。通常パラメータは自動保存、独自状態はdataToJson/dataFromJsonで明示する。プラグイン内APIであり遠隔エージェントAPIを意味しない。",
+      "evidence": {
+        "source_id": "S009",
+        "section": "Parameters; Data serialization / JSON"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "再利用制約",
+      "value": "公式案内はRackのGPLv3+、非商用プラグイン例外と別途商用条件を区別し、パネル等の複製にも制約を案内。個別コード・資産の使用前に実ライセンス確認が必要。",
+      "evidence": {
+        "source_id": "S010",
+        "section": "GPLv3; other licenses; Ethics Guidelines"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "ブラウザ対応、遠隔の安全なグラフ編集API、完全なDSP状態の再現保存、特定版固定・API互換性は未確認。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}

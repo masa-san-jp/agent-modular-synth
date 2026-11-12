@@ -1,0 +1,38 @@
+{
+  "id": "M002",
+  "name": "A-140-1 ADSR",
+  "maker": "Doepfer",
+  "kind": "hardware_module",
+  "version": "A-140 / A-140-1（名称変更）",
+  "parent_id": "I001",
+  "categories": [
+    "envelope",
+    "gate",
+    "retrigger"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "状態とポート",
+      "value": "Attack/Decay/Sustain/Releaseで包絡を設定。gate active中のRetrig入力で再開始。通常出力2系統と反転出力を持つ。",
+      "evidence": {
+        "source_id": "S003",
+        "section": "English description"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "出力と時間",
+      "value": "通常出力は約0–8 V、反転は約0–−8 V。AttackはL:20 µs–100 ms、M:400 µs–2 s、H:20 ms–120 s。Decay/Releaseは約3–4倍で減衰時定義は曖昧と注記。",
+      "evidence": {
+        "source_id": "S003",
+        "section": "English description / time ranges"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "gate閾値、初期値、再トリガ開始レベル、曲線式、ゼロ到達判定、ノブ既定値は未確認。"
+  ],
+  "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。"
+}
