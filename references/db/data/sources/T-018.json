@@ -1,0 +1,148 @@
+{
+  "sources": [
+    {
+      "id": "SRC-018-01",
+      "title": "DreamRack README",
+      "publisher": "chrisgr99 (GitHub)",
+      "url": "https://raw.githubusercontent.com/chrisgr99/DreamRack/main/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(約13KB)を読了。ソースコード本体は未取得。",
+      "link_status": "ok",
+      "license_note": "AGPL-3.0(README記載。GitHub検索APIでもAGPL-3.0)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-02",
+      "title": "DreamRack MODULE-AUTHORING.md",
+      "publisher": "chrisgr99 (GitHub)",
+      "url": "https://raw.githubusercontent.com/chrisgr99/DreamRack/main/MODULE-AUTHORING.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "目次、節1-3(descriptor/ports/params)、節8(信号ドメイン)、節9(保存と安定ID)を読了。節4-7,10-11は未精読。",
+      "link_status": "ok",
+      "license_note": "AGPL-3.0(リポジトリ全体)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-03",
+      "title": "Mod Synth 0 README",
+      "publisher": "Kyle-Shanks (GitHub)",
+      "url": "https://raw.githubusercontent.com/Kyle-Shanks/mod-synth-0/master/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(約16KB)を読了。ソース本体は未取得。",
+      "link_status": "ok",
+      "license_note": "LICENSEファイルなし(raw取得404)。package.jsonのlicenseはISC、GitHubはライセンス未検出。再利用条件は不明確なので何も再利用しない。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-04",
+      "title": "Plinth README (Block API草案を含む)",
+      "publisher": "rsimmons (GitHub)",
+      "url": "https://raw.githubusercontent.com/rsimmons/plinth/master/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(約9KB)を読了。blocks実装コードは未取得。",
+      "link_status": "ok",
+      "license_note": "MIT(LICENSEファイルで確認、Copyright 2016 Russel Simmons)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-05",
+      "title": "Patchcab README",
+      "publisher": "spectrome (GitHub)",
+      "url": "https://raw.githubusercontent.com/spectrome/patchcab/master/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(短い)を読了。モジュール実装・パッチ形式は未取得。",
+      "link_status": "ok",
+      "license_note": "MIT(GitHub検索APIのメタデータによる)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-06",
+      "title": "Modulator README",
+      "publisher": "lcrespom (GitHub)",
+      "url": "https://raw.githubusercontent.com/lcrespom/Modulator/master/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文を読了。",
+      "link_status": "ok",
+      "license_note": "LICENSEファイルなし(404)。package.jsonのlicenseはISC、GitHubはライセンス未検出。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-07",
+      "title": "Modulator SynthLib ドキュメント",
+      "publisher": "lcrespom (GitHub)",
+      "url": "https://raw.githubusercontent.com/lcrespom/Modulator/master/synthlib.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "冒頭〜Voice/Instrumentクラス記述を読了。Timerクラス以降は未精読。",
+      "link_status": "ok",
+      "license_note": "同上(ISC表記)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-08",
+      "title": "web-synth README",
+      "publisher": "Ameobea (GitHub)",
+      "url": "https://raw.githubusercontent.com/Ameobea/web-synth/main/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(約6KB)を読了。docsサイトとソース本体は未取得。",
+      "link_status": "ok",
+      "license_note": "LICENSEファイルを確認(GPL-2.0-or-later系の文面、Faust依存のため)。GitHub APIはNOASSERTION。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-09",
+      "title": "web-synth LICENSE",
+      "publisher": "Ameobea (GitHub)",
+      "url": "https://raw.githubusercontent.com/Ameobea/web-synth/main/LICENSE",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "冒頭文とGPL本文の見出し部分のみ確認。",
+      "link_status": "ok",
+      "license_note": "GPL(version 2 or later の文面)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-10",
+      "title": "eurorack-js README",
+      "publisher": "OrderAndCh4oS (GitHub)",
+      "url": "https://raw.githubusercontent.com/OrderAndCh4oS/eurorack-js/main/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "README全文(約16KB)を読了(モジュール表、アーキテクチャ、パッチ形式、電圧規約)。",
+      "link_status": "ok",
+      "license_note": "MIT(README末尾と検索APIで確認)。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-11",
+      "title": "eurorack-js Patch Workbench リファレンス",
+      "publisher": "OrderAndCh4oS (GitHub)",
+      "url": "https://raw.githubusercontent.com/OrderAndCh4oS/eurorack-js/main/docs/patch-workbench.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "grepで関連箇所(評価方式、タイムアウト、MIDIマッピング、Validate/Apply/Snapshot)を読了。全文精読ではない。",
+      "link_status": "ok",
+      "license_note": "MIT。ソースコード・アセット・文章は再利用・転載しない。事実は要約のみ記録。"
+    },
+    {
+      "id": "SRC-018-12",
+      "title": "GitHub Search API リポジトリメタデータ(7リポジトリ)",
+      "publisher": "GitHub",
+      "url": "https://api.github.com/search/repositories?q=repo:<owner>/<name>",
+      "doc_version": "unknown",
+      "doc_type": "api_doc",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "各リポジトリのpushed_at・created_at・stargazers_count・license・archivedを取得(2026-11-13)。GitHub通常API(repos/*)は403で未取得のためpushed_atは最終push日であり最終リリース日ではない。",
+      "link_status": "ok",
+      "license_note": "GitHubメタデータ。数値は取得時点のスナップショット。"
+    }
+  ]
+}

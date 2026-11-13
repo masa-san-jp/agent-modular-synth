@@ -1,5 +1,7 @@
 # モジュラーシンセ・リファレンスDB 初期版
 
+> 拡張DB(22対象・二次資料を含む広範囲): [references/db/docs/index.md](db/docs/index.md)。本ページのDBとの対応は [crosswalk](db/docs/crosswalk.md)。
+
 [範囲・方法](scope.md) / [スキーマ・ID規則](schema.md) / [出典台帳](sources/catalog.json) / [不足・引継ぎ](gaps.md) / [検査結果](validation.md)
 
 ## 機種

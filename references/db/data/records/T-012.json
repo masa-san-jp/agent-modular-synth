@@ -1,0 +1,2301 @@
+{
+ "target_id": "T-012",
+ "entities": [
+  {
+   "id": "REF-012-001",
+   "kind": "system",
+   "name": "Buchla 200 series (Electric Music Box)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "1970年登場の原機。100シリーズの後継となるBuchlaのモジュラー系列。",
+   "synthesis_method": "電圧制御モジュラー(複合波形・ウェーブシェイピング中心)",
+   "features": [
+    {
+     "text": "1970年登場の系列",
+     "fact_ids": [
+      "F-012-001"
+     ]
+    },
+    {
+     "text": "モジュール名称や音作りが独自",
+     "fact_ids": [
+      "F-012-002"
+     ]
+    },
+    {
+     "text": "CV・信号・パルスを区別する構成を後継が引き継ぐ",
+     "fact_ids": [
+      "F-012-003"
+     ]
+    },
+    {
+     "text": "1970年登場、色分けパッチコード、計算機接続",
+     "fact_ids": [
+      "F-012-049"
+     ]
+    },
+    {
+     "text": "主要型番",
+     "fact_ids": [
+      "F-012-050"
+     ]
+    },
+    {
+     "text": "Music Easelの電圧制御系",
+     "fact_ids": [
+      "F-012-051"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ピッチ規約は資料間で食い違い",
+     "fact_ids": [
+      "F-012-067"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "色分けパッチコード方式(VSE)。信号クラスごとに別ジャック(SOS)",
+     "fact_ids": [
+      "F-012-049",
+      "F-012-062"
+     ]
+    },
+    "external_control": {
+     "summary": "タッチ鍵盤・計算機インタフェース",
+     "fact_ids": [
+      "F-012-070"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-002",
+   "kind": "system",
+   "name": "Buchla 100 series (Modular Electronic Music System)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "1963年に登場した最初期のBuchlaモジュラー。",
+   "synthesis_method": "電圧制御モジュラー",
+   "features": [
+    {
+     "text": "1963年、Sender/Subotnick委嘱",
+     "fact_ids": [
+      "F-012-004"
+     ]
+    },
+    {
+     "text": "1963年Sender/Subotnick委嘱、最大25モジュール",
+     "fact_ids": [
+      "F-012-046",
+      "F-012-047"
+     ]
+    },
+    {
+     "text": "主要型番群",
+     "fact_ids": [
+      "F-012-048"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "100シリーズのピッチ規約は資料なし",
+     "fact_ids": [
+      "F-012-067"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "多数のパッチコードによる接続",
+     "fact_ids": [
+      "F-012-069"
+     ]
+    },
+    "state_save": {
+     "summary": "内蔵パッチメモリの記述なし",
+     "fact_ids": [
+      "F-012-069"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-003",
+   "kind": "system",
+   "name": "Buchla 200e series",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "2000年代に再設計された現行のBuchla 200e/200h系モジュラー。",
+   "synthesis_method": "電圧制御モジュラー(デジタル制御アナログ含む)",
+   "features": [
+    {
+     "text": "2004年の200e系発表",
+     "fact_ids": [
+      "F-012-005"
+     ]
+    },
+    {
+     "text": "200eと200hは混在可",
+     "fact_ids": [
+      "F-012-006"
+     ]
+    },
+    {
+     "text": "基本構成はオシレータ+エンベロープ+ダイナミクス(+MIDI)",
+     "fact_ids": [
+      "F-012-007"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-004",
+   "kind": "system",
+   "name": "Buchla 200 Series Classic Reissue",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "200シリーズのクラシックモジュールを、Black CorporationのRoman Filippov設計で再発売したライン。",
+   "synthesis_method": "電圧制御モジュラー(Buchla 200系モジュール再現)",
+   "features": [
+    {
+     "text": "Black CorporationのRoman Filippovが再設計",
+     "fact_ids": [
+      "F-012-008"
+     ]
+    },
+    {
+     "text": "7機種(207/230/257/258/266/281/292)",
+     "fact_ids": [
+      "F-012-009"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-005",
+   "kind": "system",
+   "name": "TipTop Audio Buchla 200t (Buchla & Tiptop Audio 200 series)",
+   "maker": "Tiptop Audio / Buchla",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Buchla 200シリーズをEurorack規格で再生産するBuchlaとTiptop Audioの共同プロジェクト。",
+   "synthesis_method": "電圧制御モジュラー(Eurorack)",
+   "features": [
+    {
+     "text": "Eurorack化の共同プロジェクト",
+     "fact_ids": [
+      "F-012-010"
+     ]
+    },
+    {
+     "text": "15機種の一覧、266tは売り切れ",
+     "fact_ids": [
+      "F-012-011"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-006",
+   "kind": "module",
+   "name": "Buchla 266 Classic Reissue - Source of Uncertainty",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "乱数・ノイズ・サンプルホールドの汎用ランダム源。",
+   "synthesis_method": "アナログ乱数/ノイズ/S&H",
+   "features": [
+    {
+     "text": "3種のノイズ出力",
+     "fact_ids": [
+      "F-012-012"
+     ]
+    },
+    {
+     "text": "ランダム電圧の揺らぎ0.05〜50Hz、量子化ランダム",
+     "fact_ids": [
+      "F-012-013"
+     ]
+    },
+    {
+     "text": "インテグレータとS&H内蔵",
+     "fact_ids": [
+      "F-012-014"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Noise outputs (3)",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-012"
+     ]
+    },
+    {
+     "name": "Fluctuating random voltage out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-013"
+     ]
+    },
+    {
+     "name": "Quantized random voltage pulse in",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-013"
+     ]
+    },
+    {
+     "name": "Sample&Hold CV in",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-014"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Fluctuating voltage bandwidth",
+     "unit": "Hz",
+     "range": {
+      "min": 0.05,
+      "max": 50,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-013"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-025",
+    "supersedes": null,
+    "part_of": "REF-012-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-007",
+   "kind": "module",
+   "name": "Buchla 258 Classic Reissue - Dual Oscillator",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "2基の独立VCOモジュール。",
+   "synthesis_method": "アナログVCO(波形可変)",
+   "features": [
+    {
+     "text": "各VCOは5Hz〜20kHz、周波数CV2系統+波形CV+FM",
+     "fact_ids": [
+      "F-012-016"
+     ]
+    },
+    {
+     "text": "波形可変(サイン→ソー/サイン→矩形)",
+     "fact_ids": [
+      "F-012-017"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Frequency CV in (x2 per osc)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-016"
+     ]
+    },
+    {
+     "name": "Waveshape CV in",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-016"
+     ]
+    },
+    {
+     "name": "FM in",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-016"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Frequency (each oscillator)",
+     "unit": "Hz",
+     "range": {
+      "min": 5,
+      "max": 20000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-016"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-023",
+    "supersedes": null,
+    "part_of": "REF-012-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-008",
+   "kind": "module",
+   "name": "Buchla 281 Classic Reissue - Quad Function Generator",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "4つのファンクション(エンベロープ)ジェネレータ。",
+   "synthesis_method": "アナログファンクションジェネレータ",
+   "features": [
+    {
+     "text": "4基、独立/対リンク",
+     "fact_ids": [
+      "F-012-018"
+     ]
+    },
+    {
+     "text": "出力0〜10V、3モード",
+     "fact_ids": [
+      "F-012-019"
+     ]
+    },
+    {
+     "text": "時間範囲0.001〜10秒、Quadratureあり",
+     "fact_ids": [
+      "F-012-020"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Pulse in",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-019"
+     ]
+    },
+    {
+     "name": "Function CV out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-019"
+     ]
+    },
+    {
+     "name": "Pulse out (end of decay)",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-019"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Attack",
+     "unit": "s",
+     "range": {
+      "min": 0.001,
+      "max": 10,
+      "unit": "s"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-020"
+     ]
+    },
+    {
+     "name": "Decay",
+     "unit": "s",
+     "range": {
+      "min": 0.001,
+      "max": 10,
+      "unit": "s"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-020"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-024",
+    "supersedes": null,
+    "part_of": "REF-012-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-009",
+   "kind": "module",
+   "name": "Buchla 292 Classic Reissue - Quad Lopass Gate",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "4基のVCA/ローパスゲート。",
+   "synthesis_method": "VCA/ローパスゲート",
+   "features": [
+    {
+     "text": "4chのVCA/ローパスゲート",
+     "fact_ids": [
+      "F-012-021"
+     ]
+    },
+    {
+     "text": "3モード(Gate/Combo/Lowpass)",
+     "fact_ids": [
+      "F-012-022"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-027",
+    "supersedes": null,
+    "part_of": "REF-012-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-010",
+   "kind": "module",
+   "name": "TipTop Buchla 245t Sequential Voltage Source",
+   "maker": "Buchla & Tiptop Audio",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "パルサー部と5ステージの保存電圧部を持つシーケンシャル電圧源(Eurorack)。",
+   "synthesis_method": "アナログCVシーケンサ",
+   "features": [
+    {
+     "text": "5ステージ×4電圧",
+     "fact_ids": [
+      "F-012-023"
+     ]
+    },
+    {
+     "text": "パルサー10V/5Vの二段パルス",
+     "fact_ids": [
+      "F-012-024"
+     ]
+    },
+    {
+     "text": "ステージ別ゲート出力、アナログ入力でステージ選択",
+     "fact_ids": [
+      "F-012-025"
+     ]
+    },
+    {
+     "text": "30HP、+12V 63mA/-12V 28mA",
+     "fact_ids": [
+      "F-012-026"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Stage gate out (x5)",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-025"
+     ]
+    },
+    {
+     "name": "Advance in",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-025"
+     ]
+    },
+    {
+     "name": "Pulser out",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-012-024"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "内蔵パルサーの周期が約10秒〜数msで、Advance入力にパルスを受けるとステージが進む。",
+     "fact_ids": [
+      "F-012-024",
+      "F-012-025"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-012-026",
+    "supersedes": null,
+    "part_of": "REF-012-005"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-011",
+   "kind": "module",
+   "name": "TipTop Buchla 266t Source of Uncertainty",
+   "maker": "Buchla & Tiptop Audio",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "266のEurorack版。ノイズ、乱数電圧、S&Hなどを集約。",
+   "synthesis_method": "アナログ乱数/ノイズ/S&H",
+   "features": [
+    {
+     "text": "3種ノイズ+用語注記",
+     "fact_ids": [
+      "F-012-027"
+     ]
+    },
+    {
+     "text": "揺らぎ0.05〜50Hz、量子化1〜6、Integrator、S&H",
+     "fact_ids": [
+      "F-012-028"
+     ]
+    },
+    {
+     "text": "24HP",
+     "fact_ids": [
+      "F-012-029"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-025",
+    "supersedes": null,
+    "part_of": "REF-012-005"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-012",
+   "kind": "module",
+   "name": "TipTop Buchla 281t Quad Function Generator",
+   "maker": "Buchla & Tiptop Audio",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "281のEurorack版ファンクションジェネレータ。",
+   "synthesis_method": "アナログファンクションジェネレータ",
+   "features": [
+    {
+     "text": "3モード、0.001〜10秒、10Vピーク",
+     "fact_ids": [
+      "F-012-030"
+     ]
+    },
+    {
+     "text": "28HP、Cycleジャックあり",
+     "fact_ids": [
+      "F-012-031"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-012-024",
+    "supersedes": null,
+    "part_of": "REF-012-005"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-013",
+   "kind": "signal_standard",
+   "name": "Buchla 200e 信号規約",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "200e/200h系の制御電圧・パルス・オーディオ信号の取り決め。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "CV 0〜10V、パルス10V/5V、信号公称1V",
+     "fact_ids": [
+      "F-012-032",
+      "F-012-033",
+      "F-012-034"
+     ]
+    },
+    {
+     "text": "ジャック色でCV/パルスを区別",
+     "fact_ids": [
+      "F-012-035"
+     ]
+    },
+    {
+     "text": "ピッチは1.2V/octと記述(218e節)",
+     "fact_ids": [
+      "F-012-036"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-003"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-014",
+   "kind": "signal_standard",
+   "name": "TipTop Buchla 200t 信号規約",
+   "maker": "Buchla & Tiptop Audio",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "Eurorack版の電圧規約。ピッチは1V/oct、パルスやCVは0〜10V系。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ピッチ入力は1V/oct",
+     "fact_ids": [
+      "F-012-038",
+      "F-012-037"
+     ]
+    },
+    {
+     "text": "CV・パルスは0〜10V系",
+     "fact_ids": [
+      "F-012-039"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-005"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-015",
+   "kind": "patch_storage",
+   "name": "Buchla 200e Remote Enable/プリセット管理",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "200e/hのプリセット管理(206e/225eのPreset Manager)とモジュール単位のRemote Enable。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "206e/225eが青ノブ・スイッチ設定を保存/呼出し",
+     "fact_ids": [
+      "F-012-040",
+      "F-012-041"
+     ]
+    },
+    {
+     "text": "電源投入時の自動呼出し(一部モジュール)",
+     "fact_ids": [
+      "F-012-042"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "プリセットマネージャ(206e/225e)がRemote Enable接続モジュールのパラメータを保存・呼出し。",
+     "fact_ids": [
+      "F-012-040",
+      "F-012-041"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-003"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-016",
+   "kind": "patch_storage",
+   "name": "TipTop Buchla 248t プリセット",
+   "maker": "Buchla & Tiptop Audio",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "248tは12のプリセットを不揮発メモリに保存できる。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "12プリセットを不揮発保存",
+     "fact_ids": [
+      "F-012-043"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "12個のプリセットを不揮発メモリに保存。",
+     "fact_ids": [
+      "F-012-043"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-005"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-017",
+   "kind": "control_interface",
+   "name": "Buchla 225e MIDI Decoder",
+   "maker": "Buchla USA",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "MIDIをアナログ電圧とパルスに変換し、200e系へ配るMIDIデコーダ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDI→CV/パルス、内部バスA〜D",
+     "fact_ids": [
+      "F-012-044"
+     ]
+    },
+    {
+     "text": "ノートバスE〜H、コントローラ/クロックバスJ〜P",
+     "fact_ids": [
+      "F-012-045"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDI Inのみ。各バスが1つのMIDIチャンネルに応答。",
+     "fact_ids": [
+      "F-012-044",
+      "F-012-045"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-003"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-018",
+   "kind": "module",
+   "name": "Buchla 158 Dual Sine/Sawtooth Oscillator (100 series)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "100シリーズの2基入り電圧制御オシレータ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "サイン/ノコギリ2基(Forrest)",
+     "fact_ids": [
+      "F-012-052"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-019",
+   "kind": "module",
+   "name": "Buchla 146 Sequential Voltage Source (100 series)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "100シリーズの16ステップ×3段のシーケンサ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "16ステップ×3段",
+     "fact_ids": [
+      "F-012-053"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-020",
+   "kind": "module",
+   "name": "Buchla 165 Dual Random Voltage Source (100 series)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "100シリーズの2系統ランダム電圧源。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "2系統ランダム電圧",
+     "fact_ids": [
+      "F-012-054"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-021",
+   "kind": "module",
+   "name": "Buchla 112 Touch-Controlled Voltage Source (100 series)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "100シリーズの静電タッチ式電圧源(鍵盤の代替)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "静電タッチ電圧源、半音階調律可",
+     "fact_ids": [
+      "F-012-055"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-022",
+   "kind": "system",
+   "name": "Buchla Music Easel (System 200-081, Model 208)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "200シリーズ系のブリーフケース型小型システム(208モジュール内蔵)。",
+   "synthesis_method": "電圧制御波形整形+フィルタ/AM+コンター+リバーブ(電圧制御)",
+   "features": [
+    {
+     "text": "1972年導入、208内蔵、プログラムカード",
+     "fact_ids": [
+      "F-012-051"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "抵抗式プログラムカード",
+     "fact_ids": [
+      "F-012-068"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-023",
+   "kind": "module",
+   "name": "Buchla 258 Dual Oscillator (200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "200シリーズ原機の2基入り電圧制御オシレータ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "5Hz-20kHz、再発売と一致",
+     "fact_ids": [
+      "F-012-056"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-024",
+   "kind": "module",
+   "name": "Buchla 281 Quad Function Generator (200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "280の改訂版とされる4基入りエンベロープ(ファンクション)ジェネレータ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1ms-10秒、再発売と一致",
+     "fact_ids": [
+      "F-012-057"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-025",
+   "kind": "module",
+   "name": "Buchla 266 Source of Uncertainty (200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "200シリーズ原機のランダム電圧・ノイズ源。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ランダム電圧・S&H・3種ノイズ",
+     "fact_ids": [
+      "F-012-058"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-026",
+   "kind": "module",
+   "name": "Buchla 245 Sequential Voltage Source (200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "200シリーズ原機のアナログメモリ式シーケンシャル電圧源。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "5電圧×4出力、再発売と一致",
+     "fact_ids": [
+      "F-012-059"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-027",
+   "kind": "module",
+   "name": "Buchla 292 Quad Lopass Gate (200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "200シリーズ原機のローパスゲート。",
+   "synthesis_method": null,
+   "features": [],
+   "constraints": [
+    {
+     "text": "VSE記述はBuchla再発売の記述と食い違う",
+     "fact_ids": [
+      "F-012-060"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-028",
+   "kind": "module",
+   "name": "Buchla 248 Multiple Arbitrary Function Generator (MARF, 200 series original)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "200シリーズ原機のステップ式任意関数/シーケンス発生器。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "16ステップ×2出力、各1ms-120秒",
+     "fact_ids": [
+      "F-012-061"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-029",
+   "kind": "signal_standard",
+   "name": "Buchla 100/200 原機 信号規約",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機の信号3分類(オーディオ/CV/パルス)と電圧。ピッチ規約は資料間で食い違う。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "3分類・別ソケット・オーディオ約1V p-p、CV/パルス最大約15V",
+     "fact_ids": [
+      "F-012-062"
+     ]
+    },
+    {
+     "text": "200eは+5V/+10Vパルス、ピッチ約1.2V/oct未満",
+     "fact_ids": [
+      "F-012-063",
+      "F-012-064"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "15V説・0-10V説・1.2V/oct・2.4V/octが併存",
+     "fact_ids": [
+      "F-012-065",
+      "F-012-066",
+      "F-012-067"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-030",
+   "kind": "patch_storage",
+   "name": "Buchla 原機 パッチ保存(Music Easelのプログラムカード)",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "Music Easelの抵抗式プログラムカード。100/200モジュラー本体は保存機構の記述なし。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "抵抗式カード(保存対象は資料間で食い違い)",
+     "fact_ids": [
+      "F-012-068"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "抵抗をはんだ付けしたカードをスロットに差す",
+     "fact_ids": [
+      "F-012-068"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-012-031",
+   "kind": "control_interface",
+   "name": "Buchla 原機 タッチプレート/計算機インタフェース",
+   "maker": "Buchla (Buchla & Associates)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機のタッチ式入力と200系のデジタル計算機インタフェース。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "容量式タッチプレートと計算機インタフェース",
+     "fact_ids": [
+      "F-012-070"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "タッチ入力・デジタル出力",
+     "fact_ids": [
+      "F-012-070"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-012-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-012-001",
+   "entity_id": "REF-012-001",
+   "topic": "来歴",
+   "statement": "Buchla公式の沿革は、100シリーズが1963年、200シリーズ(Electric Music Box)が1970年に登場したと述べる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-01",
+   "locator": "The History of Buchla 第1段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-002",
+   "entity_id": "REF-012-001",
+   "topic": "設計思想",
+   "statement": "Buchlaの設計は鍵盤を省き、複雑波形ウェーブシェイピング中心の音作りと、Complex Waveform GeneratorやSource of Uncertaintyなど独自の呼称を用いる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-01",
+   "locator": "Design Philosophy 節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-003",
+   "entity_id": "REF-012-001",
+   "topic": "信号",
+   "statement": "200e取扱説明書は、200/100の流れを引き継いで制御電圧・信号・パルスを区別すると述べる(原機自体の仕様ではなく後継の説明)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-012-07",
+   "locator": "Common Buchla System Stuff 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-004",
+   "entity_id": "REF-012-002",
+   "topic": "来歴",
+   "statement": "100シリーズは1963年構築で、Ramon SenderとMorton Subotnickの依頼に基づくモジュール群と説明されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-01",
+   "locator": "The History of Buchla / Design Philosophy",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-005",
+   "entity_id": "REF-012-003",
+   "topic": "来歴",
+   "statement": "Buchla公式の沿革は、2002年にドン・ブクラが200シリーズの改良を決め、2004年に200e系を発表したと述べる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-01",
+   "locator": "The History of Buchla 末尾",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-006",
+   "entity_id": "REF-012-003",
+   "topic": "運用",
+   "statement": "200e/200hモジュールは相互に併用でき、それぞれ単体ではシンセにならず、複数モジュールで一台を構成する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-08",
+   "locator": "Modular Concepts",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-007",
+   "entity_id": "REF-012-003",
+   "topic": "運用",
+   "statement": "基本構成の例として、オシレータ(261e/259e)、エンベロープ(281e/281h)、ダイナミクス(292e/292h)、MIDIモジュール(225e等)が挙げられている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-08",
+   "locator": "Modular Concepts",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-008",
+   "entity_id": "REF-012-004",
+   "topic": "来歴",
+   "statement": "40年ぶりにクラシック200シリーズ・モジュールを再発売したもので、Roman Filippov(Black Corporation)が再設計したと説明される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-02",
+   "locator": "ページ冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-009",
+   "entity_id": "REF-012-004",
+   "topic": "構成",
+   "statement": "掲載ラインナップは258、281、292、266、257、230、207の7機種。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-02",
+   "locator": "商品一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-010",
+   "entity_id": "REF-012-005",
+   "topic": "来歴",
+   "statement": "BuchlaとTiptop Audioが共同で200シリーズの生産を再開し、Eurorack規格に変換するプロジェクトと説明される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-09",
+   "locator": "ページ冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-011",
+   "entity_id": "REF-012-005",
+   "topic": "構成",
+   "statement": "一覧に207t、230t、242t、245t、248t、257t、258t、259t、264t、266t、277t、281t、285t、292t、296tが載る。266tは売り切れ表示、他は出荷中。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-09",
+   "locator": "製品一覧(2026-11-12時点)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-012",
+   "entity_id": "REF-012-006",
+   "topic": "機能",
+   "statement": "白色(+3dB/oct)、積分(-3dB/oct)、フラット(オクターブあたり一定エネルギー)の3種ノイズ出力を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-03",
+   "locator": "Description 第2段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-013",
+   "entity_id": "REF-012-006",
+   "topic": "機能",
+   "statement": "揺らぎ電圧は帯域が電圧制御可能で0.05Hz〜50Hz。パルスで変化する量子化ランダム電圧は段数も電圧制御可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-03",
+   "locator": "Description 第3-4段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-014",
+   "entity_id": "REF-012-006",
+   "topic": "機能",
+   "statement": "他にStored Random Voltages節、電圧制御インテグレータ、サンプルホールドを含む。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-03",
+   "locator": "Description 末尾",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-015",
+   "entity_id": "REF-012-006",
+   "topic": "販売",
+   "statement": "価格799ドル、SKU BU-266-RI、取得時は在庫切れ表示。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-012-03",
+   "locator": "商品情報",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-016",
+   "entity_id": "REF-012-007",
+   "topic": "機能",
+   "statement": "2基の独立電圧制御VCOで、各5Hz〜20kHzの連続可変。2つの周波数CV入力、波形CV入力、FM入力を持ち、各々にオフセットがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-04",
+   "locator": "Description 第1段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-017",
+   "entity_id": "REF-012-007",
+   "topic": "機能",
+   "statement": "上側は波形をサイン〜ソーに、下側はサイン〜矩形にシフトできる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-04",
+   "locator": "Description 第2段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-018",
+   "entity_id": "REF-012-008",
+   "topic": "機能",
+   "statement": "2組ずつ計4つのファンクションジェネレータで、独立動作または対でリンクして複雑な電圧を作る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-05",
+   "locator": "Description 第1段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-019",
+   "entity_id": "REF-012-008",
+   "topic": "機能",
+   "statement": "モードはTransient/Sustained/Cyclicの3択。パルス受信で出力が10Vまで上昇し、減衰後に0Vへ戻る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-05",
+   "locator": "Description 第2段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-020",
+   "entity_id": "REF-012-008",
+   "topic": "機能",
+   "statement": "アタックとディケイの時間範囲は共に0.001〜10秒。Quadratureモードでは対のジェネレータが90度位相差で動く。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-05",
+   "locator": "Description 第4-5段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-021",
+   "entity_id": "REF-012-009",
+   "topic": "機能",
+   "statement": "4つの独立VCAで、各々に信号入出力、ゲイン用CV入力、オフセット調整を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-06",
+   "locator": "Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-022",
+   "entity_id": "REF-012-009",
+   "topic": "機能",
+   "statement": "スイッチでGate(VCA)、Lowpass(VCF)、両者併用のCombo(ゲイン変化でスペクトルも変化)を選択。リビジョンCの再現と記載。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-06",
+   "locator": "Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-023",
+   "entity_id": "REF-012-010",
+   "topic": "機能",
+   "statement": "パルサー部と5ステージ×4電圧の電圧部を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-13",
+   "locator": "本文1ページ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-024",
+   "entity_id": "REF-012-010",
+   "topic": "機能",
+   "statement": "パルサー出力は10Vの100µs初期段に続く5Vのゲート段で構成され、長さはPulse Lengthで0〜100%調整。周期は最長10秒から数ms(CVで約50秒〜1ms)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-13",
+   "locator": "Pulser Section",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-025",
+   "entity_id": "REF-012-010",
+   "topic": "機能",
+   "statement": "各ステージに専用ゲート出力(10V)があり、Analog入力(0〜10V)でステージ選択も可能。Stage Select入力でステージを即時設定できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-13",
+   "locator": "Stored Voltage Stages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-026",
+   "entity_id": "REF-012-010",
+   "topic": "仕様",
+   "statement": "サイズ30HP、奥行25mm、電源+12V 63mA/-12V 28mA。入出力は0〜10V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-13",
+   "locator": "Specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-027",
+   "entity_id": "REF-012-011",
+   "topic": "機能",
+   "statement": "ノイズは−3dB/oct(reciprocal white)、フラット(pink表記)、+3dB/oct(white表記)の3出力。原機の呼称は現代の分類と異なるとの注記がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-12",
+   "locator": "Noise Source / Note on Noise Source Terminology",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-028",
+   "entity_id": "REF-012-011",
+   "topic": "機能",
+   "statement": "揺らぎ電圧は0.05〜50Hz、量子化ランダム電圧は設定1〜6の段数、Integratorは平滑化0.01〜10、S&Hとaltパルス出力を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-12",
+   "locator": "各節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-029",
+   "entity_id": "REF-012-011",
+   "topic": "仕様",
+   "statement": "24HP、奥行25mm、+12V 150mA/-12V 100mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-12",
+   "locator": "Specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-030",
+   "entity_id": "REF-012-012",
+   "topic": "機能",
+   "statement": "4基を2組で構成し、Transient/Sustained/Cyclicの3モード。パルスで10Vまで上昇し0Vへ戻り、終端でパルスを出す。時間は0.001〜10秒。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-11",
+   "locator": "本文1-2ページ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-031",
+   "entity_id": "REF-012-012",
+   "topic": "仕様",
+   "statement": "28HP、奥行32mm、+12V 160mA/-12V 55mA。Cycleジャックでゲートによる循環動作が可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-11",
+   "locator": "Specifications / 前面説明",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-032",
+   "entity_id": "REF-012-013",
+   "topic": "CV",
+   "statement": "制御電圧は0〜10Vの範囲でバナナジャック/ケーブルで接続する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "Common Buchla System Stuff",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-033",
+   "entity_id": "REF-012-013",
+   "topic": "パルス",
+   "statement": "パルスは2レベルで、10Vは過渡情報のみ、5Vはサステイン情報も伝える。バナナ接続。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "Common Buchla System Stuff",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-034",
+   "entity_id": "REF-012-013",
+   "topic": "信号",
+   "statement": "オーディオ信号は公称1V振幅で、公称より20dBまで超過し得る。Tini-Jaxコネクタ(3.5mm互換は可だが推奨せず)で接続。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "Common Buchla System Stuff / 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-035",
+   "entity_id": "REF-012-013",
+   "topic": "色分け",
+   "statement": "ジャック色:CV入力は黒/灰、CV出力は青/紫、パルス入力は橙、パルス出力は赤。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "Color-coding",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-036",
+   "entity_id": "REF-012-013",
+   "topic": "ピッチ",
+   "statement": "218eの節では、Buchla標準を1.2V/オクターブとして、C=0V、1.2V、2.4V…の例が述べられている。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-012-07",
+   "locator": "218e 節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-037",
+   "entity_id": "REF-012-014",
+   "topic": "ピッチ",
+   "statement": "248tマニュアルは、原機のBuchlaが2.4V/oct、Eurorackは1V/octで、その差が資料に影響すると注記する。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-012-14",
+   "locator": "冒頭 3 Original 1977 User Manual",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-038",
+   "entity_id": "REF-012-014",
+   "topic": "ピッチ",
+   "statement": "258tは1V/oct入力を備え、トリマで1V/oct追従を工場調整する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-10",
+   "locator": "本文・TRIMMERS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-039",
+   "entity_id": "REF-012-014",
+   "topic": "電圧",
+   "statement": "245tの入出力仕様は0〜10Vで、パルサーは10V→5Vの二段パルス。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-13",
+   "locator": "Specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-040",
+   "entity_id": "REF-012-015",
+   "topic": "保存",
+   "statement": "Remote Enableスイッチ付きモジュールの青ノブ等の設定は、プリセットマネージャ(206e/225e)で保存・呼び出しされる。LED消灯時は連動しない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "REMOTE ENABLE 節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-041",
+   "entity_id": "REF-012-015",
+   "topic": "保存",
+   "statement": "グレーノブの設定は保存されず、スイッチ設定は保存される。呼び出し後にノブを回すと値が現在位置へ追いつく。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "REMOTE ENABLE 節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-042",
+   "entity_id": "REF-012-015",
+   "topic": "保存",
+   "statement": "プリセットマネージャのないシステムでは、現在プリセットを保存しておくと電源投入時に自動呼出しされる(対応モジュールは一部)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "REMOTE ENABLE 節 注",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-043",
+   "entity_id": "REF-012-016",
+   "topic": "保存",
+   "statement": "Load/Saveボタンと1〜12のボタンで全16ステージの設定を保存・呼出し。保存は不揮発メモリ。プリセット選択ボタンはキー/スケール選択も兼ねる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-14",
+   "locator": "PRESETS AND QUANTIZATION SCALES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-044",
+   "entity_id": "REF-012-017",
+   "topic": "機能",
+   "statement": "MIDIメッセージを電圧とパルスへ変換する。内部バスA〜Dは200e系モジュールがMIDIを直接受ける。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "225e 節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-045",
+   "entity_id": "REF-012-017",
+   "topic": "機能",
+   "statement": "ノート用バスE〜Hはピッチ・ベロシティ・サステイン付きパルスを前面に出し、コントローラ/クロック用バスJ〜Pは0〜10V CVに変換する。MIDI Outは未実装。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-012-07",
+   "locator": "225e 節 Busses",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-012-046",
+   "entity_id": "REF-012-002",
+   "topic": "来歴",
+   "statement": "SOSとWikipediaは、100シリーズをSender/Subotnickの委嘱で1963年にBuchlaが作り、Rockefeller財団助成の500ドルが充てられ、1965年にSan Francisco Tape Music Centerに設置されたと述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-19",
+   "locator": "Wikipedia Company origin節; SOS Part 1 沿革",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-047",
+   "entity_id": "REF-012-002",
+   "topic": "構成と操作性",
+   "statement": "Forrest 1994(Vintage Synth Explorer引用): 100は木製筐体に最大25モジュール、容量接触式タッチプレート鍵盤、8/16ステップのシーケンサを持つ。パッチコードと知識が必須でオシレータはドリフトしがち。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-17",
+   "locator": "ページ本文とモジュール表(101, 112-114, 123, 146)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-048",
+   "entity_id": "REF-012-002",
+   "topic": "モジュール群",
+   "statement": "SOSの100シリーズ型番表: 106/107ミキサ、110ゲート、111リングモジュレータ、112-114タッチ電圧源、123/146シーケンシャル電圧源、158サイン/ノコギリOSC、160ノイズ、165ランダム電圧、190リバーブ、191-196フィルタ類。130はSOSでは「エンベロープ検出器」、Forrest表(VSE)では「エンベロープ・ジェネレータ」と名称が食い違う。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Original Series 100 Modules一覧; VSE 100 Series表(130を比較)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-049",
+   "entity_id": "REF-012-001",
+   "topic": "来歴と特徴",
+   "statement": "Vintage Synth Explorerは200シリーズ(Electric Music Box)を1970-78年とし、演奏家・サウンドデザイナー向けの高度化版、色分けパッチコード方式、デジタル計算機との接続を特徴とする。Wikipediaは1970年に100シリーズに代わったとする。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series冒頭; Wikipedia Products節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-050",
+   "entity_id": "REF-012-001",
+   "topic": "モジュール群",
+   "statement": "200シリーズの型番例: 204空間ディレクタ、208 Stored Program Sound Source、217/218タッチ鍵盤、221 Kinaesthetic Input Port、245/246シーケンシャル電圧源、248 MARF、258/259オシレータ、265/266 Source of Uncertainty、280-284エンベロープ、291/292/294/295フィルタ系。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表; SOS 一覧",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-051",
+   "entity_id": "REF-012-022",
+   "topic": "Music Easel概要",
+   "statement": "SOSは1972年導入、約3000ドル弱、EMS Synthi AKS並みのブリーフケース型で、単一の208モジュールが波形整形付きオシレータ・外部入力・変調/フィルタ・ノイズ・コンター・クロック/エンベロープ・ミキサ・リバーブを持つと述べる。VSEは22スライダー、5ステージ・シーケンサ、25超のカラーコードパッチポイントとする。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS 200e Part 1 Music Easel節; VSE 200 Series Music Easel節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-052",
+   "entity_id": "REF-012-018",
+   "topic": "機能",
+   "statement": "Forrest表: 158はサイン/ノコギリの電圧制御オシレータ2基入り。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-17",
+   "locator": "VSE 100 Series モジュール表 158",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-053",
+   "entity_id": "REF-012-019",
+   "topic": "機能",
+   "statement": "Forrest表: 146は16ステップ×3段のシーケンシャル電圧源。123は8ステップ版。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-17",
+   "locator": "VSE 100 Series モジュール表 123/146",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-054",
+   "entity_id": "REF-012-020",
+   "topic": "機能",
+   "statement": "Forrest表: 165は2系統ランダム電圧源。SOS一覧にも型番がある。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-17",
+   "locator": "VSE 100 Series モジュール表 165; SOS一覧",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-055",
+   "entity_id": "REF-012-021",
+   "topic": "タッチ電圧源",
+   "statement": "SOS: 112は直線状接点、113は同心円状で、押圧に応じ出力電圧が変化する。112の出力は半音階に調律できるが形状が通常演奏に向かない。Buchlaは従来鍵盤を避けた。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Part 1 沿革(touch-controlled voltage sources)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-056",
+   "entity_id": "REF-012-023",
+   "topic": "機能",
+   "statement": "VSE: 258は2基とも5Hz-20kHz。VCO1は波形がサイン〜ノコギリ、VCO2はサイン〜矩形で連続可変。再発売258の仕様(F-012-016/017)と一致する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 258",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-057",
+   "entity_id": "REF-012-024",
+   "topic": "機能",
+   "statement": "VSE: 280/281ともアタック/ディケイ1ms-10秒の4基のエンベロープ。281は280の改訂版。再発売281の時間範囲(0.001-10秒)と一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 280/281",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-058",
+   "entity_id": "REF-012-025",
+   "topic": "機能",
+   "statement": "VSE: 266は連続変化するランダム電圧2系統、サンプルホールド4系統、3種のノイズを持つ(265はS&H 2系統)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 265/266",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-059",
+   "entity_id": "REF-012-026",
+   "topic": "機能",
+   "statement": "VSE: 245は電圧制御可能な周期とパルス長の独立パルス発生器を持ち、4出力それぞれに最大5つの電圧を保持する(246は16)。再発売245t(5ステージ×4電圧)と一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 245/246",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-060",
+   "entity_id": "REF-012-027",
+   "topic": "機能の食い違い",
+   "statement": "VSEは292を「電圧制御パンニング付き4基のVCF」とするが、Buchla公式の再発売292(F-012-021/022)は4基のVCA/ローパスゲート/Comboを選べるゲート。VSE記述を誤りの可能性として別事実で残す。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 292",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-061",
+   "entity_id": "REF-012-028",
+   "topic": "機能",
+   "statement": "VSE: 248 MARFは16ステップ×2出力の関数/シーケンス発生器で、各ステップ1ms-120秒、すべて電圧制御可能。派生に16ステップ×6出力、32ステップ×6/10出力がある。WikipediaはMARFがエンベロープ・LFO・CV選択・量子化・トラッキングを兼ねるとする。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 200 Series Modules表 248; Wikipedia Buchla design節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-062",
+   "entity_id": "REF-012-029",
+   "topic": "信号3分類",
+   "statement": "SOS: Buchlaは信号をオーディオ、制御電圧、タイミングパルス(クロック/ゲート/トリガ)に分け、種類ごとに別のソケットで誤接続を防いだ。オーディオ約1V p-p、CVとパルスは最大約15V。Moogは全信号を区別しなかったと対比される。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Part 1, Making Connections枠",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-063",
+   "entity_id": "REF-012-029",
+   "topic": "200eの電圧",
+   "statement": "SOS(2005)は200eについて、制御電圧とパルスは+5V(サステイン付き)と+10V(過渡のみ)、オーディオ合成後は約10V p-pと述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Part 1, 電気仕様の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-064",
+   "entity_id": "REF-012-029",
+   "topic": "200eのピッチ",
+   "statement": "SOS: 200eのピッチCVは1V/oct・Hz/Vのいずれにも合わず、原機200と互換にするため1.2V/oct「よりやや小さい」スケーリング。他社機とはピッチを直結できない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Part 1, 電気仕様の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-065",
+   "entity_id": "REF-012-029",
+   "topic": "原機の制御電圧範囲(異説)",
+   "statement": "検索結果要約によれば、Buchla archivesの記事は200 Electric Music Boxの制御範囲を15Vとし、別ブログは後期200が0-10Vに下げたと述べる(いずれも原文未読)。SOSの「最大約15V」と整合する部分がある。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-20",
+   "locator": "WebSearch結果要約 2026-11-13",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-066",
+   "entity_id": "REF-012-029",
+   "topic": "1.2V/oct表記(検索要約)",
+   "statement": "検索結果要約には「Buchla標準は1.2V/oct」とするブログ記述があり、既存のF-012-036(200eガイド)と一致する。2.4V/oct(F-012-037)とは食い違う。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-21",
+   "locator": "WebSearch結果要約 2026-11-13",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-067",
+   "entity_id": "REF-012-029",
+   "topic": "ピッチ規約の整理",
+   "statement": "3系統の値が併存: 1.2V/oct(200eガイド218e節)、1.2V/oct未満(SOS 200e)、2.4V/oct(TipTop 248tマニュアルが原機として記述)。100シリーズのピッチ規約は資料なし。優劣は判断せず併記。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-16",
+   "locator": "SOS電気仕様段落と F-012-036/037 の突合",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-068",
+   "entity_id": "REF-012-030",
+   "topic": "プログラムカード",
+   "statement": "SOS: Music Easel(208)は抵抗をはんだ付けしたプログラムカードでパッチを保存し、空カード6枚と抵抗が付属した。VSEは、カードがスライダー・スイッチ・ノブ位置に加えパッチポイント接続も保持するとする。両者は保存対象で食い違う。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-16",
+   "locator": "SOS Music Easel節; VSE 200 Series Music Easel節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-069",
+   "entity_id": "REF-012-030",
+   "topic": "100/200モジュラー本体",
+   "statement": "VSEは100シリーズのパッチングが多数のパッチコードを要する作業だったと述べる。100/200モジュラーの内蔵パッチメモリの記述は読んだ資料に無い(不在の確認)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-012-17",
+   "locator": "VSE 100 Series本文",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-012-070",
+   "entity_id": "REF-012-031",
+   "topic": "タッチ入力と計算機",
+   "statement": "VSE: 100はフラットな容量式タッチプレート(圧力感知)、200は217/218タッチ鍵盤(圧力とパルス出力付き)や221(デジタル出力)を持ち、デジタル計算機とのインタフェースが特徴。259は計算機制御・チューニングインタフェース付き。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-012-18",
+   "locator": "VSE 100/200 Series本文と Modules表 217/218/221/259",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "item": "原機200シリーズの電圧規約・モジュール仕様(1次資料。1970年代当時のマニュアル)",
+   "tried_sources": [
+    "SRC-012-01",
+    "SRC-012-07",
+    "SRC-012-14",
+    "SRC-012-15"
+   ],
+   "impact_on_spec": "原機のピッチ規約等を確定できない。再発売/200e/200tの記述に依拠",
+   "entity_id": "REF-012-001"
+  },
+  {
+   "item": "100シリーズの個別モジュール仕様・電圧規約",
+   "tried_sources": [
+    "SRC-012-01"
+   ],
+   "impact_on_spec": "100シリーズは来歴以外の仕様を記録できない",
+   "entity_id": "REF-012-002"
+  },
+  {
+   "item": "266再発売の個別ジャック名・出力電圧範囲・電源(HP/電流)",
+   "tried_sources": [
+    "SRC-012-03"
+   ],
+   "impact_on_spec": "ポート範囲・電源要件を記録できない(製品ページに記載なし)",
+   "entity_id": "REF-012-006"
+  },
+  {
+   "item": "原機(200系)のピッチ電圧規約。200eガイドは1.2V/octと記し、248tマニュアルは原機が2.4V/octと述べ、記述が食い違う",
+   "tried_sources": [
+    "SRC-012-07",
+    "SRC-012-14",
+    "SRC-012-15"
+   ],
+   "impact_on_spec": "ピッチ規約を単一値に確定できない。系列ごと(200e=1.2V/oct、200t=1V/oct)で別記する",
+   "entity_id": "REF-012-013"
+  },
+  {
+   "item": "Classic Reissue(258/266等)のピッチ入力規約(1V/octか1.2V/octか)",
+   "tried_sources": [
+    "SRC-012-02",
+    "SRC-012-03",
+    "SRC-012-04"
+   ],
+   "impact_on_spec": "再発売品とEurorack版の相互接続仕様が確定できない",
+   "entity_id": "REF-012-013"
+  },
+  {
+   "item": "Buchla 100/200原機の公式マニュアル(1963-1970年代)。buchla.comは歴史ページのみ。248の1977年マニュアルはスキャン画像でテキスト抽出不可",
+   "tried_sources": [
+    "SRC-012-01",
+    "SRC-012-15"
+   ],
+   "impact_on_spec": "原機の個別モジュール仕様は記録できない"
+  },
+  {
+   "item": "Classic Reissue各機の電源要件・サイズ・端子電圧(buchla.comの製品ページに記載なし)",
+   "tried_sources": [
+    "SRC-012-02",
+    "SRC-012-03",
+    "SRC-012-04",
+    "SRC-012-05",
+    "SRC-012-06"
+   ],
+   "impact_on_spec": "Eurorack/ケース互換性などの設計制約が不明",
+   "entity_id": "REF-012-004"
+  },
+  {
+   "item": "200tの266t以外の機種の詳細(207t〜296tの大半)",
+   "tried_sources": [
+    "SRC-012-09"
+   ],
+   "impact_on_spec": "200tは一覧のみ記録、個別の機能は代表機のみ",
+   "entity_id": "REF-012-005"
+  },
+  {
+   "item": "原機200(およびlate 200)の制御電圧範囲: 15V(Buchla archives要約・SOS最大約15V) / 0-10V(ブログ要約) / 200e=+5/+10V(SOS)",
+   "tried_sources": [
+    "SRC-012-16",
+    "SRC-012-20",
+    "SRC-012-21"
+   ],
+   "impact_on_spec": "原機のCV/パルス電圧を単一値に確定できない。200系は系列別に併記",
+   "entity_id": "REF-012-029"
+  },
+  {
+   "item": "原機のピッチ電圧規約: 1.2V/oct(200eガイド)、1.2V/oct未満(SOS 200e)、2.4V/oct(248tマニュアルの原機記述)。100シリーズのピッチ規約は資料なし。",
+   "tried_sources": [
+    "SRC-012-16",
+    "SRC-012-20",
+    "SRC-012-21",
+    "SRC-012-07",
+    "SRC-012-14"
+   ],
+   "impact_on_spec": "系列横断のピッチ規約表を作れない。原機の一次マニュアル(Buchla archives等)が必要",
+   "entity_id": "REF-012-029"
+  },
+  {
+   "item": "Music Easelカードの保存対象(SOS: 抵抗値のみ / VSE: スライダー・スイッチ・ノブ・パッチポイント接続)",
+   "tried_sources": [
+    "SRC-012-16",
+    "SRC-012-18"
+   ],
+   "impact_on_spec": "パッチ保存機構を仕様化できない",
+   "entity_id": "REF-012-030"
+  },
+  {
+   "item": "Buchla 292の機能(VSE: 4VCF+パンニング / Buchla再発売: 4VCA・ローパスゲート)",
+   "tried_sources": [
+    "SRC-012-18",
+    "SRC-012-06"
+   ],
+   "impact_on_spec": "292の分類(amplifier_mixer/filter)に影響",
+   "entity_id": "REF-012-027"
+  },
+  {
+   "item": "buchlaarchives.com、modularsynthesis.com(Roman Filippov)、web.uvic.ca(200eガイドPDF)、perfectcircuit.com、nmc.emuseum.com等はプロキシ403で未取得",
+   "tried_sources": [
+    "SRC-012-20",
+    "SRC-012-21"
+   ],
+   "impact_on_spec": "一次寄りの電圧規約資料に到達できていない"
+  },
+  {
+   "entity_id": "REF-012-002",
+   "item": "100シリーズ130の機能(SOS: Dual envelope detector / Forrest表: Dual Envelop Generator)",
+   "tried_sources": [
+    "SRC-012-16",
+    "SRC-012-17"
+   ],
+   "impact_on_spec": "130をenvelopeかmodulation_otherのどちらに分類するか決められないため個別エンティティ化しない"
+  }
+ ]
+}

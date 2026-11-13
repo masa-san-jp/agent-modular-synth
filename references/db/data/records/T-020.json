@@ -1,0 +1,759 @@
+{
+  "target_id": "T-020",
+  "entities": [
+    {
+      "id": "REF-020-001",
+      "kind": "system",
+      "name": "Mutable Instruments オープンソース Eurorack コード群(pichenettes/eurorack)",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "Mutable Instrumentsの全Eurorackモジュール(約27種)のファームウェア/ハードウェア資料を1リポジトリで公開したもの。デジタルモジュールのアルゴリズムと設定保存の参考になる。",
+      "synthesis_method": "STM32F/AVRマイコン上のデジタルDSP",
+      "features": [
+        {
+          "text": "27モジュールの資料を1リポジトリに集約",
+          "fact_ids": [
+            "F-020-001"
+          ]
+        },
+        {
+          "text": "STM32F系コードはMIT、AVR系はGPL3.0、ハードはcc-by-sa-3.0",
+          "fact_ids": [
+            "F-020-002",
+            "F-020-004"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "名称『Mutable Instruments』は派生品に使えない",
+          "fact_ids": [
+            "F-020-003"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-002",
+      "kind": "signal_standard",
+      "name": "Mutable Eurorack I/O規約(ソースから読める範囲)",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "ソースコードに現れるピッチCV校正・サンプルレート・ブロック処理など、モジュール横断で読み取れる信号規約の断片。電圧範囲は公式資料未取得のため確定しない。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "ピッチCVは2点校正(C1/C3)で傾き・オフセットを決める設計(Marbles)",
+          "fact_ids": [
+            "F-020-005"
+          ]
+        },
+        {
+          "text": "CV入力ごとのoffset/scale校正値を保存",
+          "fact_ids": [
+            "F-020-008"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "電圧範囲(±5V等)や入力インピーダンスは公式資料未取得のため不明",
+          "fact_ids": [
+            "F-020-005"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-003",
+      "kind": "module",
+      "name": "Plaits",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "oscillator",
+      "purpose": "多数のシンセ方式(エンジン)を1台に収めたマクロオシレータ。",
+      "synthesis_method": "複数エンジン(バーチャルアナログ、FM、ウェーブテーブル、物理モデル、ドラム等)",
+      "features": [
+        {
+          "text": "最大24エンジンを選択",
+          "fact_ids": [
+            "F-020-009"
+          ]
+        },
+        {
+          "text": "48kHz/12サンプルブロック",
+          "fact_ids": [
+            "F-020-010"
+          ]
+        },
+        {
+          "text": "timbre/morph/harmonics+各変調量+LPG",
+          "fact_ids": [
+            "F-020-011",
+            "F-020-014"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "ゲート/トリガ入力(trigger_patched/level)で発音。ソースのトリガ遅延定数kTriggerDelay=5。",
+          "fact_ids": [
+            "F-020-011"
+          ]
+        },
+        "state_save": {
+          "summary": "選択エンジン等の状態と校正値をフラッシュに保存。",
+          "fact_ids": [
+            "F-020-012"
+          ]
+        },
+        "external_control": {
+          "summary": "timbre入力から音声でユーザーデータを書き込める。",
+          "fact_ids": [
+            "F-020-013"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-004",
+      "kind": "module",
+      "name": "Braids",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "oscillator",
+      "purpose": "デジタルのマクロオシレータ(多数の波形アルゴリズムを選択)。",
+      "synthesis_method": "波形/アルゴリズム選択式デジタルオシレータ",
+      "features": [
+        {
+          "text": "多数の波形アルゴリズムを選択",
+          "fact_ids": [
+            "F-020-015"
+          ]
+        },
+        {
+          "text": "2〜16bit/4k〜96kHzのクオリティ設定",
+          "fact_ids": [
+            "F-020-016"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "96kHz系の更新で24サンプルずつ描画。",
+          "fact_ids": [
+            "F-020-017"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-005",
+      "kind": "module",
+      "name": "Rings",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "other",
+      "purpose": "共振器(モーダル/弦モデル)による物理モデリング音源。外部入力の励起にも対応。",
+      "synthesis_method": "モーダル/ストリング共振器モデル",
+      "features": [
+        {
+          "text": "6種の共振器モデル",
+          "fact_ids": [
+            "F-020-018"
+          ]
+        },
+        {
+          "text": "最大4ポリ",
+          "fact_ids": [
+            "F-020-019"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-006",
+      "kind": "module",
+      "name": "Clouds",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "time_effect",
+      "purpose": "音声をグラニュラー/ストレッチ/ループ/スペクトル処理するテクスチャシンセ。",
+      "synthesis_method": "グラニュラー/WSOLA/位相ボコーダ",
+      "features": [
+        {
+          "text": "4モード",
+          "fact_ids": [
+            "F-020-020"
+          ]
+        },
+        {
+          "text": "4つのサンプルメモリ",
+          "fact_ids": [
+            "F-020-022"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": {
+          "summary": "4つのサンプルメモリと設定Stateをフラッシュ保存。",
+          "fact_ids": [
+            "F-020-022"
+          ]
+        },
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-007",
+      "kind": "module",
+      "name": "Tides",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "lfo",
+      "purpose": "3レンジ(高/中/低)のAD/ループ/ARモード対応のサイクリックな変調源(LFO/エンベロープ/VCO的に使用)。",
+      "synthesis_method": "テーブル/スロープ生成器",
+      "features": [
+        {
+          "text": "3レンジ×3モード",
+          "fact_ids": [
+            "F-020-023"
+          ]
+        },
+        {
+          "text": "クロック同期と比率",
+          "fact_ids": [
+            "F-020-024"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "外部クロックにパターン予測で同期可能(pattern_predictor)。",
+          "fact_ids": [
+            "F-020-024"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-020-008",
+      "kind": "module",
+      "name": "Marbles",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "random_logic",
+      "purpose": "ランダムな時間(t)と電圧(X/Y)を生成する確率的サンプラ。",
+      "synthesis_method": "確率分布に基づく乱数列生成",
+      "features": [
+        {
+          "text": "CV校正でピッチ/スプレッドを決定",
+          "fact_ids": [
+            "F-020-025"
+          ]
+        },
+        {
+          "text": "CV入力をリセットとして使うモード",
+          "fact_ids": [
+            "F-020-026"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active"
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-020-001",
+      "entity_id": "REF-020-001",
+      "topic": "収録範囲",
+      "statement": "READMEが27モジュール(Beads, Blades, Blinds, Braids, Branches, Clouds, Ears, Edges, Elements, Frames, Grids, Kinks, Links, Marbles, Peaks, Plaits, Rings, Ripples, Shades, Shelves, Stages, Streams, Tides, Veils, Volts, Warps, Yarns)を列挙。Beadsのみ『実機での動作未検証、自己責任』の注記付き。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-01",
+      "locator": "README.md 一覧と脚注",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-002",
+      "entity_id": "REF-020-001",
+      "topic": "ライセンス構成",
+      "statement": "READMEによるとコードはAVRプロジェクトがGPL3.0、STM32FプロジェクトがMIT、ハードウェアがcc-by-sa-3.0。作者はEmilie Gillet。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-01",
+      "locator": "README.md License節",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-003",
+      "entity_id": "REF-020-001",
+      "topic": "商標・派生品指針",
+      "statement": "『Mutable Instruments』は登録商標で派生品の名称には使わない方針。元のモジュール名の維持も非推奨で、別名での派生を推奨。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-01",
+      "locator": "README.md Guidelines for derivative works節",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-004",
+      "entity_id": "REF-020-001",
+      "topic": "ライセンス実在確認",
+      "statement": "Plaits/Braids/Rings/Clouds/Tides/Marblesの調べたヘッダにはいずれもMIT許諾文が冒頭に付いている(Plaitsは2016年表記)。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-02",
+      "locator": "各ファイル冒頭コメント",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-005",
+      "entity_id": "REF-020-002",
+      "topic": "ピッチCV校正",
+      "statement": "Marblesの校正処理はRATE入力にC1相当とC3相当の2点の電圧を与えて傾きとオフセットを求め、24半音スパン(2オクターブ)を基準にしている。1V/oct前提であることはソースからの推測で、電圧値自体は未確認。",
+      "basis": "licensed_source",
+      "confidence": "low",
+      "source_id": "SRC-020-08",
+      "locator": "marbles/cv_reader.h CalibrateRateC1/C3",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-006",
+      "entity_id": "REF-020-002",
+      "topic": "ピッチ内部表現",
+      "statement": "Tidesはピッチを半音あたり128単位(1オクターブ=12<<7)の整数で扱う。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-07",
+      "locator": "tides/generator.h set_pitch",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-007",
+      "entity_id": "REF-020-002",
+      "topic": "ゲート/クロック制御ビット",
+      "statement": "Tidesの制御入力はフリーズ/ゲート/クロックと各立上り・立下りの検出ビットで表現される。電圧閾値は未確認。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-07",
+      "locator": "tides/generator.h ControlBitMask",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-008",
+      "entity_id": "REF-020-002",
+      "topic": "CV校正の保存",
+      "statement": "Plaitsは各CV ADCチャンネルにoffset/scaleの校正値を持ち、フラッシュの永続データ(タグCALI)として保存する。Cloudsはpitch_offset/pitch_scaleとチャンネル別offsetを持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-03",
+      "locator": "plaits/settings.h, clouds/settings.h",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-009",
+      "entity_id": "REF-020-003",
+      "topic": "エンジン数",
+      "statement": "ファームの上限エンジン数定数は24で、includeされるエンジン実装にはバーチャルアナログ、FM、ウェーブテーブル、モーダル、弦、ノイズ、パーティクル、スウォーム、グレイン、スピーチ、スネア/ハイハット/バスドラム、チップチューン、位相歪み、6オペFM、ストリングマシン、波面地形などが並ぶ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-02",
+      "locator": "plaits/dsp/voice.h kMaxEngines とinclude一覧",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-010",
+      "entity_id": "REF-020-003",
+      "topic": "サンプルレート",
+      "statement": "DSPのサンプルレート定数は48kHz、ブロックサイズ定数は12サンプル(DACは48kHzで初期化)。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-03",
+      "locator": "plaits/dsp/dsp.h; plaits/plaits.cc audio_dac.Init",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-011",
+      "entity_id": "REF-020-003",
+      "topic": "パラメータ構造",
+      "statement": "Patchはnote/harmonics/timbre/morph、各変調量、engine、decay、lpg_colourを持ち、Modulationsはengine/note/frequency/harmonics/timbre/morph/trigger/levelと各『パッチ済み』フラグを持つ。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-02",
+      "locator": "plaits/dsp/voice.h struct Patch, Modulations",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-012",
+      "entity_id": "REF-020-003",
+      "topic": "設定保存",
+      "statement": "フラッシュにState(engine, lpg_colour, decay, octave, fine_tune等)とCV校正データを保存する。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-03",
+      "locator": "plaits/settings.h struct State, PersistentData",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-013",
+      "entity_id": "REF-020-003",
+      "topic": "ユーザーデータ受信",
+      "statement": "timbreがパッチされている間、音声信号経由でパケット(CRC付き)を受信しユーザーデータをアクティブなエンジンのスロットへ保存できる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-02",
+      "locator": "plaits/plaits.cc FillBuffer user_data_receiver",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-014",
+      "entity_id": "REF-020-003",
+      "topic": "出力",
+      "statement": "出力は2チャンネル(メイン/補助)16bitのフレームで生成され、ローパスゲート処理とリミッタを経由する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-02",
+      "locator": "plaits/dsp/voice.h ChannelPostProcessor; plaits.cc",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-015",
+      "entity_id": "REF-020-004",
+      "topic": "波形数",
+      "statement": "MacroOscillatorShape列挙にCSAW、MORPH、各種ファジー/トリプル波形、フィルタ、VOSIM、フォルマント、FM、物理モデル、ドラム、ウェーブテーブル、ノイズ系、グラニュラー雲などが並び、最後が『?』シェイプ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-04",
+      "locator": "braids/settings.h enum MacroOscillatorShape",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-016",
+      "entity_id": "REF-020-004",
+      "topic": "ビット/サンプルレート低減",
+      "statement": "Resolution列挙(2〜16bit)とSampleRate列挙(4k〜96kHz)で出力のローファイ化を設定できる。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-04",
+      "locator": "braids/settings.h enum Resolution, SampleRate",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-017",
+      "entity_id": "REF-020-004",
+      "topic": "処理周期",
+      "statement": "braids.ccのブロックサイズは24サンプル、システムタイマは96kHz基準。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-04",
+      "locator": "braids/braids.cc kBlockSize, sys.Init",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-018",
+      "entity_id": "REF-020-005",
+      "topic": "共振器モデル",
+      "statement": "ResonatorModelはモーダル、共鳴弦、弦、FMボイス、量子化共鳴弦、弦+リバーブの6種(後半3種は『ボーナス』とコメント)。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-05",
+      "locator": "rings/dsp/part.h enum ResonatorModel",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-019",
+      "entity_id": "REF-020-005",
+      "topic": "ポリフォニー",
+      "statement": "最大ポリフォニーは4(弦は最大8本)。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-05",
+      "locator": "rings/dsp/part.h kMaxPolyphony, kNumStrings",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-020",
+      "entity_id": "REF-020-006",
+      "topic": "再生モード",
+      "statement": "PlaybackModeはグラニュラー、ストレッチ、ルーピングディレイ、スペクトルの4種。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-06",
+      "locator": "clouds/dsp/granular_processor.h enum PlaybackMode",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-021",
+      "entity_id": "REF-020-006",
+      "topic": "サンプルレートと品質",
+      "statement": "処理は32kHz基準(式で表現)で、品質設定でモノ/ステレオと低忠実度を切り替える。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-06",
+      "locator": "granular_processor.h sample_rate(), set_quality",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-022",
+      "entity_id": "REF-020-006",
+      "topic": "サンプルメモリ保存",
+      "statement": "録音バッファの状態を4つのサンプルメモリのいずれかにフラッシュ保存できる(PersistentState/Block)。設定Stateはquality/blend/playback_mode/blend_value[4]。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-06",
+      "locator": "granular_processor.h PersistentState; clouds/settings.h State",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-023",
+      "entity_id": "REF-020-007",
+      "topic": "レンジとモード",
+      "statement": "GeneratorRangeは高/中/低、GeneratorModeはAD/ループ/ARの3種。低レンジはクロック分周4で更に1オクターブ下げる。",
+      "basis": "licensed_source",
+      "confidence": "high",
+      "source_id": "SRC-020-07",
+      "locator": "tides/generator.h enum, set_range, set_pitch",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-024",
+      "entity_id": "REF-020-007",
+      "topic": "出力と同期",
+      "statement": "出力サンプルは単極/双極と終端フラグ(アタック終了/リリース終了)を持ち、クロック同期時は周波数比(p/q)で追従する。ブロックサイズ16。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-07",
+      "locator": "tides/generator.h GeneratorSample, FrequencyRatio, kBlockSize",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-025",
+      "entity_id": "REF-020-008",
+      "topic": "CV校正",
+      "statement": "RATE/SPREAD入力のC1/C3による2点校正と全チャンネルのオフセット校正メソッドを持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-08",
+      "locator": "marbles/cv_reader.h",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-020-026",
+      "entity_id": "REF-020-008",
+      "topic": "クロック/リセット入力",
+      "statement": "CV入力をリセット入力として扱うモード(treat_cv_as_reset_inputs)があり、ゲート状態を読み取る。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-020-08",
+      "locator": "marbles/cv_reader.h Process",
+      "verified_on": "2026-11-13"
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-020-001",
+      "item": "公式マニュアル(mutable-instruments.net)のI/O電圧範囲・ジャック一覧・電源規格・販売終了状況",
+      "tried_sources": [
+        "SRC-020-09"
+      ],
+      "impact_on_spec": "各モジュールのポート範囲(信号規約)を一次資料で確定できない。ソース中の定数・校正処理から間接的にのみ読める"
+    },
+    {
+      "entity_id": "REF-020-001",
+      "item": "リポジトリの最終更新日・アーカイブ状態(GitHub API)",
+      "tried_sources": [
+        "SRC-020-10"
+      ],
+      "impact_on_spec": "保守状況・更新頻度を仕様根拠に使えない"
+    },
+    {
+      "entity_id": "REF-020-001",
+      "item": "READMEが言及するのみのLICENSEファイル(LICENSEは404)・個別モジュールの追加サードパーティ条項",
+      "tried_sources": [
+        "SRC-020-01"
+      ],
+      "impact_on_spec": "再利用判断は各ファイルのヘッダ確認が必要"
+    },
+    {
+      "entity_id": "REF-020-002",
+      "item": "各モジュールの入出力電圧範囲・ジャック種別(V/oct基準電圧、ゲート閾値)",
+      "tried_sources": [
+        "SRC-020-09",
+        "SRC-020-08"
+      ],
+      "impact_on_spec": "電圧規約はEurorack一般論(別対象T-001)に頼るしかなく、Mutable固有値を断定できない"
+    },
+    {
+      "entity_id": "REF-020-003",
+      "item": "パネル上のポート一覧・各パラメータの電圧範囲",
+      "tried_sources": [
+        "SRC-020-09"
+      ],
+      "impact_on_spec": "ポート表を確定できない(Modulations構造体のみ)"
+    },
+    {
+      "entity_id": "REF-020-004",
+      "item": "設定値の保存方式(Braidsのメニュー設定がフラッシュに保存されるか)",
+      "tried_sources": [
+        "SRC-020-04"
+      ],
+      "impact_on_spec": "Braidsのパッチ保存仕様は未確認"
+    },
+    {
+      "entity_id": "REF-020-005",
+      "item": "入出力ジャック仕様・サンプルレート",
+      "tried_sources": [
+        "SRC-020-05",
+        "SRC-020-09"
+      ],
+      "impact_on_spec": "ポート表を確定できない"
+    },
+    {
+      "entity_id": "REF-020-006",
+      "item": "バッファ長(秒)・入出力電圧範囲",
+      "tried_sources": [
+        "SRC-020-06",
+        "SRC-020-09"
+      ],
+      "impact_on_spec": "最大録音時間・ポート範囲を確定できない"
+    },
+    {
+      "entity_id": "REF-020-007",
+      "item": "出力電圧範囲・パネルパラメータ名",
+      "tried_sources": [
+        "SRC-020-07",
+        "SRC-020-09"
+      ],
+      "impact_on_spec": "信号範囲を仕様化できない"
+    },
+    {
+      "entity_id": "REF-020-008",
+      "item": "乱数アルゴリズム詳細・出力範囲",
+      "tried_sources": [
+        "SRC-020-08"
+      ],
+      "impact_on_spec": "確率モデルの仕様化ができない"
+    },
+    {
+      "entity_id": null,
+      "item": "Mutable Instruments全体のパッチ保存形式(セッション/プリセット)",
+      "tried_sources": [
+        "SRC-020-01"
+      ],
+      "impact_on_spec": "モジュールは単体で内部フラッシュに状態を保存する設計で、システム全体のパッチ概念はないと考えられるが未確認"
+    }
+  ]
+}

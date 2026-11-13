@@ -1,0 +1,76 @@
+{
+ "sources": [
+  {
+   "id": "SRC-003-01",
+   "title": "Mother-32 | Moog Music (product page, Specs and Overview)",
+   "publisher": "Moog Music Inc.",
+   "url": "https://www.moogmusic.com/synthesizers/mother-32",
+   "doc_version": "unknown",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Full page content as delivered by the site's public page-data (overview, specs table, resource links)",
+   "link_status": "ok",
+   "license_note": "Manufacturer web page; only own-words summaries of spec values recorded. No text, images or assets reused. Marketing text recorded as advertising."
+  },
+  {
+   "id": "SRC-003-02",
+   "title": "Mother-32 User Manual / Quickstart (Moog downloads listing)",
+   "publisher": "Moog Music Inc.",
+   "url": "https://www.moogmusic.com/downloads/?product=Mother 32&type=User Manual",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: listing is client-rendered and no PDF link was exposed; a guessed PDF path on api.moogmusic.com was refused by the proxy (403)",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  },
+  {
+   "id": "SRC-003-03",
+   "title": "Moog Mother-32 review (Gordon Reid)",
+   "publisher": "Sound On Sound (SOS Publications Group)",
+   "url": "https://www.soundonsound.com/reviews/moog-mother-32",
+   "doc_version": "Published January 2016",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Entire review text incl. Assignable Output box, Patchbay table, Specifications box (read in full).",
+   "link_status": "ok",
+   "license_note": "Web page by the named publisher (copyright held by publisher). Facts summarised in own words only; no text, figures, tables or images reused."
+  },
+  {
+   "id": "SRC-003-04",
+   "title": "Mother-32 (Wikipedia article, oldid 1279163726)",
+   "publisher": "Wikipedia / Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Mother-32",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Whole article incl. infobox (short article).",
+   "link_status": "ok",
+   "license_note": "CC BY-SA text; only facts summarised, nothing copied. Encyclopedia article: secondary, uncited infobox values."
+  },
+  {
+   "id": "SRC-003-05",
+   "title": "Mother 32 Users Manual (PDF found via WebSearch, Shopify CDN)",
+   "publisher": "Moog Music (presumed; host not confirmed)",
+   "url": "https://cdn.shopify.com/s/files/1/0527/2557/9960/files/Mother_32_Users_Manual.pdf",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Not read: proxy refused CONNECT to cdn.shopify.com (403). Host name to be allowed if wanted.",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; nothing reproduced."
+  },
+  {
+   "id": "SRC-003-06",
+   "title": "Moog Mother-32 manual listings (WebSearch result summaries: manualslib, manualmachine, scribd etc.)",
+   "publisher": "Third-party manual hosts",
+   "url": "https://www.manualslib.com/manual/988819/Moog-Mother-32.html",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Search-result summary only (2026-11-13); pages not opened. Third-party mirrors of the manual were deliberately not used.",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; unofficial mirrors not used."
+  }
+ ]
+}

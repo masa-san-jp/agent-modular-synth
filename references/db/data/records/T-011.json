@@ -1,0 +1,2030 @@
+{
+ "target_id": "T-011",
+ "entities": [
+  {
+   "id": "REF-011-001",
+   "kind": "system",
+   "name": "Behringer SYSTEM 55",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Moog 大型モジュラー(System 55系)を再現した38モジュール構成のEurorack GO×2筐体の完成品システム。",
+   "synthesis_method": "アナログ減算式モジュラー(パッチケーブル接続)",
+   "features": [
+    {
+     "text": "38モジュール+CM1A MIDIインターフェースを2ケースに収録",
+     "fact_ids": [
+      "F-011-001"
+     ]
+    },
+    {
+     "text": "3段構成(フィルタ/エンベロープ/VCA、VCO/シーケンサ、ミキサ/ユーティリティ)",
+     "fact_ids": [
+      "F-011-002"
+     ]
+    },
+    {
+     "text": "最大消費電力65W、13VDC 5Aアダプタ2個付属",
+     "fact_ids": [
+      "F-011-003"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "使用前に30分以上のウォームアップを推奨",
+     "fact_ids": [
+      "F-011-004"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "モジュール間をケーブルで接続して音色を作る(ガイドに例示パッチあり)。",
+     "fact_ids": [
+      "F-011-005"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "CM1A経由で外部MIDIキーボードがピッチとノートトリガを制御。",
+     "fact_ids": [
+      "F-011-006"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": "REF-011-004",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-002",
+   "kind": "system",
+   "name": "Behringer SYSTEM 35",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "System 35系を再現した25モジュール構成のEurorack GO×1筐体の完成品システム。",
+   "synthesis_method": "アナログ減算式モジュラー",
+   "features": [
+    {
+     "text": "25モジュール+CM1A、1ケース",
+     "fact_ids": [
+      "F-011-007"
+     ]
+    },
+    {
+     "text": "921系5基で最大5ボイス相当",
+     "fact_ids": [
+      "F-011-008"
+     ]
+    },
+    {
+     "text": "増設余地は18HP",
+     "fact_ids": [
+      "F-011-009"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-005",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-003",
+   "kind": "system",
+   "name": "Behringer SYSTEM 15",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "System 15系を再現した16モジュール構成のEurorack GO×1筐体の完成品システム。",
+   "synthesis_method": "アナログ減算式モジュラー",
+   "features": [
+    {
+     "text": "16モジュール+CM1A、PSU付きケース",
+     "fact_ids": [
+      "F-011-010"
+     ]
+    },
+    {
+     "text": "3ボイス相当の構成",
+     "fact_ids": [
+      "F-011-011"
+     ]
+    },
+    {
+     "text": "増設余地は96HP",
+     "fact_ids": [
+      "F-011-012"
+     ]
+    },
+    {
+     "text": "CM1AのトリガはV-trig/S-trig選択可",
+     "fact_ids": [
+      "F-011-013"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-006",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-004",
+   "kind": "system",
+   "name": "Moog Modular System 55",
+   "maker": "Moog Music",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "原機(1970年代初期に登場したMoogモジュラーの系列)。歴史的な大型Moogモジュラー。 原機の仕様は一次資料未入手のため個別の数値は記録しない。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1970年代初期登場、ディスクリート・トランジスタ設計(Behringer側の説明)",
+     "fact_ids": [
+      "F-011-014"
+     ]
+    },
+    {
+     "text": "961 INTERFACEはModular 55系回路の再現とBehringerが説明",
+     "fact_ids": [
+      "F-011-015"
+     ]
+    },
+    {
+     "text": "1965-1981年のMoogモジュラー系列(Wikipedia)",
+     "fact_ids": [
+      "F-011-045"
+     ]
+    },
+    {
+     "text": "921系を活かす15/35/55シリーズ",
+     "fact_ids": [
+      "F-011-046"
+     ]
+    },
+    {
+     "text": "System 55構成リスト(SOS)",
+     "fact_ids": [
+      "F-011-047"
+     ]
+    },
+    {
+     "text": "Behringerクローンとの関係",
+     "fact_ids": [
+      "F-011-050"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "製造年は資料間で食い違い",
+     "fact_ids": [
+      "F-011-049"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "パッチコードによるモジュール間接続",
+     "fact_ids": [
+      "F-011-048"
+     ]
+    },
+    "state_save": {
+     "summary": "内蔵の保存手段の記述なし",
+     "fact_ids": [
+      "F-011-063"
+     ]
+    },
+    "external_control": {
+     "summary": "鍵盤(951)・リボン・シーケンサ",
+     "fact_ids": [
+      "F-011-064"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-005",
+   "kind": "system",
+   "name": "Moog Modular System 35",
+   "maker": "Moog Music",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "原機(1970年代初期に登場したMoogモジュラーの系列)。歴史的な中型Moogモジュラー。 原機の仕様は一次資料未入手のため個別の数値は記録しない。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1970年代初期登場、ディスクリート・トランジスタ設計(Behringer側の説明)",
+     "fact_ids": [
+      "F-011-016"
+     ]
+    },
+    {
+     "text": "15/35/55シリーズの一員",
+     "fact_ids": [
+      "F-011-051"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "個別構成は未確認",
+     "fact_ids": [
+      "F-011-051"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-006",
+   "kind": "system",
+   "name": "Moog Modular System 15",
+   "maker": "Moog Music",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "原機(1970年代初期に登場したMoogモジュラーの系列)。歴史的な小型Moogモジュラー。 原機の仕様は一次資料未入手のため個別の数値は記録しない。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1970年代初期登場、ディスクリート・トランジスタ設計(Behringer側の説明)",
+     "fact_ids": [
+      "F-011-017"
+     ]
+    },
+    {
+     "text": "15/35/55シリーズの一員",
+     "fact_ids": [
+      "F-011-052"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "個別構成は未確認",
+     "fact_ids": [
+      "F-011-052"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-007",
+   "kind": "module",
+   "name": "Behringer 921B OSCILLATOR",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "921A駆動モジュールで制御する(または単独でLFO的に使う)VCO。Modular 55/35系の再現。",
+   "synthesis_method": "アナログVCO(4波形)",
+   "features": [
+    {
+     "text": "4波形個別出力",
+     "fact_ids": [
+      "F-011-018"
+     ]
+    },
+    {
+     "text": "strong/weak同期",
+     "fact_ids": [
+      "F-011-019"
+     ]
+    },
+    {
+     "text": "921Aで集中制御/単独LFO",
+     "fact_ids": [
+      "F-011-020"
+     ]
+    },
+    {
+     "text": "8HP、+12V 30mA/-12V 45mA",
+     "fact_ids": [
+      "F-011-021"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Sine out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-018"
+     ]
+    },
+    {
+     "name": "Triangle out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-018"
+     ]
+    },
+    {
+     "name": "Sawtooth out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-018"
+     ]
+    },
+    {
+     "name": "Rectangular out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-018"
+     ]
+    },
+    {
+     "name": "Sync in",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-019"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-016",
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-008",
+   "kind": "module",
+   "name": "Behringer 904A VOLTAGE CONTROLLED LOW PASS FILTER",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "filter",
+   "purpose": "Modular 55/35/15系を再現した電圧制御ローパスフィルタ。",
+   "synthesis_method": "電圧制御ローパス(再生/レゾナンス付き)",
+   "features": [
+    {
+     "text": "Regenerationでレゾナンス、最大付近で自己発振",
+     "fact_ids": [
+      "F-011-022",
+      "F-011-025"
+     ]
+    },
+    {
+     "text": "CV入力3系統",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    },
+    {
+     "text": "8HP、+12V 65mA/-12V 50mA",
+     "fact_ids": [
+      "F-011-024"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Audio in",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    },
+    {
+     "name": "Audio out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    },
+    {
+     "name": "CV in 1",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    },
+    {
+     "name": "CV in 2",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    },
+    {
+     "name": "CV in 3",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-023"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Fixed Control Voltage (cutoff)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-022"
+     ]
+    },
+    {
+     "name": "Regeneration (resonance)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-022"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-017",
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-009",
+   "kind": "module",
+   "name": "Behringer 911 ENVELOPE GENERATOR",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "Modular 55/35/15系のADSR型エンベロープジェネレータ。",
+   "synthesis_method": "アナログADSR",
+   "features": [
+    {
+     "text": "4コントロール(T1/T2/T3/Sustain)",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    },
+    {
+     "text": "時間は2ms〜10s",
+     "fact_ids": [
+      "F-011-027"
+     ]
+    },
+    {
+     "text": "8HP",
+     "fact_ids": [
+      "F-011-028"
+     ]
+    },
+    {
+     "text": "S-trig入力、CV出力",
+     "fact_ids": [
+      "F-011-029"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "Trigger in (S-trig)",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-029"
+     ]
+    },
+    {
+     "name": "CV out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "T1 (attack)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    },
+    {
+     "name": "T2 (decay)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    },
+    {
+     "name": "T3 (release)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    },
+    {
+     "name": "Sustain",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-011-026"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-018",
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-010",
+   "kind": "module",
+   "name": "Behringer 960 SEQUENTIAL CONTROLLER",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "Modular 55系のシーケンシャルコントローラの再現。",
+   "synthesis_method": "アナログCVステップシーケンサ",
+   "features": [
+    {
+     "text": "8ステップ、962で24ステップ",
+     "fact_ids": [
+      "F-011-030"
+     ]
+    },
+    {
+     "text": "ステップ別Skip/Normal/Stop",
+     "fact_ids": [
+      "F-011-031"
+     ]
+    },
+    {
+     "text": "内蔵パルス発振とCV/ゲート入出力",
+     "fact_ids": [
+      "F-011-032"
+     ]
+    },
+    {
+     "text": "56HP",
+     "fact_ids": [
+      "F-011-033"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "内蔵パルスオシレータが手動/CVで制御されるテンポを作り、ステップ毎のゲート入出力を持つ。",
+     "fact_ids": [
+      "F-011-032"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-011-020",
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-011",
+   "kind": "module",
+   "name": "Behringer 961 INTERFACE",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "V-trigとS-trigの相互変換とオーディオ→トリガ変換を行うインタフェース。",
+   "synthesis_method": "トリガ形式変換",
+   "features": [
+    {
+     "text": "V-trig⇔S-trig変換とオーディオ→トリガ",
+     "fact_ids": [
+      "F-011-034"
+     ]
+    },
+    {
+     "text": "感度・オン時間調整",
+     "fact_ids": [
+      "F-011-035"
+     ]
+    },
+    {
+     "text": "21HP、+12V 50mA",
+     "fact_ids": [
+      "F-011-036"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": "REF-011-021",
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-012",
+   "kind": "module",
+   "name": "Behringer 903A RANDOM SIGNAL GENERATOR",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "noise",
+   "purpose": "ホワイトノイズとピンクノイズを発生するModular 55系ノイズ源。",
+   "synthesis_method": "アナログノイズ生成",
+   "features": [
+    {
+     "text": "白/ピンク、各2出力",
+     "fact_ids": [
+      "F-011-037"
+     ]
+    },
+    {
+     "text": "4HP",
+     "fact_ids": [
+      "F-011-038"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-013",
+   "kind": "signal_standard",
+   "name": "Behringer SYSTEM 55 トリガ/信号規約",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "V-trig・S-trig系のトリガ形式とEurorack電源。電圧値やピッチ規約は資料未入手。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "V-trigとS-trigの両方を扱う",
+     "fact_ids": [
+      "F-011-039",
+      "F-011-040"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "電圧値・1V/oct等のピッチ規約は未確認",
+     "fact_ids": [
+      "F-011-039"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "ケーブル接続(オーディオ入出力コネクタ)。ケーブル規格の詳細は台帳内資料では未確認。",
+     "fact_ids": [
+      "F-011-041"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-014",
+   "kind": "patch_storage",
+   "name": "Behringer SYSTEM 55 パッチ保存",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "システムとしてのパッチ保存機能の有無。製品ページでは保存機能の言及なし。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "プリセット保存機能の記載なし(ページ上)",
+     "fact_ids": [
+      "F-011-042"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "製品ページ上に記載なし。",
+     "fact_ids": [
+      "F-011-042"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-015",
+   "kind": "control_interface",
+   "name": "Behringer CM1A MIDI-to-CV インターフェース",
+   "maker": "Behringer",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "外部MIDIキーボード/DAWからピッチとトリガを供給するMIDI-CV変換器。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDIキーボード/DAWから制御、V-trig/S-trig出力",
+     "fact_ids": [
+      "F-011-043",
+      "F-011-044"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDI入力(キーボードまたはDAW)をピッチ/トリガ電圧に変換。",
+     "fact_ids": [
+      "F-011-043"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-016",
+   "kind": "module",
+   "name": "Moog 921B Oscillator (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "原機の電圧制御オシレータ(921系、921Aドライバと921Bの組)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "安定・同期機能・100kHz超(SOS)",
+     "fact_ids": [
+      "F-011-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "周波数範囲は資料で食い違い",
+     "fact_ids": [
+      "F-011-054"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-017",
+   "kind": "module",
+   "name": "Moog 904A Voltage Controlled Low Pass Filter (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "filter",
+   "purpose": "原機の24dB/octラダー型ローパスフィルタ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "24dBラダー、1969年特許",
+     "fact_ids": [
+      "F-011-055"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-018",
+   "kind": "module",
+   "name": "Moog 911 Envelope Generator (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "原機のADSRエンベロープ(911)と911A二重トリガ・ディレイ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "911×5と911A",
+     "fact_ids": [
+      "F-011-056"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-019",
+   "kind": "module",
+   "name": "Moog 902 Voltage Controlled Amplifier (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "原機の電圧制御アンプ(VCA)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "902×5",
+     "fact_ids": [
+      "F-011-057"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-020",
+   "kind": "module",
+   "name": "Moog 960 Sequential Controller (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "原機のアナログ・シーケンサ(960)と962シーケンシャルスイッチ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "3バンク構成、962で16ステップ",
+     "fact_ids": [
+      "F-011-058"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "内蔵パルスと962によるステップ切替",
+     "fact_ids": [
+      "F-011-058"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-021",
+   "kind": "module",
+   "name": "Moog 961 Interface (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "電圧トリガとMoog独自S-triggerの相互変換、オーディオトリガ機能を持つインターフェース。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "V-trig⇔S-trig変換",
+     "fact_ids": [
+      "F-011-059"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "V-trig/S-trig/オーディオの変換",
+     "fact_ids": [
+      "F-011-059"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-022",
+   "kind": "signal_standard",
+   "name": "Moog 原機 信号規約(1V/oct・S-trig)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機モジュラーのピッチ規約とトリガ方式。電圧値は未確認。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1V/octave基準",
+     "fact_ids": [
+      "F-011-060"
+     ]
+    },
+    {
+     "text": "S-trigger(ショート)方式",
+     "fact_ids": [
+      "F-011-061"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "S-trigの電圧値は未確認",
+     "fact_ids": [
+      "F-011-062"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-023",
+   "kind": "patch_storage",
+   "name": "Moog 原機 パッチ保存",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "原機の設定保存手段(記録メカニズムの有無)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "保存手段なし(記述上)",
+     "fact_ids": [
+      "F-011-063"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-024",
+   "kind": "control_interface",
+   "name": "Moog 原機 コントローラ(951鍵盤・リボン等)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機の演奏/制御入力。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "鍵盤・リボン・シーケンサ",
+     "fact_ids": [
+      "F-011-064"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-011-001",
+   "entity_id": "REF-011-001",
+   "topic": "構成",
+   "statement": "38モジュール+MIDI-CV変換器(CM1A)を2台のEurorack GOケースに収めた完成品と説明されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "SYSTEM 55 副題・Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-002",
+   "entity_id": "REF-011-001",
+   "topic": "構成",
+   "statement": "上段に904A/904B/914とエンベロープ911・VCA902、中段に921B・960・MIDI I/F、下段にCP3A・減衰器・903A・962を配置と説明。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview 'Three rows'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-003",
+   "entity_id": "REF-011-001",
+   "topic": "電源",
+   "statement": "消費電力は最大65W。付属アダプタは13VDC 5A(2個同梱)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Technical facts",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-004",
+   "entity_id": "REF-011-001",
+   "topic": "運用",
+   "statement": "精密回路のため録音・演奏前に30分以上のウォームアップを推奨。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview 'Give it time to warm up'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-005",
+   "entity_id": "REF-011-001",
+   "topic": "パッチ",
+   "statement": "付属ガイドにSpace Rock、Mellow Organ、Harmonic Sequenceの例示パッチがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview 'Start from a patch'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-006",
+   "entity_id": "REF-011-001",
+   "topic": "外部制御",
+   "statement": "CM1A MIDIインターフェース経由で外部MIDIキーボードがピッチ制御とノート発音を行う。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview 先頭段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-007",
+   "entity_id": "REF-011-002",
+   "topic": "構成",
+   "statement": "25モジュールとMIDI-CV変換器を1台のEurorack GOケースに収めた完成品。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-02",
+   "locator": "副題・Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-008",
+   "entity_id": "REF-011-002",
+   "topic": "構成",
+   "statement": "921A×2・921B×4・921で5ボイス相当、914、923、904A/904B、911×3、902×3、CP3A/CP3A-M、CP35、961を含む。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-02",
+   "locator": "features 一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-009",
+   "entity_id": "REF-011-002",
+   "topic": "拡張",
+   "statement": "ブランクパネル(BP12+BP3×BP2)で計18HPの増設スペースがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-02",
+   "locator": "features 末尾",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-010",
+   "entity_id": "REF-011-003",
+   "topic": "構成",
+   "statement": "16モジュール+MIDI-CV変換器を1台のEurorack GOケースに収めた完成品(PSU同梱)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-03",
+   "locator": "副題・features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-011",
+   "entity_id": "REF-011-003",
+   "topic": "構成",
+   "statement": "921B×2+921で3ボイス相当、902×2、911×2、904A/904B、914、923、CP3A-M、CP35、961を含む。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-03",
+   "locator": "features 一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-012",
+   "entity_id": "REF-011-003",
+   "topic": "拡張",
+   "statement": "BP56/BP28/BP12の計96HPの増設スペースがあり、960の追加等を想定している。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-03",
+   "locator": "features 末尾",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-013",
+   "entity_id": "REF-011-003",
+   "topic": "外部制御",
+   "statement": "CM1AはMIDIキーボードまたはDAWで制御でき、V-trigまたはS-trig出力を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-03",
+   "locator": "features CM1A行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-014",
+   "entity_id": "REF-011-004",
+   "topic": "来歴",
+   "statement": "Behringerは、System 55/35/15の最初のモジュール群が1970年代初期に登場し、ディスクリートトランジスタ設計で非常に高価だったと説明している(Behringer側の説明であり、Moog一次資料ではない)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-011-08",
+   "locator": "Behringer 961 INTERFACE 'Modular Synthesis'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-015",
+   "entity_id": "REF-011-004",
+   "topic": "来歴",
+   "statement": "Behringer 961 INTERFACEは「Modular 55」系の回路の再現と説明されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-011-08",
+   "locator": "961 INTERFACE 'Enter the Behringer 961'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-016",
+   "entity_id": "REF-011-005",
+   "topic": "来歴",
+   "statement": "Behringerは、System 55/35/15の最初のモジュール群が1970年代初期に登場し、ディスクリートトランジスタ設計で非常に高価だったと説明している(Behringer側の説明であり、Moog一次資料ではない)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-011-08",
+   "locator": "Behringer 961 INTERFACE 'Modular Synthesis'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-017",
+   "entity_id": "REF-011-006",
+   "topic": "来歴",
+   "statement": "Behringerは、System 55/35/15の最初のモジュール群が1970年代初期に登場し、ディスクリートトランジスタ設計で非常に高価だったと説明している(Behringer側の説明であり、Moog一次資料ではない)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-011-08",
+   "locator": "Behringer 961 INTERFACE 'Modular Synthesis'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-018",
+   "entity_id": "REF-011-007",
+   "topic": "機能",
+   "statement": "サイン・三角・ノコギリ・矩形の4波形をそれぞれ別出力から取り出せる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-04",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-019",
+   "entity_id": "REF-011-007",
+   "topic": "機能",
+   "statement": "ハード/ソフトの選択式オシレータ同期入力を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-04",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-020",
+   "entity_id": "REF-011-007",
+   "topic": "機能",
+   "statement": "921A OSCILLATOR DRIVERでの制御、または単独のフリーランLFOとして使用可能。周波数・幅のリンクジャックで複数921Bを並列接続できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-04",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-021",
+   "entity_id": "REF-011-007",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は8HP、+12V 30mA、-12V 45mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-04",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-022",
+   "entity_id": "REF-011-008",
+   "topic": "機能",
+   "statement": "固定制御電圧(カットオフ)、レンジ、Regeneration(レゾナンス)の各コントロールを持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-05",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-023",
+   "entity_id": "REF-011-008",
+   "topic": "機能",
+   "statement": "オーディオ入出力と周波数用CV入力3系統を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-05",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-024",
+   "entity_id": "REF-011-008",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は8HP、+12V 65mA、-12V 50mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-05",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-025",
+   "entity_id": "REF-011-008",
+   "topic": "機能",
+   "statement": "SYSTEM 55ページによれば、Regenerationを9〜10にするとフィルタが自己発振する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview 'Start from a patch'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-026",
+   "entity_id": "REF-011-009",
+   "topic": "機能",
+   "statement": "トリガ入力とCV出力を持ち、T1(アタック)、T2(ディケイ)、T3(リリース)とサスティンの4つの独立コントロールがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-06",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-027",
+   "entity_id": "REF-011-009",
+   "topic": "仕様",
+   "statement": "時間範囲は2msから10秒と記載されている(どのノブに適用されるかは記載なし)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-011-06",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-028",
+   "entity_id": "REF-011-009",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は8HP、+12V 30mA、-12V 30mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-06",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-029",
+   "entity_id": "REF-011-009",
+   "topic": "信号",
+   "statement": "SYSTEM 35/15ページでは911はS-trig入力とCV出力を持つと記載されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-02",
+   "locator": "features 911行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-030",
+   "entity_id": "REF-011-010",
+   "topic": "機能",
+   "statement": "8ステップ×3行のCV、9番目のステップはStop指令。962併用で最大24ステップ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-07",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-031",
+   "entity_id": "REF-011-010",
+   "topic": "機能",
+   "statement": "ステップごとにSkip/Normal/Stopのスイッチ、行ごとのCVレンジスイッチ、第3行はステップ長調整。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-07",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-032",
+   "entity_id": "REF-011-010",
+   "topic": "機能",
+   "statement": "パルスオシレータ(手動/CVで周波数、Play、Stop)と各ステップの手動トリガ用ボタン9個を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-07",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-033",
+   "entity_id": "REF-011-010",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は56HP、+12V 100mA、-12V 50mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-07",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-034",
+   "entity_id": "REF-011-011",
+   "topic": "機能",
+   "statement": "オーディオ→V-trig変換、デュアルS-trig→V-trig変換、マルチチャンネルV-trig→S-trig変換を備える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-08",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-035",
+   "entity_id": "REF-011-011",
+   "topic": "機能",
+   "statement": "SensitivityノブでAudio In利得を調整し、B列のV-trig入力にSwitch-On Timeノブがあり、S-trigのON時間を調整できる(主に911用)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-08",
+   "locator": "Controls",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-036",
+   "entity_id": "REF-011-011",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は21HP、+12V 50mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-08",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-037",
+   "entity_id": "REF-011-012",
+   "topic": "機能",
+   "statement": "ホワイトとピンクの両ノイズを発生し、ノイズ源ごとに出力が2つある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-09",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-038",
+   "entity_id": "REF-011-012",
+   "topic": "仕様",
+   "statement": "Eurorack仕様は4HP、+12V 25mA、-12V 35mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-09",
+   "locator": "Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-039",
+   "entity_id": "REF-011-013",
+   "topic": "トリガ",
+   "statement": "961が複数V-trigをS-trigへ、S-trigをV-trigへ変換するため、両トリガ形式が混在する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-08",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-040",
+   "entity_id": "REF-011-013",
+   "topic": "トリガ",
+   "statement": "911/911AはS-trig入力で駆動される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-06",
+   "locator": "features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-041",
+   "entity_id": "REF-011-013",
+   "topic": "接続",
+   "statement": "904Aページにオーディオ入出力コネクタの記載がある(ケーブル規格は同系904Bページで3.5mm TSと説明、904Bページは台帳外)。",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-011-05",
+   "locator": "904A features 欄",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-042",
+   "entity_id": "REF-011-014",
+   "topic": "保存",
+   "statement": "製品ページと各モジュールページにプリセット保存の機能説明は見当たらない(不在の確認であり、ないと断定はしない)。例示パッチはガイドに記載。",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-011-01",
+   "locator": "ページ全体",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-043",
+   "entity_id": "REF-011-015",
+   "topic": "機能",
+   "statement": "MIDI機器でピッチ制御とノートトリガを行う。SYSTEM 15ページではDAWからも制御可能で、V-trig/S-trig出力を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-03",
+   "locator": "features CM1A行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-044",
+   "entity_id": "REF-011-015",
+   "topic": "構成",
+   "statement": "SYSTEM 55と35ではMIDIキーボードがCM1A経由でピッチとトリガを送るとの記載。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-011-01",
+   "locator": "Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-045",
+   "entity_id": "REF-011-004",
+   "topic": "製造期間",
+   "statement": "WikipediaのインフォボックスはR. A. Moog Co.のモジュラー製造を1965-1981年、2014年以降の再開とする。System 15/35/55単独の年は同記事にない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Infobox: Dates; 本文冒頭",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-046",
+   "entity_id": "REF-011-004",
+   "topic": "系列の位置づけ",
+   "statement": "SOSは、1960年代末までにMoog製品群が出揃い、921系を活かすために新シリーズとして15/35/55を出したと述べる。55は傾斜した2筐体のケースで、基本から実験的音色まで一式を含む代表機と評される(評価・意見)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 本文中盤(921B waveform oscillator直後の段落)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-047",
+   "entity_id": "REF-011-004",
+   "topic": "モジュール構成",
+   "statement": "SOS記載のSystem 55構成: 921×1、921A×2、921B×6、903A、904A、904B、902×5、911×5、911A、960、961、962、951。(個体により3段化などの拡張あり)",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Moog Module Cookbook節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-048",
+   "entity_id": "REF-011-004",
+   "topic": "パッチ方式",
+   "statement": "Moogの原機はパッチコードでモジュール間を接続し、モジュール同士が互いを制御でき、組み合わせが成立するまで発音しない(Wikipedia)。SOSは購入時にパッチコード最低20本程度を推奨。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Components節; SOS Leon Moog Today節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-049",
+   "entity_id": "REF-011-004",
+   "topic": "製造年の食い違い",
+   "statement": "検索結果要約には15/35/55を1972-1981年製とする記述がある(原典未読)。Behringer販売ページは1973年発売の再現と説明し、Behringer公式は1970年代初期とする(F-011-014)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-011-16",
+   "locator": "WebSearch結果要約 2026-11-13",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-050",
+   "entity_id": "REF-011-004",
+   "topic": "再現品との関係",
+   "statement": "Wikipediaは、2020年からBehringerがMoogモジュールのEurorackクローンを製造し、原機系の構成でも販売していると述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Clones and emulations節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-051",
+   "entity_id": "REF-011-005",
+   "topic": "系列の位置づけ",
+   "statement": "SOSは15/35/55が921を活かす新シリーズとして出たと述べるが、System 35の個別構成は同記事にない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 921B直後の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-052",
+   "entity_id": "REF-011-006",
+   "topic": "系列の位置づけ",
+   "statement": "同上。System 15の個別構成は同記事になく、1974年の広告に言及があるのみ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Moog Today節(広告写真キャプション)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-053",
+   "entity_id": "REF-011-016",
+   "topic": "安定性と周波数",
+   "statement": "SOSは921系を、音程が安定する最初のMoogオシレータとし、同期機能を備え、有効周波数は100kHz超に達すると述べる。921A(ドライバ)で複数の921Bを駆動する構成。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 921A/921B段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-054",
+   "entity_id": "REF-011-016",
+   "topic": "周波数範囲の食い違い",
+   "statement": "検索結果要約には921の周波数範囲を0.01Hz-40kHzとする記述がある。SOSの「100kHz超」と食い違う(いずれも原典の電圧スケーリングは未確認)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-011-16",
+   "locator": "WebSearch結果要約",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-055",
+   "entity_id": "REF-011-017",
+   "topic": "ラダーフィルタ",
+   "statement": "Wikipediaは、Moogの24dBローパスがトランジスタ対とコンデンサのラダー構造で、1969年10月28日にこのラダーのみ特許取得したと述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development / Components節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-056",
+   "entity_id": "REF-011-018",
+   "topic": "エンベロープ",
+   "statement": "SOSによればSystem 55には911が5基、911A(二重トリガ・ディレイ)が1基含まれ、911Aは固定遅延後に第2エンベロープを起動できる(System 3の説明箇所)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Cookbook節とSystem 3説明",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-057",
+   "entity_id": "REF-011-019",
+   "topic": "VCA",
+   "statement": "System 55に902×5(SOS)。Moogは電圧制御アンプ(VCA)で音量を電圧制御した(Wikipedia)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; SOS Cookbook節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-058",
+   "entity_id": "REF-011-020",
+   "topic": "シーケンサ",
+   "statement": "SOS: 960は複数バンクのCVを持ち、下段バンクはステップ長の制御にも使える。系列長とエンベロープ用ゲート生成のオプションがある。962で2バンクを切替えて16ステップ系列にできる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 960/961/962段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-059",
+   "entity_id": "REF-011-021",
+   "topic": "トリガ変換",
+   "statement": "SOS: 961は電圧トリガをMoog独自のS-trigger方式へ、またその逆へ変換し、オーディオトリガ機能も含む。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 960/961/962段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-060",
+   "entity_id": "REF-011-022",
+   "topic": "ピッチ規約",
+   "statement": "Wikipediaは、Moogが1V/octaveを基準に設計し、電圧でVCAも制御したと述べる。個別モジュール(921等)の入力スケーリング値は資料内に記載なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; CV/gate CV節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-061",
+   "entity_id": "REF-011-022",
+   "topic": "トリガ方式",
+   "statement": "CV/gate記事: S-trigger(ショート・トリガ)は常時ハイでグランドへ短絡するとノートオンになる方式で、初期Moogモジュラーで使われた。V-triggerの電圧は機種ごとに2〜10Vと幅がある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-15",
+   "locator": "Wikipedia CV/gate, Trigger節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-062",
+   "entity_id": "REF-011-022",
+   "topic": "S-trig電圧値",
+   "statement": "Moog S-trigの具体的な電圧・電流値は読んだ資料に記載なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-15",
+   "locator": "CV/gate, Trigger節(値記載なしを確認)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-063",
+   "entity_id": "REF-011-023",
+   "topic": "設定保存",
+   "statement": "Wikipediaは、初期ユーザは設定を保存・共有する手段がなく、口頭やセミナーで習得したと述べる。SOSは設定記録用にカメラの利用を勧める。内蔵パッチメモリは記述なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; SOS Leon Moog Today節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-064",
+   "entity_id": "REF-011-024",
+   "topic": "コントローラ",
+   "statement": "Wikipedia: 鍵盤、ジョイスティック、ペダル、リボン、シーケンサで演奏。SOS: System 55に951鍵盤コントローラを含み、リボンコントローラは指位置から電圧を作る。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Components節; SOS Cookbook節",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-011-004",
+   "item": "Moog原機System 55の一次仕様(モジュール構成・寸法・電源・信号電圧規約)",
+   "tried_sources": [
+    "SRC-011-11",
+    "SRC-011-12"
+   ],
+   "impact_on_spec": "原機の仕様をモデル化できず、再現品との差分を比較できない"
+  },
+  {
+   "entity_id": "REF-011-005",
+   "item": "Moog原機System 35の一次仕様",
+   "tried_sources": [
+    "SRC-011-11",
+    "SRC-011-12"
+   ],
+   "impact_on_spec": "同上"
+  },
+  {
+   "entity_id": "REF-011-006",
+   "item": "Moog原機System 15の一次仕様",
+   "tried_sources": [
+    "SRC-011-11",
+    "SRC-011-12"
+   ],
+   "impact_on_spec": "同上"
+  },
+  {
+   "item": "Moog Musicによる2015年前後の再発売品(System 15/35/55)の現行公式資料(マニュアル・仕様)。moogmusic.comのサイトマップに該当製品ページなし",
+   "tried_sources": [
+    "SRC-011-11",
+    "SRC-011-12"
+   ],
+   "impact_on_spec": "再発売品を独立したsystemエンティティとして記録できない。系譜の中間(原機→Moog再発売→Behringer)が欠ける"
+  },
+  {
+   "entity_id": "REF-011-013",
+   "item": "ピッチCV規約(1V/oct等)・CV範囲・トリガ電圧レベル(V-trig/S-trigの具体値)",
+   "tried_sources": [
+    "SRC-011-01",
+    "SRC-011-10"
+   ],
+   "impact_on_spec": "信号規約の数値化ができない。Behringer QSG(PDF)が取得不能のため"
+  },
+  {
+   "entity_id": "REF-011-001",
+   "item": "Behringer System 55 クイックスタートガイド全文(パッチ手順・コントロール範囲)",
+   "tried_sources": [
+    "SRC-011-10"
+   ],
+   "impact_on_spec": "個別パラメータの範囲・既定値が未確認"
+  },
+  {
+   "entity_id": "REF-011-007",
+   "item": "921B各出力のレベル・周波数範囲",
+   "tried_sources": [
+    "SRC-011-04",
+    "SRC-011-10"
+   ],
+   "impact_on_spec": "ポートrangeを記録できない"
+  },
+  {
+   "entity_id": "REF-011-008",
+   "item": "904Aのカットオフ周波数範囲・CV感度",
+   "tried_sources": [
+    "SRC-011-05",
+    "SRC-011-10"
+   ],
+   "impact_on_spec": "パラメータ範囲を記録できない"
+  },
+  {
+   "entity_id": "REF-011-010",
+   "item": "960の各行CVレンジ値・クロック周波数範囲",
+   "tried_sources": [
+    "SRC-011-07",
+    "SRC-011-10"
+   ],
+   "impact_on_spec": "CV出力範囲を記録できない"
+  },
+  {
+   "item": "原機の個別モジュールのピッチ入力スケーリング(1V/octの厳密度)・CV範囲・S-trigの電圧/電流値",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-14",
+    "SRC-011-15",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "原機の信号規約を数値化できず、Behringer版との電気的互換の比較ができない",
+   "entity_id": "REF-011-022"
+  },
+  {
+   "item": "原機System 35/15の個別モジュール構成と発売年(55のみSOSに構成表あり)",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "35/15を構成表レベルで比較できない",
+   "entity_id": "REF-011-005"
+  },
+  {
+   "item": "原機921の周波数範囲(SOS:100kHz超、検索要約:0.01Hz-40kHz)と原機のジャック形状(パッチケーブル規格)",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "オシレータ範囲とコネクタ互換が確定しない",
+   "entity_id": "REF-011-016"
+  },
+  {
+   "item": "Moog原機のマニュアル/サービスマニュアル(moogarchives.com等は名前解決・許可外)",
+   "tried_sources": [
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "一次資料が無く、第三者資料のみの記録になる",
+   "entity_id": "REF-011-004"
+  }
+ ]
+}

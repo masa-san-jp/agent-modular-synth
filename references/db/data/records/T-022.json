@@ -1,0 +1,1382 @@
+{
+ "target_id": "T-022",
+ "entities": [
+  {
+   "id": "REF-022-001",
+   "kind": "system",
+   "name": "MIDI 1.0",
+   "maker": "MIDI Manufacturers Association / The MIDI Association",
+   "version": null,
+   "function_category": "system",
+   "purpose": "電子楽器・コンピュータ間の演奏データ接続規格。1983年導入。ノート・コントローラ・クロック等をバイト列メッセージで送る。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "1983年2月に導入され、MMAが策定。1985年に詳細仕様書、2017年に抄録版がIEC 63035",
+     "fact_ids": [
+      "F-022-001"
+     ]
+    },
+    {
+     "text": "1本のリンクで16チャンネル(1〜16)",
+     "fact_ids": [
+      "F-022-002"
+     ]
+    },
+    {
+     "text": "メッセージはステータスバイト+最大2データバイトで、チャンネルメッセージとシステムメッセージに分かれる",
+     "fact_ids": [
+      "F-022-003"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "仕様書本体(midi.org)は未取得で、ステータス値などの詳細は二次資料でしか確認していない",
+     "fact_ids": [
+      "F-022-001"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "MIDI Clock/MTC/タイムスタンプ(拡張)で同期",
+     "fact_ids": [
+      "F-022-009",
+      "F-022-012",
+      "F-022-016"
+     ]
+    },
+    "state_save": {
+     "summary": "SysExダンプやSMFで保存(別エンティティ参照)",
+     "fact_ids": [
+      "F-022-015"
+     ]
+    },
+    "external_control": {
+     "summary": "ノート/CC/Program Change/SysExで外部制御",
+     "fact_ids": [
+      "F-022-003"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-002",
+   "kind": "signal_standard",
+   "name": "MIDI 1.0 serial/electrical interface",
+   "maker": "MIDI Manufacturers Association",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "31.25kbaud非同期シリアル、アイソレート電流ループのMIDI 1.0物理層。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "31,250 baud(±1%)、8-N-1で1バイト10ビット、1バイト320マイクロ秒、正味25kbit/s",
+     "fact_ids": [
+      "F-022-004"
+     ]
+    },
+    {
+     "text": "5mA電流ループ、フォトカプラ絶縁、5ピンDINまたはTRS",
+     "fact_ids": [
+      "F-022-005"
+     ]
+    },
+    {
+     "text": "データバイトの上位ビットは0で7ビット、ステータスバイトは1",
+     "fact_ids": [
+      "F-022-004"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "MIDI Out (5-pin DIN/TRS)",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": []
+    },
+    {
+     "name": "MIDI In (opto-isolated)",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": []
+    }
+   ],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "1バイト320µsの直列伝送。和音で遅延が積み上がる(二次資料)",
+     "fact_ids": [
+      "F-022-004"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-003",
+   "kind": "control_interface",
+   "name": "MIDI 1.0 Channel Voice messages (Note/CC/Program Change)",
+   "maker": "MIDI Manufacturers Association",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "ノートオン/オフ、プログラムチェンジ、コントロールチェンジ等の演奏メッセージ。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "ノートオンはノート番号とベロシティを持ち、ノートオフが終了、プログラムチェンジが音色切替、コントロールチェンジがパラメータ調整",
+     "fact_ids": [
+      "F-022-006"
+     ]
+    },
+    {
+     "text": "ノート番号0〜127=C-1〜G9、中央C(C4)=60、周波数8.1758〜12543.85Hz",
+     "fact_ids": [
+      "F-022-007"
+     ]
+    },
+    {
+     "text": "CC(連続コントローラ)番号をパラメータに割当てて操作",
+     "fact_ids": [
+      "F-022-008"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ステータスバイトの16進値・CC番号表(例CC1,CC7)・14ビットCCのMSB/LSB規則は未取得",
+     "fact_ids": [
+      "F-022-007"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "note number",
+     "unit": "note",
+     "range": {
+      "min": 0,
+      "max": 127,
+      "unit": "note"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-022-007"
+     ]
+    }
+   ],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "チャンネル1-16へのメッセージ",
+     "fact_ids": [
+      "F-022-006"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-004",
+   "kind": "module",
+   "name": "MIDI beat clock",
+   "maker": "MIDI Manufacturers Association",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "テンポ依存の同期クロック。1拍24パルスで機器間のテンポを揃える。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "クロック1拍24パルス(PPQN=24)、1バイトのリアルタイムメッセージ",
+     "fact_ids": [
+      "F-022-009"
+     ]
+    },
+    {
+     "text": "clock=0xF8、start=0xFA、continue=0xFB、stop=0xFC",
+     "fact_ids": [
+      "F-022-010"
+     ]
+    },
+    {
+     "text": "Song Position Pointer(0xF2)は14ビットで16分音符単位(=6クロック)",
+     "fact_ids": [
+      "F-022-011"
+     ]
+    },
+    {
+     "text": "MIDI beat clockはテンポ依存で、MIDI timecodeとは異なる",
+     "fact_ids": [
+      "F-022-009"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "clock out",
+     "direction": "out",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": []
+    },
+    {
+     "name": "clock in",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": []
+    }
+   ],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "24PPQN。アルペジエータ同期等に使用",
+     "fact_ids": [
+      "F-022-009"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-005",
+   "kind": "module",
+   "name": "MIDI timecode (MTC)",
+   "maker": "Digidesign / MMA",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "SMPTE時刻をMIDIで送る、フレームベースでテンポ非依存の同期。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "1986年MMA採用、1987年改訂。SysEx系メッセージでSMPTEと相互変換",
+     "fact_ids": [
+      "F-022-012"
+     ]
+    },
+    {
+     "text": "フレームレートは24/25/29.97/30fpsの2ビットフラグ",
+     "fact_ids": [
+      "F-022-013"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "時分秒フレームの位置情報を持ちドロップアウトから復帰可能",
+     "fact_ids": [
+      "F-022-012"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-006",
+   "kind": "control_interface",
+   "name": "MIDI System Exclusive (SysEx) and Universal SysEx",
+   "maker": "MIDI Manufacturers Association",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "メーカー固有の機器制御・データ転送に使う可変長メッセージ。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "MMAが会社ごとに固有IDを発行し、SysEx内でデバイスを識別",
+     "fact_ids": [
+      "F-022-014"
+     ]
+    },
+    {
+     "text": "Universal SysExはメーカー非依存の拡張用",
+     "fact_ids": [
+      "F-022-014"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "パッチ/設定のダンプ転送に使われる(osc-bridgeのbackup_presets等が利用)",
+     "fact_ids": [
+      "F-022-014"
+     ]
+    },
+    "external_control": {
+     "summary": "機器固有パラメータの制御",
+     "fact_ids": [
+      "F-022-014"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-007",
+   "kind": "patch_storage",
+   "name": "Standard MIDI File (.mid/.smf)",
+   "maker": "MIDI Manufacturers Association",
+   "version": null,
+   "function_category": "other",
+   "purpose": "MIDIイベントをタイムスタンプ付きで保存する標準ファイル形式。パッチ保存の代わりにシーケンスを持ち運ぶ。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "拡張子.mid/.midi/.smf、メディアタイプaudio/midi、マジックナンバー'MThd'(4D 54 68 64)",
+     "fact_ids": [
+      "F-022-015"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "シーケンス保存。音色保存はSysExまたはデバイス内メモリ",
+     "fact_ids": [
+      "F-022-015"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-008",
+   "kind": "module",
+   "name": "MIDI timestamping (extension)",
+   "maker": "複数ベンダー",
+   "version": null,
+   "function_category": "time_effect",
+   "purpose": "イベントに演奏時刻を付けて先送りし、受信側バッファで再生するタイミング問題の対策。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "MOTU MTS、eMagic AMT、Steinberg Midex 8は相互非互換、FireWire MIDIやCore Audio、ALSA sequencerが内蔵",
+     "fact_ids": [
+      "F-022-016"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ハード/ソフトの双方が対応した場合のみ機能する",
+     "fact_ids": [
+      "F-022-016"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-009",
+   "kind": "system",
+   "name": "MIDI 2.0",
+   "maker": "The MIDI Association / AMEI",
+   "version": null,
+   "function_category": "system",
+   "purpose": "MIDI 1.0を拡張・後方互換を保つ2020年の更新。双方向通信、プロファイル、プロパティ交換、UMPを導入。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "2020-01-17 Winter NAMMで発表。研究は2005年開始",
+     "fact_ids": [
+      "F-022-017"
+     ]
+    },
+    {
+     "text": "構成仕様: M2-100-U(概要)、M2-101-UM(MIDI-CI)、M2-102-U(プロファイル共通規則)、M2-103-UM(PE共通規則)、M2-104-UM(UMP+MIDI2.0プロトコル)。2023年6月に更新版とM2-116-U(MIDI Clip File/SMF2)",
+     "fact_ids": [
+      "F-022-018"
+     ]
+    },
+    {
+     "text": "既存製品はMIDI 1.0メッセージのみ実装してもよい",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "UMPはUSB・Ethernet向けで、5ピンDINでは使えない",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    },
+    {
+     "text": "分解能(ベロシティ等のビット数)など数値詳細は二次資料に無く未取得",
+     "fact_ids": [
+      "F-022-017"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "UMPにタイムスタンプを含められる",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    },
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDI-CIによる機器能力の探索・プロファイル・プロパティ交換(JSON)",
+     "fact_ids": [
+      "F-022-019"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": "REF-022-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-010",
+   "kind": "signal_standard",
+   "name": "Universal MIDI Packet (UMP)",
+   "maker": "The MIDI Association",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "MIDI 1.0/2.0メッセージを32/64/96/128ビットのパケットで運ぶ高速トランスポート向け形式。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "256チャンネル=16グループ×16チャンネル、各グループがMIDI1.0またはMIDI2.0プロトコルのストリーム",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    },
+    {
+     "text": "システムメッセージ、SysEx、タイムスタンプも含められる",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    },
+    {
+     "text": "SysEx8(8ビット)、Mixed Data Set、SysEx7(従来7ビット)",
+     "fact_ids": [
+      "F-022-021"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "5ピンDINでは未サポート(USB/Ethernet等の高速トランスポート向け)",
+     "fact_ids": [
+      "F-022-020"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-009"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-011",
+   "kind": "system",
+   "name": "Open Sound Control (OSC) 1.0",
+   "maker": "CNMAT (Matt Wright, Adrian Freed)",
+   "version": null,
+   "function_category": "system",
+   "purpose": "コンピュータ・シンセ・マルチメディア機器間のオープンでトランスポート非依存のメッセージ通信プロトコル。階層アドレス空間と型付き引数。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "1997年提案、1.0仕様は2002-03-26公開。サイトはCC BY",
+     "fact_ids": [
+      "F-022-022"
+     ]
+    },
+    {
+     "text": "トランスポート非依存: UDP等のデータグラムは自然に対応、TCPでは先頭にint32サイズを付ける",
+     "fact_ids": [
+      "F-022-023"
+     ]
+    },
+    {
+     "text": "全データ型は32ビット境界(サイズが4の倍数)",
+     "fact_ids": [
+      "F-022-025"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "クロック同期の仕組みは提供しない",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    {
+     "text": "サーバーが応答する全メッセージをプログラム的に発見する標準手段は無い(Wikipedia)",
+     "fact_ids": [
+      "F-022-024"
+     ]
+    },
+    {
+     "text": "標準メッセージ集が無くデバイス間で非標準(Wikipedia)",
+     "fact_ids": [
+      "F-022-024"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "バンドルのタイムタグで実行時刻を指定",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    "state_save": null,
+    "external_control": {
+     "summary": "任意アドレスのメソッドを呼ぶ形で制御",
+     "fact_ids": [
+      "F-022-027"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-012",
+   "kind": "signal_standard",
+   "name": "OSC atomic data types and type tags",
+   "maker": "CNMAT",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "OSCの原子データ型とタイプタグ文字の対応。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "必須型: int32(i), float32(f), OSC-string(s), OSC-blob(b)",
+     "fact_ids": [
+      "F-022-025"
+     ]
+    },
+    {
+     "text": "任意型: h(int64), t(タイムタグ), d(double), S, c, r(RGBA), m(MIDI 4バイト), T/F/N/I, 配列[ ]",
+     "fact_ids": [
+      "F-022-026"
+     ]
+    },
+    {
+     "text": "MIDIメッセージ型 'm' は port id/status/data1/data2 の4バイト",
+     "fact_ids": [
+      "F-022-026"
+     ]
+    },
+    {
+     "text": "未知のタイプタグを含むメッセージは破棄すべき",
+     "fact_ids": [
+      "F-022-026"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "1.1で追加された型(compact boolean等)の正式仕様書は存在しない",
+     "fact_ids": [
+      "F-022-031"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-011"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-013",
+   "kind": "control_interface",
+   "name": "OSC address space and pattern matching",
+   "maker": "CNMAT",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "サーバーのメソッドをツリー(コンテナ=枝、メソッド=葉)で表し、アドレスパターンで複数メソッドへ一括ディスパッチする。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "アドレスは/で始まりURL風。名前に使えない文字: 空白 # * , / ? [ ] { }",
+     "fact_ids": [
+      "F-022-027"
+     ]
+    },
+    {
+     "text": "パターン: ? 1文字、* 任意長、[abc]/[a-z]/[!x] 文字集合、{foo,bar} 候補選択",
+     "fact_ids": [
+      "F-022-028"
+     ]
+    },
+    {
+     "text": "パターンとアドレスは同数のパート(スラッシュ区切り)を持つ必要がある",
+     "fact_ids": [
+      "F-022-028"
+     ]
+    },
+    {
+     "text": "複数メソッドに一致した場合の呼び出し順は不定",
+     "fact_ids": [
+      "F-022-028"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "アドレス空間は動的に変化しうる",
+     "fact_ids": [
+      "F-022-027"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-011"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-014",
+   "kind": "module",
+   "name": "OSC bundle and time tag",
+   "maker": "CNMAT",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "複数メッセージを時刻付きで束ね、原子的に実行させるコンテナ。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "バンドル= '#bundle'(8バイト)+タイムタグ(8バイト)+サイズ付き要素の並び。バンドルは入れ子可",
+     "fact_ids": [
+      "F-022-029"
+     ]
+    },
+    {
+     "text": "タイムタグ=64ビット固定小数点NTP形式(上位32bit=1900年1月1日からの秒、下位32bit=端数、約200ps精度)",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    {
+     "text": "値1(下位ビットのみ)は『即時』",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    {
+     "text": "過去または現在時刻なら即実行、未来なら保持して時刻に実行",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    {
+     "text": "同一バンドル内のメッセージは連続実行(原子的)、入れ子バンドルは対象外",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "クロック同期機構は無く、サーバーは正確な絶対時刻を持つ前提",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    {
+     "text": "単体メッセージは受信後できるだけ早く即時実行",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "タイムタグ付きバンドル",
+     "fact_ids": [
+      "F-022-030"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-011"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-015",
+   "kind": "system",
+   "name": "Open Sound Control 1.1",
+   "maker": "CNMAT / Andy Schmeder, Adrian Freed",
+   "version": null,
+   "function_category": "system",
+   "purpose": "1.0に型(コンパクトなBoolean等)を取り込む2009年の更新構想。正式な仕様書は公開されていない。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "NIME 2009論文が唯一の根拠で『1.1仕様書』は存在しない",
+     "fact_ids": [
+      "F-022-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "1.1独自の仕様は一次資料に無いため、型の完全一覧は未確認",
+     "fact_ids": [
+      "F-022-031"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-022-011",
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-022-016",
+   "kind": "module",
+   "name": "OSC over UDP/TCP/Ethernet (practice)",
+   "maker": "(実装慣行)",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "実際のOSC運用でよく使われるトランスポートと、MIDIとの比較。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "UDP/IPとEthernetでローカルサブネットやインターネット上を伝送",
+     "fact_ids": [
+      "F-022-033"
+     ]
+    },
+    {
+     "text": "MIDIに対する優位: インターネット接続性、データ型分解能、記号パスの容易さ(7ビット番号に対し)",
+     "fact_ids": [
+      "F-022-034"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "UDPは到達保証がなく、仕様は順序・再送を規定しない(仕様はトランスポート非依存と述べるのみ)",
+     "fact_ids": [
+      "F-022-023"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-022-011"
+   },
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-022-001",
+   "entity_id": "REF-022-001",
+   "topic": "history",
+   "statement": "MIDI 1.0は1983-02-01導入、MMAが開発。1985年夏NAMMで詳細仕様書公開、2016年にThe MIDI Association設立、2017年に抄録版がIEC 63035。二次資料(Wikipedia)の要約。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Infobox; History節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-002",
+   "entity_id": "REF-022-001",
+   "topic": "channels",
+   "statement": "1リンクで独立した16チャンネル。オムニon/offとモノ/ポリの組合せでデバイスの受信方法が変わる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Technical specifications",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-003",
+   "entity_id": "REF-022-001",
+   "topic": "messages",
+   "statement": "メッセージ=ステータスバイト+最大2データバイト。種別はChannel Voice, Channel Mode, System Common, System Real-Time, System Exclusiveの5つ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-004",
+   "entity_id": "REF-022-002",
+   "topic": "baud",
+   "statement": "31,250baud(±1%)の8-N-1非同期シリアル。1バイトは開始/停止ビット込み10ビット=320マイクロ秒、正味ビットレート約25kbit/s。各バイトの先頭ビットがステータス/データを識別し、データは7ビット。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Technical specifications: Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-005",
+   "entity_id": "REF-022-002",
+   "topic": "electrical",
+   "statement": "物理層は完全絶縁の電流ループで、送信側UARTのロー出力時に公称5mAが流れ、受信側フォトカプラを通る。DINまたはTRSコネクタを使用可。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Electrical specifications",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-006",
+   "entity_id": "REF-022-003",
+   "topic": "messages",
+   "statement": "Channel Voice=ノートオン(ノート番号+ベロシティ+チャンネル)、ノートオフ、プログラムチェンジ、コントロールチェンジ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-007",
+   "entity_id": "REF-022-003",
+   "topic": "note_range",
+   "statement": "ノート番号は0〜127でC-1〜G9、中央C(C4)は60。ピアノ88鍵(A0〜C8)を超え、周波数は約8.1758〜12543.85Hz。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-008",
+   "entity_id": "REF-022-003",
+   "topic": "cc",
+   "statement": "MIDI連続コントローラ番号(CCN)をデバイスのパラメータ(ディレイフィードバック、リバーブ時間等)に割当てると、その番号のメッセージで制御できる。ノブ・スイッチ・ペダルが送信側。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Technical specifications(エフェクト機器の記述)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-009",
+   "entity_id": "REF-022-004",
+   "topic": "rate",
+   "statement": "MIDIクロックは1拍24パルスで、BPM依存の音源やアルペジエータの同期に使う。シングルバイトのメッセージ列。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-06",
+   "locator": "冒頭; Pulses per quarter note",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-010",
+   "entity_id": "REF-022-004",
+   "topic": "messages",
+   "statement": "リアルタイムメッセージ: clock 248(0xF8), start 250(0xFA), continue 251(0xFB), stop 252(0xFC)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-06",
+   "locator": "Messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-011",
+   "entity_id": "REF-022-004",
+   "topic": "spp",
+   "statement": "SPPはSystem Commonで3バイト(状態242=0xF2+7ビット2バイト、LSB先)。14ビット値は曲頭からのMIDIビート数(1ビート=16分音符=6クロック)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-06",
+   "locator": "Messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-012",
+   "entity_id": "REF-022-005",
+   "topic": "mtc",
+   "statement": "MTCはテンポではなくフレームに基づく同期で、位置情報を含み途切れから復帰できる。Digidesignが開発しSysEx系メッセージで実装、1986年にMMA採用。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-07",
+   "locator": "冒頭; wmidi Time code節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-013",
+   "entity_id": "REF-022-005",
+   "topic": "framerate",
+   "statement": "クォーターフレーム/フルフレームに2ビットのレート識別(24, 25, 29.97ドロップ, 30fps)。時刻は時・分・秒・フレームをBCDでなくバイナリ符号化。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-07",
+   "locator": "Time code format節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-014",
+   "entity_id": "REF-022-006",
+   "topic": "sysex",
+   "statement": "SysExは演奏値ではなく機器の機能情報を送り、メーカー固有メッセージで機器をより細かく制御できる。MMA発行のメーカーIDが含まれる。Universal SysExはメーカー非依存の拡張。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "System Exclusive messages節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-015",
+   "entity_id": "REF-022-007",
+   "topic": "format",
+   "statement": "Standard MIDI Fileの拡張子は.mid/.midi/.smf、メディアタイプaudio/midi、ファイル先頭はMThd(4D 54 68 64)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Infobox (Standard MIDI File)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-016",
+   "entity_id": "REF-022-008",
+   "topic": "timestamping",
+   "statement": "MIDIタイムスタンプは先送りバッファで伝送ジッタを抑える手法。ベンダー実装は互換性なし。FireWire MIDI、Mac Core Audio、Linux ALSA Sequencerに組込み。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Timestamping節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-017",
+   "entity_id": "REF-022-009",
+   "topic": "history",
+   "statement": "MIDI 2.0は2020-01-17にWinter NAMMで発表され、双方向通信と後方互換を優先。2019年1月に標準化構想の発表。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "MIDI 2.0 History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-018",
+   "entity_id": "REF-022-009",
+   "topic": "specs",
+   "statement": "2021時点で5仕様(M2-100-U v1.0, M2-101-UM v1.1, M2-102-U v1.0, M2-103-UM v1.0, M2-104-UM v1.0)、2023年6月に更新(M2-100-U 1.1, MIDI-CI 1.2, M2-102-U 1.1, M2-104-UM 1.1, M2-116-U 1.0)と記載。『3万2千コントローラ』等の記述は二次資料の主張で一次未確認。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-022-05",
+   "locator": "MIDI 2.0 History節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-019",
+   "entity_id": "REF-022-009",
+   "topic": "ci",
+   "statement": "MIDI-CIはUniversal SysExでプロファイル、パラメータ(プロパティ)交換、プロトコル交渉を実装。仕様は2017年11月(AMEI)、2018年1月(MMA)公開。プロパティ交換はJSONでパッチ名・コントローラ等の能力を問い合わせ/設定する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "MIDI Capability Inquiry / Property exchange節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-020",
+   "entity_id": "REF-022-010",
+   "topic": "ump",
+   "statement": "UMPはペイロードに応じ32/64/96/128ビット。256チャンネル(16グループ×16)、グループごとにMIDI1.0/2.0プロトコル。システム/SysEx/タイムスタンプ対応。System Real-Time/CommonはMIDI1.0と同一。DIN非対応。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "MIDI 2.0 > Universal MIDI Packet節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-021",
+   "entity_id": "REF-022-010",
+   "topic": "sysex8",
+   "statement": "データ転送形式: SysEx8は新しい8ビット形式(Universal SysEx基盤)、Mixed Data Setは大容量データ用、SysEx7は従来の7ビット形式。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-05",
+   "locator": "Data transfer formats節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-022",
+   "entity_id": "REF-022-011",
+   "topic": "history",
+   "statement": "OSCはCNMATのMatt WrightとAdrian Freedが開発、1997年に提案、1.0仕様は2002年に確定。2009年の1.1更新で型が追加。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-03",
+   "locator": "What is OSC?",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-023",
+   "entity_id": "REF-022-011",
+   "topic": "transport",
+   "statement": "OSCパケットはメッセージまたはバンドルで、サイズは常に4の倍数。UDP等では1パケット=1データグラム、TCP等のストリームでは各パケット前にint32のサイズを置く。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Packets",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-024",
+   "entity_id": "REF-022-011",
+   "topic": "limits",
+   "statement": "Wikipediaは短所として帯域・組込みプロセッサ負荷がMIDIより大きいこと、デバイス間のメッセージが標準化されていないこと、サーバーの全メッセージを自動列挙する手段が標準に無いことを挙げる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-04",
+   "locator": "冒頭; 本文末尾の注",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-025",
+   "entity_id": "REF-022-012",
+   "topic": "types",
+   "statement": "原子型: int32、float32、OSC-string(NUL終端+0〜3個のNULで4バイト整列)、OSC-blob(int32サイズ+データ+パディング)、OSC-timetag(64ビット固定小数点)。全て4バイトの倍数。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Syntax > Atomic Data Types",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-026",
+   "entity_id": "REF-022-012",
+   "topic": "typetags",
+   "statement": "タイプタグ文字列はカンマで始まり、必須はi,f,s,b。非標準型の場合に使うタグ: h,t,d,S,c,r,m,T,F,N,I,[,]。未認識タグを含むメッセージは破棄すべき。mはport id, status, data1, data2のMIDI 4バイト。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Type Tag String",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-027",
+   "entity_id": "REF-022-013",
+   "topic": "address",
+   "statement": "サーバーのOSCメソッドは葉、コンテナは枝のツリー。各名前はスペース、#、*、カンマ、/、?、[、]、{、}を含まない印字可能ASCII。アドレスはルートからのパスで/で始まる。空間は動的に変化しうる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Semantics > Address Spaces",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-028",
+   "entity_id": "REF-022-013",
+   "topic": "pattern",
+   "statement": "パターンは同数のパート数で各パートが一致すること。?は1文字、*は0文字以上、[..]は範囲(-)や否定(!)、{a,b}は選択。同一メッセージが複数メソッドに一致したら全てに同じ引数を渡し、呼び出し順は不定。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Message Dispatching and Pattern Matching",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-029",
+   "entity_id": "REF-022-014",
+   "topic": "bundle",
+   "statement": "バンドルは'#bundle'+8バイトのタイムタグ+0個以上の要素(各int32サイズ付き)。要素はメッセージまたはバンドルで再帰。入れ子のタイムタグは外側以上でなければならない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "OSC Bundles; Temporal Semantics",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-030",
+   "entity_id": "REF-022-014",
+   "topic": "timetag",
+   "statement": "タイムタグはNTP同様の64ビット固定小数点(上位32bit=1900-01-01 0時からの秒、下位32bit=端数)。値1は即時。時刻が過去/現在なら即実行(設定で遅延破棄も可)、未来なら保持。OSCはクロック同期を提供しない。バンドル内メッセージは原子的に連続実行。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-01",
+   "locator": "Temporal Semantics and OSC Time Tags",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-031",
+   "entity_id": "REF-022-015",
+   "topic": "spec",
+   "statement": "公式サイトによれば、1.1の構想を最もよく反映するのはNIME 2009論文で、1.0のような1.1仕様書は公開されなかった。論文は著者(Schmeder, Freed)が権威的と位置づけた。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-022-02",
+   "locator": "本文全体(短いページ)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-032",
+   "entity_id": "REF-022-015",
+   "topic": "extensions",
+   "statement": "Wikipediaによれば、1.0の拡張型のうちコンパクトなBoolean型が1.1で必須コア型に統合された。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-04",
+   "locator": "Motivation/Features節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-033",
+   "entity_id": "REF-022-016",
+   "topic": "transport",
+   "statement": "WikipediaはOSCメッセージがUDP/IPとEthernetでサブネット内やインターネット越しに運ばれ、ジェスチャコントローラ間は通常UDP上で送られると要約。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-04",
+   "locator": "Motivation節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-022-034",
+   "entity_id": "REF-022-016",
+   "topic": "vs_midi",
+   "statement": "Wikipediaの比較: OSCの利点はインターネット接続性、データ型の分解能、7ビットの接続指定でなく記号パスを書ける手軽さ。短所は帯域/処理負荷が大きいこと。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-022-04",
+   "locator": "Motivation節",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-022-003",
+   "item": "CC数値範囲(0-127)の明記、ステータスバイト値(0x8n/0x9n/0xBn)、ピッチベンド14ビット、RPN/NRPN、ベロシティ0=ノートオフ慣習",
+   "tried_sources": [
+    "SRC-022-05",
+    "SRC-022-08"
+   ],
+   "impact_on_spec": "データバイトが7ビットであることはWikipediaで確認済みだが、各メッセージのバイト配置は仕様書(midi.org)未取得のため確定できない。"
+  },
+  {
+   "entity_id": "REF-022-004",
+   "item": "MIDI仕様書上のクロック精度・ジッタ許容、Active Sensing等の記述、DIN同期との比較(実測は未実施)",
+   "tried_sources": [
+    "SRC-022-06",
+    "SRC-022-08"
+   ],
+   "impact_on_spec": "タイミング品質の定量値は一次資料と実測が必要。"
+  },
+  {
+   "entity_id": "REF-022-010",
+   "item": "UMPのメッセージタイプ番号とフィールド幅、MIDI 2.0ノートの分解能(ビット数)、グループ割当の詳細",
+   "tried_sources": [
+    "SRC-022-05",
+    "SRC-022-08"
+   ],
+   "impact_on_spec": "電圧/数値範囲に類する仕様化は一次仕様書(M2-104-UM)が必要。"
+  },
+  {
+   "entity_id": "REF-022-009",
+   "item": "MIDI 2.0仕様書本文(midi.org)の確認、普及状況の実測",
+   "tried_sources": [
+    "SRC-022-08",
+    "SRC-022-05"
+   ],
+   "impact_on_spec": "MIDI 2.0対応状況の主張の裏付けは二次資料止まり。必要ホスト: midi.org, www.midi.org。"
+  },
+  {
+   "entity_id": "REF-022-015",
+   "item": "1.1で追加された必須型の完全リスト、NIME 2009論文(zenodo)の内容",
+   "tried_sources": [
+    "SRC-022-02",
+    "SRC-022-04"
+   ],
+   "impact_on_spec": "1.1の型一覧を仕様化する際は論文本文の確認が必要(zenodoは許可ホスト外の可能性)。"
+  },
+  {
+   "entity_id": "REF-022-011",
+   "item": "OSC 1.0のサーバー側の推奨実装(UDPバッファ、順序、欠落)、OSCQuery(アドレス空間発見)の仕様",
+   "tried_sources": [
+    "SRC-022-01",
+    "SRC-022-04"
+   ],
+   "impact_on_spec": "エージェント連携でのアドレス発見はOSCQueryなど拡張仕様が必要になるが本調査では未読。"
+  },
+  {
+   "item": "MIDI 1.0/2.0 の一次仕様書(midi.org)の全項目、IEC 63035本文",
+   "tried_sources": [
+    "SRC-022-08"
+   ],
+   "impact_on_spec": "必要ホスト: midi.org, www.midi.org(いずれもプロキシ403)。"
+  }
+ ]
+}

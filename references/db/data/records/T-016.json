@@ -1,0 +1,1429 @@
+{
+ "target_id": "T-016",
+ "entities": [
+  {
+   "id": "REF-016-001",
+   "kind": "system",
+   "name": "Serge Modular (original, 1970s)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Original patch-programmable modular system from CalArts.",
+   "synthesis_method": "analogue modular with banana-jack patching",
+   "features": [
+    {
+     "text": "Early panels were printed paper under mylar, hence 'paperface'",
+     "fact_ids": [
+      "F-016-001"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Original-era specs not read; only the modern manual's historical remarks",
+     "fact_ids": [
+      "F-016-001",
+      "F-016-002"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Banana jacks and test cords",
+     "fact_ids": [
+      "F-016-001"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-002",
+   "kind": "system",
+   "name": "Random*Source Serge (current)",
+   "maker": "Random*Source",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Current licensed production of Serge modules in 4U, Paperface and Eurorack formats.",
+   "synthesis_method": "analogue modular, new and reissued circuits",
+   "features": [
+    {
+     "text": "Eurorack, 4U panels, Paperface 50, 4x4",
+     "fact_ids": [
+      "F-016-003"
+     ]
+    },
+    {
+     "text": "Serge Tcherepnin works with Random*Source on 5th generation",
+     "fact_ids": [
+      "F-016-004"
+     ]
+    },
+    {
+     "text": "Eurorack and 4U share signal levels",
+     "fact_ids": [
+      "F-016-006"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Built to order; DIY suspended",
+     "fact_ids": [
+      "F-016-007"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-016-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-003",
+   "kind": "signal_standard",
+   "name": "Serge signal conventions (jack-colour system)",
+   "maker": "Serge Tcherepnin / Random*Source",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Three signal families by jack colour within +/-12 V.",
+   "synthesis_method": "colour-coded unified voltage system",
+   "features": [
+    {
+     "text": "White DC CV 0..+5 V typical, red trigger/logic, black bipolar/audio",
+     "fact_ids": [
+      "F-016-008"
+     ]
+    },
+    {
+     "text": "Free mixing of levels permitted",
+     "fact_ids": [
+      "F-016-010"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "+/-12 V maximum; do not patch out-to-out",
+     "fact_ids": [
+      "F-016-009",
+      "F-016-010"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "White (DC CV)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V (typical)"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-016-008"
+     ]
+    },
+    {
+     "name": "Red (logic/trigger)",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V (typical)"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-016-008"
+     ]
+    },
+    {
+     "name": "Black (bipolar/audio)",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -12,
+      "max": 12,
+      "unit": "V (system limit)"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-016-008"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-004",
+   "kind": "module",
+   "name": "Smooth & Stepped Generator (SSG)",
+   "maker": "Serge Tcherepnin / Random*Source",
+   "version": null,
+   "function_category": "modulation_other",
+   "purpose": "Dual slew / sample-and-hold generator with Coupler comparator.",
+   "synthesis_method": "patch-programmed slew and sample functions",
+   "features": [
+    {
+     "text": "Cycle mode gives LFO/audio triangle",
+     "fact_ids": [
+      "F-016-012",
+      "F-016-013"
+     ]
+    },
+    {
+     "text": "Hot Coupler output -12..+12 V",
+     "fact_ids": [
+      "F-016-013"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Euro version 18 HP, 35/30 mA",
+     "fact_ids": [
+      "F-016-014"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Coupler (red)",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-016-013"
+     ]
+    },
+    {
+     "name": "Coupler hot (black)",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -12,
+      "max": 12,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-016-013"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Smooth cycle rate",
+     "unit": "Hz",
+     "range": {
+      "min": 1,
+      "max": 4000,
+      "unit": "Hz (approx., below 1 Hz at low end)"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-016-013"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-005",
+   "kind": "module",
+   "name": "New Timbral Oscillator (NTO)",
+   "maker": "Random*Source (Serge design)",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "Serge's elaborate oscillator remade in SMT with a pulse output.",
+   "synthesis_method": "analogue oscillator with oven",
+   "features": [
+    {
+     "text": "Pulse out added; variable oven temperature",
+     "fact_ids": [
+      "F-016-015"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Waveform list, tracking and ranges not read",
+     "fact_ids": [
+      "F-016-015"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-006",
+   "kind": "module",
+   "name": "Dual Universal Slope Generator (DSG mk2)",
+   "maker": "Random*Source (Serge design)",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "Dual voltage-controlled slope generator.",
+   "synthesis_method": "slew-limiter based envelope/LFO/oscillator",
+   "features": [
+    {
+     "text": "Independent CV for rise and fall",
+     "fact_ids": [
+      "F-016-017"
+     ]
+    },
+    {
+     "text": "Top section over 10 kHz",
+     "fact_ids": [
+      "F-016-018"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Eurorack mk2 was limited edition per the page",
+     "fact_ids": [
+      "F-016-018"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-007",
+   "kind": "module",
+   "name": "Triple Waveshaper",
+   "maker": "Serge Tcherepnin / Random*Source",
+   "version": null,
+   "function_category": "waveshaper",
+   "purpose": "Three chained waveshaping sections.",
+   "synthesis_method": "non-linear full-wave style waveshaping",
+   "features": [
+    {
+     "text": "Unipolar white and bipolar black outputs per section",
+     "fact_ids": [
+      "F-016-019"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Saturation can silence the output at high CV",
+     "fact_ids": [
+      "F-016-019"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-008",
+   "kind": "module",
+   "name": "1973 Filter (VCF) with Balanced Output",
+   "maker": "Serge Tcherepnin / Random*Source",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "12 dB/oct LP/HP plus band-pass and balanced out converter.",
+   "synthesis_method": "analogue multimode filter",
+   "features": [
+    {
+     "text": "Resonance not voltage controlled",
+     "fact_ids": [
+      "F-016-020"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Cutoff range not read",
+     "fact_ids": [
+      "F-016-020"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-009",
+   "kind": "module",
+   "name": "Paperface VCO / VCO+",
+   "maker": "Random*Source",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "2022 revision of the 1973 Serge oscillator with 1V/Oct tracking.",
+   "synthesis_method": "analogue VCO",
+   "features": [
+    {
+     "text": "1 V/Oct with temperature compensation",
+     "fact_ids": [
+      "F-016-021"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Frequency range not read",
+     "fact_ids": [
+      "F-016-021"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "1V/Oct",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-016-021"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-010",
+   "kind": "patch_storage",
+   "name": "Serge patching and patch retention",
+   "maker": "Random*Source",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "Cord-based patching; no memory documented.",
+   "synthesis_method": "banana-jack cords",
+   "features": [
+    {
+     "text": "Banana jacks and cords; no recall function documented",
+     "fact_ids": [
+      "F-016-022"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Absence of memory is not stated explicitly",
+     "fact_ids": [
+      "F-016-022",
+      "F-016-023"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Banana cords",
+     "fact_ids": [
+      "F-016-022"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-011",
+   "kind": "control_interface",
+   "name": "Serge external control and format interop",
+   "maker": "Random*Source",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "1V/Oct input, sync, balanced out, FX interface, Eurorack/4U bridging.",
+   "synthesis_method": "analogue CV and jack adaptation",
+   "features": [
+    {
+     "text": "1 V/Oct input on the revised VCO",
+     "fact_ids": [
+      "F-016-024"
+     ]
+    },
+    {
+     "text": "Pont Neuf bridge and common ground",
+     "fact_ids": [
+      "F-016-025"
+     ]
+    },
+    {
+     "text": "TKB keyboard",
+     "fact_ids": [
+      "F-016-026"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No MIDI or digital interface documented in pages read",
+     "fact_ids": [
+      "F-016-026"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "1 V/Oct, sync and FX interface; Pont Neuf for format bridging",
+     "fact_ids": [
+      "F-016-024",
+      "F-016-025"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-012",
+   "kind": "system",
+   "name": "Serge Modular module generations 1973-1983 (original catalogue)",
+   "maker": "Serge Tcherepnin / SMMS",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Chronology of the original Serge module ranges (1st to 4th generation) as listed by a secondary source.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Four documented module generations, 1973 to 1983",
+     "fact_ids": [
+      "F-016-029",
+      "F-016-030",
+      "F-016-031"
+     ]
+    },
+    {
+     "text": "Panels were user-selectable 4U module sets on a 17-inch panel",
+     "fact_ids": [
+      "F-016-032"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Chronology comes from two secondary sources that disagree on dates",
+     "fact_ids": [
+      "F-016-027",
+      "F-016-028"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-013",
+   "kind": "system",
+   "name": "Sound Transform Systems Serge (1990s onward: Shop Panels, M-Class)",
+   "maker": "Sound Transform Systems (Rex Probe)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Continuation of Serge production from the early 1990s with fixed Shop Panels and half-width M-Class panels.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Pre-configured Shop Panels and M-Class panels instead of custom builds",
+     "fact_ids": [
+      "F-016-033",
+      "F-016-034"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Relationship to the current Random*Source line not stated in these sources",
+     "fact_ids": [
+      "F-016-033"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-016-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-014",
+   "kind": "system",
+   "name": "Serge design philosophy (patch-programmable, unified signals)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Design approach of Serge modules: many internal points exposed on the panel, no split between audio and control jacks.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Panel-exposed internals allow patching outside each module's nominal function",
+     "fact_ids": [
+      "F-016-035"
+     ]
+    },
+    {
+     "text": "No audio/CV jack split; banana cords",
+     "fact_ids": [
+      "F-016-036"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Comparison with Buchla is the Wikipedia editors' framing, not a maker statement",
+     "fact_ids": [
+      "F-016-035",
+      "F-016-037"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-015",
+   "kind": "module",
+   "name": "Wave Multiplier (VCM)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "waveshaper",
+   "purpose": "Timbre-shaping section between oscillator and filter, a Serge-specific module.",
+   "synthesis_method": "wave multiplication / waveshaping",
+   "features": [
+    {
+     "text": "Sits between oscillator and filter; accepts external audio or CV",
+     "fact_ids": [
+      "F-016-041"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No electrical specification found",
+     "fact_ids": [
+      "F-016-041"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-016",
+   "kind": "module",
+   "name": "Touch Activated Keyboard (TKB)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "Touch-sensitive keyboard controller with an analogue sequencer.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Touch pads feed a sequencer (stage count differs by source)",
+     "fact_ids": [
+      "F-016-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Stage count unresolved (16-stage vs 4-stage)",
+     "fact_ids": [
+      "F-016-042"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-016-001",
+   "entity_id": "REF-016-001",
+   "topic": "origin",
+   "statement": "Serge Modular was developed by Serge Tcherepnin in the early 1970s at the California Institute of the Arts; the first-generation modules (1972-73) used banana jacks and test cords on grid-like panels, and their paper-printed front panels gave the name 'paperface'.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Introduction'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-002",
+   "entity_id": "REF-016-001",
+   "topic": "history",
+   "statement": "The 1979 catalogue is quoted for the SSG, showing the original system was catalogued modules; no other original-era documents were read.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Smooth & Stepped Generator'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-003",
+   "entity_id": "REF-016-002",
+   "topic": "supply",
+   "statement": "Random*Source sells licensed Serge designs: Paperface 50 (2 or 3 panels or single panels), 4U full panels with banana jacks (Mantra II, La Bestia III, Tantra, Yantra and others), 4x4 modules and Eurorack (3U) modules; panels run from +/-12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-02",
+   "locator": "Home page, Paperface page, Serge Panels page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-004",
+   "entity_id": "REF-016-002",
+   "topic": "relationship",
+   "statement": "Serge Tcherepnin joined Random*Source as Chief Innovation Officer in November 2018 to lead a 5th generation of the system; the Eurorack SSG is described as a licensed, authorised adaptation of the original design.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-02",
+   "locator": "Home page news item; SSG product page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-005",
+   "entity_id": "REF-016-002",
+   "topic": "about",
+   "statement": "Random*Source also holds Jurgen Haible's electronic heritage since 2015, and the Serge name is a registered trademark.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-04",
+   "locator": "About page and footer",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-006",
+   "entity_id": "REF-016-002",
+   "topic": "format",
+   "statement": "The FAQ says Eurorack (3U, mini-jack, may normalise and carry 0 V ground) and classic 4U (banana jacks) use the same circuitry and voltage levels and can be patched together given a format jumbler (Pont Neuf) and a common ground.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-03",
+   "locator": "FAQ, 'Eurorack vs 4U' and 'Can I mix' answers",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-007",
+   "entity_id": "REF-016-002",
+   "topic": "availability",
+   "statement": "Every 4U or Paperface system is built to order; DIY kits are suspended (apart from some Haible PCBs) because of the chip crisis.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-03",
+   "locator": "FAQ, 'Ordering' and 'DIY kits' answers",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-008",
+   "entity_id": "REF-016-003",
+   "topic": "jack_colours",
+   "statement": "Three signal families by jack colour: white for DC control voltages (typically 0 to +5 V, positive polarity), red for logic/trigger pulses in the same range, black for bipolar AC signals (audio and bipolar CV, bipolar CV typically +/-2.5 V). The manual says this is a recommendation, not a rule.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Signal types'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-009",
+   "entity_id": "REF-016-003",
+   "topic": "voltage",
+   "statement": "The whole system tolerates +/-12 V; voltages outside that range at any input or output may damage a module, and the system is meant for a linear +/-12 V PSU.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual sections 'Before you start' and 'Signal types'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-010",
+   "entity_id": "REF-016-003",
+   "topic": "mixing",
+   "statement": "Any voltage levels may be freely mixed in patching; connecting output to output or input to input should be avoided.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Signal types'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-011",
+   "entity_id": "REF-016-003",
+   "topic": "special_jacks",
+   "statement": "Pink, grey and other coloured jacks mark special functions, for example the sync input on the oscillator and the coupler of the SSG.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Signal types'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-012",
+   "entity_id": "REF-016-004",
+   "topic": "function",
+   "statement": "SSG (Smooth & Stepped Generator): a patch-programmed module with a Smooth section (slew, portamento, track-and-hold, cycling triangle LFO) and a Stepped section (sample-and-hold with slew limit, staircase waveforms), plus a Coupler comparing both outputs.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-09",
+   "locator": "Manual section 'SSG'; SSG product page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-013",
+   "entity_id": "REF-016-004",
+   "topic": "ranges",
+   "statement": "Paperface manual: the Coupler red output is a 0-5 V pulse, the black 'hot' Coupler output is bipolar up to -12 V to +12 V; in cycle mode the Smooth side makes a triangle from about 0 to 4-5 V and runs from below 1 Hz to about 4 kHz.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual sections 'SSG' and 'SSG First Steps'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-014",
+   "entity_id": "REF-016-004",
+   "topic": "eurorack",
+   "statement": "Random*Source Eurorack SSG: 18 HP, 35 mA at +12 V and 30 mA at -12 V, audio range up to 4 kHz, adds a bipolar Coupler output; also sold as SMT DIY kit with build docs.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-09",
+   "locator": "SSG product page, details list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-015",
+   "entity_id": "REF-016-005",
+   "topic": "function",
+   "statement": "NTO (New Timbral Oscillator): described by the maker as Serge's most ambitious oscillator; the Random*Source version replaces obsolete parts, adds a pulse output and an adjustable oven temperature, 18 HP Eurorack, EUR 555.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-11",
+   "locator": "NTO product page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-016",
+   "entity_id": "REF-016-005",
+   "topic": "claim",
+   "statement": "The page calls the NTO 'legendary' and says it combines raw vintage sound with astonishing precision; this is advertising language.",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-016-11",
+   "locator": "NTO product page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-017",
+   "entity_id": "REF-016-006",
+   "topic": "function",
+   "statement": "DSG (Dual Universal Slope Generator): unity-gain voltage followers with independently voltage-controlled rise and fall times, usable as envelope, LFO, portamento, envelope follower, pulse delay, divider or audio oscillator.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-10",
+   "locator": "DSG product page",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-018",
+   "entity_id": "REF-016-006",
+   "topic": "mk2",
+   "statement": "DSG mk2 for Eurorack improves tracking (up to 4 octaves) and speed, covers over 10 kHz in the top section, has separate rise and fall CV inputs and a 50% duty pulse out, with some temperature compensation in the new version.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-10",
+   "locator": "DSG product page details list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-019",
+   "entity_id": "REF-016-007",
+   "topic": "function",
+   "statement": "Triple Waveshaper (Paperface): three identical sections that can be chained; an input is turned into a distorted version (e.g. triangle to a sine at 2F, saw to an approximate sine at 1F); two CV inputs per section; each section has a white unipolar (0-5 V) and a black AC-coupled bipolar output.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section 'Triple Waveshaper'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-020",
+   "entity_id": "REF-016-008",
+   "topic": "function",
+   "statement": "1973 Filter (Paperface): accepts AC signals and gives low-pass (12 dB/oct), high-pass (12 dB/oct) and fixed-bandwidth band-pass outputs around one frequency set by a knob and a CV input; resonance is knob-only (not voltage controlled); can act as a sine oscillator; a separate section converts a banana-jack audio signal to a balanced TRS output.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual section '1973 Filter (VCF) and Balanced Output'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-021",
+   "entity_id": "REF-016-009",
+   "topic": "function",
+   "statement": "Paperface VCO (2022 revision of the 1973 oscillator): simultaneous saw and sine-like waves, each unipolar and bipolar; 1 V/Oct input with temperature compensation, up to 2 more CV inputs with attenuverters, wave-shape CV, sync inputs; VCO+ adds PWM pulse out, white/pink noise and the classic S/H source.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-016-06",
+   "locator": "Manual sections 'Oscillator (VCO)' and 'Oscillator+ (VCO+)'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-022",
+   "entity_id": "REF-016-010",
+   "topic": "patching",
+   "statement": "Systems are patched with banana jacks and cords (the 1970s originals used test cords); the FAQ confirms 4U panels use banana jacks. No patch memory or recall is documented in the pages read.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-06",
+   "locator": "Manual 'Introduction'; FAQ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-023",
+   "entity_id": "REF-016-010",
+   "topic": "sequencer",
+   "statement": "Sequencing is itself patch-programmed: Paperface 50 includes sequencer/programmer and gate sequencer modules and a metronomic clock (contents listed, not read in detail).",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-016-06",
+   "locator": "Manual table of contents",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-024",
+   "entity_id": "REF-016-011",
+   "topic": "inputs",
+   "statement": "Paperface VCO provides a temperature-compensated 1 V/Oct input and sync inputs; the Yantra panel has an FX Interface for external pedals and processors; a balanced TRS output exists on the 1973 filter section.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-06",
+   "locator": "Manual 'Oscillator (VCO)', '1973 Filter'; Serge Panels page, Yantra description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-025",
+   "entity_id": "REF-016-011",
+   "topic": "interop",
+   "statement": "Serge Eurorack and 4U share signal levels and can be combined via the Pont Neuf format jumbler with a common ground (all R*S PSUs include a banana ground jack).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-016-03",
+   "locator": "FAQ 'Can I mix Eurorack Serge and 4U Serge?'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-026",
+   "entity_id": "REF-016-011",
+   "topic": "keyboard",
+   "statement": "A Touch Activated Keyboard (TKB) is sold for Paperface and Eurorack; MIDI or digital control interfaces are not mentioned in the pages read.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-016-05",
+   "locator": "Paperface and Eurorack pages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-027",
+   "entity_id": "REF-016-012",
+   "topic": "origin",
+   "statement": "Wikipedia: Serge system developed by Tcherepnin, Rich Gold and Randy Cohen at CalArts from late 1972; first 20 systems built 1973 in Tcherepnin's home; commercial production from 1974 after he left CalArts; goal was a cheaper, powerful alternative to Buchla.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-028",
+   "entity_id": "REF-016-012",
+   "topic": "origin_dating",
+   "statement": "Vintage Synth Explorer gives different dates: designed 1974 in Serge's home, mass production from 1975 to 1986, special orders to 1993. This differs from the Wikipedia dates (late 1972 design, 1973 first units, 1974 commercial start); both are kept.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-029",
+   "entity_id": "REF-016-012",
+   "topic": "1st_generation",
+   "statement": "1st generation (1973) list includes dual voltage processor, dual mixer, triple waveshaper, VCA (Gate), ring modulator, weird ASR envelope, VCO, positive/negative slews, triple comparator, 2-pole state-variable VCF (LP/HP/BP), programmer, 10-step pulse sequencer.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section 1st generation modules (1973)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-030",
+   "entity_id": "REF-016-012",
+   "topic": "3rd_generation",
+   "statement": "3rd generation (c.1976) introduced highly accurate 1 V/oct oscillators (PCO, NTO), quad VCA, equal-power panners, variable-bandwidth/slope/Q VCFs, wave multipliers, dual universal slope / transient generators and the TKB; all filters are 2-pole state-variable 12 dB/oct (article says claims of 18/24 dB are mistaken).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules (1976)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-031",
+   "entity_id": "REF-016-012",
+   "topic": "4th_generation",
+   "statement": "4th generation (c.1979) added active processor, resonant equaliser, sequencers, divide/n comparator, Wilson analog delay, balanced modulator, quantizer, frequency shifter, quadrature oscillator, dual VCA, N voice controller; a standard \"System 79\" configuration was offered in 1979; no new Serge modules after 1983.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Sections 2nd-4th generation, STS modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-032",
+   "entity_id": "REF-016-012",
+   "topic": "panel_format",
+   "statement": "Originally the user chose modules (1-3 inch wide, 4U panels) arranged on a 17-inch panel; graphics moved from paper to metal film (early 1980s) to direct print (STS era).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-033",
+   "entity_id": "REF-016-013",
+   "topic": "STS_history",
+   "statement": "Business passed to Rex Probe in the early 1990s (Sound Transform Systems); STS stopped kit sales and user-chosen layouts, offering pre-configured Shop Panels (Animal, Blue/Red Voice and Control, Soup Kitchen 1/2, TKB, Sequencer) and from about 2010 half-width M-Class panels (e.g. Creature, Gator).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Sections Overview, STS modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-034",
+   "entity_id": "REF-016-013",
+   "topic": "STS_panels",
+   "statement": "VSE lists Shop Panel module sets, e.g. Animal = NTO, PCO, VCM (wave multiplier), AMX (mixer), SSG, DTG, VCFQ, UAP; M-Class panels pair 4-5 modules (Creature smallest complete Serge, Gator rhythmic pulse generator). Prices were listed but are not recorded here.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Tables Shop Panels and M-Class",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-035",
+   "entity_id": "REF-016-014",
+   "topic": "philosophy",
+   "statement": "Wikipedia: Serge modules expose many circuit points on the front panel for unusual patching, unlike Buchla modules that do one job well and separate sound from structure by signal level and connector type; the concept is said to owe more to the Yale Pulsa system than to Buchla.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-036",
+   "entity_id": "REF-016-014",
+   "topic": "unified_jacks",
+   "statement": "Audio and control jacks are not separated; all signals go module to module on 4 mm banana cords, which can be stacked to reduce multiples. Low output impedances largely avoid shielded cable; some 3.5 mm sockets serve external audio interfacing.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-037",
+   "entity_id": "REF-016-014",
+   "topic": "buchla_influence",
+   "statement": "VSE sees Buchla influence (touch keyboards, random voltage, function generators, matrix mixers) alongside Serge-original ideas such as the Wave Multiplier and banana-plug patching.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-038",
+   "entity_id": "REF-016-014",
+   "topic": "low_cost",
+   "statement": "Design goal across both sources: smaller and cheaper than Moog, Buchla and ARP systems of the time.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-039",
+   "entity_id": "REF-016-003",
+   "topic": "jack_colours_early",
+   "statement": "Wikipedia describes the early jack scheme as blue (unipolar CV), black (bipolar, not necessarily AC-coupled) and red (pulse/gate), \"not rigidly enforced\"; yellow was added later for triggers. The maker FAQ (F-016-008) instead names white for DC CV, red for logic/trigger, black for bipolar; the two descriptions are kept side by side.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-040",
+   "entity_id": "REF-016-003",
+   "topic": "one_volt_per_octave",
+   "statement": "Third-generation oscillators (c.1976) are described as accurate 1 V/oct designs; no per-module scaling table was found in these sources.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-041",
+   "entity_id": "REF-016-015",
+   "topic": "function",
+   "statement": "VSE calls the Wave Multiplier a unique section between oscillator and filter that lets external audio or CV modulate the timbre; Wikipedia lists \"wave multipliers\" among the 1976 modules. Parameters and ranges not found.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraph (Shop Panel tables list VCM)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-042",
+   "entity_id": "REF-016-016",
+   "topic": "function",
+   "statement": "Wikipedia: TKB is a very flexible touch-sensitive keyboard controller combined with a 16-stage analogue sequencer (3rd generation); VSE: 16 touch pads trigger a 4-stage sequencer in the STS Shop Panel. The stage counts differ between sources and eras.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules; VSE Shop Panel table",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-043",
+   "entity_id": "REF-016-010",
+   "topic": "no_memory_mention",
+   "statement": "Neither Wikipedia nor VSE mentions any patch memory or recall; patching is by physical banana cords. Absence of mention only.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Whole article",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-016-001",
+   "item": "Original 1970s Serge module specifications and 1979 catalogue data",
+   "tried_sources": [
+    "SRC-016-06"
+   ],
+   "impact_on_spec": "Original-vs-reissue differences are limited to the manual's remarks (improved tracking, 2022-23 revisions)."
+  },
+  {
+   "entity_id": "REF-016-003",
+   "item": "Per-module input/output impedance and precise CV range across modules; 1V/Oct scale only on VCO",
+   "tried_sources": [
+    "SRC-016-06",
+    "SRC-016-07"
+   ],
+   "impact_on_spec": "Typical ranges known (+/-12 V limit); module-specific CV scaling must be read from each manual."
+  },
+  {
+   "entity_id": "REF-016-005",
+   "item": "NTO frequency range, waveform outputs and calibration",
+   "tried_sources": [
+    "SRC-016-11"
+   ],
+   "impact_on_spec": "Oscillator spec incomplete; page gives no technical table."
+  },
+  {
+   "entity_id": "REF-016-006",
+   "item": "DSG time ranges and CV scaling",
+   "tried_sources": [
+    "SRC-016-10"
+   ],
+   "impact_on_spec": "Slope times not numerically specified."
+  },
+  {
+   "entity_id": "REF-016-008",
+   "item": "1973 filter frequency range and CV scaling",
+   "tried_sources": [
+    "SRC-016-06"
+   ],
+   "impact_on_spec": "Filter range unspecified."
+  },
+  {
+   "entity_id": "REF-016-010",
+   "item": "Whether any Serge sequencer/programmer module stores patterns non-volatilely (Sequencer 8, SEQ4, SEQQ)",
+   "tried_sources": [
+    "SRC-016-06",
+    "SRC-016-07"
+   ],
+   "impact_on_spec": "Pattern storage is unknown; Paperface manual sequencer sections not read in detail."
+  },
+  {
+   "entity_id": "REF-016-002",
+   "item": "Manuals for Mantra II, La Bestia III, Tantra, Yantra (PDF links on the panels page); Serge 4x4 page (connection reset on fetch)",
+   "tried_sources": [
+    "SRC-016-07"
+   ],
+   "impact_on_spec": "Panel-level module details not read; serge_4x4 page unreachable at attempt."
+  },
+  {
+   "entity_id": "REF-016-003",
+   "item": "Which jack colour scheme (blue/black/red/yellow vs white/red/black) applied to which production era",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-03"
+   ],
+   "impact_on_spec": "Colour-to-signal mapping in a spec must be tied to era (1970s vs Random*Source); Wikipedia and maker text differ and neither is original documentation."
+  },
+  {
+   "entity_id": "REF-016-012",
+   "item": "Dates of Serge origin (1972/73/74 start, production end 1986 vs 1983)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "Timeline in the reference should state both and not pick one."
+  },
+  {
+   "entity_id": "REF-016-015",
+   "item": "Wave Multiplier circuit behaviour, ports and ranges",
+   "tried_sources": [
+    "SRC-016-13",
+    "SRC-016-12"
+   ],
+   "impact_on_spec": "Cannot specify the module beyond a description."
+  },
+  {
+   "entity_id": "REF-016-016",
+   "item": "Actual TKB sequencer stage count per era",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13",
+    "SRC-016-11"
+   ],
+   "impact_on_spec": "Do not state a stage count in a spec without original documentation."
+  },
+  {
+   "entity_id": "REF-016-012",
+   "item": "Original 1970s manuals and catalogue (first-hand data for generations)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "All generation data here is encyclopedic; Wikipedia page itself carries reliability banners."
+  },
+  {
+   "entity_id": "REF-016-010",
+   "item": "Patch storage in original Serge systems (none mentioned in either secondary source)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "Treat as no patch memory only as an absence of evidence, not a confirmed negative."
+  }
+ ]
+}

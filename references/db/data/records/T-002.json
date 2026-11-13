@@ -1,0 +1,1298 @@
+{
+ "target_id": "T-002",
+ "entities": [
+  {
+   "id": "REF-002-001",
+   "kind": "system",
+   "name": "Make Noise(Eurorackモジュール群)",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Make Noiseは製品ページにモジュール群を掲載するEurorackメーカー。マニュアルは別ホストで、今回は閲覧できていない。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "モジュールは+12V/-12V電源とhp幅で仕様表記",
+     "fact_ids": [
+      "F-002-002"
+     ]
+    },
+    {
+     "text": "多数のモジュールを製品ページに掲載",
+     "fact_ids": [
+      "F-002-001"
+     ]
+    },
+    {
+     "text": "外部制御はCV/ゲートが中心(3モジュールの範囲)",
+     "fact_ids": [
+      "F-002-032"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "CV/ゲート/クロック(3モジュール範囲)。",
+     "fact_ids": [
+      "F-002-032"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-002",
+   "kind": "module",
+   "name": "Maths",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "modulation_other",
+   "purpose": "2チャンネルを中心に、関数発生・スルー・加算/OR/減算を行うアナログ演算モジュール(メーカーは「音楽向けアナログコンピュータ」と呼ぶ)。",
+   "synthesis_method": "関数発生器(リニア/対数/指数)によるアナログ演算",
+   "features": [
+    {
+     "text": "関数発生・積分・最大4信号の加算/OR・ゲート変換(メーカー主張)",
+     "fact_ids": [
+      "F-002-003"
+     ]
+    },
+    {
+     "text": "エンベロープ/LFO用途、約25分〜1kHz(メーカー主張)",
+     "fact_ids": [
+      "F-002-004"
+     ]
+    },
+    {
+     "text": "Rise/Fall個別のCVとBoth CVによる電圧制御",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "text": "CH2/CH3は基準電圧付きでオフセット源になる",
+     "fact_ids": [
+      "F-002-017"
+     ]
+    },
+    {
+     "text": "SUM/OR/反転SUMの混合バス",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    },
+    {
+     "text": "EOR/EOCでチャンネル同士を連鎖できる",
+     "fact_ids": [
+      "F-002-013"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅20hp、+60mA/-50mA",
+     "fact_ids": [
+      "F-002-005"
+     ]
+    },
+    {
+     "text": "上昇中は再トリガされない",
+     "fact_ids": [
+      "F-002-019"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "CH1/CH4 Signal In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-011"
+     ]
+    },
+    {
+     "name": "CH1/CH4 Trigger In",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-011"
+     ]
+    },
+    {
+     "name": "CH1/CH4 Rise CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -8,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "name": "CH1/CH4 Fall CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -8,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "name": "CH1/CH4 Both CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -8,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "name": "CH1 Cycle In",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-014"
+     ]
+    },
+    {
+     "name": "CH2/CH3 Signal In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-017"
+     ]
+    },
+    {
+     "name": "EOR (CH1)",
+     "direction": "out",
+     "signal_type": "event",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-013"
+     ]
+    },
+    {
+     "name": "EOC (CH4)",
+     "direction": "out",
+     "signal_type": "event",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-013"
+     ]
+    },
+    {
+     "name": "Unity Signal Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-015"
+     ]
+    },
+    {
+     "name": "Variable Out CH1-4",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    },
+    {
+     "name": "OR Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    },
+    {
+     "name": "SUM Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    },
+    {
+     "name": "Inverted SUM Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Rise",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "name": "Fall",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-012"
+     ]
+    },
+    {
+     "name": "Vari-Response",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-018"
+     ]
+    },
+    {
+     "name": "Attenuverter CH1-4",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "Variable出力はケーブル挿入でSUM/ORバスから切断される(正規化)。",
+     "fact_ids": [
+      "F-002-016"
+     ]
+    },
+    "timing": {
+     "summary": "Rise/Fall/Both CVで時間を制御し、Cycleで自己発振。",
+     "fact_ids": [
+      "F-002-012",
+      "F-002-014"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-003",
+   "kind": "module",
+   "name": "Wogglebug",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "random_logic",
+   "purpose": "ランダム電圧発生器。ステップ、スムーズ、ウォグル等の複数のランダム信号を出し、マスタークロックに同期できる。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "7種のランダム信号を同時生成、マスタークロック同期(メーカー主張)",
+     "fact_ids": [
+      "F-002-006"
+     ]
+    },
+    {
+     "text": "外部入力としてHeart IN(S&H)とInfluence(リングモジュレーション)",
+     "fact_ids": [
+      "F-002-006"
+     ]
+    },
+    {
+     "text": "内部クロックと外部クロックを併用できるS&H",
+     "fact_ids": [
+      "F-002-023"
+     ]
+    },
+    {
+     "text": "ランダムCVは0〜10V",
+     "fact_ids": [
+      "F-002-020"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅10hp、+50mA/-40mA",
+     "fact_ids": [
+      "F-002-007"
+     ]
+    },
+    {
+     "text": "設定次第でロックし出力が最後の値に張り付く",
+     "fact_ids": [
+      "F-002-023"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Speed/Chaos CV In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-022"
+     ]
+    },
+    {
+     "name": "External Clock In",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-023"
+     ]
+    },
+    {
+     "name": "Heart (Ego) In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-023"
+     ]
+    },
+    {
+     "name": "Stepped/Smooth/Woggle Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-020"
+     ]
+    },
+    {
+     "name": "Burst Out",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-020"
+     ]
+    },
+    {
+     "name": "Clock Out",
+     "direction": "out",
+     "signal_type": "clock",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-021"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Speed/Chaos",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-021"
+     ]
+    },
+    {
+     "name": "Ego/Id Balance",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-020"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "内部クロックは約1分/周期〜約40Hz(拡張時約200Hz)。",
+     "fact_ids": [
+      "F-002-021"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-004",
+   "kind": "module",
+   "name": "Mimeophon",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "time_effect",
+   "purpose": "ステレオのマルチゾーン・オーディオリピータ(エコー系)。Make Noiseとsoundhackの共同、実装はTom Erbe。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ステレオ入出力、Zone/Rate/Repeatsによるリピート制御(メーカー主張)",
+     "fact_ids": [
+      "F-002-009"
+     ]
+    },
+    {
+     "text": "ファームウェア更新が可能(MP86が公開)",
+     "fact_ids": [
+      "F-002-010"
+     ]
+    },
+    {
+     "text": "Tempo入力でレートを外部クロックに同期",
+     "fact_ids": [
+      "F-002-025"
+     ]
+    },
+    {
+     "text": "Rate出力で他モジュールへクロックを送れる",
+     "fact_ids": [
+      "F-002-027"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅16hp、+100mA/-10mA",
+     "fact_ids": [
+      "F-002-010"
+     ]
+    },
+    {
+     "text": "Tempo使用域は0.25〜50Hz",
+     "fact_ids": [
+      "F-002-025"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "L/R Audio In",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "L/R Audio Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Mix/Repeats/Halo/Zone/Color/Rate CV In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "microRate In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -3,
+      "max": 3,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-026"
+     ]
+    },
+    {
+     "name": "Hold In",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-025"
+     ]
+    },
+    {
+     "name": "Flip In",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-025"
+     ]
+    },
+    {
+     "name": "Tempo In",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-025"
+     ]
+    },
+    {
+     "name": "Rate Out",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-002-027"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Rate",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Repeats",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Color",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Halo",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Skew",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Zone",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    },
+    {
+     "name": "Mix",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-002-024"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Tempo入力で同期、分周/逓倍はRateとZoneで選択。",
+     "fact_ids": [
+      "F-002-025",
+      "F-002-028"
+     ]
+    },
+    "state_save": null,
+    "external_control": {
+     "summary": "CVとゲートで外部制御(MIDI記述は確認範囲になし)。",
+     "fact_ids": [
+      "F-002-024",
+      "F-002-025"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-005",
+   "kind": "signal_standard",
+   "name": "Make Noise モジュールの信号レベル(マニュアル記載)",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "3モジュールのマニュアルに現れる電圧・ゲート閾値の共通傾向。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ゲート閾値約2.5V",
+     "fact_ids": [
+      "F-002-029"
+     ]
+    },
+    {
+     "text": "約10Vppの音声と約±8V/0〜8Vの制御入力",
+     "fact_ids": [
+      "F-002-030"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "3モジュールのみの記載。メーカー全体の規約とは断定できない",
+     "fact_ids": [
+      "F-002-029",
+      "F-002-030"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-002-006",
+   "kind": "patch_storage",
+   "name": "Make Noise パッチ保存(3モジュールのマニュアル範囲)",
+   "maker": "Make Noise",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "確認したマニュアルにパッチ保存/プリセットの記述があるかの記録。",
+   "synthesis_method": null,
+   "features": [],
+   "constraints": [
+    {
+     "text": "3モジュールには保存機能の記載が確認されない",
+     "fact_ids": [
+      "F-002-031"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "記述なし(確認範囲内)。",
+     "fact_ids": [
+      "F-002-031"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-002-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-002-001",
+   "entity_id": "REF-002-001",
+   "topic": "製品ラインアップ",
+   "statement": "modulesページにMaths、Wogglebug、Mimeophon、QPAS、Tempi等の多数のモジュールが並ぶ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "https://www.makenoisemusic.com/modules/ 一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-002",
+   "entity_id": "REF-002-001",
+   "topic": "電源表記",
+   "statement": "製品ページの電源仕様は+12V/-12Vの電流値で示され、幅はhp単位。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-003",
+   "entity_id": "REF-002-002",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では、直線・対数・指数の関数をトリガ型や連続で生成、入力信号の積分、最大4信号の加算・減算・OR、ゲート/クロックとアナログ信号の相互変換、ゲート遅延ができる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-004",
+   "entity_id": "REF-002-002",
+   "topic": "用途(広告)",
+   "statement": "メーカーはエンベロープ/LFO(約25分〜1kHz)、ラグ/スルー/ポルタメント、複数CVの合成などの用途を挙げる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-005",
+   "entity_id": "REF-002-002",
+   "topic": "物理仕様",
+   "statement": "幅20hp、電源は+12Vで60mA、-12Vで50mA、最大深さ32mm(電源ケーブル込み)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-02",
+   "locator": "MATHS product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-006",
+   "entity_id": "REF-002-003",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では7種のランダム信号(Smooth VCO、Woggle VCO、Ring Mod、Stepped、Smooth、Woggle、Burst)を同時に生成し、電圧制御可能なマスタークロックを持つ。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-007",
+   "entity_id": "REF-002-003",
+   "topic": "物理仕様",
+   "statement": "幅10hp、電源は+12Vで50mA、-12Vで40mA、最大深さ32mm。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page SPECIFICATIONS",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-008",
+   "entity_id": "REF-002-003",
+   "topic": "来歴",
+   "statement": "Grant Richter(Wiard)の設計で、Buchla 265の系譜と説明されている。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-03",
+   "locator": "Wogglebug product page 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-009",
+   "entity_id": "REF-002-004",
+   "topic": "機能(広告)",
+   "statement": "メーカー記述では、ステレオ入出力、Rate/Skew/Repeatsなどによるリピート制御、Zoneの反転、Holdを持ち、Time/Space/Colorを電圧制御できる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-002-04",
+   "locator": "Mimeophon product page FEATURES",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-010",
+   "entity_id": "REF-002-004",
+   "topic": "物理仕様とファーム",
+   "statement": "幅16hp、電源は+12Vで100mA、-12Vで10mA、最大深さ45mm。ファームウェアMP86が配布されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-04",
+   "locator": "Mimeophon product page SPECIFICATIONS/FIRMWARE",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-011",
+   "entity_id": "REF-002-002",
+   "topic": "チャンネル1/4入力",
+   "statement": "CH1/CH4のSignal入力は直流結合で約±10V。Trigger入力はゲート/パルスで0〜10Vの関数(エンベロープ)を起動する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: MATHS Channel 1/4",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-012",
+   "entity_id": "REF-002-002",
+   "topic": "Rise/Fall/Both CV",
+   "statement": "Rise CVとFall CVは線形、Both CVは指数応答で、いずれも約±8V。Rise/Fallは正で長く、Bothは正で短くなる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: Channel 1 項目6,8,9; Rise Fall and Vari-Response",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-013",
+   "entity_id": "REF-002-002",
+   "topic": "EOR/EOC",
+   "statement": "End of Riseは0Vまたは10Vのイベント信号(通常0V)。CH4のEnd of Cycleは通常+10Vで、下端到達時に変化する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls; Rise Fall and Vari-Response 内 EOR/EOC節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-014",
+   "entity_id": "REF-002-002",
+   "topic": "Cycle入力",
+   "statement": "Cycle入力は、ゲートhighでサイクル(自己発振)させ、highには最低約+2.5Vが必要。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: Channel 1 項目2",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-015",
+   "entity_id": "REF-002-002",
+   "topic": "Unity出力",
+   "statement": "Unity Signal出力は、サイクル中0〜8V、それ以外は入力振幅に追従する。LEDは正緑・負赤で約±8V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: Channel 1 項目5,6",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-016",
+   "entity_id": "REF-002-002",
+   "topic": "SUM/ORバス",
+   "statement": "CH1〜4のVariable出力は約±10VでSUM/ORバスに正規化される(ケーブル挿入で切断)。ORバス出力は0〜10V、SUMと反転SUMは約±10V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: SUM and OR Bus 項目1〜5",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-017",
+   "entity_id": "REF-002-002",
+   "topic": "CH2/CH3オフセット",
+   "statement": "CH2はSignal入力に何もないと+10V、CH3は+5Vの基準電圧に正規化され、オフセット電圧源になる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: SUM and OR Bus 項目1,2",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-018",
+   "entity_id": "REF-002-002",
+   "topic": "Vari-Response",
+   "statement": "応答曲線は対数からリニア、指数、超指数まで連続可変。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Panel Controls: Channel 1 項目1",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-019",
+   "entity_id": "REF-002-002",
+   "topic": "再トリガ",
+   "statement": "下降中は再トリガされるが上昇中は再トリガされない。Riseを長くするとクロック分周に使える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-06",
+   "locator": "Getting Started: Trigger Input",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-020",
+   "entity_id": "REF-002-003",
+   "topic": "出力電圧",
+   "statement": "Smooth/Stepped/Woggle等のランダムCVは0〜10V、Ring-Mod等は約10Vpp。Burstは0〜+10Vの矩形ゲート。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-07",
+   "locator": "Panel Controls: Wogglebug 出力説明",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-021",
+   "entity_id": "REF-002-003",
+   "topic": "クロック",
+   "statement": "内部クロックは約1分/周期〜約40Hz(拡張時約200Hz)。Clock出力は0〜+10Vの矩形で外部クロックの影響を受けない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-07",
+   "locator": "Panel Controls: Speed/Chaos項目6,8; Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-022",
+   "entity_id": "REF-002-003",
+   "topic": "Speed CV",
+   "statement": "Speed/Chaos CV入力は0〜+8Vで、未接続時は+8Vに正規化される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-07",
+   "locator": "Panel Controls: 項目1,2",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-023",
+   "entity_id": "REF-002-003",
+   "topic": "外部入力",
+   "statement": "External Clock入力は任意信号を受けてサンプル&ホールドのレートを独立制御し、Heart入力は10Vpp以内のCV/オーディオを受ける。DisturbボタンでS&Hを手動クロックできる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-07",
+   "locator": "Panel Controls 項目3; Overview 新機能の節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-024",
+   "entity_id": "REF-002-004",
+   "topic": "信号レベル",
+   "statement": "音声入出力は典型で10Vpp。Mix/Repeats/Halo/Zone/Color等のCV入力は0〜8V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-08",
+   "locator": "Panel Controls 項目1〜16",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-025",
+   "entity_id": "REF-002-004",
+   "topic": "ゲート入力",
+   "statement": "Hold/Flip入力は2.5V以上のゲートでトグルし、Tempo入力は2.5V以上の規則的クロックを受ける(使用可能域0.25〜50Hz)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-08",
+   "locator": "Panel Controls 項目5,7,9; Tempo節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-026",
+   "entity_id": "REF-002-004",
+   "topic": "microRate",
+   "statement": "microRate入力はゾーン0で1V/oct追従し、範囲は約±3V、ユニティゲイン。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-08",
+   "locator": "Panel Controls 項目4; microRate節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-027",
+   "entity_id": "REF-002-004",
+   "topic": "Rate出力",
+   "statement": "Rate出力は両チャンネルのレートをORしたトリガで、0Vまたは8V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-08",
+   "locator": "Panel Controls 項目10; Rate Output節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-028",
+   "entity_id": "REF-002-004",
+   "topic": "ゾーン時間",
+   "statement": "リピート時間はマイクロ音から最長約41秒まで、ゾーンのレート範囲は隣接ゾーンと2/4/8倍の関係。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-002-08",
+   "locator": "Overview; Rate節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-029",
+   "entity_id": "REF-002-005",
+   "topic": "ゲート閾値",
+   "statement": "ゲート入力のhigh閾値は約2.5V以上と記載され(Maths Cycle、Mimeophon Hold/Flip/Tempo)、イベント出力は0/10V(Maths、Wogglebug)または0/8V(Mimeophon)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-002-06",
+   "locator": "Maths Cycle Input; Mimeophon Panel Controls 5,7,9; Wogglebug Burst/Clock",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-030",
+   "entity_id": "REF-002-005",
+   "topic": "信号振幅",
+   "statement": "音声は約10Vpp、CVは0〜10Vまたは約±10V、制御入力は約±8Vまたは0〜8Vがマニュアルに記載されている。ピッチは1V/octが明記されるのはMimeophonのmicroRateのみ。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-002-08",
+   "locator": "Mimeophon Panel Controls; Maths/Wogglebug Panel Controls",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-031",
+   "entity_id": "REF-002-006",
+   "topic": "保存機能の記述",
+   "statement": "Maths/Wogglebug/Mimeophonのマニュアル本文にプリセットやパッチ保存の記述は見当たらない(Mimeophonはファームウェア更新のみ公開)。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-002-08",
+   "locator": "3マニュアル全文の検索結果",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-002-032",
+   "entity_id": "REF-002-001",
+   "topic": "外部制御",
+   "statement": "確認した3モジュールの外部制御はCVとゲート/クロック入力で、MIDI等の記述はない。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-002-08",
+   "locator": "3マニュアルのパネル説明",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-002-002",
+   "item": "Mathsのつまみの時間範囲数値(Rise/Fall時間)と各Attenuverterの利得範囲",
+   "tried_sources": [
+    "SRC-002-06"
+   ],
+   "impact_on_spec": "時間範囲は概要上の『約25分〜1kHz』のみ。つまみのマッピングは未確認。"
+  },
+  {
+   "entity_id": "REF-002-003",
+   "item": "Wogglebugの各ポートの厳密な入力電圧と各つまみの範囲",
+   "tried_sources": [
+    "SRC-002-07"
+   ],
+   "impact_on_spec": "Heart入力の許容範囲は10Vpp max記載のみ(符号付き範囲は未確認)。"
+  },
+  {
+   "entity_id": "REF-002-004",
+   "item": "Mimeophonの音声入出力の符号付き範囲(10Vppのみ記載)",
+   "tried_sources": [
+    "SRC-002-08"
+   ],
+   "impact_on_spec": "音声範囲は仮定せず約±5Vを10Vppの便宜表現としている点に注意。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "MIDI Inlet等Make Noiseのコントロール系モジュールのマニュアル",
+   "tried_sources": [
+    "SRC-002-02"
+   ],
+   "impact_on_spec": "control_interfaceエンティティを作っていない。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "Make Noise全体としての電圧規約(1V/oct明記等)の公式な規定文書",
+   "tried_sources": [
+    "SRC-002-06",
+    "SRC-002-07",
+    "SRC-002-08"
+   ],
+   "impact_on_spec": "3モジュールの記載から傾向を述べるに留まる。"
+  },
+  {
+   "entity_id": "REF-002-001",
+   "item": "各モジュールのバージョン・マニュアル版番号",
+   "tried_sources": [
+    "SRC-002-06",
+    "SRC-002-07",
+    "SRC-002-08"
+   ],
+   "impact_on_spec": "doc_versionをunknownとしている。"
+  },
+  {
+   "item": "makenoise.com は調査対象と別組織のサイトだった(経緯記録)",
+   "tried_sources": [
+    "SRC-002-01"
+   ],
+   "impact_on_spec": "出典として採用しない。"
+  }
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "sources": [
+  {
+   "id": "SRC-004-01",
+   "title": "MS-20 mini/MS-20 Original Owner's Manual (reprint of 1978 manual)",
+   "publisher": "Korg Inc.",
+   "url": "https://www.korg.com/us/support/download/manual/0/134/2441/",
+   "doc_version": "2015.07.07 posting (original text)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Read pp.1-8 (intro, block diagram, signal flow, normal setting, functions, patching, ESP, specifications) as page images; setting charts pp.25+ not read",
+   "link_status": "ok",
+   "license_note": "Korg copyrighted manual; only short own-words summaries and facts were recorded. No text, figures or assets are reused or reproduced; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-004-02",
+   "title": "MS-20 mini Owner's Manual",
+   "publisher": "Korg Inc.",
+   "url": "https://www.korg.com/us/support/download/manual/0/134/1955/",
+   "doc_version": "2015.06.01",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "English sections: About the MS-20 mini, MIDI chart, basic operation, MIDI, specifications",
+   "link_status": "ok",
+   "license_note": "Korg copyrighted manual; only short own-words summaries and facts were recorded. No text, figures or assets are reused or reproduced; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-004-03",
+   "title": "MS-20 mini MIDI Implementation",
+   "publisher": "Korg Inc.",
+   "url": "https://www.korg.com/us/support/download/manual/0/134/2704/",
+   "doc_version": "Revision 1.0 (2012.10.25)",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Full text file read",
+   "link_status": "ok",
+   "license_note": "Korg copyrighted manual; only short own-words summaries and facts were recorded. No text, figures or assets are reused or reproduced; the PDF is not stored in the repository."
+  },
+  {
+   "id": "SRC-004-04",
+   "title": "MS-20 mini/MS-20 Patch Book",
+   "publisher": "Korg Inc.",
+   "url": "https://www.korg.com/us/support/download/manual/0/134/2443/",
+   "doc_version": "2015.07.07 posting",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Contents list and introduction read; individual patch pages not summarized",
+   "link_status": "ok",
+   "license_note": "Korg copyrighted manual; only short own-words summaries and facts were recorded. No text, figures or assets are reused or reproduced; the PDF is not stored in the repository."
+  }
+ ]
+}

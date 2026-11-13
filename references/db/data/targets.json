@@ -1,0 +1,237 @@
+{
+  "version": "0.1",
+  "fixed_on": "2026-11-12",
+  "note": "初期版の調査対象。途中の追加・除外は理由をstatus_noteに追記する。件数充足ではなく、種別・時代・信号規約・パッチ保存・外部制御の比較に必要な範囲で選定。 2026-11-12: オーナー指示で歴史的・再発売系のT-011〜T-017を追加。 2026-11-13: オーナー指示で追加調査(T-018〜T-022: ブラウザ型、エージェント連携、Mutable、Web Audio、MIDI/OSC)。T-003は二次資料の範囲で確定(公式マニュアル未取得のまま)。",
+  "targets": [
+    {
+      "id": "T-001",
+      "name": "Doepfer A-100(Eurorack規格と代表モジュール)",
+      "maker": "Doepfer Musikelektronik",
+      "category": "hardware_modular",
+      "era": "current",
+      "selection_reason": "Eurorack形式の事実上の基準。電圧規約・ゲート/トリガー仕様・基本機能モジュールの公式資料が公開されている。",
+      "status": "confirmed",
+      "status_note": "doepfer.de のA-100概要・Technical Details・Construction Details と代表8件(A-110-1,A-120,A-140-1,A-145-1,A-138s,A-160-1,A-190-3)の公式説明ページを確認。各モジュールのPDFマニュアルは未取得で、パラメータ範囲の一部は未確認。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org Eurorack/CV/gate/Doepfer/Modular synthesizer/Moog synthesizer)で電圧規約の一般論、V/oct対Hz/V、トリガ/ゲート種別、1V/oct歴史、Doepfer沿革を新規エンティティREF-001-011〜014として追記(third_party、low〜medium)。既存事実は変更なし。Doepfer公式値と整合を確認、発売年・沿革年・モジュール数に資料間の食い違いあり。"
+    },
+    {
+      "id": "T-002",
+      "name": "Make Noise(Maths等の代表モジュール)",
+      "maker": "Make Noise",
+      "category": "hardware_modular",
+      "era": "current",
+      "selection_reason": "多機能モジュールの現行例。エンベロープ/LFO/関数発生器の統合設計の参考。",
+      "status": "confirmed",
+      "status_note": "makenoisemusic.com の製品ページと makenoise-manuals.com のPDFマニュアル(Maths、Wogglebug、Mimeophon)を確認。ポート電圧と主要仕様は確認済み。つまみの数値範囲・MIDI系モジュール・メーカー全体の規約は未確認。指定のmakenoise.comは別組織のサイトで不採用。"
+    },
+    {
+      "id": "T-003",
+      "name": "Moog Mother-32",
+      "maker": "Moog Music",
+      "category": "semi_modular",
+      "era": "current",
+      "selection_reason": "現行セミモジュラーの代表。正規化接続とパッチ点の関係を比較できる。",
+      "status": "insufficient_sources",
+      "status_note": "公式ユーザーマニュアルPDFを取得できず(ダウンロード一覧はクライアント描画、PDFホストはプロキシで拒否)。moogmusic.com製品ページのSpecs表(パッチベイ32点、正規化、32ステップ/64シーケンス、MIDI/アサイナブル出力)のみ確認。電圧・ゲート規約、パッチ点名、サウンド保存の有無は未確認。(2026-11-13 追記) SOS 2016レビュー(全文)とWikipediaでパッチ点名・+5V/±5V CV・アサイナブル出力16機能・MIDI機能・シーケンス64メモリを補完(basis=third_party)。ゲート閾値・音声電圧・パッチ(音色)保存の有無は依然未確認。公式マニュアルPDFはcdn.shopify.com等が403で未取得、statusはinsufficient_sourcesのまま。フィルタ種別・LFO下限・ベロシティ対応は資料間で食い違い(unconfirmed記録)。 (2026-11-13 オーナー判断: 二次資料の範囲で良しとし、公式マニュアルの追加取得は行わない)"
+    },
+    {
+      "id": "T-004",
+      "name": "Korg MS-20 系(MS-20 mini)",
+      "maker": "Korg",
+      "category": "semi_modular",
+      "era": "historical",
+      "selection_reason": "歴史的な代表的セミモジュラー(原機1978年)の系譜。現行再発版のマニュアルを根拠にする。",
+      "status": "confirmed",
+      "status_note": "korg.comの公式マニュアル(原機オーナーズマニュアル復刻、MS-20 miniオーナーズマニュアル、MIDI Implementation、Patch Book)を確認。原機1978年との関係はminiマニュアルの記述の範囲のみ。miniのパッチパネルのジャック数・電圧表の再掲、音色メモリの明示的有無は未確認。"
+    },
+    {
+      "id": "T-005",
+      "name": "VCV Rack",
+      "maker": "VCV",
+      "category": "software_modular",
+      "era": "current",
+      "selection_reason": "ソフトのモジュラーとして電圧規約・ポリフォニー・パッチ保存・公開APIが公開されている主要例。",
+      "status": "confirmed",
+      "status_note": "確認済み。公式マニュアル(電圧規約・ポリフォニー・Core・メニュー)とGitHub v2のソースを読んだ。OSC等の外部制御は本体に確認できず未確認項目に記録。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org VCV_Rack/Eurorack/CV_gate)で、公式マニュアルの電圧規約を実機Eurorack慣習と照合する新規エンティティREF-005-011を追記(third_party、low〜medium)。既存事実は変更なし。"
+    },
+    {
+      "id": "T-006",
+      "name": "Cardinal",
+      "maker": "DISTRHO",
+      "category": "software_modular",
+      "era": "current",
+      "selection_reason": "VCV Rack由来のプラグイン形式実装。ホスト統合・ライセンス構成の比較対象。",
+      "status": "confirmed",
+      "status_note": "確認済み(一部)。README/LICENSES/FAQ/DIFFERENCESを読んだ。GitHub APIは接続拒否のためバージョン未確認。パッチ保存形式とOSCは未確認。"
+    },
+    {
+      "id": "T-007",
+      "name": "BespokeSynth",
+      "maker": "Ryan Challinor ほか",
+      "category": "software_modular",
+      "era": "current",
+      "selection_reason": "ライブコーディング/スクリプトを備えたソフトのモジュラー。プログラムによる制御の参考。",
+      "status": "confirmed",
+      "status_note": "確認済み(ソース中心)。公式ドキュメントサイト(bespokesynth.com/docs)は接続拒否のため未取得。README・GPLソース(raw.githubusercontent.com)で確認。モジュール別の公式パラメータ記述は未確認。"
+    },
+    {
+      "id": "T-008",
+      "name": "Pure Data(Pd)",
+      "maker": "Miller Puckette ほか",
+      "category": "software_environment",
+      "era": "historical",
+      "selection_reason": "データフロー型パッチング環境の歴史的代表。パッチ保存形式と制御/信号レートの区別の参考。",
+      "status": "confirmed",
+      "status_note": "一次情報はGitHub(pure-data/pure-data)のマニュアル/ヘルプ/ソースで確認。msp.ucsd.eduはアクセス不能(unreachable)でpuredata.infoは根拠未使用。FUDI厳密形式・.pd完全文法・OSC送出側は未確認としてunconfirmedに記録。"
+    },
+    {
+      "id": "T-009",
+      "name": "SuperCollider",
+      "maker": "James McCartney ほか",
+      "category": "software_environment",
+      "era": "current",
+      "selection_reason": "サーバー/クライアント分離とOSC制御により、プログラムによる制御の代表例。",
+      "status": "confirmed",
+      "status_note": "一次情報は doc.sccode.org(3.14.0ヘルプ)と公式GitHubで確認。Pdほか他ツールとの比較に必要なクライアント/サーバ分離・OSC・ノード順序・SynthDef形式を取得。電圧規約相当や状態保存機構は未確認としてunconfirmedに記録。"
+    },
+    {
+      "id": "T-010",
+      "name": "Max / MSP",
+      "maker": "Cycling '74",
+      "category": "software_environment",
+      "era": "current",
+      "selection_reason": "商用データフロー環境の代表。信号/メッセージの区別と外部制御の公式資料が公開されている。",
+      "status": "confirmed",
+      "status_note": "一次情報は docs.cycling74.com のユーザガイド/リファレンスで確認。.maxpat内部スキーマ・既定OSCポート・利用条件(/legalは404)は未確認としてunconfirmedに記録。gen~/RNBOは範囲限定。"
+    },
+    {
+      "id": "T-011",
+      "name": "Moog 大型モジュラー系(System 15/35/55、Behringer System 55)",
+      "maker": "Moog Music / Behringer",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "歴史的な大型モジュラーの代表系譜。原機(Moog)と再発売(Behringer)の関係を比較できる。",
+      "status": "confirmed",
+      "status_note": "Behringer SYSTEM 55/35/15と代表モジュールは公式製品ページで確認済み。Moog原機・Moog再発売品の公式資料(moogmusic.com)は該当ページ無く未確認(unconfirmed記録)。BehringerのQSG PDFはcdn-media.empowertribe.com 403で未取得。(2026-11-12 調査) (2026-11-13 追記) 原機System 55/35/15を独立systemとして維持し、SOS 2003(Leon)・Wikipedia(Moog synthesizer, CV/gate)から原機の構成(55の全モジュール表)、921/904A/911/902/960/961、1V/octとS-trig、パッチ保存手段なしを補完(basis=third_party)。原機の電圧値、35/15の構成、発売年は資料間で食い違いまたは未確認。"
+    },
+    {
+      "id": "T-012",
+      "name": "Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue)",
+      "maker": "Buchla / TipTop Audio",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "Moogと異なる設計思想(電圧規約・ペンタ/ファンクション系)の歴史的代表系譜と現行再発売。",
+      "status": "confirmed",
+      "status_note": "Buchla公式の沿革・200e取扱説明書・Classic Reissue製品ページ、TipTop 200tマニュアルで確認済み。原機100/200の一次仕様は未入手で、ピッチ電圧規約(1.2V/oct対2.4V/oct)に資料間の食い違いあり(unconfirmed記録)。(2026-11-12 調査) (2026-11-13 追記) SOS 200e記事(2005)・Vintage Synth Explorer(100/200)・Wikipediaから原機100/200を拡充(100: 158/146/165/112、200: 258/281/266/245/292/248、Music Easel、信号規約、カード保存、タッチ/計算機IF)。ピッチ規約は1.2V/oct(200eガイド)、1.2V/oct未満(SOS)、2.4V/oct(248t)が併存し未確定、制御電圧範囲も15V/0-10V/+5・+10Vで食い違い(unconfirmed記録、basis=third_party)。"
+    },
+    {
+      "id": "T-013",
+      "name": "ARP 系(ARP 2500、ARP 2600、Behringer 2500)",
+      "maker": "ARP / Korg / Behringer",
+      "category": "semi_modular",
+      "era": "historical",
+      "selection_reason": "マトリクス式パッチ(2500)とセミモジュラー(2600)の歴史的代表。再発売との関係を比較できる。",
+      "status": "confirmed",
+      "status_note": "2026-11-12確認済み。Korg公式(2600 FS/M の製品ページ・仕様・取扱説明書・MIDI表)とBehringer 2500系の製品ページを読了。ARP 2500/2600原機の一次仕様は未取得(原機2600取扱説明書は画像スキャンで未読)、Behringer QSG PDFは接続拒否で未取得。(2026-11-12 オーナー指示により追加) 2026-11-13追記(第3陣): 原機を二次資料で補完。Vintage Synth Explorer、Wikipedia(2600/2500/CV-gate)、Sound On Sound(ARP 2500 1996、2600 FS 2020)、CMUスタジオ解説を読了し、2600原機の改版・1V/oct・ゲート0/10V(低〜中確度)、2500のマトリクス(寸法はVSE 10x10とSOS 10x20で不一致、両論併記)・モジュール構成・約100台を追加。原機の一次資料(サービスノート)はarchive.org未許可で未読(検索要約のみ)。"
+    },
+    {
+      "id": "T-014",
+      "name": "Roland System 系(System-100m、System-700、System-500、Behringer System 100)",
+      "maker": "Roland / Behringer",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "国産モジュラーの歴史的系譜と現行のEurorack展開(System-500)・再発売の比較。",
+      "status": "confirmed",
+      "status_note": "2026-11-12確認済み。Roland公式のSYSTEM-500(製品ページ・取扱説明書・各パラメータガイド)とBehringer System 100の4製品ページを読了。SYSTEM-100M/700原機の一次資料は未取得(700の取扱説明書は公式アーカイブ記載のみでPDFがホスト名解決不能)、BehringerのQSG PDFは接続拒否。(2026-11-12 オーナー指示により追加) 2026-11-13追記(第3陣): 原機System 100/100M/700を二次資料で補完。Vintage Synth Explorer、Wikipedia(System 100/100M/700/CV-gate)から構成・ラック・モジュール・ブロック構成を記録。電圧規約(1V/oct、ゲート3V以上等)はmanualmachine/archive.org/modwiggler未許可のためWebSearch要約のみ(低確度)。発売年や型番文字は資料間で不一致のため併記。"
+    },
+    {
+      "id": "T-015",
+      "name": "EMS 系(VCS3、Synthi 100)",
+      "maker": "EMS",
+      "category": "semi_modular",
+      "era": "historical",
+      "selection_reason": "ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。",
+      "status": "confirmed",
+      "status_note": "emssynthesisers.co.uk(EMS公式)のトップ・製品ガイド・沿革(Graham Hinton執筆)を確認し、VCS3/Synthi 100/Synthi Aのモジュール構成、ピンマトリクス(Synthi 100は60x60二枚)、シーケンサ、権利者の変遷を記録。公式の操作・保守マニュアルは見つからず、信号電圧規約・VCS3マトリクス寸法・個別モジュール仕様は未確認。製品ガイドは個人執筆の史料としてthird_party扱い。2026-11-13追記(第3陣): Sound On Sound(Gordon Reid、All About EMS Part 1/2)とWikipedia(VCS3/Synthi 100/AKS)を読了し、VCS3の16x16ピンマトリクス、抵抗入りピン(白2.7kΩ等)、電圧規約(0.32/0.26/0.20 V/oct、外部CVはその約2倍、信号レベル3〜6V)、VCO/VCF/シェイパーの個別仕様、Prestopatch、Synthi 100の60x60二枚、Computer Synthi等を追加。電圧値は単一の第三者資料(SOS)で、EMS一次資料は未確認。フィルタのスロープ(12/18dB対24dB)ほか数点は資料間で不一致のため併記。"
+    },
+    {
+      "id": "T-016",
+      "name": "Serge 系(Serge Modular、Random*Source Serge)",
+      "maker": "Serge / Random*Source",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。",
+      "status": "confirmed",
+      "status_note": "serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。 [2026-11-13 第3陣] 二次資料(en.wikipedia.org Serge synthesizer、vintagesynth.com Serge Modular)で原機の歴史(1972-83の4世代モジュール構成)、設計思想、旧ジャック色(青/黒/赤)、STS継続、Wave Multiplier・TKBを追記(basis third_party、confidence low〜medium)。年代や段数は資料間で食い違い、unconfirmedに記録。1970年代原機の一次資料は依然未入手。"
+    },
+    {
+      "id": "T-017",
+      "name": "現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX)",
+      "maker": "AJH Synth / Intellijel / Behringer",
+      "category": "hardware_modular",
+      "era": "current",
+      "selection_reason": "歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。",
+      "status": "confirmed",
+      "status_note": "AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXはクイックスタートガイド(V 2.0)を取得し、パラメータ範囲・入出力仕様を記録(電圧範囲・保存・外部制御は記載なしで未確認、消費電流は製品ページと不一致)。Korgasmatron IIの公式マニュアルは未取得。"
+    },
+    {
+      "id": "T-018",
+      "name": "ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js)",
+      "maker": "複数(OSS開発者)",
+      "category": "software_modular",
+      "era": "current",
+      "selection_reason": "本製品と同じ『ブラウザ上で動くモジュラー』の先行例。パッチグラフ、状態保存、音声エンジン(Web Audio/AudioWorklet)の設計差を比較できる。",
+      "status": "confirmed",
+      "status_note": "2026-11-13 READMEと一部docsを読了(DreamRack/Mod Synth 0/Plinth/Patchcab/Modulator/web-synth/eurorack-js。system・パッチ保存・制御IF等のエンティティを記録)。GitHub通常APIは403のため最終更新は検索APIのpushed_at。ソース本体・web-synth docs(synth.ameo.dev)・patch.cabは未取得で、個別モジュール仕様・信号数値規約は一部unconfirmed。ライセンスはAGPL/MIT/GPL/ISC(無記載含む)で再利用しない。(2026-11-13 オーナー指示『追加調査』により追加)"
+    },
+    {
+      "id": "T-019",
+      "name": "エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge)",
+      "maker": "複数(コミュニティ)",
+      "category": "software_environment",
+      "era": "current",
+      "selection_reason": "エージェント操作の先行例。コマンド体系、状態取得、認証・安全性、OSC/MIDIブリッジの設計を比較できる。",
+      "status": "confirmed",
+      "status_note": "確認済み(二次資料含む)。5プロジェクト(MCP Synth Controller/SuperCollider MCP/vcv-rack-mcp/synthlab-mcp-server/osc-bridge)のREADME・一部ソース・LICENSEを取得。ツール一覧・認証/安全性の有無を記録。github.com本体(コミット履歴)は403のため最終更新日は未確認。osc-bridgeはWebSearch要約(GPL・5ツール)と本文(AGPL・9ツール)が食い違い、本文を採用し併記。(2026-11-13 オーナー指示『追加調査』により追加)"
+    },
+    {
+      "id": "T-020",
+      "name": "Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等)",
+      "maker": "Mutable Instruments (Emilie Gillet)",
+      "category": "hardware_modular",
+      "era": "historical",
+      "selection_reason": "公開ソース・マニュアルが豊富で、現代的なデジタルモジュールのアルゴリズム・I/O規約の参考になる。ライセンス条件は個別に記録。",
+      "status": "confirmed",
+      "status_note": "[2026-11-13 第4陣] github.com/pichenettes/eurorack のREADME(ライセンス: STM32F=MIT, AVR=GPL3.0, HW=cc-by-sa-3.0, 商標指針)と Plaits/Braids/Rings/Clouds/Tides/Marblesのソースヘッダ(MIT表記確認)から、エンジン数・サンプルレート・ブロックサイズ・設定保存を記録。mutable-instruments.net の公式マニュアルとGitHub APIは403で未取得のため、入出力電圧範囲・ジャック仕様・最終更新日は未確認(unconfirmed)。"
+    },
+    {
+      "id": "T-021",
+      "name": "Web Audio API(AudioContext/AudioWorklet、自動再生制限)",
+      "maker": "W3C / MDN",
+      "category": "software_environment",
+      "era": "current",
+      "selection_reason": "ブラウザでの音声処理の制約(開始条件、レイテンシ、スレッド)の根拠資料。技術スタックの採用決定ではなく制約調査(#3で判断)。",
+      "status": "confirmed",
+      "status_note": "[2026-11-13 第4陣] www.w3.org/TR/webaudio/ (Web Audio API 1.1 Working Draft 2026-09-22) と MDN(AudioContext/AudioWorklet/Best practices)を確認。サンプルレート範囲・レンダ量子128・スレッドモデル・latencyHint・自動再生/resume要件を記録。ブラウザ別の実測レイテンシ・既定レート・自動再生の具体条件は未確認。"
+    },
+    {
+      "id": "T-022",
+      "name": "外部制御規格(MIDI 1.0/2.0、OSC)",
+      "maker": "MIDI Association / CNMAT 等",
+      "category": "software_environment",
+      "era": "current",
+      "selection_reason": "MIDI/外部接続・エージェント接続の共通基盤の仕様。ノート/CC/クロックの扱いとOSCのアドレス/型体系を比較できる。",
+      "status": "confirmed",
+      "status_note": "確認済み(二次資料中心)。OSC 1.0仕様書(opensoundcontrol.stanford.edu)は一次で読了、MIDI 1.0/2.0はmidi.orgが403のためWikipedia(CC BY-SA)による二次確認のみで、ステータスバイト値・MIDI 2.0分解能などはunconfirmed。(2026-11-13 オーナー指示『追加調査』により追加)"
+    }
+  ],
+  "out_of_scope": [
+    {
+      "name": "商用ソフトモジュラー(Softube Modular, Voltage Modular等)",
+      "reason": "公式資料の公開範囲が限られ、VCV Rack等で代表可能。後続追加候補。"
+    },
+    {
+      "name": "商用ソフトモジュラー(Arturia Modular V、NI Reaktor Blocks 等)・ModularGrid等の目録サイト",
+      "reason": "後続追加候補。初期版ではVCV Rack・Cardinal・BespokeSynth・Pd・SC・Maxで代表。"
+    }
+  ]
+}

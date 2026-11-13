@@ -1,0 +1,2070 @@
+{
+  "target_id": "T-018",
+  "entities": [
+    {
+      "id": "REF-018-001",
+      "kind": "system",
+      "name": "DreamRack",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "Web Audioで動くブラウザ型モジュラー。ラックにモジュールを置きケーブルで結線する。",
+      "synthesis_method": "Web Audio(一部モジュールはAudioWorklet DSP)+ビデオ信号系統",
+      "features": [
+        {
+          "text": "タブ=ボイスによるポリフォニー(最大8)",
+          "fact_ids": [
+            "F-018-004"
+          ]
+        },
+        {
+          "text": "ビデオ信号とUnified rack",
+          "fact_ids": [
+            "F-018-006"
+          ]
+        },
+        {
+          "text": "スコープ・周波数/DC読取・信号経路ハイライト",
+          "fact_ids": [
+            "F-018-009"
+          ]
+        },
+        {
+          "text": "knAck(ノブとCV入力の一体化、アテヌバーター付き)",
+          "fact_ids": [
+            "F-018-010"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "alpha段階で仕様変更の可能性あり。パッチ保存はChrome/Edge限定",
+          "fact_ids": [
+            "F-018-002"
+          ]
+        },
+        {
+          "text": "ビデオ画像は音声入力へ加算不可",
+          "fact_ids": [
+            "F-018-006"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "クリックで掴みクリックで置く方式(押し続け不要)。ケーブル色は接続先で果たす役割の色。",
+          "fact_ids": [
+            "F-018-011"
+          ]
+        },
+        "state_save": {
+          "summary": "ラック状態(タブ/表示/パッチ)を記憶して再訪時に復元。ファイル保存はFile System Access。",
+          "fact_ids": [
+            "F-018-007"
+          ]
+        },
+        "external_control": {
+          "summary": "ラック全状態をJSONでフォルダに書き出し・読み戻しでき、AIアシスタントによる閲覧/変更提案に使える。外部送信者からのイベント受信は未完。",
+          "fact_ids": [
+            "F-018-012"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-002",
+      "kind": "signal_standard",
+      "name": "DreamRack 信号ドメインと色分け",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "jack/ケーブルの信号ファミリーと色の規約。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "audio=黄/control=橙/trigger=青/pitch=緑",
+          "fact_ids": [
+            "F-018-013"
+          ]
+        },
+        {
+          "text": "ケーブルは行き先の役割色",
+          "fact_ids": [
+            "F-018-014"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-001"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-003",
+      "kind": "patch_storage",
+      "name": "DreamRack パッチ保存",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "パッチの保存・復元方式。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "id参照でパッチを保存。id不変が互換性の前提",
+          "fact_ids": [
+            "F-018-015"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "id参照のJSON(READMEではplain JSON状態)。ブラウザ記憶+ファイル保存(Chrome/Edge)。",
+          "fact_ids": [
+            "F-018-015",
+            "F-018-007"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-001"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-004",
+      "kind": "module",
+      "name": "Voice In",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "routing",
+      "purpose": "タブをポリフォニックなボイスにするモジュール。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "POLYPHONY最大8、ノート束ケーブル",
+          "fact_ids": [
+            "F-018-016"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-001"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-005",
+      "kind": "module",
+      "name": "Strudel",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "clock_sequencer",
+      "purpose": "Strudelライブコーディングをラックに統合するモジュール。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "8ノート出力と内蔵REPL",
+          "fact_ids": [
+            "F-018-017"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-001"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-006",
+      "kind": "module",
+      "name": "Quad Low Pass Gate",
+      "maker": "chrisgr99(個人開発)",
+      "version": null,
+      "function_category": "filter",
+      "purpose": "4チャンネルのローパスゲート(READMEの音源/整形リストに記載)。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "同梱モジュールとして存在",
+          "fact_ids": [
+            "F-018-018"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-001"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-007",
+      "kind": "system",
+      "name": "Mod Synth 0",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "ブラウザ上で動作するモジュラー。React+Zustand+Web Audio/AudioWorklet、SVGケーブル。",
+      "synthesis_method": "AudioWorkletによるサンプル単位DSP(audio/cvを同一Float32Array)",
+      "features": [
+        {
+          "text": "サブパッチとマクロノブ",
+          "fact_ids": [
+            "F-018-021"
+          ]
+        },
+        {
+          "text": "アプリ内チュートリアル",
+          "fact_ids": [
+            "F-018-023"
+          ]
+        },
+        {
+          "text": "55モジュール",
+          "fact_ids": [
+            "F-018-019"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "表示系モジュールはSharedArrayBuffer(COOP/COEPヘッダ)が必要",
+          "fact_ids": [
+            "F-018-020"
+          ]
+        },
+        {
+          "text": "個人プロジェクトで更新実績は短期。LICENSEファイルがなく再利用条件不明確",
+          "fact_ids": [
+            "F-018-022"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "出力ポートからドラッグして入力に結線、右クリックで切断、ケーブルは信号種別で色分け。",
+          "fact_ids": [
+            "F-018-024"
+          ]
+        },
+        "timing": {
+          "summary": "clock(bpm 20-1000)とclock divなどのモジュールで拍を生成する。",
+          "fact_ids": [
+            "F-018-025"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-008",
+      "kind": "signal_standard",
+      "name": "Mod Synth 0 接続規則",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "ポート種別(audio/cv/gate/trigger)と接続可否。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "audio<->cv、gate<->trigger は相互可、audio/cv→gate/triggerは不可",
+          "fact_ids": [
+            "F-018-026"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-007"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-009",
+      "kind": "patch_storage",
+      "name": "Mod Synth 0 パッチ保存",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "オートセーブとJSONの書き出し/読み込み。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "LocalStorage自動保存+JSON export/import+サンプル埋め込み",
+          "fact_ids": [
+            "F-018-028"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "LocalStorage+JSONファイル。",
+          "fact_ids": [
+            "F-018-028"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-007"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-010",
+      "kind": "module",
+      "name": "vco (Mod Synth 0)",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "oscillator",
+      "purpose": "sine/saw/pulse出力とv/oct・fm・PWM入力を持つオシレータ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "3波形出力+v/oct/fm/PWM入力",
+          "fact_ids": [
+            "F-018-029"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-007"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-011",
+      "kind": "module",
+      "name": "euclid (Mod Synth 0)",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "clock_sequencer",
+      "purpose": "ユークリッドリズムのトリガシーケンサ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "steps/pulses/offset+accent出力",
+          "fact_ids": [
+            "F-018-030"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-007"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-012",
+      "kind": "module",
+      "name": "vcf (Mod Synth 0)",
+      "maker": "Kyle Shanks(個人開発)",
+      "version": null,
+      "function_category": "filter",
+      "purpose": "LP/HP/BPの多モードステートバリアブルフィルタ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "LP/HP/BP、cutoff/resonance CV",
+          "fact_ids": [
+            "F-018-031"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-007"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-013",
+      "kind": "system",
+      "name": "Plinth",
+      "maker": "Russell Simmons(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "モジュラー合成とプラグイン規格(VST/AU類)の考え方をブラウザに持ち込む実験。デモラックとBlock API草案を含む。",
+      "synthesis_method": "Web Audio(AudioWorkletを将来前提とした草案)",
+      "features": [
+        {
+          "text": "ブロック(コンポーネント)標準化のAPI草案",
+          "fact_ids": [
+            "F-018-032"
+          ]
+        },
+        {
+          "text": "プログラマティックに組み立てるホスト例",
+          "fact_ids": [
+            "F-018-034"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "2017年以降更新なし。AudioWorkletが'upcoming'の時代の草案",
+          "fact_ids": [
+            "F-018-033"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "ホストはブロックのinputs/outputsを列挙して接続(audioはnode.connect、gateEventはsubscribe/notify)。",
+          "fact_ids": [
+            "F-018-035"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-014",
+      "kind": "control_interface",
+      "name": "Plinth Block API(草案)",
+      "maker": "Russell Simmons(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "ブロックとホスト間の標準インターフェース草案。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "ポート型 audio / gateEvent",
+          "fact_ids": [
+            "F-018-036"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "ノブとCV入力の関係は仕様未定義",
+          "fact_ids": [
+            "F-018-037"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-013"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-015",
+      "kind": "patch_storage",
+      "name": "Plinth ブロック設定保存",
+      "maker": "Russell Simmons(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "ブロックのsave()によるJSON化可能な設定。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "ブロック毎save()でJSON設定。バッファはホストが抽出",
+          "fact_ids": [
+            "F-018-038"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "ホスト側が各ブロックのsave()結果を集める。",
+          "fact_ids": [
+            "F-018-038"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-013"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-016",
+      "kind": "system",
+      "name": "Patchcab",
+      "maker": "spectrome(OSS)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "Tone.jsとSvelteによるEurorack風ブラウザシンセ。コミュニティモジュールの作成・共有・リミックスができる。",
+      "synthesis_method": "Tone.js(Web Audio)",
+      "features": [
+        {
+          "text": "コミュニティモジュールとパッチ共有サイト",
+          "fact_ids": [
+            "F-018-039"
+          ]
+        },
+        {
+          "text": "npmでローカル実行",
+          "fact_ids": [
+            "F-018-040"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "最終更新2023-04で、開発ドキュメント未整備",
+          "fact_ids": [
+            "F-018-041"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-017",
+      "kind": "system",
+      "name": "Modulator",
+      "maker": "Luis Crespo(個人開発)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "Web Audio APIによるグラフィカルなモジュラー。静的HTML/JSアプリでサーバー不要。",
+      "synthesis_method": "Web Audio標準ノードのグラフ(音源/フィルタ/エフェクトノードをキャンバス上で接続)",
+      "features": [
+        {
+          "text": "シフトホバーによる接続トグル",
+          "fact_ids": [
+            "F-018-042"
+          ]
+        },
+        {
+          "text": "UI非依存ライブラリSynthLib",
+          "fact_ids": [
+            "F-018-045"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "デスクトップのみ想定、モバイル操作は不完全",
+          "fact_ids": [
+            "F-018-044"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-018",
+      "kind": "control_interface",
+      "name": "Modulator SynthLib",
+      "maker": "Luis Crespo(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "保存済みModulatorパッチを読み込み演奏するプログラマブルAPI。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "Voice/Instrument/Timer クラス",
+          "fact_ids": [
+            "F-018-046"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "velocityはほぼ未反映",
+          "fact_ids": [
+            "F-018-047"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-017"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-019",
+      "kind": "patch_storage",
+      "name": "Modulator パッチ(JSON)",
+      "maker": "Luis Crespo(個人開発)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "パッチはJSONとして保存され、プリセットはissue経由で寄稿できる。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "JSONパッチ+プリセット寄稿",
+          "fact_ids": [
+            "F-018-048"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "JSON。",
+          "fact_ids": [
+            "F-018-048"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-017"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-020",
+      "kind": "system",
+      "name": "web-synth",
+      "maker": "Casey Primozic / Ameobea",
+      "version": null,
+      "function_category": "system",
+      "purpose": "ブラウザ上のDAW的機能とモジュラー式グラフエディタを併せ持つ音楽制作プラットフォーム。",
+      "synthesis_method": "Web Audioグラフ+Rust/WASM+AudioWorklet(+Faust/Soul動的コンパイル)",
+      "features": [
+        {
+          "text": "Rust/WASM+AudioWorkletの高性能エンジン",
+          "fact_ids": [
+            "F-018-050"
+          ]
+        },
+        {
+          "text": "Faust/Soul DSPをパッチに動的導入",
+          "fact_ids": [
+            "F-018-051"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "モバイル最適化なし。ビルドにRust nightly等が必要",
+          "fact_ids": [
+            "F-018-054"
+          ]
+        },
+        {
+          "text": "GPL(2以上)。コードは再利用不可",
+          "fact_ids": [
+            "F-018-052"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "external_control": {
+          "summary": "WebMIDI経由でハードウェア鍵盤/コントローラ対応。",
+          "fact_ids": [
+            "F-018-055"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-021",
+      "kind": "patch_storage",
+      "name": "web-synth 状態保存",
+      "maker": "Casey Primozic / Ameobea",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "アプリ全体の状態をlocalStorageへシリアライズ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "localStorageシリアライズ+JSON blob",
+          "fact_ids": [
+            "F-018-056"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "完全な復元は'mostly but not completely realized'と自己申告",
+          "fact_ids": [
+            "F-018-056"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "localStorage JSON。",
+          "fact_ids": [
+            "F-018-056"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-020"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-022",
+      "kind": "system",
+      "name": "eurorack-js",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "Eurorackモジュラーをエミュレートするブラウザ型シンセ。AudioWorklet内で全DSPを実行する。",
+      "synthesis_method": "AudioWorkletによる固定ブロック処理。ポートはFloat32Arrayバッファ、1ブロック遅延のフィードバック",
+      "features": [
+        {
+          "text": "AudioWorklet必須、メインスレッドはUIミラー",
+          "fact_ids": [
+            "F-018-057"
+          ]
+        },
+        {
+          "text": "占有入力は置換、出力ファンアウト、フィードバックは1ブロック遅延",
+          "fact_ids": [
+            "F-018-059"
+          ]
+        },
+        {
+          "text": "84HP行制限などEurorack寸法を模す",
+          "fact_ids": [
+            "F-018-062"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "ブラウザはAudioWorklet対応+セキュアコンテキスト必須",
+          "fact_ids": [
+            "F-018-063"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "timing": {
+          "summary": "クロック系モジュール(CLK/DIV/SWING等)と、ブロック単位処理。512/128サンプルでのサンプルレート別DSP監査コマンドがある。",
+          "fact_ids": [
+            "F-018-064"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-023",
+      "kind": "signal_standard",
+      "name": "eurorack-js 電圧規約",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "system",
+      "purpose": "音声・ゲート・トリガ・ピッチCVの電圧規約。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "audio ±5V、gate 0/10V、trigger 5-10V/5-10ms、1V/oct",
+          "fact_ids": [
+            "F-018-065"
+          ]
+        },
+        {
+          "text": "ポート毎にvoltage範囲を宣言",
+          "fact_ids": [
+            "F-018-066"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-024",
+      "kind": "patch_storage",
+      "name": "eurorack-js パッチ形式 v3",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "バージョン3のみを受理する厳格なパッチ形式。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "v3厳格検証、原子的拒否",
+          "fact_ids": [
+            "F-018-067"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "state_save": {
+          "summary": "JSONオブジェクト(v3)。",
+          "fact_ids": [
+            "F-018-067"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-025",
+      "kind": "control_interface",
+      "name": "eurorack-js Patch Workbench(JSパッチ記述)",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "クライアント側JavaScriptでラックを記述・検証・適用するコードエディタ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "検証→適用→スナップショットのワークフロー、ロールバック付き",
+          "fact_ids": [
+            "F-018-069"
+          ]
+        },
+        {
+          "text": "MIDI CCマッピング",
+          "fact_ids": [
+            "F-018-070"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "スクリプトは信頼コード扱い、非同期/import不可、2秒タイムアウト",
+          "fact_ids": [
+            "F-018-068"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "external_control": {
+          "summary": "JSビルダー+MIDI CC。外部プロセスからのAPI/OSCは記載なし。",
+          "fact_ids": [
+            "F-018-068",
+            "F-018-070"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-026",
+      "kind": "module",
+      "name": "VCO (eurorack-js)",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "oscillator",
+      "purpose": "三角・ノコギリ・パルス出力の電圧制御オシレータ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "三角・ノコ・パルス出力",
+          "fact_ids": [
+            "F-018-071"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-027",
+      "kind": "module",
+      "name": "ADSR (eurorack-js)",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "envelope",
+      "purpose": "CVでタイミングを制御できるADSRエンベロープ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "タイミングCV入力付きADSR",
+          "fact_ids": [
+            "F-018-072"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-028",
+      "kind": "module",
+      "name": "PROB SEQ (eurorack-js)",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "clock_sequencer",
+      "purpose": "確率・ラチェット・条件付きゲートを持つ8ステップのトリガシーケンサ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "確率/ラチェット/条件/シード",
+          "fact_ids": [
+            "F-018-073"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-018-029",
+      "kind": "module",
+      "name": "FUNC (eurorack-js)",
+      "maker": "OrderAndCh4oS(OSS)",
+      "version": null,
+      "function_category": "envelope",
+      "purpose": "エンベロープ、サイクリングLFO、スルーを兼ねるファンクションジェネレータ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "envelope/cycle/slew",
+          "fact_ids": [
+            "F-018-074"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {},
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-018-022"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-018-001",
+      "entity_id": "REF-018-001",
+      "topic": "概要",
+      "statement": "Web Audio上で動くブラウザ型モジュラーで、ラックにモジュールを並べ仮想ケーブルで結線して演奏する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 冒頭",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-002",
+      "entity_id": "REF-018-001",
+      "topic": "ライセンス・状態",
+      "statement": "AGPL-3.0(v3のみ)で公開、alpha段階と自己申告。Strudel(AGPL)を内包する。GitHub上の最終pushは2026-08-22、リポジトリ作成は2026-07-08、stars 13。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README License / Current state。日付と星数はSRC-018-12",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-003",
+      "entity_id": "REF-018-001",
+      "topic": "リポジトリメタデータ",
+      "statement": "GitHub検索APIで pushed_at=2026-08-22、created_at=2026-07-08、stars=13、license=AGPL-3.0。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:chrisgr99/DreamRack",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-004",
+      "entity_id": "REF-018-001",
+      "topic": "ポリフォニー",
+      "statement": "タブ単位でボイス化でき、Voice Inモジュールを置いたタブのPOLYPHONYで最大8ボイスに複製される。モジュールごとに per note / shared が示される。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'A tab can be a voice'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-005",
+      "entity_id": "REF-018-001",
+      "topic": "モジュール数",
+      "statement": "README時点で32モジュールを同梱(音源、整形、タイミング、ボイス、ビデオ、ユーティリティ)。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'What's in it today'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-006",
+      "entity_id": "REF-018-001",
+      "topic": "ビデオ信号",
+      "statement": "音声と別にビデオ信号系統を持ち、CVでビデオパラメータは駆動できるが画像を音声入力へ加算はできない、という接続ルールがある。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'Video and audio in the same rack'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-007",
+      "entity_id": "REF-018-001",
+      "topic": "ブラウザ対応",
+      "statement": "主要ブラウザで動作するが、パッチのファイル保存はFile System Access対応のChrome/Edgeのみ。Electronデスクトップ版もあり(配布パッケージは未提供)。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README Running it",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-008",
+      "entity_id": "REF-018-001",
+      "topic": "プラグイン方式",
+      "statement": "モジュールはJavaScriptのフォルダ単位プラグインで、ビルド不要で追加できる。パネルはコードから生成するSVG。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'Modules are plug-ins'; MODULE-AUTHORING 節1-2",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-009",
+      "entity_id": "REF-018-001",
+      "topic": "計測UI",
+      "statement": "任意の端子にスコープを複数クリップでき、周波数/最大最小/DCオフセット表示、影響元/先のチェーン強調、音声スレッド負荷表示(Loadモジュール)を備える。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'Instruments, not guesswork'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-010",
+      "entity_id": "REF-018-001",
+      "topic": "knAck",
+      "statement": "ノブとジャックを同一箇所に統合する独自コントロールで、ノブ単位でアテヌバーターを有効化できる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'The knAck'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-011",
+      "entity_id": "REF-018-001",
+      "topic": "パッチ操作",
+      "statement": "ケーブルはクリックで掴んでクリックで置く操作で、スクロールでノブを回す。ケーブルは行き先入力の役割に応じた色になる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'How it feels to use' / 'The visual language'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-012",
+      "entity_id": "REF-018-001",
+      "topic": "AI連携",
+      "statement": "ラック全状態(モジュール・ケーブル・ノブ)をプレーンJSONとしてフォルダに書き出し、同じ場所からパッチを読み戻す。AIアシスタントが読み、変更案をユーザーが承認する運用と説明。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'A rack an AI can read'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-013",
+      "entity_id": "REF-018-002",
+      "topic": "ドメイン",
+      "statement": "descriptorのportのdomainはaudio/control(CV)/trigger(ゲート・パルス・クロック)の3種で、1V/oct入力はcontrolに role:'pitch' か名前'1V/Oct'を付けて緑で描画される。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-02",
+      "locator": "MODULE-AUTHORING 節3 Ports / 節8",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-014",
+      "entity_id": "REF-018-002",
+      "topic": "ケーブル色",
+      "statement": "ケーブルは接続先入力のドメイン色で描かれ、出力側ではなく行き先での役割を示す。双極性ジャックは中央に白点で示す。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-02",
+      "locator": "MODULE-AUTHORING 節8; README visual language",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-015",
+      "entity_id": "REF-018-003",
+      "topic": "保存単位",
+      "statement": "保存パッチはモジュールをdescriptorのid、配線をportのid、設定をparamのidで参照し、公開後のid改名は旧パッチを壊すので禁止。バージョンとソースリビジョンも刻印される。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-02",
+      "locator": "MODULE-AUTHORING 節9",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-016",
+      "entity_id": "REF-018-004",
+      "topic": "機能",
+      "statement": "タブに置くとそのタブがボイスになり、POLYPHONYで複製数(最大8)を設定、ポリのコンポジットケーブルがピッチ/ベロシティ/長さ等を運ぶ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'A tab can be a voice'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-017",
+      "entity_id": "REF-018-005",
+      "topic": "機能",
+      "statement": "Strudel全体をJSパッケージとして取り込み、.rack(1)〜.rack(8)の8ノート出力で各ボイスタブへ送る。サウンド指定パターンはStrudel自身の音声出力として出る。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "README 'Live coding, patched into the rack'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-018",
+      "entity_id": "REF-018-006",
+      "topic": "存在",
+      "statement": "'Shaping'分類に含まれる同梱モジュールとして列挙されている。内部仕様は未精読。",
+      "basis": "licensed_source",
+      "confidence": "low",
+      "source_id": "SRC-018-01",
+      "locator": "README 'What's in it today'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-019",
+      "entity_id": "REF-018-007",
+      "topic": "概要",
+      "statement": "仮想ケーブルで結線する単一ページのブラウザモジュラー。サーバー不要で、55モジュール(コマンドパレットから追加)を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README What It Is / Modules",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-020",
+      "entity_id": "REF-018-007",
+      "topic": "技術スタック",
+      "statement": "React+TypeScript+Vite、状態管理Zustand、音声処理はWeb Audio/AudioWorklet、ケーブル描画はSVG。表示系モジュールはSharedArrayBufferを要する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Tech Stack / Requirements",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-021",
+      "entity_id": "REF-018-007",
+      "topic": "サブパッチ",
+      "statement": "モジュール選択からサブパッチにグループ化でき、in/outモジュールでポート公開、ノブをマクロとして公開、ライブラリ保存と再利用が可能。同一定義のインスタンスは内部構造を共有する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Subpatches",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-022",
+      "entity_id": "REF-018-007",
+      "topic": "リポジトリメタデータ",
+      "statement": "作成2026-04-10、最終push 2026-05-06、stars 0、ライセンス未検出。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:Kyle-Shanks/mod-synth-0",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-023",
+      "entity_id": "REF-018-007",
+      "topic": "チュートリアル",
+      "statement": "内蔵チュートリアル(beginner/veteran)があり、進行はストア状態から自動判定される。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Tutorials",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-024",
+      "entity_id": "REF-018-007",
+      "topic": "パッチ操作",
+      "statement": "出力ポートをドラッグして入力にドロップ、右クリックで切断、入力端のドラッグで付け替え。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Patching",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-025",
+      "entity_id": "REF-018-007",
+      "topic": "クロック",
+      "statement": "clockモジュールはbpm 20-1000の整数、スウィング、リセット、ゲートと4msトリガ出力を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Modules > Control",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-026",
+      "entity_id": "REF-018-008",
+      "topic": "接続規則",
+      "statement": "audioとcvは相互接続可(同一Float32Arrayのため)、gateとtriggerも相互接続可、audio/cvからgate/triggerへは不可。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Patching > Connection Rules",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-027",
+      "entity_id": "REF-018-008",
+      "topic": "スケール",
+      "statement": "ノート系ステップシーケンサは-24..24半音、cv seqは-2..2などで、pitch CVのV/oct規約はモジュール表記(v/oct入力)で示される。電圧値の定義は精読範囲に記載なし。",
+      "basis": "licensed_source",
+      "confidence": "low",
+      "source_id": "SRC-018-03",
+      "locator": "README Modules",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-028",
+      "entity_id": "REF-018-009",
+      "topic": "保存",
+      "statement": "パッチはLocalStorageに自動保存され、JSONファイルとしてExport/Importできる。サンプラー音声はパッチデータに埋め込まれ、大きいサンプルでファイルも大きくなる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README What It Is",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-029",
+      "entity_id": "REF-018-010",
+      "topic": "仕様",
+      "statement": "sine,saw,pulseの3出力、v/oct・fm・パルス幅変調の入力を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Modules > Source",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-030",
+      "entity_id": "REF-018-011",
+      "topic": "仕様",
+      "statement": "steps/pulses/offsetノブとアクセント出力、アクティビティ表示を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Modules > Control",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-031",
+      "entity_id": "REF-018-012",
+      "topic": "仕様",
+      "statement": "マルチモードSVF(LP/HP/BP)で、カットオフ/レゾナンスにCV変調、エンベロープ入力を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-03",
+      "locator": "README Modules > Filter",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-032",
+      "entity_id": "REF-018-013",
+      "topic": "目的",
+      "statement": "モジュラーとオーディオプラグイン規格の発想を組み合わせ、再利用可能なオーディオ部品の標準形式の叩き台を示すことを目指す。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Introduction",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-033",
+      "entity_id": "REF-018-013",
+      "topic": "状態",
+      "statement": "リポジトリは2016-12作成、最終push 2017-04-29、stars 93、MIT。Block APIは'work in progress'と明記。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:rsimmons/plinth; README Block API",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-034",
+      "entity_id": "REF-018-013",
+      "topic": "構成",
+      "statement": "デモは rack.html の結線環境と、programmatic.html によるJSからの組み立て例を提供。ブロックは本リポジトリ内にバンドルされる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Introduction / API Example",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-035",
+      "entity_id": "REF-018-013",
+      "topic": "接続API",
+      "statement": "audioポートはAudioNode/AudioParamを参照してconnectし、gateEventポートは出力のsubscribe(callback)を入力のnotify(time,value)に渡して接続する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Block API > API Details",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-036",
+      "entity_id": "REF-018-014",
+      "topic": "API",
+      "statement": "ブロックは new Block(audioContext, viewContainer, settings)、.inputs/.outputs、.save()、.deactivate() を公開。ポート型は現状 audio と gateEvent の2種。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Block API > API Details",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-037",
+      "entity_id": "REF-018-014",
+      "topic": "ゲート表現",
+      "statement": "gateEventは(time,boolean)でWeb Audio時間軸のゲート変化を伝え、CV的な連続信号はaudioポートで運ぶ設計。パネルノブと入力ポートの対応関係は未規定。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Block API > Overview / API Details",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-038",
+      "entity_id": "REF-018-015",
+      "topic": "保存",
+      "statement": "各ブロックの.save()がJSON化可能な設定(ArrayBuffer/AudioBufferを含みうる)を返し、ホストがパッチとして保存/復元する。.saveは任意実装。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-04",
+      "locator": "README Block API > .save()",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-039",
+      "entity_id": "REF-018-016",
+      "topic": "概要",
+      "statement": "Tone.js+Svelte製のEurorack風モジュラー。VCV Rackに強く影響を受けたと自己申告し、patch.cabでパッチを作成・共有・リミックスできる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-05",
+      "locator": "README 冒頭",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-040",
+      "entity_id": "REF-018-016",
+      "topic": "配布",
+      "statement": "npm の@patchcab/coreと@patchcab/modulesでローカル起動でき、モジュールテンプレートリポジトリとPRによる共有経路がある。モジュール開発ドキュメントは'coming soon'。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-05",
+      "locator": "README Run locally / Build modules",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-041",
+      "entity_id": "REF-018-016",
+      "topic": "リポジトリメタデータ",
+      "statement": "作成2021-01-19、最終push 2023-04-27、stars 174、MIT。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:spectrome/patchcab",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-042",
+      "entity_id": "REF-018-017",
+      "topic": "概要",
+      "statement": "パレットのノードをキャンバスに追加し、ドラッグで配置、シフト押下で接続元から接続先へ結線、同じ接続をもう一度行うと切断される。キーボードで演奏。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-06",
+      "locator": "README Usage",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-043",
+      "entity_id": "REF-018-017",
+      "topic": "リポジトリメタデータ",
+      "statement": "作成2015-12-10、最終push 2023-01-03、stars 66。LICENSEファイルなし、package.jsonはISC。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:lcrespom/Modulator; package.json",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-044",
+      "entity_id": "REF-018-017",
+      "topic": "ブラウザ制約",
+      "statement": "モバイルでは接続・切断・削除ができず、Line InはSafari非対応、FirefoxではCPU消費が大きい。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-06",
+      "locator": "README Browser limitations",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-045",
+      "entity_id": "REF-018-017",
+      "topic": "SynthLib",
+      "statement": "音源生成部をUI非依存のSynthLib(約19KB)として分離し、保存済みインストゥルメントの読込と演奏ができる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-06",
+      "locator": "README SynthLib",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-046",
+      "entity_id": "REF-018-018",
+      "topic": "API",
+      "statement": "Voice(ac,json,dest)で単音、Instrumentで複数Voice管理のポリ、Timerで高精度スケジューリング。noteOn(midi,velocity,when)/noteOff/close を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-07",
+      "locator": "synthlib.md Voice / Instrument",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-047",
+      "entity_id": "REF-018-018",
+      "topic": "ベロシティ",
+      "statement": "ベロシティ引数は現状ほとんどのノードで無視される旨が記載。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-07",
+      "locator": "synthlib.md noteOn",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-048",
+      "entity_id": "REF-018-019",
+      "topic": "保存",
+      "statement": "SynthLibはパッチの'previously-saved Modulator patch'をパース済みJSONとして受け取る。プリセット追加はissueにJSONを貼る運用。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-07",
+      "locator": "synthlib.md constructor; README Contributing",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-049",
+      "entity_id": "REF-018-020",
+      "topic": "概要",
+      "statement": "DAW的機能に加え、モジュラー風パッチング、動的カスタムコード、ライブルーピングを備えるブラウザ音楽制作環境。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README 冒頭",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-050",
+      "entity_id": "REF-018-020",
+      "topic": "エンジン",
+      "statement": "WebAudioグラフが基盤で、各処理ノードはグラフ内ノードとして存在する。RustなどからコンパイルしたWASMをAudioWorklet上で実行する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README Tech / Design + Structure",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-051",
+      "entity_id": "REF-018-020",
+      "topic": "機能",
+      "statement": "8オペレータFM、MIDIエディタ、2系統ルーパー、Faust/Soul DSPの動的コンパイル、LFO/ランダム/クオンタイザ等のモジュラー系ユーティリティ、オシロ/スペアナ、カスタムUIなど。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README Notable Features",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-052",
+      "entity_id": "REF-018-020",
+      "topic": "ライセンス",
+      "statement": "LICENSEはGPL(version 2 or later)の文面で、Faust由来コードを含む派生物としてGPL化したと説明。GitHub APIのlicenseはNOASSERTION。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-09",
+      "locator": "LICENSE 冒頭",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-053",
+      "entity_id": "REF-018-020",
+      "topic": "リポジトリメタデータ",
+      "statement": "作成2018-11-11、最終push 2026-08-13、stars 583。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:Ameobea/web-synth",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-054",
+      "entity_id": "REF-018-020",
+      "topic": "制約",
+      "statement": "最新ブラウザ前提でモバイルUI未最適化。開発ビルドにRust nightly、wasm-bindgen、wasm-opt、Node/Yarn、Justが必要。READMEはビルド手順が古い可能性を明記。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README Building + Running",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-055",
+      "entity_id": "REF-018-020",
+      "topic": "MIDI",
+      "statement": "WebMIDIでMIDIキーボード/コントローラを使える。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README Tech / Notable Features",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-056",
+      "entity_id": "REF-018-021",
+      "topic": "保存",
+      "statement": "タブを閉じる際に全状態をlocalStorageへシリアライズし、再読込で復元する。保存/読込はlocalStorage相当のJSON blobの作成/ロード。プリセットと作品の共有はバックエンドAPI(MySQL)で行う。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-08",
+      "locator": "README Design + Structure / Building",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-057",
+      "entity_id": "REF-018-022",
+      "topic": "概要",
+      "statement": "Eurorack風ブラウザエミュレータ。RackHostがメインスレッドUIミラーと、必須のAudioWorklet内の本番DSPを同期させる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Architecture",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-058",
+      "entity_id": "REF-018-022",
+      "topic": "モジュール群",
+      "statement": "組込みモジュールはMIDI/クロック/音源/ボイス/モジュレーション/シーケンサ/クオンタイザ/フィルタ/エフェクト/ユーティリティ/出力のカテゴリに多数(80弱)ある。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Modules",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-059",
+      "entity_id": "REF-018-022",
+      "topic": "不変条件",
+      "statement": "入力は1本のケーブルのみ受け、占有入力へ結線すると置換される。出力はファンアウト可。フィードバック辺は明示的に1ブロック遅延。パッチ有効化はリビジョン確認付きでアトミック。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Runtime invariants",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-060",
+      "entity_id": "REF-018-022",
+      "topic": "リポジトリメタデータ",
+      "statement": "作成2025-07-22、最終push 2026-08-03、stars 8、MIT。",
+      "basis": "third_party",
+      "confidence": "medium",
+      "source_id": "SRC-018-12",
+      "locator": "search/repositories?q=repo:OrderAndCh4oS/eurorack-js",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-061",
+      "entity_id": "REF-018-022",
+      "topic": "モジュール拡張",
+      "statement": "各モジュールはDSP+UIのフォルダで、信頼できるプラグインとしてregisterPlugin(manifest)で追加でき、メインスレッド定義とworklet入口の両方が必要。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Creating a Module / Architecture",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-062",
+      "entity_id": "REF-018-022",
+      "topic": "行制限",
+      "statement": "ワークベンチ検証でモジュール配置時に1行84HPの制限を強制する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-11",
+      "locator": "patch-workbench.md Validate",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-063",
+      "entity_id": "REF-018-022",
+      "topic": "要件",
+      "statement": "AudioWorkletが対応するブラウザとセキュアコンテキスト(localhostは可)が必要。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Development",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-064",
+      "entity_id": "REF-018-022",
+      "topic": "監査",
+      "statement": "DSP監査コマンドで44.1/48/96kHz、128/512サンプルブロックを網羅し、宣言電圧契約の違反を検出できる。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Development",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-065",
+      "entity_id": "REF-018-023",
+      "topic": "電圧",
+      "statement": "音声は±5V双極、ゲートは0V/10V、トリガは5〜10V・5〜10msパルス、ピッチは1V/oct。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Voltage Standards",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-066",
+      "entity_id": "REF-018-023",
+      "topic": "宣言",
+      "statement": "各モジュールのUIでポート毎にvoltage{min,max}と信号種別(cv等)を宣言し、DSPがその範囲に合わせる契約になっている。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Creating a Module",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-067",
+      "entity_id": "REF-018-024",
+      "topic": "形式",
+      "statement": "パッチはversion:3、plugins、modules(id/type/row/index)、params、cables(fromModule/fromPort/toModule/toPort)、midiMappingsで構成される。v3のみ受理し、未知モジュール/パラメータ/ポート、重複入力はパッチ全体を原子的に拒否する。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Patch Format",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-068",
+      "entity_id": "REF-018-025",
+      "topic": "API",
+      "statement": "patch().module(type,name,params).connect(from,to).set().midi() のビルダーAPIでパッチを記述し、Validate/Apply/Snapshotを行う。スクリプトは使い捨てWorkerで2秒タイムアウト付きで評価され、読み込んだスクリプトは自動実行されない。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-11",
+      "locator": "patch-workbench.md; README Patch Workbench",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-069",
+      "entity_id": "REF-018-025",
+      "topic": "適用の安全性",
+      "statement": "Validateは非破壊で配置・ポート・MIDIマッピング・占有入力を検査し、Applyは失敗時に前パッチへロールバックする。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-11",
+      "locator": "patch-workbench.md Validate, Apply, Snapshot",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-070",
+      "entity_id": "REF-018-025",
+      "topic": "MIDI",
+      "statement": "midi()で'channel:cc'(チャンネルは0始まり)キーのCCマッピングを追加。モジュールにはMIDI-CV/MIDI-4/MIDI-CC/M-CLK/MIDI-DRUMがある。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-11",
+      "locator": "patch-workbench.md .midi(); README MIDI",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-071",
+      "entity_id": "REF-018-026",
+      "topic": "仕様",
+      "statement": "triangle/saw/pulse出力を持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Sources",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-072",
+      "entity_id": "REF-018-027",
+      "topic": "仕様",
+      "statement": "ADSRでタイミング入力にCVを受ける。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Modulation",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-073",
+      "entity_id": "REF-018-028",
+      "topic": "仕様",
+      "statement": "8ステップのトリガシーケンサで、ラチェット、スキップ、条件付きゲート、決定的シードを持つ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Sequencers",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-018-074",
+      "entity_id": "REF-018-029",
+      "topic": "仕様",
+      "statement": "エンベロープ、サイクリングLFO、スルー挙動を持つファンクションジェネレータ。",
+      "basis": "licensed_source",
+      "confidence": "medium",
+      "source_id": "SRC-018-10",
+      "locator": "README Modulation",
+      "verified_on": "2026-11-13"
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-018-001",
+      "item": "JSON状態のスキーマ・フォルダ位置・読み戻し手順・安全性(音量制限など)",
+      "tried_sources": [
+        "SRC-018-01",
+        "SRC-018-02"
+      ],
+      "impact_on_spec": "DreamRackの状態JSON/AI連携の仕様化(入出力形式、検証の有無)に影響。READMEは機能の存在のみ記述"
+    },
+    {
+      "entity_id": "REF-018-002",
+      "item": "電圧の物理値規約(1V/oct以外の電圧範囲、ゲート電圧、音声レベル)",
+      "tried_sources": [
+        "SRC-018-01",
+        "SRC-018-02"
+      ],
+      "impact_on_spec": "DreamRackのデジタル信号値域の仕様比較ができない。精読範囲では電圧値の記載なし"
+    },
+    {
+      "entity_id": "REF-018-003",
+      "item": "パッチJSONの具体的フィールド構成",
+      "tried_sources": [
+        "SRC-018-01",
+        "SRC-018-02"
+      ],
+      "impact_on_spec": "パッチ形式の比較に影響。ファイル構造は未取得"
+    },
+    {
+      "entity_id": "REF-018-006",
+      "item": "ポート/パラメータ詳細(LPG 292系とのヒントのみ)",
+      "tried_sources": [
+        "SRC-018-01",
+        "SRC-018-02"
+      ],
+      "impact_on_spec": "個別モジュール仕様は取得できず、機能カテゴリ比較に限る"
+    },
+    {
+      "entity_id": "REF-018-008",
+      "item": "信号の数値規約(基準電圧、1V/oct換算、ゲート電圧)",
+      "tried_sources": [
+        "SRC-018-03"
+      ],
+      "impact_on_spec": "ソース未取得のため数値規約を比較できない"
+    },
+    {
+      "entity_id": "REF-018-009",
+      "item": "JSONスキーマ、バージョニング、互換性方針",
+      "tried_sources": [
+        "SRC-018-03"
+      ],
+      "impact_on_spec": "パッチ形式の比較に影響"
+    },
+    {
+      "entity_id": "REF-018-007",
+      "item": "外部制御(MIDI/OSC)の有無",
+      "tried_sources": [
+        "SRC-018-03"
+      ],
+      "impact_on_spec": "README記載なし。外部制御比較で空欄になる"
+    },
+    {
+      "entity_id": "REF-018-013",
+      "item": "デモラックのパッチファイル形式(rack.htmlの保存フォーマット)",
+      "tried_sources": [
+        "SRC-018-04"
+      ],
+      "impact_on_spec": "READMEに記載なし。ホスト側の保存形式は未確認"
+    },
+    {
+      "entity_id": "REF-018-016",
+      "item": "パッチ保存形式・信号規約・外部制御",
+      "tried_sources": [
+        "SRC-018-05"
+      ],
+      "impact_on_spec": "READMEが短く本体ソース未取得。パッチ形式/信号規約の比較不可"
+    },
+    {
+      "entity_id": "REF-018-019",
+      "item": "JSONスキーマ詳細・ブラウザ内自動保存の有無",
+      "tried_sources": [
+        "SRC-018-06",
+        "SRC-018-07"
+      ],
+      "impact_on_spec": "パッチ形式比較に影響"
+    },
+    {
+      "entity_id": "REF-018-020",
+      "item": "個別モジュール仕様・信号規約(docsサイト synth.ameo.dev/docs は未取得)",
+      "tried_sources": [
+        "SRC-018-08"
+      ],
+      "impact_on_spec": "個別モジュール/信号規約の比較不可。docsホスト synth.ameo.dev が必要"
+    },
+    {
+      "entity_id": "REF-018-025",
+      "item": "OSC/外部プロセスAPI・認証・音量制限",
+      "tried_sources": [
+        "SRC-018-10",
+        "SRC-018-11"
+      ],
+      "impact_on_spec": "外部エージェント連携の可否(ローカルUI外からの制御)は仕様化に影響。記載なし"
+    },
+    {
+      "entity_id": null,
+      "item": "各プロジェクトの実ソースでのオーディオエンジン詳細(AudioWorklet利用割合、ブロックサイズ、サンプル単位CV)を未検証。DreamRack/Patchcab/Plinthはソース未取得",
+      "tried_sources": [
+        "SRC-018-01",
+        "SRC-018-03",
+        "SRC-018-04",
+        "SRC-018-05"
+      ],
+      "impact_on_spec": "音声エンジン設計差の比較は、READMEが述べる範囲(自己申告)に限る"
+    },
+    {
+      "entity_id": null,
+      "item": "Patchcab・Plinth・ModulatorのREADME以外の仕様/動作確認(実機で動かして検証していない)",
+      "tried_sources": [
+        "SRC-018-04",
+        "SRC-018-05",
+        "SRC-018-06"
+      ],
+      "impact_on_spec": "third_party扱いのメタデータ(stars・最終更新)のみで動作状況は不明。2017/2023年の古さに注意"
+    }
+  ]
+}

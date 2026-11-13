@@ -1,0 +1,100 @@
+{
+ "sources": [
+  {
+   "title": "VCV Rack Manual(Voltage Standards, Polyphony, Core, Menu Bar, Installing, Version, Rack Pro, Plugin Licensing)",
+   "publisher": "VCV",
+   "url": "https://vcvrack.com/manual/",
+   "doc_version": "Rack 2 manual (unknown date)",
+   "doc_type": "manufacturer_manual",
+   "checked_scope": "VoltageStandards, Polyphony, Core, MenuBar, GettingStarted, Installing, Version, RackPro, PluginLicensing を通読",
+   "license_note": "VCV著作物。要約のみ記録し転載しない。",
+   "id": "SRC-005-01",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "VCV Free Modules(Fundamental)モジュールマニュアル",
+   "publisher": "VCV",
+   "url": "https://vcvrack.com/Fundamental",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "checked_scope": "VCO, VCF, VCA, LFO, ADSR, Noise, Random の説明",
+   "license_note": "Fundamentalのビジュアルデザインは CC BY-NC-ND 4.0(商用・派生不可)。ソースはGPLv3+。コード・画像・パネルは再利用しない。",
+   "id": "SRC-005-02",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "VCV Rack LICENSE.md / README.md (v2 branch)",
+   "publisher": "VCV",
+   "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/LICENSE.md",
+   "doc_version": "v2 branch",
+   "doc_type": "source_code",
+   "checked_scope": "LICENSE.md と README.md",
+   "license_note": "GPLv3+に、非商用プラグイン例外と商用ライセンス選択肢。GPLコードは取り込めない前提のため、ソース・アセットは再利用しない。VCV名称・ロゴは商標。",
+   "id": "SRC-005-03",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "VCV Rack src/patch.cpp, include/engine/Port.hpp (v2)",
+   "publisher": "VCV",
+   "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/src/patch.cpp",
+   "doc_version": "v2 branch",
+   "doc_type": "source_code",
+   "checked_scope": "patch.cpp(保存・読込・アーカイブ判定)、Port.hpp(チャンネル上限)",
+   "license_note": "GPLv3+。実装の理解のみに使い、コードは再利用しない。",
+   "id": "SRC-005-04",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "VCV Rack include/engine/Module.hpp (v2)",
+   "publisher": "VCV",
+   "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/include/engine/Module.hpp",
+   "doc_version": "v2 branch",
+   "doc_type": "api_doc",
+   "checked_scope": "Module構造体の主要メソッド宣言(process, dataToJson)のみ",
+   "license_note": "GPLv3+(プラグイン例外あり)。コードは再利用しない。",
+   "id": "SRC-005-05",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "id": "SRC-005-06",
+   "title": "VCV Rack (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/VCV_Rack",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Whole article read (stub): Overview, Interconnectivity.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-005-07",
+   "title": "Eurorack (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Eurorack",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Section Electrical read, to compare with VCV Rack levels.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-005-08",
+   "title": "CV/gate (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Sections CV and Trigger read, to compare with VCV Rack levels.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  }
+ ]
+}

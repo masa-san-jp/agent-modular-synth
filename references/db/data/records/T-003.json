@@ -1,0 +1,1387 @@
+{
+ "target_id": "T-003",
+ "entities": [
+  {
+   "id": "REF-003-001",
+   "kind": "system",
+   "name": "Mother-32",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Semi-modular analog mono synthesizer with 32-point patchbay and sequencer.",
+   "synthesis_method": "analog subtractive; normalled internal routing + patchbay",
+   "features": [
+    {
+     "text": "No patching needed; patchbay adds routing",
+     "fact_ids": [
+      "F-003-001",
+      "F-003-003"
+     ]
+    },
+    {
+     "text": "Normalled mod and mixer inputs",
+     "fact_ids": [
+      "F-003-007"
+     ]
+    },
+    {
+     "text": "MIDI IN and Eurorack mount",
+     "fact_ids": [
+      "F-003-004",
+      "F-003-006"
+     ]
+    },
+    {
+     "text": "Reviewer measurements and Moog statements add 1V/oct tracking caveats, trimmers, assignable CV list",
+     "fact_ids": [
+      "F-003-026",
+      "F-003-032",
+      "F-003-041"
+     ]
+    },
+    {
+     "text": "Panel 60 HP, 12 V DC wall adapter, 230 mA",
+     "fact_ids": [
+      "F-003-044"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Voltage levels not given on product page; manual not read",
+     "fact_ids": [
+      "F-003-011"
+     ]
+    },
+    {
+     "text": "Wikipedia and SOS differ from Moog page on filter type, LFO range, velocity/aftertouch",
+     "fact_ids": [
+      "F-003-034",
+      "F-003-036",
+      "F-003-043"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "32 x 3.5 mm patchbay; legend scheme and point names known",
+     "fact_ids": [
+      "F-003-028",
+      "F-003-029"
+     ]
+    },
+    "timing": {
+     "summary": "Internal clock, MIDI Clock, Tempo CV (clock/DIN sync)",
+     "fact_ids": [
+      "F-003-038"
+     ]
+    },
+    "state_save": {
+     "summary": "Only sequences documented",
+     "fact_ids": [
+      "F-003-022",
+      "F-003-023"
+     ]
+    },
+    "external_control": {
+     "summary": "MIDI IN, CV/gate inputs",
+     "fact_ids": [
+      "F-003-024",
+      "F-003-008"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-002",
+   "kind": "signal_standard",
+   "name": "Mother-32 CV/gate/audio conventions",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "What the product page states about CV and gate jacks.",
+   "synthesis_method": "CV 1V/oct, linear FM, +/-5 V mixer CV",
+   "features": [
+    {
+     "text": "1V/oct pitch and linear FM inputs",
+     "fact_ids": [
+      "F-003-010"
+     ]
+    },
+    {
+     "text": "Long input/output lists",
+     "fact_ids": [
+      "F-003-008",
+      "F-003-009"
+     ]
+    },
+    {
+     "text": "1V/oct input on VCO; filter/LFO need attenuator or VC mixer to track",
+     "fact_ids": [
+      "F-003-026"
+     ]
+    },
+    {
+     "text": "MIDI notes 0-120 map to -5..+5 V",
+     "fact_ids": [
+      "F-003-027"
+     ]
+    },
+    {
+     "text": "Patch point names and legend scheme",
+     "fact_ids": [
+      "F-003-028",
+      "F-003-029"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Gate/trigger levels not stated",
+     "fact_ids": [
+      "F-003-011"
+     ]
+    },
+    {
+     "text": "Gate threshold and audio levels unstated",
+     "fact_ids": [
+      "F-003-030"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "VCO 1V/OCT",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-010"
+     ]
+    },
+    {
+     "name": "VCO LINEAR FM",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-008"
+     ]
+    },
+    {
+     "name": "VC MIX CONTROL",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-003-010"
+     ]
+    },
+    {
+     "name": "GATE",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-008"
+     ]
+    },
+    {
+     "name": "ASSIGN",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-009"
+     ]
+    },
+    {
+     "name": "VCO SAW",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-009"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-003",
+   "kind": "module",
+   "name": "VCO",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "Single oscillator.",
+   "synthesis_method": "analog VCO",
+   "features": [
+    {
+     "text": "8 Hz-8 kHz, pulse and saw",
+     "fact_ids": [
+      "F-003-012"
+     ]
+    },
+    {
+     "text": "Mod to PW/freq",
+     "fact_ids": [
+      "F-003-013"
+     ]
+    },
+    {
+     "text": "Wave/CV/trimmer details",
+     "fact_ids": [
+      "F-003-031",
+      "F-003-032"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [
+    {
+     "name": "Frequency",
+     "unit": "octave",
+     "range": {
+      "min": -1,
+      "max": 1,
+      "unit": "oct"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-012"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-004",
+   "kind": "module",
+   "name": "VCF",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "Switchable LP/HP ladder.",
+   "synthesis_method": "transistor ladder 4-pole",
+   "features": [
+    {
+     "text": "20 Hz-20 kHz LP/HP",
+     "fact_ids": [
+      "F-003-014"
+     ]
+    },
+    {
+     "text": "Measured cutoff 17 Hz-21.5 kHz; CV for cutoff and resonance",
+     "fact_ids": [
+      "F-003-033"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Wikipedia says state-variable (conflict)",
+     "fact_ids": [
+      "F-003-034"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "Cutoff",
+     "unit": "Hz",
+     "range": {
+      "min": 20,
+      "max": 20000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-014"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-005",
+   "kind": "module",
+   "name": "Envelope (EG)",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "AD or ASD envelope.",
+   "synthesis_method": "envelope",
+   "features": [
+    {
+     "text": "Multi-trigger AD or single-trigger ASD",
+     "fact_ids": [
+      "F-003-015"
+     ]
+    },
+    {
+     "text": "Moog-quoted attack/decay times",
+     "fact_ids": [
+      "F-003-035"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-006",
+   "kind": "module",
+   "name": "LFO",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "lfo",
+   "purpose": "Triangle/square LFO.",
+   "synthesis_method": "LFO",
+   "features": [
+    {
+     "text": "1-350 Hz panel rate",
+     "fact_ids": [
+      "F-003-016"
+     ]
+    },
+    {
+     "text": "Range 0.1-600 Hz per SOS; differs from Moog page",
+     "fact_ids": [
+      "F-003-036"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [
+    {
+     "name": "Rate",
+     "unit": "Hz",
+     "range": {
+      "min": 1,
+      "max": 350,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-016"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-007",
+   "kind": "module",
+   "name": "32-step sequencer",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "Step sequencer with keyboard and step-edit modes.",
+   "synthesis_method": "sequencer",
+   "features": [
+    {
+     "text": "32 steps, 64 locations",
+     "fact_ids": [
+      "F-003-017"
+     ]
+    },
+    {
+     "text": "Per-step glide",
+     "fact_ids": [
+      "F-003-018"
+     ]
+    },
+    {
+     "text": "Clock available at assign out",
+     "fact_ids": [
+      "F-003-019"
+     ]
+    },
+    {
+     "text": "Per-step gate, slew, ratchet, accent",
+     "fact_ids": [
+      "F-003-037"
+     ]
+    },
+    {
+     "text": "Clock sources incl. MIDI clock and DIN sync",
+     "fact_ids": [
+      "F-003-038"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Ratchet/gate length detail only from walkthrough titles",
+     "fact_ids": [
+      "F-003-020"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Tempo, swing, run/stop, hold, reset",
+     "fact_ids": [
+      "F-003-018",
+      "F-003-019"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-008",
+   "kind": "module",
+   "name": "Voltage controlled mixer",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "amplifier_mixer",
+   "purpose": "VC crossfade/mix.",
+   "synthesis_method": "VC mixer",
+   "features": [
+    {
+     "text": "Crossfades oscillator and external audio; second mix of two DC-coupled signals",
+     "fact_ids": [
+      "F-003-021"
+     ]
+    },
+    {
+     "text": "Acts as DC source 0 V / +5 V",
+     "fact_ids": [
+      "F-003-039"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-009",
+   "kind": "patch_storage",
+   "name": "Mother-32 sequence memory",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "What can be stored.",
+   "synthesis_method": "sequence memory",
+   "features": [
+    {
+     "text": "64 sequence locations",
+     "fact_ids": [
+      "F-003-022"
+     ]
+    },
+    {
+     "text": "64 memories confirmed by SOS and Wikipedia",
+     "fact_ids": [
+      "F-003-040"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Sound/patch saving not described",
+     "fact_ids": [
+      "F-003-023"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "64 sequence memories; no panel/patch memory described",
+     "fact_ids": [
+      "F-003-040"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-010",
+   "kind": "control_interface",
+   "name": "Mother-32 MIDI and assignable output",
+   "maker": "Moog Music",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "MIDI-to-CV with 16-function assignable output.",
+   "synthesis_method": "MIDI to CV",
+   "features": [
+    {
+     "text": "Note, gate, pitch bend; others via assign out",
+     "fact_ids": [
+      "F-003-024"
+     ]
+    },
+    {
+     "text": "16 assign functions",
+     "fact_ids": [
+      "F-003-025"
+     ]
+    },
+    {
+     "text": "16 assignable CVs, 9 sequencer and 7 MIDI",
+     "fact_ids": [
+      "F-003-041"
+     ]
+    },
+    {
+     "text": "Channel, clock, program change; no MIDI Out/Thru",
+     "fact_ids": [
+      "F-003-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Wikipedia contradicts velocity/aftertouch",
+     "fact_ids": [
+      "F-003-043"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "MIDI IN",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-024"
+     ]
+    },
+    {
+     "name": "ASSIGN",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-003-025"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDI in (notes, clock, PC); assignable CV out",
+     "fact_ids": [
+      "F-003-041",
+      "F-003-042"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-003-011",
+   "kind": "module",
+   "name": "VCA (Mother-32)",
+   "maker": "Moog Music",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "Output amplifier with drone and contoured modes.",
+   "synthesis_method": "analog VCA with on/EG modes",
+   "features": [
+    {
+     "text": "On (drone) and EG (contoured) modes",
+     "fact_ids": [
+      "F-003-047"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-003-012",
+   "kind": "module",
+   "name": "Mult (Mother-32)",
+   "maker": "Moog Music",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "Buffered one-in/two-out signal multiple on the patchbay.",
+   "synthesis_method": "buffered multiple",
+   "features": [
+    {
+     "text": "One-in/two-out buffered multiple",
+     "fact_ids": [
+      "F-003-048"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-003-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-003-001",
+   "entity_id": "REF-003-001",
+   "topic": "positioning",
+   "statement": "Moog's product page calls Mother-32 a semi-modular analog synthesizer that works without patching and has a 32-point patchbay, a 32-note step sequencer, and MIDI-to-CV.",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Overview text",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-002",
+   "entity_id": "REF-003-001",
+   "topic": "sound engine",
+   "statement": "Monophonic analog; one oscillator (pulse and saw), one white noise generator, one external audio input; 13-note keypad.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-003",
+   "entity_id": "REF-003-001",
+   "topic": "patchbay",
+   "statement": "Patchbay is 32 jacks of 3.5 mm.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-004",
+   "entity_id": "REF-003-001",
+   "topic": "size and mounting",
+   "statement": "60 HP Eurorack mounting dimensions with 26 mm depth; draws 230 mA from +12 V on a 10-pin header; included supply 110-250 VAC to +12 VDC 1 A; 2.8 W; 3.5 lb; 12.57 x 4.21 x 5.24 in.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-005",
+   "entity_id": "REF-003-001",
+   "topic": "expandability",
+   "statement": "Page states it can be relocated into a Eurorack enclosure and several units can be combined, via a wooden-sided aluminum enclosure.",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, 'Exponentially Expandable'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-006",
+   "entity_id": "REF-003-001",
+   "topic": "I/O",
+   "statement": "Audio out is quarter-inch TS line shared with a TRS headphone jack; external audio in is 3.5 mm; MIDI IN is 5-pin DIN.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-007",
+   "entity_id": "REF-003-001",
+   "topic": "normalled connections",
+   "statement": "Spec lists a VCO modulation input normalled to the EG and an external-audio mixer input normalled to white noise.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-008",
+   "entity_id": "REF-003-002",
+   "topic": "CV/gate input list",
+   "statement": "Listed inputs include external audio, mix CV, VCA CV, VCF cutoff and resonance, VCO 1V/octave, VCO linear FM, VCO modulation, LFO rate, Mix 1/2, VC mix control, mult, gate, tempo, run/stop, reset and hold.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-009",
+   "entity_id": "REF-003-002",
+   "topic": "CV/gate output list",
+   "statement": "Listed outputs: VCA, noise, VCF, VCO saw and pulse, LFO triangle and square, VC mix, Mult and Mult 2, Assign, EG, KB, Gate.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-010",
+   "entity_id": "REF-003-002",
+   "topic": "pitch and FM CV",
+   "statement": "VCO pitch input is stated as 1V/octave and a separate linear FM input exists; mixer CV crossfade range is stated as +/-5 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-011",
+   "entity_id": "REF-003-002",
+   "topic": "voltage and gate levels",
+   "statement": "Gate threshold, trigger level and output voltage ranges are not given on the product page.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page (absence in Specs table)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-012",
+   "entity_id": "REF-003-003",
+   "topic": "range",
+   "statement": "Oscillator 8 Hz to 8 kHz (16 kHz maximum with LFO/CV); pulse and saw; frequency control +/- 1 octave.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-013",
+   "entity_id": "REF-003-003",
+   "topic": "modulation",
+   "statement": "Modulation destinations: pulse width, oscillator frequency, filter cutoff, with polarity; VCO mod input normalled to EG.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-014",
+   "entity_id": "REF-003-004",
+   "topic": "type",
+   "statement": "20 Hz-20 kHz switchable low-pass/high-pass 4-pole transistor ladder filter.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-015",
+   "entity_id": "REF-003-005",
+   "topic": "modes",
+   "statement": "Envelope is selectable AD (multi-trigger) or ASD (single-trigger).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-016",
+   "entity_id": "REF-003-006",
+   "topic": "waveforms and rate",
+   "statement": "LFO triangle or square; panel rate 1-350 Hz (600 Hz max).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-017",
+   "entity_id": "REF-003-007",
+   "topic": "capacity",
+   "statement": "Step sequencer has 32 steps with 64 sequence locations; keyboard and step-edit modes.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-018",
+   "entity_id": "REF-003-007",
+   "topic": "controls",
+   "statement": "Panel controls: tempo, swing, run/stop, hold, reset; glide can be set per step.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-019",
+   "entity_id": "REF-003-007",
+   "topic": "clock I/O",
+   "statement": "Tempo, run/stop, reset and hold are listed among patchable inputs; sequencer clock, clock/2, clock/4, accent and step 1 are assignable-output choices.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-020",
+   "entity_id": "REF-003-007",
+   "topic": "video walkthroughs",
+   "statement": "Product-page walkthrough titles mention ratcheting and per-step gate length; no parameter ranges given.",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Video Walkthroughs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-021",
+   "entity_id": "REF-003-008",
+   "topic": "voltage controlled mixer",
+   "statement": "VC mixer crossfades the selected oscillator wave and external audio; a second VC mixer cross-fades two DC-coupled signals.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-022",
+   "entity_id": "REF-003-009",
+   "topic": "sequence storage",
+   "statement": "The only stored items named in specs are 64 sequence locations.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-023",
+   "entity_id": "REF-003-009",
+   "topic": "sound patches",
+   "statement": "The page does not describe saving panel settings or patch-cable layouts.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page (absence)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-024",
+   "entity_id": "REF-003-010",
+   "topic": "MIDI",
+   "statement": "MIDI IN is a 5-pin DIN; MIDI control covers note, gate and pitch bend; mod wheel, aftertouch and velocity are available through the assignable output.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-025",
+   "entity_id": "REF-003-010",
+   "topic": "assignable output",
+   "statement": "Assignable output offers 16 functions: sequencer accent, clock, clock/2, clock/4, decimated ramp/saw/triangle, stepped random, step 1, MIDI velocity, aftertouch, pitch bend, CC1, CC2, CC4, CC7.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-003-01",
+   "locator": "Mother-32 product page, Specs table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-003-026",
+   "entity_id": "REF-003-002",
+   "topic": "1V/oct tracking",
+   "statement": "VCO pitch input is labelled 1V/octave. Reviewer found the VCF and LFO do not track exactly 1V/oct as shipped; Moog said only trimmers critical to interconnection were fitted and 1V/oct use is possible via an external attenuator or the VC Mixer.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth section (VCF and LFO paragraphs); Patchbay table",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-027",
+   "entity_id": "REF-003-002",
+   "topic": "MIDI note to CV scale",
+   "statement": "MIDI notes 0 to 120 (10 octaves) are converted to CV spanning -5 V to +5 V.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard, Sequencer & MIDI section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-028",
+   "entity_id": "REF-003-002",
+   "topic": "jack legend conventions",
+   "statement": "Patchbay legends: plain text marks inputs, boxed text marks outputs, a white ring around the nut marks gate inputs. 32 x 3.5 mm jacks; only five short patch cables are supplied.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Patchbay box; In Use section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-029",
+   "entity_id": "REF-003-002",
+   "topic": "patch point names",
+   "statement": "Named patch points listed by the review (input/output column pairing is lost in the flattened table, so only the names are recorded): External Audio, Mix CV, VCA CV, VCF Cutoff, VCF Resonance, VCO 1V/octave, VCO Linear FM, VCO Modulation, LFO Rate, Mix 1, Mix 2, VC Mix Control, Mult; outputs VCA, Noise, VCF, VCO Saw, VCO Pulse, LFO Triangle, LFO Square, VC Mix, Mult 1/2, Assign, EG, KB; gate inputs Gate, Tempo, Run/Stop, Reset, Hold.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Patchbay box (table)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-030",
+   "entity_id": "REF-003-002",
+   "topic": "audio level",
+   "statement": "No audio or CV peak-to-peak voltage is given for the patchbay in this review; gate threshold and trigger levels are also not stated (+5 V pulses are named only for assignable-output functions).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review (whole text checked)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-031",
+   "entity_id": "REF-003-003",
+   "topic": "VCO details",
+   "statement": "Single VCO with sawtooth and pulse (PWM). Only one wave is heard without cables, both are on the patchbay. Three pitch CV inputs; portamento; stated 1V/oct range 8 Hz to 8 kHz, about 16 kHz maximum. Agrees with Moog page values.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth; Specifications box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-032",
+   "entity_id": "REF-003-003",
+   "topic": "user trimmers",
+   "statement": "Four user-reachable trimmers: VCO offset, frequency-control gain, external 1V/oct gain, keyboard CV gain. There are none for filter or LFO tracking.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, In Use section (calibration paragraph)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-033",
+   "entity_id": "REF-003-004",
+   "topic": "filter character",
+   "statement": "24 dB/oct Moog ladder, switchable low/high-pass. Reviewer measured cutoff from 17 Hz to above 21.5 kHz; the high-pass mode behaves unlike a textbook HP. Cutoff and resonance each have CV inputs on the patchbay.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth (filter paragraphs); Specifications box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-034",
+   "entity_id": "REF-003-004",
+   "topic": "filter type per Wikipedia",
+   "statement": "Wikipedia infobox calls the filter a state-variable low/high-pass design, which conflicts with Moog's 4-pole transistor ladder (F-003-014) and the reviewer's ladder description. Uncited; treated as likely error.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-003-04",
+   "locator": "Infobox: Filter",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-035",
+   "entity_id": "REF-003-005",
+   "topic": "envelope times",
+   "statement": "Switchable AD (multi-trigger) and ASR (single-trigger) contour generator. Moog told the reviewer nominal attack is 1.25 to 3000 ms and decay/release 1.25 to 7000 ms; no times appear in the literature. Wikipedia lists it as an AR envelope.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth (contour generator paragraph); Wikipedia infobox",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-036",
+   "entity_id": "REF-003-006",
+   "topic": "LFO range",
+   "statement": "Triangle and square, both available at once on the patchbay, range about 0.1 to 600 Hz in the review spec box. Moog's page gives 1-350 Hz panel / 600 Hz max (F-003-016), so the lower limit differs by source. LFO can serve as a second oscillator but does not track 1V/oct exactly.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth; Specifications box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-037",
+   "entity_id": "REF-003-007",
+   "topic": "sequencer operation",
+   "statement": "32 steps, 64 memories. Per-step pitch, gate length, slew, ratchet and accent; swing; rests/ties. Sequencer is hard-wired to VCO pitch, gate and EG trigger. Keyboard or MIDI note transposes a running sequence. Hold and reset during play.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard, Sequencer & MIDI; In Use",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-038",
+   "entity_id": "REF-003-007",
+   "topic": "clock sources",
+   "statement": "Internal clock by default; MIDI Clock accepted (Tempo knob then divides); Tempo CV input also takes clock pulses and DIN Sync, selectable in Setup mode.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard, Sequencer & MIDI; Assignable Output box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-039",
+   "entity_id": "REF-003-008",
+   "topic": "VC mixer 2 as DC source",
+   "statement": "VC mixer 2 is not pre-patched. With nothing patched it outputs 0 V at full counter-clockwise and +5 V at full clockwise; input 1 replaces the 0 V end and input 2 the +5 V end.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth (final paragraph)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-040",
+   "entity_id": "REF-003-009",
+   "topic": "memory count",
+   "statement": "Saved sequences go to 64 memories. Wikipedia likewise says 64 sequences of up to 32 notes. Neither source says panel-knob or patch-cable settings can be stored; the sound itself is set by 14 knobs and 9 switches.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard...; In Use; Wikipedia infobox Storage",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-041",
+   "entity_id": "REF-003-010",
+   "topic": "assignable output list",
+   "statement": "Assignable output (Setup mode) offers 16 CVs: nine sequencer-derived (accent default, clock, /2, /4 as +5 V pulses; ramp, saw, triangle -5..+5 V; random per step; step-1 trigger +5 V) and seven MIDI-derived (velocity, channel aftertouch, pitch-bend, CC1, CC2, CC4, CC7), all -5..+5 V. Only one is active at a time.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Assignable Output box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-042",
+   "entity_id": "REF-003-010",
+   "topic": "MIDI features",
+   "statement": "Receive channel 1-16 set in Setup; MIDI Clock, Start/Stop/Continue and Program Change (selects sequence memories) are accepted. No MIDI Out or Thru. Review text also lists portamento and sustain as translatable, but the box table does not include them (internal inconsistency).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard, Sequencer & MIDI; Assignable Output box",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-043",
+   "entity_id": "REF-003-010",
+   "topic": "Wikipedia velocity/aftertouch",
+   "statement": "Wikipedia infobox says velocity and aftertouch expression 'no'; the SOS review says both are recognised and one can be routed to the Assignable output.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-003-04",
+   "locator": "Infobox rows Aftertouch/Velocity expression",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-044",
+   "entity_id": "REF-003-001",
+   "topic": "physical and power",
+   "statement": "Panel 319 x 107 mm (60 HP), case 319 x 107 x 132 mm, 1.6 kg; 12 V DC 1 A wall adapter, max draw 230 mA; single 1/4 in TRS output for line and headphones. Wikipedia: panel removable and usable as 60 HP Eurorack module.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review Specifications box; Wikipedia Eurorack compatibility",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-045",
+   "entity_id": "REF-003-001",
+   "topic": "manual contents hint",
+   "statement": "Reviewer says the manual's largest part covers the keyboard and sequencer and contains nine example patches. The manual itself was not read.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Keyboard, Sequencer & MIDI; In Use",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-046",
+   "entity_id": "REF-003-001",
+   "topic": "manual availability",
+   "statement": "Search results show a 60-page English manual on third-party sites, a Moog-hosted firmware page, and a Version 2.0 addendum adding sequencer functions. Not opened.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-003-06",
+   "locator": "WebSearch result summary, 2026-11-13",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-047",
+   "entity_id": "REF-003-011",
+   "topic": "VCA modes",
+   "statement": "VCA offers On (drone) and EG (contoured) modes and feeds the single 1/4 in output.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, The Synth",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-003-048",
+   "entity_id": "REF-003-012",
+   "topic": "Mult",
+   "statement": "One-in/two-out buffered multiple; a mult input and two outputs appear in the patch point list.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-003-03",
+   "locator": "Review, Specifications box (Multiple)",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-003-001",
+   "item": "User manual contents (panel layout, jack list, normalling details, voltages)",
+   "tried_sources": [
+    "SRC-003-02",
+    "SRC-003-01"
+   ],
+   "impact_on_spec": "Patch-point names, voltage and gate levels, and normalled paths beyond the spec table are unknown."
+  },
+  {
+   "entity_id": "REF-003-002",
+   "item": "Gate/trigger voltage thresholds, CV ranges per jack",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-02"
+   ],
+   "impact_on_spec": "Signal standard cannot be fully specified."
+  },
+  {
+   "entity_id": "REF-003-009",
+   "item": "Whether panel/patch settings can be saved; sequence retention at power-off",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-02"
+   ],
+   "impact_on_spec": "State save model unknown for sound settings."
+  },
+  {
+   "entity_id": "REF-003-007",
+   "item": "Sequencer detail (ratchet, gate length, accent, hold behaviour)",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-02"
+   ],
+   "impact_on_spec": "Only capacity and panel controls are specified."
+  },
+  {
+   "entity_id": "REF-003-010",
+   "item": "MIDI channel selection, CC mappings beyond assign list",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-02"
+   ],
+   "impact_on_spec": "MIDI spec limited to the product page summary."
+  },
+  {
+   "item": "Official user manual PDF: Moog download listing is client-rendered; candidate PDF host cdn.shopify.com and api.moogmusic.com refused (403); third-party mirrors (manualslib, manualmachine, scribd) deliberately not used",
+   "tried_sources": [
+    "SRC-003-02",
+    "SRC-003-05",
+    "SRC-003-06"
+   ],
+   "impact_on_spec": "Manual-level detail (exact jack list per point, voltage levels, normalling, setup procedures) still rests on reviews; high-confidence values missing",
+   "entity_id": "REF-003-001"
+  },
+  {
+   "item": "Gate/trigger thresholds and CV/audio voltage levels of the patchbay (not in product page nor SOS review)",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-03"
+   ],
+   "impact_on_spec": "Cannot specify jack electrical levels beyond +5 V pulses and +-5 V assignable CVs",
+   "entity_id": "REF-003-002"
+  },
+  {
+   "item": "Conflicting filter type (Moog/SOS: ladder; Wikipedia: state-variable), LFO low limit (0.1 Hz vs 1 Hz panel), velocity/aftertouch support (SOS yes via Assignable; Wikipedia no). Not resolved; both kept.",
+   "tried_sources": [
+    "SRC-003-01",
+    "SRC-003-03",
+    "SRC-003-04"
+   ],
+   "impact_on_spec": "Use Moog page + SOS (agree) as primary; Wikipedia treated as low-confidence outlier",
+   "entity_id": "REF-003-004"
+  },
+  {
+   "item": "Sequence retention at power-off and exact behaviour of Version 2.0 firmware (adds sequencer functions per search summary)",
+   "tried_sources": [
+    "SRC-003-03",
+    "SRC-003-06"
+   ],
+   "impact_on_spec": "Cannot state whether saved sequences survive power-off or what v2.0 changed",
+   "entity_id": "REF-003-009"
+  }
+ ]
+}

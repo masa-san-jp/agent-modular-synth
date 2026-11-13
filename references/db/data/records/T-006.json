@@ -1,0 +1,691 @@
+{
+ "target_id": "T-006",
+ "entities": [
+  {
+   "id": "REF-006-001",
+   "kind": "system",
+   "name": "Cardinal",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "system",
+   "purpose": "VCV Rackのコードを使う、自己完結型のオープンソース仮想モジュラー・プラグイン/スタンドアロン。",
+   "synthesis_method": "Rackエンジンのプラグイン(DPF)ラッパー",
+   "features": [
+    {
+     "text": "プラグイン(AU/CLAP/LV2/VST2/VST3)とスタンドアロン",
+     "fact_ids": [
+      "F-006-001"
+     ]
+    },
+    {
+     "text": "Rackコードを直接使用し、Coreは置換",
+     "fact_ids": [
+      "F-006-002"
+     ]
+    },
+    {
+     "text": "バリアントごとにIO構成が異なる",
+     "fact_ids": [
+      "F-006-004"
+     ]
+    },
+    {
+     "text": "処理順はケーブル接続に基づく",
+     "fact_ids": [
+      "F-006-008"
+     ]
+    },
+    {
+     "text": "DSP/UI分離可能なMini",
+     "fact_ids": [
+      "F-006-009"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "外部モジュールを読み込めない(同梱のみ)",
+     "fact_ids": [
+      "F-006-003"
+     ]
+    },
+    {
+     "text": "mainはAU/VST2非対応",
+     "fact_ids": [
+      "F-006-005"
+     ]
+    },
+    {
+     "text": "最終バイナリはGPLv3+、GPLv3-onlyは不可",
+     "fact_ids": [
+      "F-006-006"
+     ]
+    },
+    {
+     "text": "アートワークは個別ライセンスが混在",
+     "fact_ids": [
+      "F-006-007"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "ホストのMIDI、24ホストパラメータ、ホスト時間、CVポート(mainバリアント)で外部連携。",
+     "fact_ids": [
+      "F-006-004"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-002",
+   "kind": "signal_standard",
+   "name": "Cardinal 信号規約(Rack由来)",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Rackと同じモジュール/ケーブル体系を継承する。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "Rackの体系を継承(詳細はT-005)",
+     "fact_ids": [
+      "F-006-010"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-003",
+   "kind": "module",
+   "name": "Host Parameters",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "DAW/ホストが公開する24個のパラメータをCV源として使うモジュール。",
+   "synthesis_method": "ホスト自動化→CV",
+   "features": [
+    {
+     "text": "24個のホストパラメータをCV化",
+     "fact_ids": [
+      "F-006-011"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "任意パラメータ自動化は不可、24個の固定",
+     "fact_ids": [
+      "F-006-011"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "host parameter CV",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-011"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "host parameter",
+     "unit": "-",
+     "range": {
+      "min": 1,
+      "max": 24,
+      "unit": "index"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-011"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-004",
+   "kind": "module",
+   "name": "Host Time",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "ホストのトランスポート情報(再生、リセット、小節、拍、ティック、位相)をCV源として出力。",
+   "synthesis_method": "ホスト同期→CV",
+   "features": [
+    {
+     "text": "7種のホスト時間CV",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "play",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "reset",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "bar",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "beat",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "tick",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "bar-phase",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    },
+    {
+     "name": "beat-phase",
+     "direction": "out",
+     "signal_type": "unknown",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "ホストトランスポートに同期。",
+     "fact_ids": [
+      "F-006-012"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-005",
+   "kind": "module",
+   "name": "Audio to CV Pitch",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "オーディオ入力のピッチをCVに変換するCardinal独自モジュール。",
+   "synthesis_method": "ピッチ検出→CV",
+   "features": [
+    {
+     "text": "音声からピッチCVを生成",
+     "fact_ids": [
+      "F-006-013"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-006",
+   "kind": "module",
+   "name": "Carla Plugin Host / Ildaeil Host",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "他のプラグイン(LV2/VST2等)をCardinal内でホストするモジュール。",
+   "synthesis_method": "内部プラグインホスティング",
+   "features": [
+    {
+     "text": "内部プラグインホスト",
+     "fact_ids": [
+      "F-006-014"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-007",
+   "kind": "patch_storage",
+   "name": "Cardinal パッチ保存",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "system",
+   "purpose": "ホスト/スタンドアロンでの状態保存。バリアントごとに設定ファイルが異なる。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "自動保存なし、バリアント別設定",
+     "fact_ids": [
+      "F-006-015"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "X11ではダイアログ実装に依存",
+     "fact_ids": [
+      "F-006-016"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "自動保存なし。バリアント別設定ファイル。ホストプロジェクトへの状態保存方式はドキュメント未確認。",
+     "fact_ids": [
+      "F-006-015"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-006-008",
+   "kind": "control_interface",
+   "name": "Cardinal ホスト統合/MIDI/CVポート",
+   "maker": "DISTRHO",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "プラグインのMIDI入出力、CVポート、ホストパラメータによる外部制御。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "MIDI入出力",
+     "fact_ids": [
+      "F-006-017"
+     ]
+    },
+    {
+     "text": "CVポート(main)",
+     "fact_ids": [
+      "F-006-018"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "物理デバイスは扱わない",
+     "fact_ids": [
+      "F-006-019"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "ホストMIDI、ホストパラメータ、CVポート。OSC記述はREADME等に見当たらない。",
+     "fact_ids": [
+      "F-006-017",
+      "F-006-018"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-006-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-006-001",
+   "entity_id": "REF-006-001",
+   "topic": "概要",
+   "statement": "フリー/オープンソースの仮想モジュラー。AU/CLAP/LV2/VST2/VST3プラグインおよびスタンドアロンで提供される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-002",
+   "entity_id": "REF-006-001",
+   "topic": "Rackとの関係",
+   "statement": "DPFによるRackのラッパーで、Rackのコードをフォークせず直接使う。Core相当はCardinal版に置換され、VCVのブランドは除去されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 冒頭・導入",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-003",
+   "entity_id": "REF-006-001",
+   "topic": "自己完結",
+   "statement": "外部モジュールは読み込めず、公式ライブラリにも接続しない。サードパーティモジュールは本体に同梱し、オンラインアクセスは禁止。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md / docs/FAQ.md",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-004",
+   "entity_id": "REF-006-001",
+   "topic": "バリアント",
+   "statement": "main(音声8入出力+CV10入出力)、Synth(音声2出力)、FX(音声2入出力)、Miniの4種がある。全バリアントがMIDI入出力を持つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 'Plugin variants'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-005",
+   "entity_id": "REF-006-001",
+   "topic": "制約",
+   "statement": "AUとVST2はCVポートを扱えないためmainバリアントは提供されない。CLAP対応は作業中の記述がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 'Plugin variants','Current status'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-006",
+   "entity_id": "REF-006-001",
+   "topic": "ライセンス",
+   "statement": "CardinalはGPLv3+。静的結合のため、同梱コードのうち最も制限的なライセンスが最終バイナリに適用される。GPLv3-onlyモジュールは不可。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-02",
+   "locator": "docs/LICENSES.md 'CODE LICENSE / BINARY'; README 'Module restrictions'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-007",
+   "entity_id": "REF-006-001",
+   "topic": "アートワーク",
+   "statement": "パネル等のアートワークは別ライセンスの場合があり、CC0からCC-NC-NDや個別許諾まで幅がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-02",
+   "locator": "docs/LICENSES.md 'ARTWORK / PANEL LICENSES'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-008",
+   "entity_id": "REF-006-001",
+   "topic": "Rack Proとの差",
+   "statement": "モジュール処理順はケーブル接続に基づく(Rack Proは挿入順)。エンジンはホストのオーディオスレッドを使う(Rack Proは並列)。Rack Pro側の記述は作者の推測を含む。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md 表",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-009",
+   "entity_id": "REF-006-001",
+   "topic": "DSP/UI分離",
+   "statement": "Miniは単純なモジュールのみのため、DSPとUIを別マシンで動かす構成に対応し、MOD Audio向けに使われている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 'Mini'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-010",
+   "entity_id": "REF-006-002",
+   "topic": "継承",
+   "statement": "CardinalはRackのコードを直接使うため、Rackのモジュール/ケーブル体系を引き継ぐ。電圧規約の詳細の確認はT-005を参照。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 導入",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-011",
+   "entity_id": "REF-006-003",
+   "topic": "機能",
+   "statement": "ホストが公開する24個のパラメータをCV源として提供し、任意の自動化はこの固定数のパラメータを経由する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md 'Host Parameters','Arbitrary parameter automation'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-012",
+   "entity_id": "REF-006-004",
+   "topic": "機能",
+   "statement": "再生、リセット、小節、拍、ティック、小節位相、拍位相をCVで出力する。Rack Proは同期にMIDI信号を使う。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md 'Host Time','Host sync/timing'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-013",
+   "entity_id": "REF-006-005",
+   "topic": "機能",
+   "statement": "オーディオ入力のピッチをCVに変換する、公式Rackにないモジュール。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md DISTRHO collection",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-014",
+   "entity_id": "REF-006-006",
+   "topic": "機能",
+   "statement": "CarlaまたはIldaeilを使い、LV2/VST2等のプラグインをCardinal内部で実行できる。Rack Proでは別売。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md 'Integrated plugin host'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-015",
+   "entity_id": "REF-006-007",
+   "topic": "保存",
+   "statement": "Cardinalは自動保存を行わず、バリアント別に別ファイルへ設定を保存する(テンプレートも別)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "docs/FAQ.md 'Changes are lost on restart'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-016",
+   "entity_id": "REF-006-007",
+   "topic": "制約",
+   "statement": "BSD/Linux/X11の保存ダイアログはxdg-desktop-portalの実装に依存する。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-006-01",
+   "locator": "docs/FAQ.md 'Save As/Export...'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-017",
+   "entity_id": "REF-006-008",
+   "topic": "MIDI",
+   "statement": "全バリアントがMIDI入力とMIDI出力に対応する。MIDIはホストのオーディオスレッドに同期させる設計。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 'Plugin variants','Why'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-018",
+   "entity_id": "REF-006-008",
+   "topic": "CVポート",
+   "statement": "mainバリアントは10 CV入出力を持ち、Host CVモジュールがDAWとの直接CV送受を担う。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-01",
+   "locator": "README.md 'Main'; DIFFERENCES.md Host CV",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-006-019",
+   "entity_id": "REF-006-008",
+   "topic": "制約",
+   "statement": "Rackと異なり物理デバイスは扱わない。CardinalNativeがスタンドアロンでネイティブ音声/MIDIを提供する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-006-03",
+   "locator": "docs/DIFFERENCES.md 'Supports physical devices'",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-006-002",
+   "item": "Cardinal固有の電圧規約差異の有無(Rack規約との差)",
+   "tried_sources": [
+    "SRC-006-01",
+    "SRC-006-02",
+    "SRC-006-03"
+   ],
+   "impact_on_spec": "規約をRackと同一とみなす根拠は間接的。T-005の規約を共通扱いにする場合、要注意。"
+  },
+  {
+   "entity_id": "REF-006-007",
+   "item": "ホストプロジェクト内のパッチ状態保存形式(.vcvとの互換含む)",
+   "tried_sources": [
+    "SRC-006-01",
+    "SRC-006-02",
+    "SRC-006-03"
+   ],
+   "impact_on_spec": "DAW保存時のシリアライズ形式が不明。パッチ形式の互換性は主張できない。"
+  },
+  {
+   "entity_id": "REF-006-008",
+   "item": "OSCやスクリプトによる外部制御の有無",
+   "tried_sources": [
+    "SRC-006-01",
+    "SRC-006-03"
+   ],
+   "impact_on_spec": "プログラム制御は主にホスト経由と推定されるが、確証なし。"
+  },
+  {
+   "entity_id": "REF-006-001",
+   "item": "最新リリースのバージョン番号(GitHub APIへの接続が拒否された)",
+   "tried_sources": [
+    "SRC-006-01",
+    "SRC-006-04"
+   ],
+   "impact_on_spec": "versionをnull扱い。"
+  }
+ ]
+}

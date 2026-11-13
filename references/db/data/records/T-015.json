@@ -1,0 +1,1652 @@
+{
+ "target_id": "T-015",
+ "entities": [
+  {
+   "id": "REF-015-001",
+   "kind": "system",
+   "name": "VCS3 (EMS original instrument)",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": "Mk I (1969)",
+   "function_category": "system",
+   "purpose": "Portable matrix-patched analogue synthesizer introduced in 1969.",
+   "synthesis_method": "analogue voltage-controlled subtractive synthesis with pin-matrix patching",
+   "features": [
+    {
+     "text": "3 VCOs, noise, ring modulator, low-pass filter, trapezoid envelope, reverb, joystick in one cabinet",
+     "fact_ids": [
+      "F-015-002"
+     ]
+    },
+    {
+     "text": "VCS3 II adds Prestopatch and a changed matrix",
+     "fact_ids": [
+      "F-015-003"
+     ]
+    },
+    {
+     "text": "16 x 16 pin matrix (256 positions) with resistor pins; nothing connects unless pins are inserted",
+     "fact_ids": [
+      "F-015-024",
+      "F-015-026"
+     ]
+    },
+    {
+     "text": "VCS3 Mk II Prestopatch socket takes 16 x 16 routing plugs",
+     "fact_ids": [
+      "F-015-028"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Matrix size and voltage levels not confirmed",
+     "fact_ids": [
+      "F-015-001"
+     ]
+    },
+    {
+     "text": "Pin resistance variation changes tracking and levels from pin to pin; matrix is unbuffered",
+     "fact_ids": [
+      "F-015-025",
+      "F-015-026"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "16 x 16 resistor-pin matrix (256 positions); pins from 2.7 kohm (white/red) to higher-value green attenuating pins",
+     "fact_ids": [
+      "F-015-024",
+      "F-015-026",
+      "F-015-027"
+     ]
+    },
+    "timing": null,
+    "state_save": {
+     "summary": "Pin positions plus knob positions; Mk II Prestopatch plugs recall routing only",
+     "fact_ids": [
+      "F-015-028",
+      "F-015-025"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-015-002",
+   "kind": "system",
+   "name": "EMS Synthi A / VCS3 (current production by EMS)",
+   "maker": "Electronic Music Studios",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Present-day EMS production and service of original-type Synthi A and VCS3.",
+   "synthesis_method": "analogue pin-matrix synthesizer built to original or modified specification",
+   "features": [
+    {
+     "text": "Original-type units still built per the home page",
+     "fact_ids": [
+      "F-015-005"
+     ]
+    },
+    {
+     "text": "Ownership chain since 1979 recorded in the history page",
+     "fact_ids": [
+      "F-015-008",
+      "F-015-009"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Currency of the 2020-dated page is unconfirmed",
+     "fact_ids": [
+      "F-015-006"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-015-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-003",
+   "kind": "system",
+   "name": "Synthi 100",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Large studio console with two 60x60 matrix boards (signal and control).",
+   "synthesis_method": "analogue subtractive/modular console with digital sequencer",
+   "features": [
+    {
+     "text": "12 VCOs, 4+4 filters, 3 ring mods, 256-step sequencer",
+     "fact_ids": [
+      "F-015-011"
+     ]
+    },
+    {
+     "text": "Under 40 built",
+     "fact_ids": [
+      "F-015-010"
+     ]
+    },
+    {
+     "text": "Two 60 x 60 pin matrices; 12 VCOs, 8 filters; about 30 units made",
+     "fact_ids": [
+      "F-015-031",
+      "F-015-032",
+      "F-015-034"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Voltage levels and matrix line assignment not confirmed",
+     "fact_ids": [
+      "F-015-010"
+     ]
+    },
+    {
+     "text": "Sequencer description differs between sources; no voltage standard read",
+     "fact_ids": [
+      "F-015-033"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Two 60 x 60 pin matrices (signal and control)",
+     "fact_ids": [
+      "F-015-032"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "Two keyboards: four CVs and two key triggers; digital sequencer",
+     "fact_ids": [
+      "F-015-035",
+      "F-015-033"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-004",
+   "kind": "system",
+   "name": "Synthi A / Synthi AKS",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Briefcase version of the VCS3 (A) and with sequencer/touch keyboard (AKS).",
+   "synthesis_method": "same boards as VCS3 in a case",
+   "features": [
+    {
+     "text": "Same specification and boards as the VCS3",
+     "fact_ids": [
+      "F-015-013"
+     ]
+    },
+    {
+     "text": "AKS adds KS sequencer in the lid",
+     "fact_ids": [
+      "F-015-013"
+     ]
+    },
+    {
+     "text": "VCS3 circuits in a briefcase; AKS adds a 256-event digital sequencer and touch keyboard",
+     "fact_ids": [
+      "F-015-036",
+      "F-015-037"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Detailed specifications unread",
+     "fact_ids": [
+      "F-015-036"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-015-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-005",
+   "kind": "signal_standard",
+   "name": "EMS pin-matrix patching convention",
+   "maker": "Electronic Music Studios",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "How EMS instruments interconnect modules with pins in a matrix.",
+   "synthesis_method": "pin matrix",
+   "features": [
+    {
+     "text": "Pins on a patchboard replace cables; Synthi 100 separates signal and control boards",
+     "fact_ids": [
+      "F-015-014"
+     ]
+    },
+    {
+     "text": "Pins are consumables sold separately",
+     "fact_ids": [
+      "F-015-007"
+     ]
+    },
+    {
+     "text": "Non-standard scaling: about 0.2-0.32 V/octave internally, doubled for external CV",
+     "fact_ids": [
+      "F-015-038"
+     ]
+    },
+    {
+     "text": "Signal levels about 3-6 V rather than 10 Vpp",
+     "fact_ids": [
+      "F-015-039"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Voltage standard (signal and control levels, impedances) not read from any EMS document",
+     "fact_ids": [
+      "F-015-014"
+     ]
+    },
+    {
+     "text": "Only Sound On Sound states these numbers; no EMS manual read. Measurement basis not stated by the author",
+     "fact_ids": [
+      "F-015-038",
+      "F-015-039"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "CV input (external, oscillators 1/2)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0.64,
+      "max": 0.64,
+      "unit": "V/oct"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-015-038"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Pin matrix patchboards",
+     "fact_ids": [
+      "F-015-014"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-006",
+   "kind": "module",
+   "name": "VCS3 voltage controlled oscillator",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "One of three VCS3 VCOs.",
+   "synthesis_method": "analogue VCO",
+   "features": [
+    {
+     "text": "Three in VCS3, twelve in Synthi 100",
+     "fact_ids": [
+      "F-015-016"
+     ]
+    },
+    {
+     "text": "Osc 1: sine+saw; osc 2: pulse+triangle; osc 3 low-frequency",
+     "fact_ids": [
+      "F-015-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Frequency range and waveform set unconfirmed",
+     "fact_ids": [
+      "F-015-016"
+     ]
+    },
+    {
+     "text": "Osc 1/2 frequency limits differ by source",
+     "fact_ids": [
+      "F-015-042",
+      "F-015-043"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "Oscillator 3 frequency",
+     "unit": "Hz",
+     "range": {
+      "min": 0.025,
+      "max": 500,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-015-042"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-007",
+   "kind": "module",
+   "name": "VCS3 voltage controlled low-pass filter",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "Voltage-controlled low-pass filter.",
+   "synthesis_method": "analogue VCF",
+   "features": [
+    {
+     "text": "One in VCS3; Synthi 100 adds high-pass filters",
+     "fact_ids": [
+      "F-015-017"
+     ]
+    },
+    {
+     "text": "Self-oscillating filter, low-pass/band-pass character, slope 12 then 18 dB/octave",
+     "fact_ids": [
+      "F-015-044"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Slope, resonance and range unconfirmed",
+     "fact_ids": [
+      "F-015-017"
+     ]
+    },
+    {
+     "text": "Slope: 18 dB/octave (SOS, with knee) vs 24 dB/octave (Wikipedia, uncited)",
+     "fact_ids": [
+      "F-015-044",
+      "F-015-045"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-008",
+   "kind": "module",
+   "name": "VCS3 trapezoid envelope generator",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "Envelope generator with trapezoid shape.",
+   "synthesis_method": "analogue envelope",
+   "features": [
+    {
+     "text": "One in VCS3; three in Synthi 100",
+     "fact_ids": [
+      "F-015-018"
+     ]
+    },
+    {
+     "text": "AHD-like trapezoid shaper with auto-repeat to 60 Hz",
+     "fact_ids": [
+      "F-015-046"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Time ranges unconfirmed",
+     "fact_ids": [
+      "F-015-018"
+     ]
+    },
+    {
+     "text": "Claimed and measured times differ",
+     "fact_ids": [
+      "F-015-046",
+      "F-015-047"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "Attack",
+     "unit": "s",
+     "range": {
+      "min": 0.002,
+      "max": 1,
+      "unit": "s"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-015-046"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-009",
+   "kind": "module",
+   "name": "VCS3 voltage controlled reverberation",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "time_effect",
+   "purpose": "Built-in reverberation unit with voltage control.",
+   "synthesis_method": "analogue spring/other reverb (type not stated)",
+   "features": [
+    {
+     "text": "One in VCS3; two in Synthi 100",
+     "fact_ids": [
+      "F-015-019"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Mechanism and ranges unconfirmed",
+     "fact_ids": [
+      "F-015-019"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-010",
+   "kind": "module",
+   "name": "Synthi Sequencer 256",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "Digital sequencer for Synthi 100 and standalone use.",
+   "synthesis_method": "digital event memory",
+   "features": [
+    {
+     "text": "256 events x 42 bits",
+     "fact_ids": [
+      "F-015-020"
+     ]
+    },
+    {
+     "text": "Internal 0.1-200 Hz or external clock",
+     "fact_ids": [
+      "F-015-020"
+     ]
+    },
+    {
+     "text": "KS: 256 steps x 6 bits, 700 ms - 100 s",
+     "fact_ids": [
+      "F-015-021"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "External clock",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-015-020"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Internal clock",
+     "unit": "Hz",
+     "range": {
+      "min": 0.1,
+      "max": 200,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-015-020"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Internal or external clock, forward/backward play",
+     "fact_ids": [
+      "F-015-020"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-003"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-011",
+   "kind": "patch_storage",
+   "name": "EMS patch state (pin positions) and sequence memory",
+   "maker": "Electronic Music Studios",
+   "version": null,
+   "function_category": "other",
+   "purpose": "How patches and sequences are retained.",
+   "synthesis_method": "physical pin matrix plus digital sequence memory",
+   "features": [
+    {
+     "text": "A patch is the arrangement of pins; no patch memory documented",
+     "fact_ids": [
+      "F-015-022"
+     ]
+    },
+    {
+     "text": "Recall needs pin map, knob positions and pin identity; Prestopatch plug is the only built-in routing recall",
+     "fact_ids": [
+      "F-015-051",
+      "F-015-028"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Whether boards are removable or catalogued for recall is unconfirmed",
+     "fact_ids": [
+      "F-015-022"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "Pin positions; sequence memory in Sequencer 256/KS",
+     "fact_ids": [
+      "F-015-022"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-003"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-012",
+   "kind": "control_interface",
+   "name": "EMS external control add-ons",
+   "maker": "Electronic Music Studios",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Keyboards and sequencers used to control VCS3/Synthi systems.",
+   "synthesis_method": "analogue CV keyboards, sequencer clock",
+   "features": [
+    {
+     "text": "DK1/DK2 keyboards for VCS3; Sequencer 256 accepts external clock",
+     "fact_ids": [
+      "F-015-023",
+      "F-015-004"
+     ]
+    },
+    {
+     "text": "DK1/DK2 keyboards, special MIDI/CV lead, Prestopatch link matrices",
+     "fact_ids": [
+      "F-015-048",
+      "F-015-049",
+      "F-015-050"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No MIDI or digital control interface documented in the pages read",
+     "fact_ids": [
+      "F-015-023"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "CV/gate keyboards via 8-way cable; MIDI/CV jack lead; Prestopatch linking",
+     "fact_ids": [
+      "F-015-048",
+      "F-015-049",
+      "F-015-050"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-013",
+   "kind": "module",
+   "name": "VCS3 DK1 keyboard",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": "DK1 (1969)",
+   "function_category": "io_utility",
+   "purpose": "Velocity-sensitive monophonic keyboard for the VCS3 with its own oscillator and VCA.",
+   "synthesis_method": "CV/gate keyboard",
+   "features": [
+    {
+     "text": "Velocity-sensitive, 2 CV channels, gate, own oscillator",
+     "fact_ids": [
+      "F-015-052",
+      "F-015-048"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Voltage ranges not read",
+     "fact_ids": [
+      "F-015-052"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-015-014",
+   "kind": "module",
+   "name": "VCS3 output stage, joystick and meter",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": "Mk I (1969)",
+   "function_category": "io_utility",
+   "purpose": "Two output channels, joystick and voltmeter/scope output.",
+   "synthesis_method": "amplifier / controller",
+   "features": [
+    {
+     "text": "Stereo outputs, joystick +/-2 V, voltmeter",
+     "fact_ids": [
+      "F-015-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Output levels in volts not read",
+     "fact_ids": [
+      "F-015-053"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-001"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-015-015",
+   "kind": "module",
+   "name": "Synthi 100 Computer Synthi",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Add-on computer interface for the Synthi 100 with a PDP-8 minicomputer.",
+   "synthesis_method": "digital control of analogue modules",
+   "features": [
+    {
+     "text": "PDP-8, 4 Kb, 2 x 24 x 60 matrices, cassettes",
+     "fact_ids": [
+      "F-015-054"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Programming interface unread",
+     "fact_ids": [
+      "F-015-054"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "Computer control of the Synthi 100",
+     "fact_ids": [
+      "F-015-054"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-003"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-015-016",
+   "kind": "module",
+   "name": "Vocoder 5000 (Studio Vocoder)",
+   "maker": "Electronic Music Studios (London) Ltd.",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "22-band vocoder installed in the Synthi 100.",
+   "synthesis_method": "filter-bank vocoder",
+   "features": [
+    {
+     "text": "22 bands, 22 x 22 matrix",
+     "fact_ids": [
+      "F-015-055"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Band ranges unread",
+     "fact_ids": [
+      "F-015-055"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-015-003"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-015-001",
+   "entity_id": "REF-015-001",
+   "topic": "overview",
+   "statement": "VCS3 (nickname Putney) was introduced in 1969, designed by David Cockerell, as a portable synthesizer in a wooden cabinet whose modules are interconnected through a matrix patchboard.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'VCS3 (aka The Putney)'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-002",
+   "entity_id": "REF-015-001",
+   "topic": "module_list",
+   "statement": "Module complement: 3 VCOs, noise generator, 2 input amplifiers, ring modulator, voltage controlled low-pass filter, trapezoid envelope generator, voltage controlled reverberation, meter, 2 stereo output amplifiers, joystick.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'VCS3 (aka The Putney)' module list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-003",
+   "entity_id": "REF-015-001",
+   "topic": "revision",
+   "statement": "VCS3 II (1973) added Prestopatch, changed the matrix layout and some circuitry, otherwise like the Mk I; 32x32 and 49x49 matrix boards (1974) link two VCS3 or Synthi A units via the Prestopatch sockets.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'Synthi VCS3 II', '32 x 32 Matrix', '49 x 49 Matrix'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-004",
+   "entity_id": "REF-015-001",
+   "topic": "accessory",
+   "statement": "DK1 (1969) is a velocity-sensitive monophonic keyboard for the VCS3 adding an extra VCO and VCA; DK2 (1972) is a duophonic version.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'DK1' and 'DK2'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-005",
+   "entity_id": "REF-015-002",
+   "topic": "production",
+   "statement": "The current EMS home page says original-type Synthi A and VCS3 units are still in production, with spares and service for most original products; it lists Synthi A and VCS3 at GBP 5950 each.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-015-03",
+   "locator": "Home page, top block and price list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-006",
+   "entity_id": "REF-015-002",
+   "topic": "currency",
+   "statement": "The home page is stamped 'Last updated 5th May 2020', so whether prices and availability are current is not confirmed.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-015-03",
+   "locator": "Home page header",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-007",
+   "entity_id": "REF-015-002",
+   "topic": "consumable",
+   "statement": "Patch pins are sold separately by the current maker at GBP 9.50 each.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-015-03",
+   "locator": "Home page price list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-008",
+   "entity_id": "REF-015-002",
+   "topic": "history",
+   "statement": "After EMS (London) folded in 1979 its assets passed to Datanomics (small numbers of VCS3, Synthi AKS and Vocoders built 1980-84), then to composer Edward Williams; in April 1995 Robin Wood acquired the full EMS rights and Synthi A, VCS3 and vocoders continue to be built to original or modified specification.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-05",
+   "locator": "Section 'The Inbetween Years'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-009",
+   "entity_id": "REF-015-002",
+   "topic": "history",
+   "statement": "EMS (London) Ltd. was formed in 1969 by Peter Zinovieff; the company collapsed in 1979 after heavy debt from the Hi-Fli guitar unit and other ventures.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-05",
+   "locator": "Sections 'The Beginning' and 'The Inbetween Years'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-010",
+   "entity_id": "REF-015-003",
+   "topic": "overview",
+   "statement": "Synthi 100 (1971, formerly Digitana, nickname Delaware) uses VCS3-type technology in a large console patched with two 60x60 matrix boards, one for signals and one for control voltages; fewer than 40 were built, mainly for universities and radio stations.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-011",
+   "entity_id": "REF-015-003",
+   "topic": "module_list",
+   "statement": "Module complement: 12 VCOs, 2 noise generators, 3 ring modulators, 4 low-pass and 4 high-pass VCFs, 3 trapezoid envelope generators, 2 reverbs, octave filter bank, slew limiter, envelope follower, pitch-to-voltage converter, 8 input and 8 stereo output amplifiers, 2 joysticks, 2 five-octave keyboards, 256-step digital sequencer, oscilloscope, frequency counter.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'Synthi 100' module list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-012",
+   "entity_id": "REF-015-003",
+   "topic": "price",
+   "statement": "Introduced at GBP 6,500; the guide lists GBP 35,000 as its 1979 price.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-013",
+   "entity_id": "REF-015-004",
+   "topic": "overview",
+   "statement": "Synthi A (1971, formerly Portabella) has the same specification and circuit boards as the VCS3 in an attache-case enclosure; Synthi AKS (1972) adds a KS sequencer and touch keyboard in the lid.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'Synthi A' and 'Synthi AKS'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-014",
+   "entity_id": "REF-015-005",
+   "topic": "patching",
+   "statement": "VCS3 and Synthi A are patched with pins in a matrix patchboard; the Synthi 100 uses two 60x60 boards (signal and control-voltage), and the 32x32 / 49x49 boards patch two instruments together through Prestopatch sockets.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'VCS3', 'Synthi 100', '32 x 32 Matrix', '49 x 49 Matrix'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-015",
+   "entity_id": "REF-015-005",
+   "topic": "patching",
+   "statement": "Matrix patching was used on other EMS products, for example the Spectron video synthesizer with a 53x57 digital and a 16x20 analogue patch panel.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'Spectron'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-016",
+   "entity_id": "REF-015-006",
+   "topic": "module",
+   "statement": "The VCS3 has three voltage-controlled oscillators (Synthi 100: twelve); waveform and frequency specifications are not given in the pages read.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Module lists of 'VCS3' and 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-017",
+   "entity_id": "REF-015-007",
+   "topic": "module",
+   "statement": "The VCS3 has one voltage-controlled low-pass filter; the Synthi 100 has four low-pass plus four high-pass VCFs.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Module lists of 'VCS3' and 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-018",
+   "entity_id": "REF-015-008",
+   "topic": "module",
+   "statement": "The VCS3 has one trapezoid envelope generator; the Synthi 100 has three. Shape and time specifications are not given in the pages read.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Module lists of 'VCS3' and 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-019",
+   "entity_id": "REF-015-009",
+   "topic": "module",
+   "statement": "The VCS3 has a voltage controlled reverberation unit (Synthi 100: two); no specifications are given in the pages read.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Module lists of 'VCS3' and 'Synthi 100'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-020",
+   "entity_id": "REF-015-010",
+   "topic": "sequencer",
+   "statement": "Synthi Sequencer 256 (1971) stores 256 events of 42 bits (two 6-bit control voltages plus 13-bit start and stop times), runs from an internal 0.1-200 Hz clock or an external clock, and plays forwards or backwards; a 128-step version (also 32 and 64) existed.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'Synthi Sequencer 256' and 'Sequencer 128'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-021",
+   "entity_id": "REF-015-010",
+   "topic": "sequencer",
+   "statement": "KS sequencer (1972, as in Synthi AKS): 256 steps x 6-bit memory, sequence length 700 ms to 100 s, real-time and sequencer pitch outputs, transposition controls.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Section 'KS'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-022",
+   "entity_id": "REF-015-011",
+   "topic": "storage",
+   "statement": "The product guide describes no electronic patch memory for the VCS3, Synthi A or Synthi 100: the patch is the set of pins in the matrix board. Digital storage is documented only for sequence data (Sequencer 256, KS). A DataSynthi with a programmable patch matrix was developed in 1980-84 but never produced.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'VCS3', 'Synthi 100', 'Synthi Sequencer 256' of the guide and 'The Inbetween Years' of the history",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-023",
+   "entity_id": "REF-015-012",
+   "topic": "control",
+   "statement": "Sequencer 256 accepts an external clock; the Synthi 100 and Synthi A can be extended with keyboards and sequencers (DK1/DK2 for VCS3, KS in Synthi AKS). MIDI or computer interfaces are not mentioned in the pages read.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-04",
+   "locator": "Sections 'Synthi Sequencer 256', 'DK1', 'KS'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-015-024",
+   "entity_id": "REF-015-001",
+   "topic": "matrix",
+   "statement": "The VCS3 patch matrix is 16 x 16 (256 pin positions): rows are sources, columns are destinations, so a pin at one position joins one source to one destination.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "'Patch matrix' section ('the 16 x 16 matrix')",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-025",
+   "entity_id": "REF-015-001",
+   "topic": "matrix",
+   "statement": "The matrix is unbuffered, so adding a pin to a patch changes how other connections behave; patches are not exactly repeatable even with the same pin positions.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Patch matrix section; 'patch pins' section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-026",
+   "entity_id": "REF-015-001",
+   "topic": "pins",
+   "statement": "Pins contain resistors: white about 2.7 kohm (5% tolerance; measured spread 2,565-2,835 ohm), red 2.7 kohm with a tighter 2% tolerance, green higher resistance to attenuate a signal.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Patch pins section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-027",
+   "entity_id": "REF-015-001",
+   "topic": "pins",
+   "statement": "Wikipedia (Synthi A paragraph) gives 2.7 kohm pins with red = 1% and white = 5% tolerance, and green = 68 kohm attenuating pins. The red-pin tolerance (1% vs 2%) differs from the Sound On Sound figure.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-08",
+   "locator": "Synthi A section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-028",
+   "entity_id": "REF-015-001",
+   "topic": "prestopatch",
+   "statement": "The VCS3 Mk II (1973) added a Prestopatch socket accepting custom 16 x 16 plugs that mimic the matrix, giving a primitive way to recall a routing; knobs still had to be set by hand.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-07",
+   "locator": "Part 2, paragraph on the VCS3 MkII",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-029",
+   "entity_id": "REF-015-001",
+   "topic": "overview",
+   "statement": "Wikipedia: VCS3 introduced by EMS in 1969; electronics largely by David Cockerell, appearance by Tristram Cary; about GBP 330 at launch; tuning instability from exponential conversion. It lists 3 oscillators (the third an LFO), noise, 2 input amplifiers, ring modulator, low-pass filter, trapezoid envelope generator, joystick, spring reverb and 2 output amplifiers.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-08",
+   "locator": "History and Description sections",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-030",
+   "entity_id": "REF-015-001",
+   "topic": "controls",
+   "statement": "Joystick range is only about +/-2 V, a voltmeter measures CVs or signals, and an oscilloscope output is on the rear panel. Stereo outputs A and B have independent level, pan and output filters.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Performance controls and output paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-031",
+   "entity_id": "REF-015-003",
+   "topic": "spec",
+   "statement": "Wikipedia: designed by David Cockerell and documented in 1971; GBP 6,500 originally; EMS built 30 units (the last one a Datanomics redesign sold to Cuenca, Spain). About six VCS3 worth of analogue modules; 12 VCOs and 8 VCFs; 85 circuit cards once the sequencer is included.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-09",
+   "locator": "Lead and specification paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-032",
+   "entity_id": "REF-015-003",
+   "topic": "matrix",
+   "statement": "Two 60 x 60 pin matrices connect the modules, with an oscillator sync function from white pins (2.7 kohm).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-09",
+   "locator": "Specification paragraph; reference on synchronisation",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-033",
+   "entity_id": "REF-015-003",
+   "topic": "sequencer",
+   "statement": "Wikipedia describes the digital sequencer as three duophonic layers, 10,000 clock events and 256 duophonic note events; Sound On Sound calls it a six-track, 256-step sequencer. The descriptions differ in wording.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-09",
+   "locator": "Specification paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-034",
+   "entity_id": "REF-015-003",
+   "topic": "overview",
+   "statement": "Sound On Sound: 12 VCOs, 2 noise generators, 3 ring modulators, 4 low-pass and 4 high-pass filters plus 39 other modules and an oscilloscope; two 5-octave velocity-sensitive keyboards; about 30 units built, almost all in universities or broadcasters, the BBC Radiophonic Workshop one being nicknamed The Delaware.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-07",
+   "locator": "Part 2, Synthi 100 paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-035",
+   "entity_id": "REF-015-003",
+   "topic": "keyboard",
+   "statement": "The two keyboards together give four control voltages and two key triggers; keyboard spread is adjustable, including microtonal tunings up to 61 divisions per semitone.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-09",
+   "locator": "Specification paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-036",
+   "entity_id": "REF-015-004",
+   "topic": "overview",
+   "statement": "Wikipedia: Synthi A debuted May 1971, Synthi AKS March 1972 with built-in keyboard and sequencer; AKS retailed at about GBP 450; uses the VCS3 design in a briefcase with the same pin matrix. EMS (Robin Wood) still builds units.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-10",
+   "locator": "Article text",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-037",
+   "entity_id": "REF-015-004",
+   "topic": "sequencer",
+   "statement": "The AKS sequencer is the KS (Keyboard Sequencer), a 256-event digital sequencer in the lid with a touch-sensitive Buchla-style keyboard.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-08",
+   "locator": "Related models / Synthi A section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-038",
+   "entity_id": "REF-015-005",
+   "topic": "voltage",
+   "statement": "Sound On Sound: the VCS3 follows neither 1 V/octave nor Hz/V. Internal scaling is 0.32 V/oct (oscillators 1 and 2), 0.26 V/oct (oscillator 3) and 0.20 V/oct (filter); because inputs have CV amplifiers, external CVs need about double: 0.64, 0.52 and 0.40 V/oct.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "'Keyboard' section, voltage paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-039",
+   "entity_id": "REF-015-005",
+   "topic": "level",
+   "statement": "Signal levels are not the usual 10 V peak-to-peak: oscillator outputs are 3, 4 or 6 V depending on waveform, the filter 5 V and the noise generator 3 V (per Sound On Sound).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Same voltage paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-040",
+   "entity_id": "REF-015-005",
+   "topic": "pitch",
+   "statement": "The WebSearch summary of bigbluewave.co.uk also gives sub-1V/oct scalings (0.32/0.26/0.20 V/oct internal), giving similar numbers; the pages themselves were not read, so it is not independent confirmation.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-11",
+   "locator": "Search result summary only",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-041",
+   "entity_id": "REF-015-005",
+   "topic": "inputs",
+   "statement": "Four 1/4-inch rear inputs (two microphone, two line) feed the Channel 1 and 2 rows of the matrix; the DK1 keyboard cable carries two power rails, two CVs and a gate for the envelope shaper.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Rear inputs paragraph; DK1 paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-042",
+   "entity_id": "REF-015-006",
+   "topic": "overview",
+   "statement": "Oscillators 1 and 2 cover below 1 Hz to about 10 kHz. Osc 1 outputs sine and sawtooth (with rectifying shape), osc 2 pulse and triangle with waveshapers, and osc 3 pulse and triangle in a low range of 0.025 Hz to about 500 Hz. On an unmodified unit the waveshapers are not voltage controlled.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Oscillators paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-043",
+   "entity_id": "REF-015-006",
+   "topic": "range",
+   "statement": "The WebSearch summary of another spec page gives oscillator ranges of 0.5 Hz-20 kHz and 1 Hz-10 kHz / 1 Hz-100 kHz for osc 1/2, which disagree with each other; text unread. Both are kept as unreliable.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-11",
+   "locator": "Search result summary only",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-044",
+   "entity_id": "REF-015-007",
+   "topic": "slope",
+   "statement": "Sound On Sound says the low-pass filter is often described as 18 dB/octave but has a knee: 12 dB/octave in the first octave above cutoff, then 18 dB/octave. High resonance (EMS: response) lowers low-frequency gain, so EMS called it low-pass/band-pass, and it self-oscillates.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Filter paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-045",
+   "entity_id": "REF-015-007",
+   "topic": "slope",
+   "statement": "Wikipedia states 24 dB/octave for the VCS3 filter, with a citation-needed tag. This conflicts with the 12/18 dB figure.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-08",
+   "locator": "Description section (citation needed)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-046",
+   "entity_id": "REF-015-008",
+   "topic": "shaper",
+   "statement": "The envelope generator (Shaper) has six controls: Attack about 2 ms-1 s; On (hold) claimed 0-2.5 s; Decay claimed 3 ms-15 s; Off (delay before auto retrigger) set to 10/Manual for normal playing; separate Trapezoid and Signal levels; a manual Attack button. It can auto-repeat up to 60 Hz.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Envelope generator / Shaper paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-047",
+   "entity_id": "REF-015-008",
+   "topic": "shaper",
+   "statement": "The author measured a hold of about 5 s and decay of about 60 s on his unit, longer than EMS claimed (3 ms-15 s decay).",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-06",
+   "locator": "Same paragraph (author measurement)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-048",
+   "entity_id": "REF-015-012",
+   "topic": "dk1",
+   "statement": "The DK1 keyboard connects through a dedicated 8-way cable (two power rails, two CVs, gate). Channel switches select Signal/CV1 and Dynamic Voltage/CV2; the DK1 has its own sawtooth oscillator and VCA with a spread control. Keyboard CVs enter via two input-level controls, so 1:1 tracking needs tuning.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "DK1 paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-049",
+   "entity_id": "REF-015-012",
+   "topic": "interfaces",
+   "statement": "EMS sold a special jack lead to allow conventional MIDI/CV operation, and the rear panel has an oscilloscope output.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-015-06",
+   "locator": "End of article (accessories)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-050",
+   "entity_id": "REF-015-012",
+   "topic": "matrix",
+   "statement": "Two Matrix products linked Prestopatch sockets of two Synthi A or VCS3 Mk II instruments (with or without keyboard sockets).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-07",
+   "locator": "Part 2 paragraph on Cockerell products",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-051",
+   "entity_id": "REF-015-011",
+   "topic": "recall",
+   "statement": "To recreate a patch one must record knob positions, the matrix pin map, and which pin (by resistance) sits in each position because pins vary.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Patch pins section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-052",
+   "entity_id": "REF-015-013",
+   "topic": "overview",
+   "statement": "DK1 (1969) is an early velocity-sensitive monophonic keyboard with an extra VCO and VCA; DK2 (1972) is duophonic.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-08",
+   "locator": "Keyboards controller section",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-053",
+   "entity_id": "REF-015-014",
+   "topic": "overview",
+   "statement": "Outputs A and B drive the left/right speakers with level, pan and bass/treble filters; the X/Y joystick has about +/-2 V range; a voltmeter and a rear oscilloscope output allow patch checking.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-06",
+   "locator": "Output and performance paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-054",
+   "entity_id": "REF-015-015",
+   "topic": "overview",
+   "statement": "Computer Synthi added a PDP-8 minicomputer with 4 Kb RAM, an LED display, twin digital cassettes and two 24 x 60 matrix patchboards; only three were sold.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-09",
+   "locator": "Specification paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-015-055",
+   "entity_id": "REF-015-016",
+   "topic": "overview",
+   "statement": "The Vocoder 5000 has a 22-band filter, mic/line inputs, 22 x 22 matrix patchboard, two oscillators and noise, a frequency shifter, pitch-to-voltage extractor and a spectrum display driver.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-015-09",
+   "locator": "Specification paragraph",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-015-001",
+   "item": "VCS3 matrix size, line assignments, voltage levels, oscillator and filter specifications",
+   "tried_sources": [
+    "SRC-015-03",
+    "SRC-015-04",
+    "SRC-015-05"
+   ],
+   "impact_on_spec": "Pin-matrix voltage conventions cannot be compared with other signal standards; the product guide gives module lists only."
+  },
+  {
+   "entity_id": "REF-015-005",
+   "item": "Official EMS operating manual or service manual with signal levels",
+   "tried_sources": [
+    "SRC-015-03",
+    "SRC-015-04"
+   ],
+   "impact_on_spec": "Matrix patching is recorded structurally only; electrical conventions are unspecified."
+  },
+  {
+   "entity_id": "REF-015-002",
+   "item": "Current production specification and a dated current price/availability",
+   "tried_sources": [
+    "SRC-015-03"
+   ],
+   "impact_on_spec": "Home page dated May 2020; reissue vs. original differences cannot be listed."
+  },
+  {
+   "entity_id": "REF-015-011",
+   "item": "Patch recall methods (removable boards, documentation charts)",
+   "tried_sources": [
+    "SRC-015-04"
+   ],
+   "impact_on_spec": "Patch storage for pin-matrix instruments is recorded as absent-from-documentation, not confirmed absent."
+  },
+  {
+   "entity_id": "REF-015-003",
+   "item": "Computer Synthi / Synthi E / Spectron details (guide sections not read)",
+   "tried_sources": [
+    "SRC-015-04"
+   ],
+   "impact_on_spec": "Digital-control variants of the Synthi 100 line not recorded."
+  },
+  {
+   "entity_id": "REF-015-001",
+   "item": "Official emssynthesisers.co.uk owner-run pages besides home/products/history/adverts (manuals, modification page at hinton-instruments.co.uk)",
+   "tried_sources": [
+    "SRC-015-01",
+    "SRC-015-02"
+   ],
+   "impact_on_spec": "hinton-instruments.co.uk is not an allowed host; servicing/modification data not read."
+  },
+  {
+   "entity_id": "REF-015-005",
+   "item": "Voltage scalings and signal levels come from a single Sound On Sound author; EMS documentation unread",
+   "tried_sources": [
+    "SRC-015-06",
+    "SRC-015-11"
+   ],
+   "impact_on_spec": "Comparison with 1 V/oct systems relies on one third-party source."
+  },
+  {
+   "entity_id": "REF-015-007",
+   "item": "Filter slope disagreement (12/18 dB vs 24 dB)",
+   "tried_sources": [
+    "SRC-015-06",
+    "SRC-015-08"
+   ],
+   "impact_on_spec": "Filter specification cannot be fixed; both retained."
+  },
+  {
+   "entity_id": "REF-015-006",
+   "item": "Osc 1/2 exact frequency limits; search summaries disagree and bigbluewave.co.uk is not reachable",
+   "tried_sources": [
+    "SRC-015-06",
+    "SRC-015-11"
+   ],
+   "impact_on_spec": "Oscillator range spec incomplete."
+  },
+  {
+   "entity_id": "REF-015-003",
+   "item": "Synthi 100 sequencer exact structure (three layers / six tracks, 256 events) and total units (30 vs fewer than 40)",
+   "tried_sources": [
+    "SRC-015-09",
+    "SRC-015-07"
+   ],
+   "impact_on_spec": "Sequencer and production figures not settled."
+  },
+  {
+   "entity_id": "REF-015-001",
+   "item": "Red-pin tolerance (1% vs 2%) and matrix row/column assignment tables",
+   "tried_sources": [
+    "SRC-015-06",
+    "SRC-015-08"
+   ],
+   "impact_on_spec": "Pin resistance spec incomplete; row/column allocation per signal not read."
+  },
+  {
+   "entity_id": "REF-015-012",
+   "item": "Exact jack lead (MIDI/CV) specification",
+   "tried_sources": [
+    "SRC-015-06"
+   ],
+   "impact_on_spec": "Interface not specifiable."
+  }
+ ]
+}

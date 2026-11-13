@@ -1,0 +1,27 @@
+# 検査結果(2026-11-12)
+
+## 自動検査(`python3 tools/validate_reference.py`)
+結果: **エラーなし**。集計: 対象22 / エンティティ339 / 事実1107 / 出典272 / 未確認227(2026-11-13)。
+
+検査項目: 必須項目、ID形式・重複、列挙値、`fact_ids`/`source_id`/`entity_id`/`tried_sources` の参照切れ、(メーカー,名称,版)の重複、確認済み値に根拠があること、未確認値に数値が入っていないこと、事実本文の長さ(転載の疑い)。
+
+## 索引・比較表・不足一覧の生成
+`python3 tools/build_reference_docs.py` で `index.md` / `comparison.md` / `gaps.md` をDBから再生成。手編集しない。
+
+## 手動確認
+- Doepfer(T-001)・VCV Rack(T-005)の電圧規約の事実を、公式ページの記述と照合した(ゲート閾値、典型レベル、1V/oct)。矛盾なし。
+- 全事実の網羅的な再検証は未実施。事実は担当調査時の読解に依存する。
+- 外部リンクのアクセス確認日は各出典の `accessed_on`、取得不能は `link_status: unreachable`(一覧は [不足一覧](gaps.md))。
+
+## 既知の制限
+- T-003(Mother-32)は公式マニュアル未取得のため `insufficient_sources`。
+- 歴史的系譜(T-011〜T-016)は原機の一次資料が乏しく、再発売品・現行権利者の資料が根拠。原機自体の仕様は未確認として記録。
+- T-015(EMS)の主な史料は個人執筆(公式サイト掲載)のため `third_party` 扱い。
+- Pd公式ドキュメントサイト(msp.ucsd.edu)など一部は取得不能で、同梱マニュアル・ソースで代替した。
+- スキーマ上の課題(Vpp単位、ground-closure型トリガー、`signal_type` に note なし、版の二重管理、「規約が存在しない」の表現)は [スキーマ改善候補](schema-improvements.md) に記録。
+
+## メーカー外資料による補強(2026-11-13)
+オーナー指示で、Wikipedia・vintagesynth.com・soundonsound.com 等の二次資料も調査対象に加えた。追加分の事実は `basis: third_party`、確度は単独で low〜medium。資料間で食い違う数値(例: Buchlaのピッチ電圧、Serge開始年)は優劣をつけず両方を別事実として残し、`unconfirmed` に記録した。検索結果の要約のみ参照した出典は `checked_scope` に明記し `unreachable` としている。
+
+## 追加調査(T-018〜T-022、2026-11-13)
+ブラウザ型モジュラー、エージェント/MCP連携シンセ、Mutable Instruments、Web Audio API、MIDI/OSCを追加。MIDI 1.0/2.0 は midi.org が取得できず、Wikipedia等の二次資料のみ(確度は中以下)。GitHubの最終更新日は検索API由来で未確認のものがある。

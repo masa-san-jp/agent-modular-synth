@@ -1,0 +1,1856 @@
+{
+ "target_id": "T-001",
+ "entities": [
+  {
+   "id": "REF-001-001",
+   "kind": "system",
+   "name": "Doepfer A-100",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "19インチ系ラックに3U(128.5mm)パネルのモジュールを組み込むアナログ・モジュラーシステム(Eurorack規格の基準)。",
+   "synthesis_method": "電圧制御によるアナログ減算/モジュラー合成",
+   "features": [
+    {
+     "text": "電源は+12V/-12V(一部+5V)、バスで供給",
+     "fact_ids": [
+      "F-001-003"
+     ]
+    },
+    {
+     "text": "3U高パネル・HP幅・84HP/段のラック",
+     "fact_ids": [
+      "F-001-002",
+      "F-001-004"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "全モジュールの合計電流が電源容量を超えないこと",
+     "fact_ids": [
+      "F-001-003",
+      "F-001-004"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "フロントパネルのソケットをパッチケーブルで接続。内部バスのCV/Gateも任意で併用可能。",
+     "fact_ids": [
+      "F-001-001"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-002",
+   "kind": "signal_standard",
+   "name": "A-100 信号・電圧規約",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "A-100内の音声・制御電圧・トリガ/ゲートの電圧と基準の取り決め。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1V/octのピッチ規約",
+     "fact_ids": [
+      "F-001-005"
+     ]
+    },
+    {
+     "text": "約+3V超でhighとなるゲート閾値",
+     "fact_ids": [
+      "F-001-006"
+     ]
+    },
+    {
+     "text": "バスに共有CV/Gate線(送信元は各1つ)",
+     "fact_ids": [
+      "F-001-010"
+     ]
+    },
+    {
+     "text": "任意の出力を任意の用途に使える",
+     "fact_ids": [
+      "F-001-009"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "トリガ系には矩形波のみ",
+     "fact_ids": [
+      "F-001-008"
+     ]
+    },
+    {
+     "text": "バスCV/Gateの送信元は1つだけ",
+     "fact_ids": [
+      "F-001-010"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "音声レベル(典型)",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-007"
+     ]
+    },
+    {
+     "name": "ゲート/トリガ(典型)",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-006",
+      "F-001-007"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "バスのINT.CV/INT.Gateをジャンパで受信/送信するかを選択可能。",
+     "fact_ids": [
+      "F-001-010"
+     ]
+    },
+    "timing": {
+     "summary": "トリガは立ち上がりエッジで起動。",
+     "fact_ids": [
+      "F-001-006"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-003",
+   "kind": "patch_storage",
+   "name": "A-100 パッチ保存(ハードウェア)",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "A-100の音色はパッチケーブルとつまみ配置で決まり、公式資料に電子的なパッチ保存の機能は記載されていない。",
+   "synthesis_method": null,
+   "features": [],
+   "constraints": [
+    {
+     "text": "パッチはケーブルとつまみで保持され、本体にプリセット保存の記述はない(資料上は未確認)",
+     "fact_ids": [
+      "F-001-011"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "電子的保存の記述なし(確認範囲内)。",
+     "fact_ids": [
+      "F-001-011"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-004",
+   "kind": "control_interface",
+   "name": "Doepfer A-190-3 USB/MIDI-to-CV/Gate",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "MIDIまたはUSBからCV4本とゲート1本を生成し、A-100を外部制御する。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDI/USBからCV4本+ゲート1本",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    },
+    {
+     "text": "学習ボタンで設定",
+     "fact_ids": [
+      "F-001-013"
+     ]
+    },
+    {
+     "text": "内部バスへCV/Gate送出",
+     "fact_ids": [
+      "F-001-014"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "CV1(ノート)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    },
+    {
+     "name": "CV2(ピッチベンド)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    },
+    {
+     "name": "CV3(ベロシティ)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    },
+    {
+     "name": "CV4(CC)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    },
+    {
+     "name": "Gate",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": {
+      "min": 0,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-012",
+      "F-001-013"
+     ]
+    },
+    {
+     "name": "USB/MIDI in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDI/USB入力で外部制御。",
+     "fact_ids": [
+      "F-001-012"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-005",
+   "kind": "module",
+   "name": "A-110-1 Standard VCO",
+   "maker": "Doepfer Musikelektronik",
+   "version": "A-110-1(旧A-110)",
+   "version_status": "confirmed",
+   "function_category": "oscillator",
+   "purpose": "電圧制御オシレータ。4波形を同時出力。",
+   "synthesis_method": "ノコギリ波コアから他波形を派生",
+   "features": [
+    {
+     "text": "4波形同時出力",
+     "fact_ids": [
+      "F-001-015"
+     ]
+    },
+    {
+     "text": "PWMとバスCV正規化",
+     "fact_ids": [
+      "F-001-017",
+      "F-001-018"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "三角・正弦は不完全な波形",
+     "fact_ids": [
+      "F-001-019"
+     ]
+    },
+    {
+     "text": "幅10HP、+90/-20mA",
+     "fact_ids": [
+      "F-001-020"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "CV1",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-018"
+     ]
+    },
+    {
+     "name": "Saw/Square out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-016"
+     ]
+    },
+    {
+     "name": "Triangle/Sine out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-016"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Range",
+     "unit": "octave",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-017"
+     ]
+    },
+    {
+     "name": "Tune",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-017"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "CV1はバスCVに正規化。",
+     "fact_ids": [
+      "F-001-018"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-006",
+   "kind": "module",
+   "name": "A-120 24dB Low Pass (Transistor Ladder)",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "filter",
+   "purpose": "電圧制御24dB/oct低域通過フィルタ。",
+   "synthesis_method": "トランジスタ・ラダー",
+   "features": [
+    {
+     "text": "3CV加算入力と自己発振",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "幅8HP、+30/-20mA",
+     "fact_ids": [
+      "F-001-022"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "CV in (x3)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    },
+    {
+     "name": "Audio in",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    },
+    {
+     "name": "Audio out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Cutoff",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    },
+    {
+     "name": "Resonance (Emphasis)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-021"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-007",
+   "kind": "module",
+   "name": "A-140-1 ADSR Envelope Generator",
+   "maker": "Doepfer Musikelektronik",
+   "version": "A-140-1(旧A-140)",
+   "version_status": "confirmed",
+   "function_category": "envelope",
+   "purpose": "Gateで起動するADSRエンベロープ発生器。",
+   "synthesis_method": "ゲート駆動のADSR",
+   "features": [
+    {
+     "text": "Retrigとバスゲート受信",
+     "fact_ids": [
+      "F-001-023"
+     ]
+    },
+    {
+     "text": "3段の時間レンジ",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "減衰時間は指数的で厳密な規定が難しい",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Gate in",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-023"
+     ]
+    },
+    {
+     "name": "Retrig in",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-023"
+     ]
+    },
+    {
+     "name": "Env out (+)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-025"
+     ]
+    },
+    {
+     "name": "Env out (inverted)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -8,
+      "max": 0,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-025"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Attack",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    },
+    {
+     "name": "Decay",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    },
+    {
+     "name": "Release",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    },
+    {
+     "name": "Sustain",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-023"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "GateはバスINT.GATEまたはフロント入力。",
+     "fact_ids": [
+      "F-001-023"
+     ]
+    },
+    "timing": {
+     "summary": "3段の時間レンジ。",
+     "fact_ids": [
+      "F-001-024"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-008",
+   "kind": "module",
+   "name": "A-145-1 Low Frequency Oscillator",
+   "maker": "Doepfer Musikelektronik",
+   "version": "A-145-1(旧A-145)",
+   "version_status": "confirmed",
+   "function_category": "lfo",
+   "purpose": "低周波オシレータ。5波形、リセット同期付き。",
+   "synthesis_method": "三角コアのLFO",
+   "features": [
+    {
+     "text": "5波形と3段の周波数レンジ",
+     "fact_ids": [
+      "F-001-027",
+      "F-001-028"
+     ]
+    },
+    {
+     "text": "Resetによる同期",
+     "fact_ids": [
+      "F-001-029"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ノコギリ出力は他波形の2倍周波数",
+     "fact_ids": [
+      "F-001-027"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Reset in",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-029"
+     ]
+    },
+    {
+     "name": "Waveform outs",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -4,
+      "max": 4,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-029"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Frequency range",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-028"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "3段の周波数レンジ。",
+     "fact_ids": [
+      "F-001-028"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-009",
+   "kind": "module",
+   "name": "A-138s Mini Stereo Mixer",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "4入力2出力のパン付きミキサー。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "4入力パン付き2出力、DC結合",
+     "fact_ids": [
+      "F-001-031"
+     ]
+    },
+    {
+     "text": "並列ルーティングやフィードバックにも使える",
+     "fact_ids": [
+      "F-001-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ゲイン約1.6〜1.9",
+     "fact_ids": [
+      "F-001-032"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "In 1-4",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-031"
+     ]
+    },
+    {
+     "name": "Out L/R",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-031"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Level/Pan (x4)",
+     "unit": null,
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-032"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-010",
+   "kind": "module",
+   "name": "A-160-1 Clock/Trigger Divider",
+   "maker": "Doepfer Musikelektronik",
+   "version": "A-160-1(旧A-160)",
+   "version_status": "confirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "クロック/トリガ周波数を分周する。",
+   "synthesis_method": "デジタル分周",
+   "features": [
+    {
+     "text": "1/2〜1/64分周とReset",
+     "fact_ids": [
+      "F-001-034"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "出力high約+10V(標準ゲート+5Vと異なる)",
+     "fact_ids": [
+      "F-001-035"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Trigger in",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-034"
+     ]
+    },
+    {
+     "name": "Reset in",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-001-034"
+     ]
+    },
+    {
+     "name": "Divided outs",
+     "direction": "out",
+     "signal_type": "clock",
+     "range": {
+      "min": 0,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-001-035"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "1/2〜1/64分周。",
+     "fact_ids": [
+      "F-001-034"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-011",
+   "kind": "signal_standard",
+   "name": "Eurorack 電圧・形状規約(二次資料による概説)",
+   "maker": "Doepfer(起点)/業界慣習",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "Doepfer A-100仕様を事実上の基準とするEurorackの形状・電圧慣習を、メーカー外の百科事典記述で裏取りする。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "3U・HP・±12V・3.5mmジャックの形状/電源規約",
+     "fact_ids": [
+      "F-001-038",
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "電圧は「緩く定義」された3分類",
+     "fact_ids": [
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "Doepfer公式値(F-001-002,003,007)と数値は整合",
+     "fact_ids": [
+      "F-001-038",
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "Eurorack以前のEuroカード系の先行例(Formant等)",
+     "fact_ids": [
+      "F-001-041"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "規模・発売年は資料間で食い違う",
+     "fact_ids": [
+      "F-001-040",
+      "F-001-042"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-012",
+   "kind": "signal_standard",
+   "name": "1V/oct と Hz/V(ピッチCV方式の違い)",
+   "maker": "業界慣習(Moog,Korg,Yamaha等)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "ピッチ制御電圧の2大方式の違いと歴史的背景。A-100は1V/oct側。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1V/oct: 対数、1V=1オクターブ",
+     "fact_ids": [
+      "F-001-043"
+     ]
+    },
+    {
+     "text": "Hz/V: 周波数に比例、Korg/Yamaha系",
+     "fact_ids": [
+      "F-001-044"
+     ]
+    },
+    {
+     "text": "換算式 V_hz=2^(V_oct-1)",
+     "fact_ids": [
+      "F-001-045"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "方式違いの接続は調子外れになる",
+     "fact_ids": [
+      "F-001-046"
+     ]
+    },
+    {
+     "text": "1V/octの絶対基準電圧・範囲は実装で異なる",
+     "fact_ids": [
+      "F-001-048"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-013",
+   "kind": "signal_standard",
+   "name": "トリガ/ゲートの種別と閾値(一般論)",
+   "maker": "業界慣習",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "トリガとゲートの定義、V-trig/S-trig、電圧閾値のばらつき。A-100のゲート仕様の位置づけを一般論で補う。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "トリガ=パルス、ゲート=持続",
+     "fact_ids": [
+      "F-001-049"
+     ]
+    },
+    {
+     "text": "V-trigは2〜10Vの範囲、S-trigは初期Moog",
+     "fact_ids": [
+      "F-001-050",
+      "F-001-051"
+     ]
+    },
+    {
+     "text": "Eurorackは0〜5Vパルスが慣習",
+     "fact_ids": [
+      "F-001-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "不一致接続は無音または逆転",
+     "fact_ids": [
+      "F-001-052"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-014",
+   "kind": "system",
+   "name": "Doepfer Musikelektronik とA-100の歴史的位置づけ",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Doepferの沿革とA-100の位置づけ(メーカー外の百科事典による)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDI機器とモジュラーの両方を長く手がけた",
+     "fact_ids": [
+      "F-001-054"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "沿革年は同記事内でも食い違う",
+     "fact_ids": [
+      "F-001-055"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-001-001",
+   "entity_id": "REF-001-001",
+   "topic": "概要",
+   "statement": "A-100は70年代の古典的モジュラーを範とするアナログ・モジュラー。2016年夏時点で125種超のモジュールがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-01",
+   "locator": "A-100 English Main Page 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-002",
+   "entity_id": "REF-001-001",
+   "topic": "パネル寸法",
+   "statement": "パネル高は128.5mm(3U)、幅はHP単位(1HP=5.08mm)。ラックの有効幅は84HP。A-100のパネル幅は2HPの倍数。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-03",
+   "locator": "Construction Details 冒頭〜Table 1; Order Notes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-003",
+   "entity_id": "REF-001-001",
+   "topic": "電源",
+   "statement": "標準電源は+12V/-12Vで、世代により650mA/1200mA/2000mA(-12Vは1200mA)。一部モジュールは+5Vも必要。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Power Supply and System Bus",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-004",
+   "entity_id": "REF-001-001",
+   "topic": "筐体構成",
+   "statement": "6Uの標準筐体は3U段2つ、各段にバスボード1枚、1枚あたり最大14モジュールを接続可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-03",
+   "locator": "Construction Details 後半",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-005",
+   "entity_id": "REF-001-002",
+   "topic": "1V/oct",
+   "statement": "VCOピッチは1V/oct。CVは絶対音高でなく相対量で、実ピッチはtune、レンジ、他CV入力の合算で決まる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Principles of Voltage Control",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-006",
+   "entity_id": "REF-001-002",
+   "topic": "ゲート閾値",
+   "statement": "約+3V超をhigh、1V未満をlowと扱う。+5V〜+12Vで動作し、トリガは立ち上がりエッジで起動。全モジュールは+12Vまで耐える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Principles / Signals in the A-100",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-007",
+   "entity_id": "REF-001-002",
+   "topic": "信号種別と典型レベル",
+   "statement": "信号は音声・制御電圧・トリガの3種。音声は約10Vpp(-5〜+5V)、LFOのCVは約-2.5〜+2.5V、ADSRは0〜+8V、トリガ/ゲート/クロックは0/+5V程度。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Signals in the A-100",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-008",
+   "entity_id": "REF-001-002",
+   "topic": "トリガ波形",
+   "statement": "トリガ/ゲート/クロックには矩形波のみ使うこと。三角やノコギリなど立上りの遅い信号は不適。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Signals in the A-100",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-009",
+   "entity_id": "REF-001-002",
+   "topic": "役割の混用",
+   "statement": "どのモジュール出力も音声・CV・トリガとして使え、信号種別の区別は原理的なもの。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Signals in the A-100 末尾",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-010",
+   "entity_id": "REF-001-002",
+   "topic": "内部バスCV/Gate",
+   "statement": "バスにはCVとGateの線があり、CV送信元とGate送信元はそれぞれ1つのみ許される。複数モジュールが受信可能。バス中央のジャンパで2領域に分割できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-02",
+   "locator": "Technical Details Meaning and usage of the bus signal CV and Gate",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-011",
+   "entity_id": "REF-001-003",
+   "topic": "再現性",
+   "statement": "音色は都度組み立てるもので、正確に再現できない場合があると公式概要が述べている。パッチ保存機能への言及は確認されない。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-001-01",
+   "locator": "A-100 English Main Page 第2段落",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-012",
+   "entity_id": "REF-001-004",
+   "topic": "出力",
+   "statement": "CV1はMIDIノートで1V/oct 0〜+5V、CV2はピッチベンド、CV3はベロシティ(0〜+5V)、CV4は任意のコントロールチェンジ(0〜+5V)。ゲートは0/+5V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-10",
+   "locator": "A-190-3 入出力と操作部の節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-013",
+   "entity_id": "REF-001-004",
+   "topic": "設定",
+   "statement": "MIDIチャンネル、基準音、CV4のコントローラ番号は学習ボタンで設定。ゲート電圧は+5Vまたは+12Vにジャンパ選択でき、他社機器にはS-Trigger用ケーブルがある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-10",
+   "locator": "A-190-3 入出力と操作部/ジャンパの節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-014",
+   "entity_id": "REF-001-004",
+   "topic": "バス連携",
+   "statement": "ジャンパによりCV1とGateを内部バスへ送出でき、A-110/A-111やA-140をフロント配線なしで制御可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-10",
+   "locator": "A-190-3 説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-015",
+   "entity_id": "REF-001-005",
+   "topic": "周波数と波形",
+   "statement": "約8オクターブ(約15Hz〜8kHz)。矩形・ノコギリ・三角・正弦を同時出力。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-016",
+   "entity_id": "REF-001-005",
+   "topic": "出力レベル",
+   "statement": "出力は典型的にノコギリと矩形が8Vpp、三角と正弦が10Vpp。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-017",
+   "entity_id": "REF-001-005",
+   "topic": "制御",
+   "statement": "ピッチはレンジスイッチ(5段)、Tuneつまみ、CV入力で決まり、パルス幅は手動またはCVで変調可。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-018",
+   "entity_id": "REF-001-005",
+   "topic": "バス正規化",
+   "statement": "CV1はバスの内部CVに正規化され、ジャンパで解除可。CV1にケーブルを挿すとバスCVは切断される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 Technical remarks",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-019",
+   "entity_id": "REF-001-005",
+   "topic": "波形の制約",
+   "statement": "三角・正弦はノコギリのリセットによる切れ込みがあり完全ではない。正弦は丸めた三角に近い。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 Technical remarks",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-020",
+   "entity_id": "REF-001-005",
+   "topic": "物理仕様",
+   "statement": "幅10HP、電流は+90mA/-20mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-04",
+   "locator": "A-110 仕様行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-021",
+   "entity_id": "REF-001-006",
+   "topic": "特性",
+   "statement": "3つのCV入力が加算されカットオフを変える。-24dB/octのトランジスタ・ラダーで、レゾナンスは自己発振まで上げられ正弦波源として働く。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-05",
+   "locator": "A-120 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-022",
+   "entity_id": "REF-001-006",
+   "topic": "物理仕様",
+   "statement": "幅8HP、電流+30mA/-20mA。2009年にトランジスタ・アレイへ改訂。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-05",
+   "locator": "A-120 仕様行/Technical note",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-023",
+   "entity_id": "REF-001-007",
+   "topic": "動作",
+   "statement": "ゲート(入力またはバスのINT.GATE)で起動し、Retrig入力でゲート中の再起動が可能。出力は正と反転。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-06",
+   "locator": "A-140 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-024",
+   "entity_id": "REF-001-007",
+   "topic": "時間範囲",
+   "statement": "3段スイッチで時間比約1:20:1000。Attackは約20us〜100ms/400us〜2s/20ms〜120s、Decay/Releaseは約3〜4倍。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-06",
+   "locator": "A-140 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-025",
+   "entity_id": "REF-001-007",
+   "topic": "出力電圧",
+   "statement": "通常出力は約0〜+8V、反転出力は約0〜-8V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-06",
+   "locator": "A-140 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-026",
+   "entity_id": "REF-001-007",
+   "topic": "物理仕様",
+   "statement": "幅8HP、電流+20mA/-20mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-06",
+   "locator": "A-140 仕様行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-027",
+   "entity_id": "REF-001-008",
+   "topic": "波形",
+   "statement": "ノコギリ、反転ノコギリ、三角、正弦、矩形の5波形。ノコギリ出力の周波数は他の2倍。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-07",
+   "locator": "A-145 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-028",
+   "entity_id": "REF-001-008",
+   "topic": "周波数レンジ",
+   "statement": "3段スイッチ。H約10Hz〜4.5kHz、M約0.1〜50Hz、L約0.005〜5Hz。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-07",
+   "locator": "A-145 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-029",
+   "entity_id": "REF-001-008",
+   "topic": "リセットと出力",
+   "statement": "Reset入力の立ち上がりで三角波が0Vに戻り上昇から再開。出力は約±4V(約8Vpp)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-07",
+   "locator": "A-145 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-030",
+   "entity_id": "REF-001-008",
+   "topic": "物理仕様",
+   "statement": "幅8HP、電流+30mA/-20mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-07",
+   "locator": "A-145 仕様行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-031",
+   "entity_id": "REF-001-009",
+   "topic": "構成",
+   "statement": "4入力に各Level/Panを持ち、L/Rの2出力。入出力はDC結合で制御信号の混合にも使える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-08",
+   "locator": "A-138s 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-032",
+   "entity_id": "REF-001-009",
+   "topic": "ゲイン",
+   "statement": "Level全開・Pan中央で両出力約1.6倍、Pan端では片出力約1.9倍でもう一方は0。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-08",
+   "locator": "A-138s Technical notes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-033",
+   "entity_id": "REF-001-009",
+   "topic": "物理仕様",
+   "statement": "幅8HP、電流+10mA/-10mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-08",
+   "locator": "A-138s 仕様行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-034",
+   "entity_id": "REF-001-010",
+   "topic": "機能",
+   "statement": "Trigger入力のクロックを1/2〜1/64に分周して出力。Reset入力high中は全出力が0。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-09",
+   "locator": "A-160 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-035",
+   "entity_id": "REF-001-010",
+   "topic": "出力レベル",
+   "statement": "出力のlow/highは0Vと約+10V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-09",
+   "locator": "A-160 英語説明部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-036",
+   "entity_id": "REF-001-010",
+   "topic": "物理仕様",
+   "statement": "幅4HP、電流+40mA/-0mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-001-09",
+   "locator": "A-160 仕様行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-037",
+   "entity_id": "REF-001-011",
+   "topic": "定義",
+   "statement": "Wikipediaは、Eurorackは1995年にDoepfer社が仕様化した形式で、他社モジュールが互換を保つ事実上の標準と述べる。基準はDoepferのConstruction/Technical Detailsとされる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭・節Standards",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-038",
+   "entity_id": "REF-001-011",
+   "topic": "形状",
+   "statement": "3U高(128.5mm)、幅はHP(5.08mm)の整数倍(一部メーカーは0.5HP単位)、電源は+12V/0V/-12Vで10ピンまたは16ピン(Gate,CV,+5V含む)リボン、2.54mmピッチ。Doepfer一次資料の記述(F-001-002,003)と一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "節Physical・Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-039",
+   "entity_id": "REF-001-011",
+   "topic": "信号レベル",
+   "statement": "音声は最大約10Vpp(-5〜+5V)、双極CVは約5Vpp(-2.5〜+2.5V)、単極CVは0〜8V、トリガ/ゲート/クロックは0〜5Vのデジタルパルス。3.5mmモノジャック。「緩く定義された3分類」と明記。Doepfer一次資料(F-001-007)と数値が一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-040",
+   "entity_id": "REF-001-011",
+   "topic": "普及規模",
+   "statement": "2022年時点で600社超・15000モジュール超とWikipedia Eurorack記事は述べる。CV/gate記事は別の時点で316社・7000モジュール超と述べ、数値は記事間で異なる(時点差とみられるが記事は日付を示さない)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭(CV/gate記事の節CV併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-041",
+   "entity_id": "REF-001-011",
+   "topic": "先行規格",
+   "statement": "1970年代末にはEuroカード筐体の先行システム(Elektor Formant: 3U/6U×7HP・3.5mmジャック・31ピンバス・±15V、BME PM10/Axiom: 8HP・RCA、Synton 3000: 8HP・4mmバナナ・±15V)があり、1980年代末に生産終了したとされる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "節History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-042",
+   "entity_id": "REF-001-011",
+   "topic": "発売年",
+   "statement": "Eurorack記事は最初のA-100の発売を1996年とし、Doepfer記事の製品年表は1995年にA-100を載せる。年は資料間で1年異なる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "Product History(1995の項)/Eurorack節History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-043",
+   "entity_id": "REF-001-012",
+   "topic": "1V/oct",
+   "statement": "1V/octでは電圧が1V増えるごとに1オクターブ上がる(対数的)。Bob Moogが1960年代に普及させ、Roland、Moog、Sequential、Oberheim、ARP、Doepferが採用した。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-044",
+   "entity_id": "REF-001-012",
+   "topic": "Hz/V",
+   "statement": "Hz/Vは電圧の倍加で1オクターブ上がる(周波数が電圧に比例)。KorgとYamahaの多くの機種が採用。2Vは4Vの1オクターブ下、1Vの1オクターブ上。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-045",
+   "entity_id": "REF-001-012",
+   "topic": "換算式",
+   "statement": "両方式の関係は V_hz = 2^(V_oct − 1)。同記事の表(1V/oct基準と55Hz/V例: A1=1V/1V、A2=2V/2V、A3=3V/4V、A4=4V/8V、A5=5V/16V)で示される。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CVの表と式",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-046",
+   "entity_id": "REF-001-012",
+   "topic": "非互換",
+   "statement": "電圧範囲が近いため機器は壊れにくいが、方式違いを接続すると音は鳴っても調子外れになる。変換用にKorg MS-02などのインターフェースがある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-047",
+   "entity_id": "REF-001-012",
+   "topic": "Moogと1V/oct",
+   "statement": "Moog synthesizer記事は、Moogが指数特性のトランジスタを用いたVCOを1V/octを基準に設計したと述べる。Modular synthesizer記事も、Moogが1V/octを定めたと述べる。複数のWikipedia記事は互いに独立した一次調査ではない点に注意。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-15",
+   "locator": "節Development(Modular synthesizer記事の節Historyと併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-048",
+   "entity_id": "REF-001-012",
+   "topic": "実装差",
+   "statement": "1V/oct内でも実装(制御電圧の範囲0〜5V/0〜10V/-5〜5V等、TRSでの給電)は一様でなく、モジュール間互換が問題になるとCV/gate記事は述べる。Modular synthesizer記事も「1V/octとゲート/トリガ閾値が一般的互換性を与える」が異種メーカー間はプラグ違いで追加ケーブルが必要と述べる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-14",
+   "locator": "節Overview/Standards(CV/gate記事の節CVと併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-049",
+   "entity_id": "REF-001-013",
+   "topic": "定義",
+   "statement": "トリガは音の開始を示すパルス(多くは立ち上がりエッジで起動)、ゲートは出来事の間ずっとhighを保つ信号。キーボードが送るCVは音高、ゲートが発音のオン/オフ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Basic usage",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-050",
+   "entity_id": "REF-001-013",
+   "topic": "V-trigger",
+   "statement": "V-trig(正トリガ)は通常0V付近でトリガ時に一定の正電圧を出す。電圧はメーカーにより2V〜10V。RolandやSequential Circuitsが採用。Doepfer A-100の+3V超でhigh(F-001-006)はこの範囲内にある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-051",
+   "entity_id": "REF-001-013",
+   "topic": "S-trigger",
+   "statement": "S-trig(ショートトリガ)は通常high状態で、発音時にグランドへ短絡する。初期のMoogモジュラーで使われ、現在はまれ。KorgやYamahaの反転ゲートとは別。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-052",
+   "entity_id": "REF-001-013",
+   "topic": "不一致時の症状",
+   "statement": "方式や電圧の合わない機器を接続すると、鳴らない、または押鍵と発音が逆転する。ゲート電圧もメーカーで異なり、負電圧側へ振れる実装もあり、入力は保護のためバッファされることが多い。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger・Gate",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-053",
+   "entity_id": "REF-001-013",
+   "topic": "Eurorackでの標準",
+   "statement": "Eurorack記事はトリガ/ゲート/クロックを0〜5Vのデジタルパルスと説明する。VCV Rackは10Vの出力(別対象T-005)で、実機の0〜5V慣習より高い。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-054",
+   "entity_id": "REF-001-014",
+   "topic": "沿革",
+   "statement": "Dieter DoepferはElektor Formant用VCフェイザー(1977年着手とする記述、年表では1979年)を作り、1980年PMS、1982年Voice Modular System、1986年MCV1(MIDI-CV)、1992年Kraftwerkと共同でMAQ16/3シーケンサーを出した。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "冒頭・Product History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-055",
+   "entity_id": "REF-001-014",
+   "topic": "年表の食い違い",
+   "statement": "同じDoepfer記事の冒頭は1977年にフェイザー開発開始、年表は1979年と記す。年は未確定。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "冒頭/Product History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-056",
+   "entity_id": "REF-001-014",
+   "topic": "形式の特徴",
+   "statement": "Eurorack記事はコンパクトな寸法、全信号3.5mmモノジャック、特定メーカーの音の美学がないことを普及理由に挙げる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-001-001",
+   "item": "A-100の電子的なパッチ保存機能の有無",
+   "tried_sources": [
+    "SRC-001-01",
+    "SRC-001-02"
+   ],
+   "impact_on_spec": "保存機能がないと仮定して良いか未確定。DAW等の保存要件は別途決める必要がある。"
+  },
+  {
+   "entity_id": "REF-001-002",
+   "item": "ゲート/トリガのパルス幅・立ち上がり時間の最小要件",
+   "tried_sources": [
+    "SRC-001-02"
+   ],
+   "impact_on_spec": "トリガ検出の最小パルス幅をモデル化できない。"
+  },
+  {
+   "entity_id": "REF-001-005",
+   "item": "A-110-1のCV入力感度・Tune/Range・パルス幅の数値範囲",
+   "tried_sources": [
+    "SRC-001-04"
+   ],
+   "impact_on_spec": "パラメータ範囲はA-110_man.pdf未取得のため未確定。"
+  },
+  {
+   "entity_id": "REF-001-006",
+   "item": "A-120のカットオフ範囲とCV感度",
+   "tried_sources": [
+    "SRC-001-05"
+   ],
+   "impact_on_spec": "フィルタのパラメータ範囲を仕様化できない。"
+  },
+  {
+   "entity_id": "REF-001-004",
+   "item": "A-190-3の英語マニュアル(ベンド範囲等の詳細)",
+   "tried_sources": [
+    "SRC-001-10"
+   ],
+   "impact_on_spec": "MIDI対応詳細は説明ページのみに基づく。"
+  },
+  {
+   "item": "各モジュールのPDFマニュアル(A110_man.pdf等)",
+   "tried_sources": [
+    "SRC-001-04"
+   ],
+   "impact_on_spec": "ページ記載を超えるポート詳細は未確認。"
+  },
+  {
+   "entity_id": "REF-001-011",
+   "item": "Eurorack公称の基準年(1995仕様化か1996発売か)とモジュール数の最新値",
+   "tried_sources": [
+    "SRC-001-11",
+    "SRC-001-13"
+   ],
+   "impact_on_spec": "歴史年表に使う場合は両説を併記し、数値は出典日付付きで扱う。"
+  },
+  {
+   "entity_id": "REF-001-012",
+   "item": "1V/octを最初に導入した歴史的一次資料(Moog 1964年論文等)",
+   "tried_sources": [
+    "SRC-001-15",
+    "SRC-001-12"
+   ],
+   "impact_on_spec": "歴史的起源の記述は二次資料に依存。仕様化では「普及させた」の程度に留める。"
+  },
+  {
+   "entity_id": "REF-001-013",
+   "item": "Doepfer以外のEurorackモジュールの個別ゲート閾値",
+   "tried_sources": [
+    "SRC-001-11",
+    "SRC-001-12"
+   ],
+   "impact_on_spec": "閾値は個体差があるため、仕様化では範囲で記し、モジュール別は各取扱説明書で確認が必要。"
+  },
+  {
+   "entity_id": "REF-001-014",
+   "item": "Doepferフェイザーの開発年(1977年か1979年か)とA-100初出年",
+   "tried_sources": [
+    "SRC-001-13",
+    "SRC-001-11"
+   ],
+   "impact_on_spec": "沿革の年表に使う場合は不確実性を明示。公式の「Zeit-Tabelle」(doepfer.de)は未取得。"
+  }
+ ]
+}

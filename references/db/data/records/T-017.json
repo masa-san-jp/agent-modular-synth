@@ -1,0 +1,2463 @@
+{
+ "target_id": "T-017",
+ "entities": [
+  {
+   "id": "REF-017-001",
+   "kind": "system",
+   "name": "AJH MiniMod (Eurorack module series)",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Series of Eurorack modules recreating the circuits of the early R.A. Moog Model D, sold as individual modules and as complete systems.",
+   "synthesis_method": "analog subtractive voice built from discrete-transistor Model D circuit recreations",
+   "features": [
+    {
+     "text": "Individual modules plus ready-made multi-row systems and a keyboard version",
+     "fact_ids": [
+      "F-017-002"
+     ]
+    },
+    {
+     "text": "Works with standard Eurorack voltages, power bus and panel dimensions",
+     "fact_ids": [
+      "F-017-001"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Low internal signal levels make the modules sensitive to noisy switching power supplies",
+     "fact_ids": [
+      "F-017-003"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Patch cables on Eurorack jacks; some inputs are normalled through jack switches",
+     "fact_ids": [
+      "F-017-001"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-002",
+   "kind": "module",
+   "name": "MiniMod VCO",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "Discrete-transistor Model D style voltage-controlled oscillator with four waveforms, PWM, sync and linear/exponential FM.",
+   "synthesis_method": "analog VCO with exponential converter, transistor core",
+   "features": [
+    {
+     "text": "Four waveforms available at once",
+     "fact_ids": [
+      "F-017-005"
+     ]
+    },
+    {
+     "text": "PWM, hard sync and linear plus exponential modulation inputs",
+     "fact_ids": [
+      "F-017-006",
+      "F-017-008",
+      "F-017-009"
+     ]
+    },
+    {
+     "text": "Lo octave setting for LFO use",
+     "fact_ids": [
+      "F-017-007"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Tracking may fail above about 10 kHz; needs warm-up",
+     "fact_ids": [
+      "F-017-006",
+      "F-017-011"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "1V/Oct",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -7,
+      "max": 7,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-006"
+     ]
+    },
+    {
+     "name": "Exp CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-006"
+     ]
+    },
+    {
+     "name": "Linear CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-006"
+     ]
+    },
+    {
+     "name": "PWM CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-008"
+     ]
+    },
+    {
+     "name": "Sync In",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-009"
+     ]
+    },
+    {
+     "name": "Saw Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-005"
+     ]
+    },
+    {
+     "name": "Triangle Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-005"
+     ]
+    },
+    {
+     "name": "Shark Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-005"
+     ]
+    },
+    {
+     "name": "Square Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-005"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Tune",
+     "unit": "semitones",
+     "range": {
+      "min": -8,
+      "max": 8,
+      "unit": "semitones"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-007"
+     ]
+    },
+    {
+     "name": "Exp CV Level",
+     "unit": "percent",
+     "range": {
+      "min": 0,
+      "max": 120,
+      "unit": "percent"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-006"
+     ]
+    },
+    {
+     "name": "PWM Shape (duty)",
+     "unit": "percent",
+     "range": {
+      "min": 10,
+      "max": 90,
+      "unit": "percent"
+     },
+     "default": 50,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-017-008"
+     ]
+    },
+    {
+     "name": "Octave switch",
+     "unit": "octave",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-007"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "1 V/Oct jack normalled to the power-bus pitch line",
+     "fact_ids": [
+      "F-017-010"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-003",
+   "kind": "module",
+   "name": "MiniMod VCF (Transistor Ladder Filter)",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "Model D style 24 dB/oct transistor ladder low-pass filter with three-input mixer and voltage-controlled resonance.",
+   "synthesis_method": "analog transistor-ladder low-pass",
+   "features": [
+    {
+     "text": "24 dB/oct low-pass with 3-input mixer",
+     "fact_ids": [
+      "F-017-012",
+      "F-017-016"
+     ]
+    },
+    {
+     "text": "Multiple CV scalings: 1V/Oct, 1/3, 2/3, exponential",
+     "fact_ids": [
+      "F-017-013",
+      "F-017-014"
+     ]
+    },
+    {
+     "text": "Voltage-controlled resonance, self-oscillation as sine VCO",
+     "fact_ids": [
+      "F-017-015"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Self-oscillation pitch tracking is limited and not temperature corrected",
+     "fact_ids": [
+      "F-017-017"
+     ]
+    },
+    {
+     "text": "Audio inputs are AC coupled",
+     "fact_ids": [
+      "F-017-016"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Audio In 1",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-016"
+     ]
+    },
+    {
+     "name": "Audio In 2",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-016"
+     ]
+    },
+    {
+     "name": "Audio In 3",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-016"
+     ]
+    },
+    {
+     "name": "1V/Oct",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-013"
+     ]
+    },
+    {
+     "name": "1/3 CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-013"
+     ]
+    },
+    {
+     "name": "2/3 CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-013"
+     ]
+    },
+    {
+     "name": "Freq CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-014"
+     ]
+    },
+    {
+     "name": "Emphasis CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-015"
+     ]
+    },
+    {
+     "name": "Audio Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-012"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Freq CV Level",
+     "unit": "percent",
+     "range": {
+      "min": 0,
+      "max": 130,
+      "unit": "percent"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-014"
+     ]
+    },
+    {
+     "name": "Input 1-3 Level",
+     "unit": "percent",
+     "range": {
+      "min": 0,
+      "max": 100,
+      "unit": "percent"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-016"
+     ]
+    },
+    {
+     "name": "Cutoff",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-012"
+     ]
+    },
+    {
+     "name": "Emphasis",
+     "unit": "unitless",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-015"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-004",
+   "kind": "module",
+   "name": "MiniMod Dual Contour",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "Dual discrete-transistor ADSD envelope generator reproducing Model D contour behaviour.",
+   "synthesis_method": "analog discrete-transistor envelope",
+   "features": [
+    {
+     "text": "Two independent ADSD envelopes",
+     "fact_ids": [
+      "F-017-020"
+     ]
+    },
+    {
+     "text": "Gate threshold about +2 V, manual trigger buttons",
+     "fact_ids": [
+      "F-017-021"
+     ]
+    },
+    {
+     "text": "Attack/decay 10 ms-10 s, sustain 0-8 V",
+     "fact_ids": [
+      "F-017-022"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Output can exceed Eurorack-typical CV levels (up to about 11 V) unless jumpers are removed",
+     "fact_ids": [
+      "F-017-023"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Gate 1",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": {
+      "min": 2,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-021"
+     ]
+    },
+    {
+     "name": "Gate 2",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": {
+      "min": 2,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-021"
+     ]
+    },
+    {
+     "name": "Out 1",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-023"
+     ]
+    },
+    {
+     "name": "Out 2",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-023"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Attack",
+     "unit": "time",
+     "range": {
+      "min": 0.01,
+      "max": 10,
+      "unit": "s"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-022"
+     ]
+    },
+    {
+     "name": "Decay",
+     "unit": "time",
+     "range": {
+      "min": 0.01,
+      "max": 10,
+      "unit": "s"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-022"
+     ]
+    },
+    {
+     "name": "Sustain",
+     "unit": "V",
+     "range": {
+      "min": 0,
+      "max": 8,
+      "unit": "V"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-022"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Gate-driven ADSD envelope with equal Decay 1 and Decay 2 rates",
+     "fact_ids": [
+      "F-017-020",
+      "F-017-024"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-005",
+   "kind": "module",
+   "name": "MiniMod Glide + Noise",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "noise",
+   "purpose": "Combined portamento/gated-slew circuit and white/pink/red noise source from the Model D.",
+   "synthesis_method": "analog discrete-transistor slew and avalanche noise",
+   "features": [
+    {
+     "text": "Gate-controlled glide with up/down/both modes",
+     "fact_ids": [
+      "F-017-026",
+      "F-017-027"
+     ]
+    },
+    {
+     "text": "White, pink and red noise outputs",
+     "fact_ids": [
+      "F-017-028"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Glide input effective only between 0 and +6 V",
+     "fact_ids": [
+      "F-017-026"
+     ]
+    },
+    {
+     "text": "Asymmetric glide rates",
+     "fact_ids": [
+      "F-017-029"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Glide CV In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 6,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-026"
+     ]
+    },
+    {
+     "name": "Hold CV In",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": {
+      "min": 2,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-027"
+     ]
+    },
+    {
+     "name": "Glide CV Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": 0,
+      "max": 6,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-026"
+     ]
+    },
+    {
+     "name": "White Noise Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-028"
+     ]
+    },
+    {
+     "name": "Pink Noise Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-028"
+     ]
+    },
+    {
+     "name": "Red Noise Out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": {
+      "min": -5,
+      "max": 5,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-028"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Glide speed",
+     "unit": "time",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-029"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-006",
+   "kind": "module",
+   "name": "Ring SM",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "modulation_other",
+   "purpose": "Ring modulator with sub-octave generators and a five-channel normalled mixer.",
+   "synthesis_method": "analog discrete-transistor ring modulation (Gilbert cell) and mixing",
+   "features": [
+    {
+     "text": "Three-input ring modulator with frequency doubling",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    },
+    {
+     "text": "Normalled five-channel DC-coupled mixer",
+     "fact_ids": [
+      "F-017-032"
+     ]
+    },
+    {
+     "text": "Two shaped sub-bass generators",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Mixer channel 5 clips by design",
+     "fact_ids": [
+      "F-017-033"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "X In",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    },
+    {
+     "name": "Y In",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    },
+    {
+     "name": "Z In",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    },
+    {
+     "name": "Mixer In 1-5",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -10,
+      "max": 10,
+      "unit": "V"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-017-033"
+     ]
+    },
+    {
+     "name": "Output",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-031"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Mixer channel levels",
+     "unit": "level",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-032"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "Mixer inputs normalled to internal sources until a cable is inserted",
+     "fact_ids": [
+      "F-017-032"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-007",
+   "kind": "module",
+   "name": "MiniMod Discrete Cascaded VCA",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "amplifier_mixer",
+   "purpose": "Series-cascaded dual discrete VCA recreating the Model D amplifier chain.",
+   "synthesis_method": "analog discrete transistor differential-amplifier VCA",
+   "features": [
+    {
+     "text": "Two cascaded VCAs with separate CV and master level",
+     "fact_ids": [
+      "F-017-035"
+     ]
+    },
+    {
+     "text": "Linear CV response, AC-coupled audio, overdrive jumper",
+     "fact_ids": [
+      "F-017-036"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Cannot pass DC signals",
+     "fact_ids": [
+      "F-017-036"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Audio In 1",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-035"
+     ]
+    },
+    {
+     "name": "Audio In 2",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-035"
+     ]
+    },
+    {
+     "name": "CV In 1",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-035"
+     ]
+    },
+    {
+     "name": "Master CV In",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-036"
+     ]
+    },
+    {
+     "name": "Audio Out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-035"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "Master CV jack normalled to +10 V when unpatched",
+     "fact_ids": [
+      "F-017-036"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-008",
+   "kind": "signal_standard",
+   "name": "AJH MiniMod signal conventions",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "Voltage conventions observed across MiniMod modules.",
+   "synthesis_method": "1V/oct, +/-5 V audio, gate over 2 V, +/-12 V supplies",
+   "features": [
+    {
+     "text": "Eurorack-style +/-5 V audio and 1 V/oct pitch",
+     "fact_ids": [
+      "F-017-038",
+      "F-017-039"
+     ]
+    },
+    {
+     "text": "Gate threshold about +2 V, envelope CV up to 8 V",
+     "fact_ids": [
+      "F-017-039"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Envelope outputs can exceed 8 V on fast retrigger",
+     "fact_ids": [
+      "F-017-023"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-009",
+   "kind": "patch_storage",
+   "name": "MiniMod patch recording (paper chart)",
+   "maker": "AJH Synth",
+   "version": null,
+   "function_category": "other",
+   "purpose": "Settings are recorded by hand; no digital preset memory is described in the pages read.",
+   "synthesis_method": "none (analog)",
+   "features": [
+    {
+     "text": "Blank patch chart PDF provided",
+     "fact_ids": [
+      "F-017-040"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No electronic patch memory described in material read",
+     "fact_ids": [
+      "F-017-040"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "Manual patch chart only; no electronic storage described",
+     "fact_ids": [
+      "F-017-040"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-017-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-010",
+   "kind": "module",
+   "name": "Morgasmatron",
+   "maker": "Intellijel",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "Dual six-mode self-oscillating analog filter with crossfader, overdrive and ring-mod use, third generation of the Korgasmatron.",
+   "synthesis_method": "analog multimode state-variable-style dual filter (MS-20 inspired lineage)",
+   "features": [
+    {
+     "text": "Two independent six-mode filters with serial/parallel routing",
+     "fact_ids": [
+      "F-017-041",
+      "F-017-042",
+      "F-017-044"
+     ]
+    },
+    {
+     "text": "Pitch tracking sine oscillators via 1V/OCT inputs",
+     "fact_ids": [
+      "F-017-041",
+      "F-017-043"
+     ]
+    },
+    {
+     "text": "Crossfader, DRY bypass and phase invert enable ring-mod patches",
+     "fact_ids": [
+      "F-017-044"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Only Filter A has the overdrive circuit",
+     "fact_ids": [
+      "F-017-044"
+     ]
+    },
+    {
+     "text": "20 HP and notable current draw",
+     "fact_ids": [
+      "F-017-046"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "IN A",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "IN B",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "OUT A",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "OUT B",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "1V/OCT A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "1V/OCT B",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "FM1 A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "FM1 B",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "FM2 A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "FM2 B",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "Q CV A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "Q CV B",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-043"
+     ]
+    },
+    {
+     "name": "XFADE CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-044"
+     ]
+    },
+    {
+     "name": "MIX OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-044"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "Cutoff",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "Q",
+     "unit": "unitless",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "Q-Drive",
+     "unit": "unitless",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-041"
+     ]
+    },
+    {
+     "name": "XFADE",
+     "unit": "balance",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-044"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": {
+     "summary": "Normalled 1V/OCT and FM2 from A to B; Series/Parallel switch",
+     "fact_ids": [
+      "F-017-043",
+      "F-017-044"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "Analog CV control of cutoff, Q and crossfade; no MIDI or digital interface described",
+     "fact_ids": [
+      "F-017-043",
+      "F-017-044"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": "REF-017-011",
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-017-011",
+   "kind": "module",
+   "name": "Korgasmatron II",
+   "maker": "Intellijel",
+   "version": "II",
+   "function_category": "filter",
+   "purpose": "Previous-generation Intellijel dual multimode filter, now a legacy product, documented through a third-party illustrated supplement.",
+   "synthesis_method": "analog multimode dual filter",
+   "features": [
+    {
+     "text": "Dual filter with six modes and normalled 1V/Oct inputs",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    },
+    {
+     "text": "Optional Expander module with extra Q and aux inputs",
+     "fact_ids": [
+      "F-017-050"
+     ]
+    },
+    {
+     "text": "Listed as legacy by Intellijel",
+     "fact_ids": [
+      "F-017-051"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Original Intellijel manual not read; details come from a third-party supplement",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "1V/Oct A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    },
+    {
+     "name": "1V/Oct B",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    },
+    {
+     "name": "FM1 A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    },
+    {
+     "name": "FM2 A",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-049"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-017-012",
+   "kind": "module",
+   "name": "SPACE FX",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "time_effect",
+   "purpose": "Digital stereo multi-effects module for Eurorack with reverbs, delays, modulation and special effects.",
+   "synthesis_method": "digital 24-bit stereo effects processor",
+   "features": [
+    {
+     "text": "32 algorithms: reverbs, delays, modulation, pitch shift, filters",
+     "fact_ids": [
+      "F-017-053",
+      "F-017-057"
+     ]
+    },
+    {
+     "text": "Tap control for time-based effects",
+     "fact_ids": [
+      "F-017-054"
+     ]
+    },
+    {
+     "text": "Switchable Eurorack or line input level",
+     "fact_ids": [
+      "F-017-055"
+     ]
+    },
+    {
+     "text": "Parameter ranges documented per program in the Quick Start Guide",
+     "fact_ids": [
+      "F-017-059"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Only front-panel control is documented; no CV control or preset storage found",
+     "fact_ids": [
+      "F-017-054"
+     ]
+    },
+    {
+     "text": "Quick Start Guide documents no CV, MIDI or preset memory; current draw differs between page and guide",
+     "fact_ids": [
+      "F-017-062",
+      "F-017-061"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Input L",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-055",
+      "F-017-060"
+     ]
+    },
+    {
+     "name": "Input R",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-055",
+      "F-017-060"
+     ]
+    },
+    {
+     "name": "Output L",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-055",
+      "F-017-060"
+     ]
+    },
+    {
+     "name": "Output R",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-055",
+      "F-017-060"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "FX SEND",
+     "unit": "level",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-054"
+     ]
+    },
+    {
+     "name": "Program",
+     "unit": "index",
+     "range": {
+      "min": 1,
+      "max": 32,
+      "unit": "program"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-053"
+     ]
+    },
+    {
+     "name": "Delay/echo tempo",
+     "unit": "bpm",
+     "range": {
+      "min": 72,
+      "max": 500,
+      "unit": "bpm"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-017-059"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "Tap control sets timing of delays and time-based effects where allowed",
+     "fact_ids": [
+      "F-017-054"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-017-001",
+   "entity_id": "REF-017-001",
+   "topic": "positioning",
+   "statement": "The MiniMod range is a set of Eurorack modules that reproduce Model D (Minimoog) circuitry; the site says it works at standard Eurorack signal levels and system voltages and uses a Eurorack power connector and panel sizes.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-07",
+   "locator": "faq.html, first question; Keyboard.html intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-002",
+   "entity_id": "REF-017-001",
+   "topic": "system_packaging",
+   "statement": "AJH sells pre-configured MiniMod systems (e.g. a 6U starter with 3 VCOs, 2 sub-bass generators, mixers, 2 LFOs, 3 envelopes, 2 VCAs) and a MiniMod Keyz keyboard version pairing the modules with a Cre8audio Niftykeyz controller.",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-017-07",
+   "locator": "Minimod.html (6U Full system list); Keyboard.html",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-003",
+   "entity_id": "REF-017-001",
+   "topic": "power_advice",
+   "statement": "AJH recommends a linear Eurorack power supply and warns that some switching supplies inject ripple (stated up to 200 mV) that can disturb its low-level analog circuits; it also advises not mixing digital and analog modules on one bus board.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-07",
+   "locator": "faq.html, power supply question",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-004",
+   "entity_id": "REF-017-002",
+   "topic": "core",
+   "statement": "Oscillator built around a discrete transistor core claimed to emulate the earliest Model D oscillator card, with updated control-voltage summing for better temperature stability.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-01",
+   "locator": "User Guide intro; VCO.html In Depth",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-005",
+   "entity_id": "REF-017-002",
+   "topic": "outputs",
+   "statement": "Four simultaneous waveform outputs (shark-tooth, saw rising ramp, square, triangle), each about +/-5 V centred on 0 V with 1 kOhm output impedance.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list items 11-14",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-006",
+   "entity_id": "REF-017-002",
+   "topic": "cv_inputs",
+   "statement": "1 V/Oct input accepts +/-7 V and tracks one octave per volt (may not track above about 10 kHz); Exp CV and Linear inputs accept +/-5 V; Exp CV level knob scales 0 to 120%.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list items 3-7",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-007",
+   "entity_id": "REF-017-002",
+   "topic": "tuning",
+   "statement": "Tune knob shifts pitch by about +/-8 notes; the Linear input adds up to about +/-7 notes; the Octave switch has a Lo setting that drops the oscillator into LFO range.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list items 1, 2, 6",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-008",
+   "entity_id": "REF-017-002",
+   "topic": "pwm",
+   "statement": "Square wave pulse width is adjustable from about 10% to 90% (50% at centre) by a manual knob and a +/-5 V PWM CV input with 0-100% depth.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list items 15, 16",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-009",
+   "entity_id": "REF-017-002",
+   "topic": "sync",
+   "statement": "Hard sync input expects a +/-5 V rising ramp (e.g. another MiniMod VCO's saw); a threshold knob sets sensitivity and a switch turns sync on (S2) or off.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list items 8-10",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-010",
+   "entity_id": "REF-017-002",
+   "topic": "normalling",
+   "statement": "The 1 V/Oct jack is normalled to the Eurorack power-bus 1 V/Oct line; plugging into the jack breaks the normal.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-01",
+   "locator": "Controls list item 3 (Distribution Buss)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-011",
+   "entity_id": "REF-017-002",
+   "topic": "physical",
+   "statement": "14 HP wide, 38 mm deep, drawing 55 mA from +12 V and 40 mA from -12 V; needs about 15 minutes warm-up before tuning.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-01",
+   "locator": "User Guide intro and Notes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-012",
+   "entity_id": "REF-017-003",
+   "topic": "topology",
+   "statement": "Four-pole 24 dB/octave transistor ladder low-pass filter replicating the early Model D VCF, with a three-channel input mixer.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "User Guide intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-013",
+   "entity_id": "REF-017-003",
+   "topic": "cv_scaling",
+   "statement": "1 V/Oct input moves cutoff one octave per volt; the 1/3 CV input moves it 3 V per octave and the 2/3 input 1.5 V per octave, mimicking the original keyboard-control switches.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "Controls list items 10-12",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-014",
+   "entity_id": "REF-017-003",
+   "topic": "freq_cv",
+   "statement": "Freq CV level knob scales 0-130% of the Freq CV input; 1 V/Oct response occurs at about the 2 o'clock knob position.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "Controls list items 8, 9",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-015",
+   "entity_id": "REF-017-003",
+   "topic": "resonance",
+   "statement": "Emphasis (resonance) is voltage controlled through a vactrol, can reach audio-rate modulation, and the filter self-oscillates as a sine VCO at high settings (about positions 8-10).",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "Intro; items 13, 14",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-016",
+   "entity_id": "REF-017-003",
+   "topic": "audio_in",
+   "statement": "Three audio inputs accept up to +/-5 V; the signal path is AC coupled so DC CVs are not useful there.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "Controls list items 1-3",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-017",
+   "entity_id": "REF-017-003",
+   "topic": "extras",
+   "statement": "An onboard jumper enables input overdrive; self-oscillation tracking is about 3-4 octaves and is not temperature corrected.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-02",
+   "locator": "Intro; item 13",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-018",
+   "entity_id": "REF-017-003",
+   "topic": "physical",
+   "statement": "14 HP, 26 mm deep, 45 mA at +12 V and 30 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-02",
+   "locator": "User Guide intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-019",
+   "entity_id": "REF-017-003",
+   "topic": "output_level",
+   "statement": "The product page says an output stage after the filter restores signals to about +/-5 V peak-to-peak modular levels (stated THD 0.008%).",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-017-14",
+   "locator": "VCF.html (product page, Core Voltages section) - fetched at https://ajhsynth.com/VCF.html",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-020",
+   "entity_id": "REF-017-004",
+   "topic": "function",
+   "statement": "Two independent envelope generators recreating Model D contour generators; the response is Attack, Decay 1, Sustain, Decay 2 with both decays always at the same rate.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "User Guide intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-021",
+   "entity_id": "REF-017-004",
+   "topic": "gate",
+   "statement": "Each generator triggers from a gate input; any gate above about +2 V works and levels up to +10 V are acceptable; a manual trigger button is provided.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "Controls list items 1-4",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-022",
+   "entity_id": "REF-017-004",
+   "topic": "times",
+   "statement": "Attack and decay times range from about 10 ms to 10 s; sustain level is 0 to 8 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "Controls list items 5-10",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-023",
+   "entity_id": "REF-017-004",
+   "topic": "output",
+   "statement": "Output is typically 0-8 V but repeated fast retriggering can push it up to about 11 V; removing board jumpers J1/J2 lowers nominal output to 5.5 V with a peak limit of 8 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "Controls list items 15, 16",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-024",
+   "entity_id": "REF-017-004",
+   "topic": "retrigger",
+   "statement": "Retriggering accumulates level in a Model D specific way; a per-envelope decay switch selects decay active or instantaneous after gate off.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "User Guide intro; item 11",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-025",
+   "entity_id": "REF-017-004",
+   "topic": "physical",
+   "statement": "12 HP, 26 mm deep, 38 mA at +12 V and 15 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "User Guide intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-026",
+   "entity_id": "REF-017-005",
+   "topic": "glide",
+   "statement": "Glide circuit slews a pitch CV; processed input is 0 to +6 V (negatives ignored, above +6 V limited), output 0 to +6 V at about 500 Ohm; glide mode switch gives up/down, up-only or down-only.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-04",
+   "locator": "Controls list items 5, 8, 9",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-027",
+   "entity_id": "REF-017-005",
+   "topic": "hold",
+   "statement": "Glide is active only while the Hold input is high (+2 to +10 V); when low the output holds the last value, so it also works as a sample-and-hold for 0 to +6 V; an unpatched Hold follows an onboard jumper (always on, or the power-bus gate).",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-04",
+   "locator": "Intro; Controls list item 6",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-028",
+   "entity_id": "REF-017-005",
+   "topic": "noise",
+   "statement": "Separate analog noise generator with white, pink and red (Brownian) outputs, each stated as +/-5 V peak-to-peak (wording of the manual).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-04",
+   "locator": "Controls list items 1-3",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-029",
+   "entity_id": "REF-017-005",
+   "topic": "asymmetry",
+   "statement": "Glide speed is asymmetric as on the original: upward glides are considerably faster than downward ones; the On/Off switch is not a bypass, equal to speed at zero.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-04",
+   "locator": "Controls list items 4, 7",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-030",
+   "entity_id": "REF-017-005",
+   "topic": "physical",
+   "statement": "6 HP, 54 mm deep, 35 mA at +12 V and 35 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-04",
+   "locator": "User Guide intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-031",
+   "entity_id": "REF-017-006",
+   "topic": "function",
+   "statement": "Four-in-one module: discrete-transistor ring modulator with X, Y and Z inputs (Z being an extra resonant modulator input), a frequency-doubling switch, two shaped-sine sub-bass generators (-1 and -2 octaves), and a five-channel DC-coupled mixer.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-05",
+   "locator": "Ring_SM.html top section; manual intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-032",
+   "entity_id": "REF-017-006",
+   "topic": "normalling",
+   "statement": "Ring modulator, X, Y and the two subs are normalled to mixer channels 1-5; plugging into a mixer input defeats that channel's normal so the mixer can be used for audio or CV.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-05",
+   "locator": "Ring_SM.html top section; manual intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-033",
+   "entity_id": "REF-017-006",
+   "topic": "levels",
+   "statement": "Mixer inputs nominally take +/-5 V (10 V pp) and up to +/-10 V can pass through; input 5 is much hotter and clips, with DC bias giving asymmetric clipping; subs are usable up to about 1 kHz.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-05",
+   "locator": "Ring_SM.html top section; manual controls text",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-034",
+   "entity_id": "REF-017-006",
+   "topic": "physical",
+   "statement": "14 HP, 24 mm deep, 55 mA at +12 V and 50 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-05",
+   "locator": "Ring_SM.html; manual intro",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-035",
+   "entity_id": "REF-017-007",
+   "topic": "function",
+   "statement": "Two discrete transistor VCA cores hard-wired in series: two audio inputs with level controls, two CV inputs and an offset for VCA 1, and a Master CV input plus level for VCA 2.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-06",
+   "locator": "VCA.html top section",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-036",
+   "entity_id": "REF-017-007",
+   "topic": "response",
+   "statement": "All CV inputs have linear response and the VCA is AC coupled (audio only); an onboard jumper selects a high-gain overdrive mode; the Master CV jack is normalled internally to +10 V when unpatched.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-06",
+   "locator": "VCA.html Response, CV Inputs and High distortion sections",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-037",
+   "entity_id": "REF-017-007",
+   "topic": "physical",
+   "statement": "10 HP, 26 mm deep, 40 mA at +12 V and 22 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-06",
+   "locator": "VCA.html top section",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-038",
+   "entity_id": "REF-017-008",
+   "topic": "audio_levels",
+   "statement": "MiniMod VCO and noise outputs are +/-5 V; filter and VCA cores run at lower original-voltage levels (filter core on +/-10 V from the +/-12 V rails) with output stages restoring modular levels.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-02",
+   "locator": "VCF manual intro/controls; VCO controls list; VCF product page Core Voltages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-039",
+   "entity_id": "REF-017-008",
+   "topic": "pitch_cv",
+   "statement": "Pitch CV is 1 V per octave; gates trigger above about +2 V and are accepted up to +10 V; internal envelope outputs normally span 0 to 8 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-03",
+   "locator": "Dual Contour controls list items 1, 15; VCO item 3",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-040",
+   "entity_id": "REF-017-009",
+   "topic": "patch_chart",
+   "statement": "AJH offers a blank MiniMod patch chart as a downloadable PDF alongside the module manuals; the page does not mention any electronic patch memory.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-017-07",
+   "locator": "downloads.html file list (chart file name only; PDF not opened)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-041",
+   "entity_id": "REF-017-010",
+   "topic": "overview",
+   "statement": "Two independent six-mode filters (A and B), each with mode select, input, output, cutoff, resonance, Q-Drive and gain, plus a crossfader and a MIX output; both filters self-oscillate at maximum Q.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.5 Overview; p.6-7 Controls",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-042",
+   "entity_id": "REF-017-010",
+   "topic": "modes",
+   "statement": "Filter modes: LP2 (2-pole low-pass), LP1, BP1, HP1, HP2 and BR1 (notch).",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.6, MODE control",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-043",
+   "entity_id": "REF-017-010",
+   "topic": "cv_inputs",
+   "statement": "Each filter has 1V/OCT, FM1 (attenuated, tracks 1V/oct at full), FM2 (attenuverter) and Q CV inputs; Filter A's 1V/OCT and FM2 inputs are normalled to Filter B's.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.6 FM1/FM2; p.10 jacks D-F",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-044",
+   "entity_id": "REF-017-010",
+   "topic": "routing",
+   "statement": "Series/parallel switch routes Filter A into B or runs both independently; DRY switches bypass each filter at the crossfader; phase invert on B; XFADE knob and XFADE CV with attenuverter set the MIX balance; Overdrive circuit is on Filter A only.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.8-9 controls 9-16; p.11 jacks G-H",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-045",
+   "entity_id": "REF-017-010",
+   "topic": "levels",
+   "statement": "With a typical 10 Vp-p Eurorack signal unity gain at the IN knob is about 12 o'clock; past that the input soft-clips.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.7 control 8 (IN)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-046",
+   "entity_id": "REF-017-010",
+   "topic": "physical",
+   "statement": "20 HP, 38 mm max depth, 113 mA at +12 V and 102 mA at -12 V.",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.18 Technical specifications",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-047",
+   "entity_id": "REF-017-010",
+   "topic": "lineage",
+   "statement": "Described as the third generation of the Korgasmatron filter, designed with David G. Dixon; the manual refers to the classic MS-20 filter as the model behind the resonance behaviour Q-Drive counters.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.5 Overview; p.7 Q-Drive note",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-048",
+   "entity_id": "REF-017-010",
+   "topic": "price_listing",
+   "statement": "Intellijel's product page lists the module as out of stock at the time of access and describes it as an analog dual multimode self-oscillating VCF and crossfader.",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-017-09",
+   "locator": "Morgasmatron product page header",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-049",
+   "entity_id": "REF-017-011",
+   "topic": "layout",
+   "statement": "The supplement shows the Korgasmatron II as a dual filter (A and B) with 1V/Oct A and B inputs (1V/Oct A is normalled to B), FM1/FM2 inputs, Q control and drive, and the modes LP2, LP1, BP1, HP1, HP2 and BR1.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-017-10",
+   "locator": "Index; pages 01-08 (LP2/LP1, dual 1V/Oct sine oscillator, normalled inputs)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-050",
+   "entity_id": "REF-017-011",
+   "topic": "expander",
+   "statement": "The supplement includes patches for a Korgasmatron II Expander adding AUX IN, AUX MOD and Q CV inputs for each filter.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-017-10",
+   "locator": "Index entries 55-61; page Expander - Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-051",
+   "entity_id": "REF-017-011",
+   "topic": "legacy_listing",
+   "statement": "Intellijel's legacy modules page lists Korgasmatron II, a Korgasmatron II Expander and Korgasmatron I (Corgasmatron) among discontinued products, and the manuals index links this illustrated supplement for Korgasmatron II.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-11",
+   "locator": "Legacy Modules page text; Support page manual list (Korgasmatron II Legacy Illustrated Supplement)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-052",
+   "entity_id": "REF-017-011",
+   "topic": "lineage",
+   "statement": "The Morgasmatron manual calls Morgasmatron the third generation of the Korgasmatron design.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-08",
+   "locator": "Manual p.5 Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-053",
+   "entity_id": "REF-017-012",
+   "topic": "overview",
+   "statement": "24-bit stereo multi-effects Eurorack module, 14 HP, with 32 effect algorithms (rooms, chambers, halls, plates, springs, church, gated, reverse, delay/echo, chorus, flanger, phaser, tremolo, pitch shifter, talk box, LFO filter, clipper, combinations).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-12",
+   "locator": "Product page overview and features list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-054",
+   "entity_id": "REF-017-012",
+   "topic": "controls",
+   "statement": "Eight-character display; PROGRAM/VALUE selects the program and adjusts values; buttons choose parameters 1/2 or 3 (up to three adjustable parameters per effect); a tap control serves time-based effects where the parameter table allows; FX SEND sets effect amount.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-12",
+   "locator": "Product page 'Three parameters, one display' and 'Eurorack or line level'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-055",
+   "entity_id": "REF-017-012",
+   "topic": "io",
+   "statement": "INPUT LEVEL switch selects low level (Eurorack) or high (line) input; stereo input or mono into the left socket; stereo processed outputs.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-12",
+   "locator": "Product page 'Eurorack or line level'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-056",
+   "entity_id": "REF-017-012",
+   "topic": "power",
+   "statement": "14 HP, 100 mA from +12 V and 30 mA from -12 V; mounting screws and power cable included.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-12",
+   "locator": "Product page 'Eurorack specs'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-057",
+   "entity_id": "REF-017-012",
+   "topic": "details",
+   "statement": "Church reverb decay runs 1 to 10 seconds; the LFO filter offers vowel settings A, E, I, O and U.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-12",
+   "locator": "Product page overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-058",
+   "entity_id": "REF-017-012",
+   "topic": "marketing",
+   "statement": "Behringer says the effects are powered by Klark Teknik; this is a brand claim not verified against a technical document.",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-017-12",
+   "locator": "Product page features list",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-059",
+   "entity_id": "REF-017-012",
+   "topic": "parameters",
+   "statement": "Each of the 32 programs has up to three parameters: reverbs mostly Decay plus Pre-Delay/Damping (Bright or Dark); delay and echo Feedback 0-100% plus Tempo 72-500 bpm or tap; chorus Depth -20 to +20 and LFO speed 0.05-5 Hz; flanger and phaser Tempo 5-400 bpm or tap.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, 'SPACE FX Effects and Parameters' table (EN)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-060",
+   "entity_id": "REF-017-012",
+   "topic": "io_specs",
+   "statement": "Two unbalanced 3.5 mm inputs (impedance above 22 kOhm), two unbalanced 3.5 mm outputs (330 Ohm output impedance); input gain switch is +2 dB (high) or -6 dB (low).",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, specifications table",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-061",
+   "entity_id": "REF-017-012",
+   "topic": "power",
+   "statement": "QSG states power consumption 90 mA (+12 V) / 25 mA (-12 V), 14 HP, 71 x 129 x 41 mm; this differs from the product page (100 mA / 30 mA), so the current draw is recorded as inconsistent between Behringer documents.",
+   "basis": "manufacturer_doc",
+   "confidence": "low",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, specifications table; compare F-017-056",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-017-062",
+   "entity_id": "REF-017-012",
+   "topic": "controls",
+   "statement": "Controls are the display, a Parameter 1/2 button, a Parameter 3/Tap button, FX SEND knob, PROGRAM/VALUE encoder and an INPUT LEVEL switch; the guide lists no CV input, MIDI or preset-save function.",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-017-13",
+   "locator": "Quick Start Guide, 'SPACE FX Controls' (EN)",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-017-002",
+   "item": "Octave switch positions and absolute frequency range of the oscillator",
+   "tried_sources": [
+    "SRC-017-01"
+   ],
+   "impact_on_spec": "Frequency range per octave setting is unknown; the pitch scale in Hz cannot be specified."
+  },
+  {
+   "entity_id": "REF-017-003",
+   "item": "Cutoff frequency range in Hz and CV input voltage ranges (Freq, 1/3, 2/3, Emphasis CV, output level)",
+   "tried_sources": [
+    "SRC-017-02"
+   ],
+   "impact_on_spec": "CV input ranges and output voltage cannot be specified; the output stage level is only stated in the web page as bringing signals to +/-5 V pp."
+  },
+  {
+   "entity_id": "REF-017-005",
+   "item": "Glide time range in seconds",
+   "tried_sources": [
+    "SRC-017-04"
+   ],
+   "impact_on_spec": "Maximum and minimum glide times are not given numerically in the manual text read."
+  },
+  {
+   "entity_id": "REF-017-006",
+   "item": "Per-jack voltage ranges for X/Y/Z inputs and output; sub-bass tracking limits",
+   "tried_sources": [
+    "SRC-017-05"
+   ],
+   "impact_on_spec": "Only partial ranges known; full port range table not specified."
+  },
+  {
+   "entity_id": "REF-017-007",
+   "item": "CV input voltage ranges and gain scaling",
+   "tried_sources": [
+    "SRC-017-06"
+   ],
+   "impact_on_spec": "CV ranges not captured from the web page read; PDF manual not fetched."
+  },
+  {
+   "entity_id": "REF-017-009",
+   "item": "Whether any MiniMod module has electronic preset or CV-controlled memory",
+   "tried_sources": [
+    "SRC-017-07",
+    "SRC-017-01",
+    "SRC-017-02",
+    "SRC-017-03",
+    "SRC-017-04"
+   ],
+   "impact_on_spec": "All modules read are fully analog with knobs and switches; storage is assumed absent but not stated."
+  },
+  {
+   "entity_id": "REF-017-010",
+   "item": "CV input voltage ranges, output levels, cutoff frequency range",
+   "tried_sources": [
+    "SRC-017-08",
+    "SRC-017-09"
+   ],
+   "impact_on_spec": "Port voltage ranges cannot be specified beyond the typical 10 Vp-p reference."
+  },
+  {
+   "entity_id": "REF-017-010",
+   "item": "Signal flow diagram contents (image only in the manual)",
+   "tried_sources": [
+    "SRC-017-08"
+   ],
+   "impact_on_spec": "Exact internal routing beyond the textual description is not captured."
+  },
+  {
+   "entity_id": "REF-017-011",
+   "item": "Original Korgasmatron II manual, specs (HP width, current draw, voltage ranges), release years, Korgasmatron I details",
+   "tried_sources": [
+    "SRC-017-10",
+    "SRC-017-11"
+   ],
+   "impact_on_spec": "Only functional layout from a supplement; no official spec table. Generation order (I, II, III=Morgasmatron) rests on one Intellijel sentence."
+  },
+  {
+   "entity_id": "REF-017-011",
+   "item": "Hardware relationship to the Korg MS-20 filter (circuit lineage claim)",
+   "tried_sources": [
+    "SRC-017-08",
+    "SRC-017-10"
+   ],
+   "impact_on_spec": "Only the Morgasmatron manual mentions the MS-20 filter's behaviour; no statement that Korgasmatron copies its circuit was read."
+  },
+  {
+   "entity_id": "REF-017-012",
+   "item": "Release date and firmware/version",
+   "tried_sources": [
+    "SRC-017-12"
+   ],
+   "impact_on_spec": "Version unknown."
+  },
+  {
+   "item": "Intellijel Morgasmatron/Korgasmatron and AJH MiniMod voltage references for modules not read (Gemini 2412, Sonic XV, V-Shape etc.)",
+   "tried_sources": [
+    "SRC-017-07"
+   ],
+   "impact_on_spec": "Only a subset of the MiniMod range was read; other modules are not covered."
+  },
+  {
+   "entity_id": "REF-017-012",
+   "item": "Port voltage ranges, parameter defaults, whether settings persist after power-off, and external control beyond the front panel",
+   "tried_sources": [
+    "SRC-017-12",
+    "SRC-017-13"
+   ],
+   "impact_on_spec": "The Quick Start Guide gives parameter ranges and impedances but no voltage levels, defaults or storage statement; persistence is unknown."
+  }
+ ]
+}

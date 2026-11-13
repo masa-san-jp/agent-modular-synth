@@ -1,0 +1,1204 @@
+{
+ "target_id": "T-010",
+ "entities": [
+  {
+   "id": "REF-010-001",
+   "kind": "system",
+   "name": "Max / MSP",
+   "maker": "Cycling '74",
+   "version": "9系(ドキュメント上の記述。正確な版は未確認)",
+   "function_category": "system",
+   "purpose": "ビジュアルパッチング環境。Max(メッセージ)とMSP(音声信号)を同一パッチで扱う",
+   "synthesis_method": "メッセージ駆動オブジェクトと信号オブジェクトの接続グラフ",
+   "features": [
+    {
+     "text": "メッセージ駆動と信号処理を同一パッチで接続",
+     "fact_ids": [
+      "F-010-001"
+     ]
+    },
+    {
+     "text": "スケジューラ設定でタイミング精度を調整",
+     "fact_ids": [
+      "F-010-003",
+      "F-010-004"
+     ]
+    },
+    {
+     "text": "論理最大1024チャンネル",
+     "fact_ids": [
+      "F-010-007"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Overdrive有効時はデバッグ機能が使えず、状態が処理途中に変わり得る",
+     "fact_ids": [
+      "F-010-003"
+     ]
+    },
+    {
+     "text": "RNBOは有償アドオン",
+     "fact_ids": [
+      "F-010-006"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "高優先度スケジューラと低優先度キュー。SIAIでDSPとスケジューラが同期",
+     "fact_ids": [
+      "F-010-002",
+      "F-010-004"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-010-002",
+   "kind": "signal_standard",
+   "name": "Max メッセージ/MSP信号規約",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "system",
+   "purpose": "イベント(メッセージ)と信号(音声)とMCなど複数種のパッチコード規約",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "メッセージ(イベント)・信号・MC等のパッチコードを視覚的に区別",
+     "fact_ids": [
+      "F-010-008"
+     ]
+    },
+    {
+     "text": "MCで多チャンネル信号を1本で扱う",
+     "fact_ids": [
+      "F-010-012"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "信号オブジェクトは入口ごとにメッセージ/信号の受け入れが異なる(オブジェクト参照で個別確認が必要)",
+     "fact_ids": [
+      "F-010-011"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "パッチコードの種別で接続の種類が決まる",
+     "fact_ids": [
+      "F-010-008"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-003",
+   "kind": "patch_storage",
+   "name": "Max パッチ(.maxpat)と状態保存",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "パッチ構造のJSON保存と、状態を別途保存するpattr系",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "JSON形式(.maxpat)でパッチ構造を保存",
+     "fact_ids": [
+      "F-010-014"
+     ]
+    },
+    {
+     "text": "pattrで状態を別途JSON保存",
+     "fact_ids": [
+      "F-010-016"
+     ]
+    },
+    {
+     "text": "読込時の初期化段階が定義されている",
+     "fact_ids": [
+      "F-010-017"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "通常の保存では状態値は含まれない",
+     "fact_ids": [
+      "F-010-015"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "構造はパッチに保存。状態はpattrstorage/presetで別途保存",
+     "fact_ids": [
+      "F-010-015",
+      "F-010-016"
+     ]
+    },
+    "patching": {
+     "summary": "接続は読込時にオブジェクト初期化後に再構築される",
+     "fact_ids": [
+      "F-010-017"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-004",
+   "kind": "control_interface",
+   "name": "Max 外部制御(OSC/UDP/パラメータ)",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "OSC/UDPでMaxを制御・外部へ送信する手段",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "OSCでパラメータを外部から読み書き可能",
+     "fact_ids": [
+      "F-010-018"
+     ]
+    },
+    {
+     "text": "udpreceive/udpsendでUDP送受信",
+     "fact_ids": [
+      "F-010-021",
+      "F-010-022"
+     ]
+    },
+    {
+     "text": "OSCQueryで能力を公開",
+     "fact_ids": [
+      "F-010-019"
+     ]
+    },
+    {
+     "text": "セミコロン宛先でMax本体をスクリプト制御",
+     "fact_ids": [
+      "F-010-023"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "FullPacketは保存・加工してはならない不透明値",
+     "fact_ids": [
+      "F-010-020"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "udpreceive port",
+     "unit": null,
+     "range": null,
+     "default": 7374,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-021"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSC(内蔵UDPサーバ/param.osc)、udpreceive/udpsend、OSCQuery",
+     "fact_ids": [
+      "F-010-018",
+      "F-010-021"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-005",
+   "kind": "module",
+   "name": "cycle~",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "周期波形(既定は余弦)を出す補間つきオシレータ",
+   "synthesis_method": "ウェーブテーブル",
+   "features": [
+    {
+     "text": "周波数・位相を信号でも指定可能",
+     "fact_ids": [
+      "F-010-025"
+     ]
+    },
+    {
+     "text": "buffer~のデータでウェーブテーブルを置換",
+     "fact_ids": [
+      "F-010-024"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 周波数",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-025"
+     ]
+    },
+    {
+     "name": "右入口: 位相",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": 0.0,
+      "max": 1.0,
+      "unit": "cycle"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-010-025"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-024"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "frequency",
+     "unit": "Hz",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-025"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-006",
+   "kind": "module",
+   "name": "lores~",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "共振付きの低コストローパス",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "共振付きローパス",
+     "fact_ids": [
+      "F-010-026"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "中入口: カットオフ",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-026"
+     ]
+    },
+    {
+     "name": "右入口: 共振",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-010-026"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "cutoff",
+     "unit": "Hz",
+     "range": null,
+     "default": 0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-027"
+     ]
+    },
+    {
+     "name": "resonance",
+     "unit": "normalized",
+     "range": {
+      "min": 0,
+      "max": 1
+     },
+     "default": 0,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-027"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-007",
+   "kind": "module",
+   "name": "line~",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "信号ランプ/エンベロープを生成",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "複合ランプで簡易エンベロープ生成",
+     "fact_ids": [
+      "F-010-028"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 目標値/リスト",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-028"
+     ]
+    },
+    {
+     "name": "右入口: 時間(ms)",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-028"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-028"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "maxpoints",
+     "unit": "points",
+     "range": null,
+     "default": 129,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-029"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-008",
+   "kind": "module",
+   "name": "metro",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "一定間隔でbangを出すメトロノーム",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "テンポ相対の時間指定に対応",
+     "fact_ids": [
+      "F-010-030"
+     ]
+    },
+    {
+     "text": "deferで低優先度出力",
+     "fact_ids": [
+      "F-010-031"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 開始/停止",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-030"
+     ]
+    },
+    {
+     "name": "右入口: 間隔",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-030"
+     ]
+    },
+    {
+     "name": "出力: bang",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-030"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "interval",
+     "unit": "ms",
+     "range": null,
+     "default": 5,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-031"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-009",
+   "kind": "module",
+   "name": "random",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "random_logic",
+   "purpose": "乱数を出力",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "seed/cycleで再現可能な列を生成",
+     "fact_ids": [
+      "F-010-033"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "入力: bang/範囲",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-032"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-010-032"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "range",
+     "unit": "count",
+     "range": null,
+     "default": 1,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-032"
+     ]
+    },
+    {
+     "name": "seed",
+     "unit": null,
+     "range": null,
+     "default": 0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-010-033"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-010",
+   "kind": "module",
+   "name": "noise~",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "noise",
+   "purpose": "一様分布の白色ノイズ信号",
+   "synthesis_method": "一様乱数",
+   "features": [
+    {
+     "text": "一様分布のノイズ",
+     "fact_ids": [
+      "F-010-034"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -1.0,
+      "max": 1.0,
+      "unit": "normalized"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-010-034"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-010-011",
+   "kind": "module",
+   "name": "gen~",
+   "maker": "Cycling '74",
+   "version": null,
+   "function_category": "other",
+   "purpose": "埋め込みGenパッチを最適化ネイティブコード化して信号処理する(範囲限定)",
+   "synthesis_method": "コード生成",
+   "features": [
+    {
+     "text": "Genをネイティブコードにして実行",
+     "fact_ids": [
+      "F-010-035"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-010-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-010-001",
+   "entity_id": "REF-010-001",
+   "topic": "メッセージ",
+   "statement": "Maxのオブジェクトは原子(bang, int, float, symbol)の並びである「メッセージ」を送り合い、先頭要素で受信側の反応が決まる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-01",
+   "locator": "Messages: Messages Overview",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-002",
+   "entity_id": "REF-010-001",
+   "topic": "深さ優先",
+   "statement": "イベントはスケジューラ(高優先度)または低優先度キューで処理され、パッチ内のメッセージは深さ優先で伝わる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-04",
+   "locator": "Scheduler and Priority 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-003",
+   "entity_id": "REF-010-001",
+   "topic": "Overdrive",
+   "statement": "Overdriveを有効にすると高優先度イベントと低優先度イベントが別スレッドで処理されタイミング精度が上がる。既定は無効。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-04",
+   "locator": "Scheduler and Priority: Overdrive",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-004",
+   "entity_id": "REF-010-001",
+   "topic": "SIAI",
+   "statement": "Scheduler in Audio Interruptを有効にすると高優先度スケジューラがオーディオスレッドで走り、信号ベクタごとに処理されて信号と同期する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-04",
+   "locator": "Scheduler and Priority: Scheduler in Audio Interrupt",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-005",
+   "entity_id": "REF-010-001",
+   "topic": "サンプル精度",
+   "statement": "OverdriveとSIAIが有効だとsig~などがメッセージ時刻をサンプル精度で信号に反映できる。無効だとブロック内でイベントが畳まれる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-05",
+   "locator": "Sample Accurate Messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-006",
+   "entity_id": "REF-010-001",
+   "topic": "Gen/RNBO",
+   "statement": "Genは別のオブジェクト群を使うグラフ言語でコード生成されネイティブ化される。RNBOはrnbo~内で動き、ハード/プラグイン等へ書き出せるが、有償アドオン。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-09",
+   "locator": "Gen overview; RNBO 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-007",
+   "entity_id": "REF-010-001",
+   "topic": "チャンネル",
+   "statement": "Maxは最大1024の論理オーディオチャンネルを持ち、物理デバイスのチャンネルへ割り当てられる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-12",
+   "locator": "Multi-Channel Audio I/O 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-008",
+   "entity_id": "REF-010-002",
+   "topic": "パッチコード種別",
+   "statement": "パッチコードにはイベント(メッセージ)、信号、MC(マルチチャンネル信号)、Jitterの行列/テクスチャ/ジオメトリの種別があり、模様と色で区別される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-03",
+   "locator": "Patch Cords: Types of patch cords",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-009",
+   "entity_id": "REF-010-002",
+   "topic": "原子型",
+   "statement": "メッセージの原子はbang・int・float・symbolで、複数原子の並びはリスト。リストが記号で始まるとそれがセレクタになる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-02",
+   "locator": "Message Types: Atoms / Lists",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-010",
+   "entity_id": "REF-010-002",
+   "topic": "信号処理",
+   "statement": "信号は「ブロックで処理される音声」であり、イベントはスケジューラで処理されると区別される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-03",
+   "locator": "Patch Cords: Types of patch cords",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-011",
+   "entity_id": "REF-010-002",
+   "topic": "メッセージ→信号",
+   "statement": "sig~などの信号オブジェクトはメッセージ値を信号に変換し、SIAI有効時はサンプル精度を保つ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-05",
+   "locator": "Sample Accurate Messages: Objects that convert...",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-012",
+   "entity_id": "REF-010-002",
+   "topic": "MC",
+   "statement": "MCは1本のパッチコードに複数チャンネルを載せる方式で、mc.接頭辞のラッパーで通常の音声オブジェクトを複数インスタンス化できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-14",
+   "locator": "MC 概要ページ冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-013",
+   "entity_id": "REF-010-002",
+   "topic": "信号範囲例",
+   "statement": "MSP信号の値域はオブジェクトごとに文書化される(例: noise~は-1.0〜1.0の一様白色ノイズ)。共通の物理規約は文書上確認していない。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-010-10",
+   "locator": "noise~ Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-014",
+   "entity_id": "REF-010-003",
+   "topic": "拡張子",
+   "statement": "ファイルタイプ一覧で .maxpat はJSON形式のパッチャとして扱われ、.maxhelp, .maxproto, .maxpresets等もJSON系として列挙される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-06",
+   "locator": "File Types 表(JSON Patcher .maxpat)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-015",
+   "entity_id": "REF-010-003",
+   "topic": "保存範囲",
+   "statement": "パッチを保存すると、オブジェクト名・接続・引数・固定属性などの構造は保存されるが、スライダ値などの状態は通常保存されない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-07",
+   "locator": "Saving State with pattr 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-016",
+   "entity_id": "REF-010-003",
+   "topic": "状態保存",
+   "statement": "pattr系(autopattr, pattrstorage等)で状態を保存・復元でき、pattrstorageは設定をJSON/XMLファイルとして保存する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-07",
+   "locator": "Saving State with pattr",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-017",
+   "entity_id": "REF-010-003",
+   "topic": "読み込み順",
+   "statement": "パッチを開く際は、オブジェクト初期化、パッチコード接続、パラメータ初期化、pattr復元、loadbang/loadmess、…の段階順で初期化される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-11",
+   "locator": "Patcher Lifecycle: Max patcher stages of initialization",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-018",
+   "entity_id": "REF-010-004",
+   "topic": "OSC",
+   "statement": "Maxは内蔵UDPサーバ(アプリ全体またはパッチャ単位)かparam.oscでOSCを有効にでき、パラメータに /<patcher>/param/<name>/<attr> 形式のアドレスが付く。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-08",
+   "locator": "OpenSoundControl 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-019",
+   "entity_id": "REF-010-004",
+   "topic": "OSCQuery",
+   "statement": "OSCQueryを有効にするとHTTPでOSCサーバの能力を問い合わせでき、OSC公開パラメータを持つパッチャが応答に含まれる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-08",
+   "locator": "OpenSoundControl: OSCQuery",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-020",
+   "entity_id": "REF-010-004",
+   "topic": "FullPacket",
+   "statement": "OSC対応オブジェクトはFullPacketメッセージで受け渡し、これは不透明な値でmessage boxなどに保存してはならない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-08",
+   "locator": "OpenSoundControl: The FullPacket Message",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-021",
+   "entity_id": "REF-010-004",
+   "topic": "udpreceive",
+   "statement": "udpreceiveはUDPで待受し、既定ポート7374、出力形式はmessage/osc_packet/fullpacket/rawbytesから選べる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "udpreceive Attributes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-022",
+   "entity_id": "REF-010-004",
+   "topic": "udpsend",
+   "statement": "udpsendは指定ホスト・ポートへUDPでメッセージを送る。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "udpsend Description/Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-023",
+   "entity_id": "REF-010-004",
+   "topic": "セミコロン送信",
+   "statement": "message boxの先頭セミコロンで、グローバル名前空間の宛先(例: maxオブジェクト、receive)へメッセージを送れる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-01",
+   "locator": "Messages: Semicolon prefix",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-024",
+   "entity_id": "REF-010-005",
+   "topic": "機能",
+   "statement": "余弦波(既定)を出し、ウェーブテーブルはset/setallで変更できる。内部は64ビット16Kの余弦テーブル。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "cycle~ Description/Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-025",
+   "entity_id": "REF-010-005",
+   "topic": "入力",
+   "statement": "左入口は周波数(floatまたは信号)、右入口は位相で0.0〜1.0。resetで位相を同期できる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "cycle~ Messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-026",
+   "entity_id": "REF-010-006",
+   "topic": "機能",
+   "statement": "共振(0〜1)を指定できる低コストのローパス。中央入口がカットオフ、右入口が共振。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "lores~ Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-027",
+   "entity_id": "REF-010-006",
+   "topic": "引数",
+   "statement": "cutoffとresonanceの作成引数があり、既定は0。信号接続時は引数が無視される。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "lores~ Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-028",
+   "entity_id": "REF-010-007",
+   "topic": "機能",
+   "statement": "目標値と時間(ms)から信号ランプを生成する。時間は右入口、リストで目標+時間を連ねて複合ランプが作れる(最大128組)。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "line~ Description/Messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-029",
+   "entity_id": "REF-010-007",
+   "topic": "属性",
+   "statement": "SIAI有効時はサンプル精度。maxpointsの既定は129点。activeoutで稼働中信号を出力できる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "line~ Discussion/Attributes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-030",
+   "entity_id": "REF-010-008",
+   "topic": "機能",
+   "statement": "bang/非ゼロで開始し0で停止。間隔はms、または拍子表記などMaxの時間形式で指定できる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "metro Description/Messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-031",
+   "entity_id": "REF-010-008",
+   "topic": "属性",
+   "statement": "interval既定は5ms、transport既定はinternal、deferで低優先度キュー出力にできる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "metro Attributes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-032",
+   "entity_id": "REF-010-009",
+   "topic": "機能",
+   "statement": "0から引数−1までの乱数を出す(intの場合)。floatの引数だと0〜上限の浮動小数。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "random Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-033",
+   "entity_id": "REF-010-009",
+   "topic": "シード",
+   "statement": "seedを非ゼロにすると再現可能な列になり、0なら起動時間から決まる。classicモードは統計特性が悪い旧生成器。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "random Attributes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-034",
+   "entity_id": "REF-010-010",
+   "topic": "機能",
+   "statement": "-1.0〜1.0の一様分布白色ノイズ信号を出し、引数は無い。classic属性がある。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "noise~ Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-035",
+   "entity_id": "REF-010-011",
+   "topic": "機能",
+   "statement": "gen~は埋め込みGenパッチを最適化したネイティブコードにし、.gendspを引数に読み込める。コードを書き出す属性もある。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "gen~ Description/Arguments/Attributes",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-010-036",
+   "entity_id": "REF-010-011",
+   "topic": "属性",
+   "statement": "nocacheで再コンパイルを強制でき、exportfolderなどでコード書き出し先を指定する。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-010-10",
+   "locator": "gen~ Attributes",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "item": "Max本体の正確なバージョン(ドキュメントは現行表記のみ)",
+   "tried_sources": [
+    "SRC-010-01",
+    "SRC-010-10"
+   ],
+   "impact_on_spec": "版固有の挙動差を仕様化できない",
+   "entity_id": "REF-010-001"
+  },
+  {
+   "item": "利用条件(商用ソフトの出力/ドキュメント利用規約)",
+   "tried_sources": [
+    "SRC-010-13"
+   ],
+   "impact_on_spec": "仕様転記の可否判断に影響。本DBは要約のみ記録",
+   "entity_id": "REF-010-001"
+  },
+  {
+   "item": "信号の共通値域規約と信号ベクタ長の既定値",
+   "tried_sources": [
+    "SRC-010-05",
+    "SRC-010-10"
+   ],
+   "impact_on_spec": "信号範囲・ブロック長の仕様化に影響",
+   "entity_id": "REF-010-002"
+  },
+  {
+   "item": ".maxpat内部のJSONスキーマ(キー名・座標・接続の記述)",
+   "tried_sources": [
+    "SRC-010-06",
+    "SRC-010-07"
+   ],
+   "impact_on_spec": "パッチ形式を相互運用する場合、実ファイルまたは別資料の確認が必須",
+   "entity_id": "REF-010-003"
+  },
+  {
+   "item": "OSCアドレスの既定ポート・内蔵UDPサーバの既定ポート",
+   "tried_sources": [
+    "SRC-010-08"
+   ],
+   "impact_on_spec": "外部制御の既定接続設定を仕様化できない",
+   "entity_id": "REF-010-004"
+  },
+  {
+   "item": "外部プロセスからMaxパッチを起動/操作するAPIの全体像(Node for Max, js等は範囲外)",
+   "tried_sources": [
+    "SRC-010-08"
+   ],
+   "impact_on_spec": "プログラム制御の完全な比較には追加調査が必要",
+   "entity_id": "REF-010-004"
+  },
+  {
+   "item": "出力振幅範囲と周波数の有効範囲",
+   "tried_sources": [
+    "SRC-010-10"
+   ],
+   "impact_on_spec": "ポート範囲を記載できない",
+   "entity_id": "REF-010-005"
+  },
+  {
+   "item": "カットオフ有効範囲と実際のフィルタ形式(次数)",
+   "tried_sources": [
+    "SRC-010-10"
+   ],
+   "impact_on_spec": "フィルタ特性の仕様化に影響",
+   "entity_id": "REF-010-006"
+  },
+  {
+   "item": "出力値域と最小ランプ時間",
+   "tried_sources": [
+    "SRC-010-10"
+   ],
+   "impact_on_spec": "エンベロープ範囲の仕様化に影響",
+   "entity_id": "REF-010-007"
+  },
+  {
+   "item": "最大精度・ジッタ",
+   "tried_sources": [
+    "SRC-010-10",
+    "SRC-010-04"
+   ],
+   "impact_on_spec": "クロック精度を仕様化できない",
+   "entity_id": "REF-010-008"
+  },
+  {
+   "item": "Gen/RNBOの個別演算子と書き出しコードのライセンス条件(範囲外)",
+   "tried_sources": [
+    "SRC-010-09",
+    "SRC-010-13"
+   ],
+   "impact_on_spec": "gen~/RNBOの利用範囲を限定した調査にとどまる",
+   "entity_id": "REF-010-011"
+  }
+ ]
+}
