@@ -612,6 +612,228 @@
    },
    "status": "active",
    "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-016-012",
+   "kind": "system",
+   "name": "Serge Modular module generations 1973-1983 (original catalogue)",
+   "maker": "Serge Tcherepnin / SMMS",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Chronology of the original Serge module ranges (1st to 4th generation) as listed by a secondary source.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Four documented module generations, 1973 to 1983",
+     "fact_ids": [
+      "F-016-029",
+      "F-016-030",
+      "F-016-031"
+     ]
+    },
+    {
+     "text": "Panels were user-selectable 4U module sets on a 17-inch panel",
+     "fact_ids": [
+      "F-016-032"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Chronology comes from two secondary sources that disagree on dates",
+     "fact_ids": [
+      "F-016-027",
+      "F-016-028"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-013",
+   "kind": "system",
+   "name": "Sound Transform Systems Serge (1990s onward: Shop Panels, M-Class)",
+   "maker": "Sound Transform Systems (Rex Probe)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Continuation of Serge production from the early 1990s with fixed Shop Panels and half-width M-Class panels.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Pre-configured Shop Panels and M-Class panels instead of custom builds",
+     "fact_ids": [
+      "F-016-033",
+      "F-016-034"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Relationship to the current Random*Source line not stated in these sources",
+     "fact_ids": [
+      "F-016-033"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-016-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-014",
+   "kind": "system",
+   "name": "Serge design philosophy (patch-programmable, unified signals)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Design approach of Serge modules: many internal points exposed on the panel, no split between audio and control jacks.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Panel-exposed internals allow patching outside each module's nominal function",
+     "fact_ids": [
+      "F-016-035"
+     ]
+    },
+    {
+     "text": "No audio/CV jack split; banana cords",
+     "fact_ids": [
+      "F-016-036"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Comparison with Buchla is the Wikipedia editors' framing, not a maker statement",
+     "fact_ids": [
+      "F-016-035",
+      "F-016-037"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-016-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-015",
+   "kind": "module",
+   "name": "Wave Multiplier (VCM)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "waveshaper",
+   "purpose": "Timbre-shaping section between oscillator and filter, a Serge-specific module.",
+   "synthesis_method": "wave multiplication / waveshaping",
+   "features": [
+    {
+     "text": "Sits between oscillator and filter; accepts external audio or CV",
+     "fact_ids": [
+      "F-016-041"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "No electrical specification found",
+     "fact_ids": [
+      "F-016-041"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-016-016",
+   "kind": "module",
+   "name": "Touch Activated Keyboard (TKB)",
+   "maker": "Serge Tcherepnin",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "Touch-sensitive keyboard controller with an analogue sequencer.",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "Touch pads feed a sequencer (stage count differs by source)",
+     "fact_ids": [
+      "F-016-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Stage count unresolved (16-stage vs 4-stage)",
+     "fact_ids": [
+      "F-016-042"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
   }
  ],
  "facts": [
@@ -900,6 +1122,193 @@
    "source_id": "SRC-016-05",
    "locator": "Paperface and Eurorack pages",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-016-027",
+   "entity_id": "REF-016-012",
+   "topic": "origin",
+   "statement": "Wikipedia: Serge system developed by Tcherepnin, Rich Gold and Randy Cohen at CalArts from late 1972; first 20 systems built 1973 in Tcherepnin's home; commercial production from 1974 after he left CalArts; goal was a cheaper, powerful alternative to Buchla.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-028",
+   "entity_id": "REF-016-012",
+   "topic": "origin_dating",
+   "statement": "Vintage Synth Explorer gives different dates: designed 1974 in Serge's home, mass production from 1975 to 1986, special orders to 1993. This differs from the Wikipedia dates (late 1972 design, 1973 first units, 1974 commercial start); both are kept.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-029",
+   "entity_id": "REF-016-012",
+   "topic": "1st_generation",
+   "statement": "1st generation (1973) list includes dual voltage processor, dual mixer, triple waveshaper, VCA (Gate), ring modulator, weird ASR envelope, VCO, positive/negative slews, triple comparator, 2-pole state-variable VCF (LP/HP/BP), programmer, 10-step pulse sequencer.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section 1st generation modules (1973)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-030",
+   "entity_id": "REF-016-012",
+   "topic": "3rd_generation",
+   "statement": "3rd generation (c.1976) introduced highly accurate 1 V/oct oscillators (PCO, NTO), quad VCA, equal-power panners, variable-bandwidth/slope/Q VCFs, wave multipliers, dual universal slope / transient generators and the TKB; all filters are 2-pole state-variable 12 dB/oct (article says claims of 18/24 dB are mistaken).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules (1976)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-031",
+   "entity_id": "REF-016-012",
+   "topic": "4th_generation",
+   "statement": "4th generation (c.1979) added active processor, resonant equaliser, sequencers, divide/n comparator, Wilson analog delay, balanced modulator, quantizer, frequency shifter, quadrature oscillator, dual VCA, N voice controller; a standard \"System 79\" configuration was offered in 1979; no new Serge modules after 1983.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Sections 2nd-4th generation, STS modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-032",
+   "entity_id": "REF-016-012",
+   "topic": "panel_format",
+   "statement": "Originally the user chose modules (1-3 inch wide, 4U panels) arranged on a 17-inch panel; graphics moved from paper to metal film (early 1980s) to direct print (STS era).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-033",
+   "entity_id": "REF-016-013",
+   "topic": "STS_history",
+   "statement": "Business passed to Rex Probe in the early 1990s (Sound Transform Systems); STS stopped kit sales and user-chosen layouts, offering pre-configured Shop Panels (Animal, Blue/Red Voice and Control, Soup Kitchen 1/2, TKB, Sequencer) and from about 2010 half-width M-Class panels (e.g. Creature, Gator).",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Sections Overview, STS modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-034",
+   "entity_id": "REF-016-013",
+   "topic": "STS_panels",
+   "statement": "VSE lists Shop Panel module sets, e.g. Animal = NTO, PCO, VCM (wave multiplier), AMX (mixer), SSG, DTG, VCFQ, UAP; M-Class panels pair 4-5 modules (Creature smallest complete Serge, Gator rhythmic pulse generator). Prices were listed but are not recorded here.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Tables Shop Panels and M-Class",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-035",
+   "entity_id": "REF-016-014",
+   "topic": "philosophy",
+   "statement": "Wikipedia: Serge modules expose many circuit points on the front panel for unusual patching, unlike Buchla modules that do one job well and separate sound from structure by signal level and connector type; the concept is said to owe more to the Yale Pulsa system than to Buchla.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-036",
+   "entity_id": "REF-016-014",
+   "topic": "unified_jacks",
+   "statement": "Audio and control jacks are not separated; all signals go module to module on 4 mm banana cords, which can be stacked to reduce multiples. Low output impedances largely avoid shielded cable; some 3.5 mm sockets serve external audio interfacing.",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-037",
+   "entity_id": "REF-016-014",
+   "topic": "buchla_influence",
+   "statement": "VSE sees Buchla influence (touch keyboards, random voltage, function generators, matrix mixers) alongside Serge-original ideas such as the Wave Multiplier and banana-plug patching.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraphs",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-038",
+   "entity_id": "REF-016-014",
+   "topic": "low_cost",
+   "statement": "Design goal across both sources: smaller and cheaper than Moog, Buchla and ARP systems of the time.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraph",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-039",
+   "entity_id": "REF-016-003",
+   "topic": "jack_colours_early",
+   "statement": "Wikipedia describes the early jack scheme as blue (unipolar CV), black (bipolar, not necessarily AC-coupled) and red (pulse/gate), \"not rigidly enforced\"; yellow was added later for triggers. The maker FAQ (F-016-008) instead names white for DC CV, red for logic/trigger, black for bipolar; the two descriptions are kept side by side.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-040",
+   "entity_id": "REF-016-003",
+   "topic": "one_volt_per_octave",
+   "statement": "Third-generation oscillators (c.1976) are described as accurate 1 V/oct designs; no per-module scaling table was found in these sources.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-041",
+   "entity_id": "REF-016-015",
+   "topic": "function",
+   "statement": "VSE calls the Wave Multiplier a unique section between oscillator and filter that lets external audio or CV modulate the timbre; Wikipedia lists \"wave multipliers\" among the 1976 modules. Parameters and ranges not found.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-13",
+   "locator": "Intro paragraph (Shop Panel tables list VCM)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-042",
+   "entity_id": "REF-016-016",
+   "topic": "function",
+   "statement": "Wikipedia: TKB is a very flexible touch-sensitive keyboard controller combined with a 16-stage analogue sequencer (3rd generation); VSE: 16 touch pads trigger a 4-stage sequencer in the STS Shop Panel. The stage counts differ between sources and eras.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Section 3rd generation modules; VSE Shop Panel table",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-016-043",
+   "entity_id": "REF-016-010",
+   "topic": "no_memory_mention",
+   "statement": "Neither Wikipedia nor VSE mentions any patch memory or recall; patching is by physical banana cords. Absence of mention only.",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-016-12",
+   "locator": "Whole article",
+   "verified_on": "2026-11-13"
   }
  ],
  "unconfirmed": [
@@ -960,6 +1369,61 @@
     "SRC-016-07"
    ],
    "impact_on_spec": "Panel-level module details not read; serge_4x4 page unreachable at attempt."
+  },
+  {
+   "entity_id": "REF-016-003",
+   "item": "Which jack colour scheme (blue/black/red/yellow vs white/red/black) applied to which production era",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-03"
+   ],
+   "impact_on_spec": "Colour-to-signal mapping in a spec must be tied to era (1970s vs Random*Source); Wikipedia and maker text differ and neither is original documentation."
+  },
+  {
+   "entity_id": "REF-016-012",
+   "item": "Dates of Serge origin (1972/73/74 start, production end 1986 vs 1983)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "Timeline in the reference should state both and not pick one."
+  },
+  {
+   "entity_id": "REF-016-015",
+   "item": "Wave Multiplier circuit behaviour, ports and ranges",
+   "tried_sources": [
+    "SRC-016-13",
+    "SRC-016-12"
+   ],
+   "impact_on_spec": "Cannot specify the module beyond a description."
+  },
+  {
+   "entity_id": "REF-016-016",
+   "item": "Actual TKB sequencer stage count per era",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13",
+    "SRC-016-11"
+   ],
+   "impact_on_spec": "Do not state a stage count in a spec without original documentation."
+  },
+  {
+   "entity_id": "REF-016-012",
+   "item": "Original 1970s manuals and catalogue (first-hand data for generations)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "All generation data here is encyclopedic; Wikipedia page itself carries reliability banners."
+  },
+  {
+   "entity_id": "REF-016-010",
+   "item": "Patch storage in original Serge systems (none mentioned in either secondary source)",
+   "tried_sources": [
+    "SRC-016-12",
+    "SRC-016-13"
+   ],
+   "impact_on_spec": "Treat as no patch memory only as an absence of evidence, not a confirmed negative."
   }
  ]
 }

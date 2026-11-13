@@ -131,6 +131,30 @@
    "checked_scope": "Read the product description and details list",
    "link_status": "ok",
    "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright and trademarks belong to the rights holder."
+  },
+  {
+   "id": "SRC-016-12",
+   "title": "Serge synthesizer (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Serge_synthesizer",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Whole article text read (Overview, Modules by generation, STS sections). Page carries maintenance banners saying sources are weak and too close to the subject.",
+   "link_status": "ok",
+   "license_note": "Wikipedia article (CC BY-SA 4.0). Facts summarised in own words; no text or images reproduced or reused. Tertiary source, so confidence is not raised on its own."
+  },
+  {
+   "id": "SRC-016-13",
+   "title": "Serge Modular (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer (vintagesynth.com)",
+   "url": "https://www.vintagesynth.com/misc/serge.php",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Whole page read: history paragraph, Shop Panel and M-Class tables (module lists, prices not recorded). Single-author enthusiast site.",
+   "link_status": "ok",
+   "license_note": "Enthusiast reference page. Facts summarised in own words; no text, tables or images reproduced; nothing reused."
   }
  ]
 }

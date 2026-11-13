@@ -911,6 +911,54 @@
     "part_of": "REF-005-001"
    },
    "status": "active"
+  },
+  {
+   "id": "REF-005-011",
+   "kind": "signal_standard",
+   "name": "VCV Rack 電圧規約と実機Eurorack慣習の対応(二次資料との照合)",
+   "maker": "VCV / 業界慣習",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "VCV Rackの電圧規約(公式マニュアル記載)が実機Eurorack慣習とどこで一致・相違するかを、メーカー外の記述で照合する。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "音声±5Vは実機慣習と一致",
+     "fact_ids": [
+      "F-005-045"
+     ]
+    },
+    {
+     "text": "ピッチは実機と同じ1V/oct",
+     "fact_ids": [
+      "F-005-048"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "実機とのCV/ゲート範囲の差(VCVのほうが高い)",
+     "fact_ids": [
+      "F-005-046",
+      "F-005-047"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-005-001"
+   },
+   "status": "active"
   }
  ],
  "facts": [
@@ -1375,6 +1423,72 @@
    "source_id": "SRC-005-01",
    "locator": "RackPro 'MIDI input/output'",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-005-043",
+   "entity_id": "REF-005-011",
+   "topic": "位置づけ",
+   "statement": "Wikipediaは、VCV Rackを無料のオープンソース仮想モジュラーで、実機Eurorackを模したものと説明し、バージョン1.0で安定API・マルチスレッド・ポリフォニー、2.0(2021年11月30日)でVSTプラグイン化が加わったと述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-005-06",
+   "locator": "節Overview",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-005-044",
+   "entity_id": "REF-005-011",
+   "topic": "実機連携",
+   "statement": "Wikipediaは、アナログCV/gateとデジタルUSB/MIDIを出力して外部ハードに接続でき、VST host モジュールで他VSTも載せられると述べる。詳細(使用モジュール名)は記載なし。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-005-06",
+   "locator": "節Interconnectivity",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-005-045",
+   "entity_id": "REF-005-011",
+   "topic": "音声レベル対応",
+   "statement": "実機Eurorackの音声は約10Vpp(±5V)で、VCV Rackの音声レベル(F-005-009)と一致する(Eurorack記事)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-005-07",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-005-046",
+   "entity_id": "REF-005-011",
+   "topic": "CVレベル対応",
+   "statement": "実機Eurorackの単極CVは0〜8V、双極CVは約±2.5V(5Vpp)で、VCV Rackの典型(0〜10V単極、±5V双極、F-005-009)とは範囲が異なる。VCV側が広い。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-005-07",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-005-047",
+   "entity_id": "REF-005-011",
+   "topic": "ゲートレベル対応",
+   "statement": "実機Eurorackのトリガ/ゲートは0〜5Vパルスが慣習(Eurorack記事)。VCV Rackの10V出力(F-005-011)はより高いが、受信側のしきい値(1〜2V)は実機の低めの閾値と矛盾しない範囲。CV/gate記事はトリガ電圧が機種により2〜10Vと述べる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-005-08",
+   "locator": "節Trigger(Eurorack記事の節Electrical併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-005-048",
+   "entity_id": "REF-005-011",
+   "topic": "1V/oct",
+   "statement": "1V/octは実機Eurorackの標準的ピッチ規約で、Bob Moog以来の方式(CV/gate記事)。VCV Rack側も1V/oct(F-005-013)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-005-08",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
   }
  ],
  "unconfirmed": [
@@ -1426,6 +1540,15 @@
     "SRC-005-02"
    ],
    "impact_on_spec": "範囲を数値化できない。"
+  },
+  {
+   "entity_id": "REF-005-011",
+   "item": "VCV Rackのトリガ10Vと実機モジュール(5V系)を直結した際の実機側の挙動",
+   "tried_sources": [
+    "SRC-005-07",
+    "SRC-005-08"
+   ],
+   "impact_on_spec": "実機モジュールのゲート閾値は個体差があるため、橋渡し時はレベル確認が必要。"
   }
  ]
 }

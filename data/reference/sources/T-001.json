@@ -119,6 +119,66 @@
    "checked_scope": "ドイツ語説明部(入出力・ジャンパ節)。英語版は未確認(英語マニュアルPDFは取得せず)",
    "link_status": "ok",
    "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-001-11",
+   "title": "Eurorack (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Eurorack",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Sections History, Physical, Electrical, VCO overview read.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-001-12",
+   "title": "CV/gate (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Sections Basic usage, CV (V/oct vs Hz/V, table), Trigger, Gate read.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-001-13",
+   "title": "Doepfer (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Doepfer",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Intro and Product History list read.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-001-14",
+   "title": "Modular synthesizer (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Modular_synthesizer",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "History and Module descriptions sections read.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-001-15",
+   "title": "Moog synthesizer (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Moog_synthesizer",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Development section (voltage control, 1 V/oct) read.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
   }
  ]
 }

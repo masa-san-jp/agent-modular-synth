@@ -11,7 +11,7 @@
       "era": "current",
       "selection_reason": "Eurorack形式の事実上の基準。電圧規約・ゲート/トリガー仕様・基本機能モジュールの公式資料が公開されている。",
       "status": "confirmed",
-      "status_note": "doepfer.de のA-100概要・Technical Details・Construction Details と代表8件(A-110-1,A-120,A-140-1,A-145-1,A-138s,A-160-1,A-190-3)の公式説明ページを確認。各モジュールのPDFマニュアルは未取得で、パラメータ範囲の一部は未確認。"
+      "status_note": "doepfer.de のA-100概要・Technical Details・Construction Details と代表8件(A-110-1,A-120,A-140-1,A-145-1,A-138s,A-160-1,A-190-3)の公式説明ページを確認。各モジュールのPDFマニュアルは未取得で、パラメータ範囲の一部は未確認。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org Eurorack/CV/gate/Doepfer/Modular synthesizer/Moog synthesizer)で電圧規約の一般論、V/oct対Hz/V、トリガ/ゲート種別、1V/oct歴史、Doepfer沿革を新規エンティティREF-001-011〜014として追記(third_party、low〜medium)。既存事実は変更なし。Doepfer公式値と整合を確認、発売年・沿革年・モジュール数に資料間の食い違いあり。"
     },
     {
       "id": "T-002",
@@ -51,7 +51,7 @@
       "era": "current",
       "selection_reason": "ソフトのモジュラーとして電圧規約・ポリフォニー・パッチ保存・公開APIが公開されている主要例。",
       "status": "confirmed",
-      "status_note": "確認済み。公式マニュアル(電圧規約・ポリフォニー・Core・メニュー)とGitHub v2のソースを読んだ。OSC等の外部制御は本体に確認できず未確認項目に記録。"
+      "status_note": "確認済み。公式マニュアル(電圧規約・ポリフォニー・Core・メニュー)とGitHub v2のソースを読んだ。OSC等の外部制御は本体に確認できず未確認項目に記録。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org VCV_Rack/Eurorack/CV_gate)で、公式マニュアルの電圧規約を実機Eurorack慣習と照合する新規エンティティREF-005-011を追記(third_party、low〜medium)。既存事実は変更なし。"
     },
     {
       "id": "T-006",
@@ -161,7 +161,7 @@
       "era": "historical",
       "selection_reason": "Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。",
       "status": "confirmed",
-      "status_note": "serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。"
+      "status_note": "serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。 [2026-11-13 第3陣] 二次資料(en.wikipedia.org Serge synthesizer、vintagesynth.com Serge Modular)で原機の歴史(1972-83の4世代モジュール構成)、設計思想、旧ジャック色(青/黒/赤)、STS継続、Wave Multiplier・TKBを追記(basis third_party、confidence low〜medium)。年代や段数は資料間で食い違い、unconfirmedに記録。1970年代原機の一次資料は依然未入手。"
     },
     {
       "id": "T-017",

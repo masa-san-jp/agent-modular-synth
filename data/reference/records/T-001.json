@@ -931,6 +931,222 @@
     "part_of": "REF-001-001"
    },
    "status": "active"
+  },
+  {
+   "id": "REF-001-011",
+   "kind": "signal_standard",
+   "name": "Eurorack 電圧・形状規約(二次資料による概説)",
+   "maker": "Doepfer(起点)/業界慣習",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "Doepfer A-100仕様を事実上の基準とするEurorackの形状・電圧慣習を、メーカー外の百科事典記述で裏取りする。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "3U・HP・±12V・3.5mmジャックの形状/電源規約",
+     "fact_ids": [
+      "F-001-038",
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "電圧は「緩く定義」された3分類",
+     "fact_ids": [
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "Doepfer公式値(F-001-002,003,007)と数値は整合",
+     "fact_ids": [
+      "F-001-038",
+      "F-001-039"
+     ]
+    },
+    {
+     "text": "Eurorack以前のEuroカード系の先行例(Formant等)",
+     "fact_ids": [
+      "F-001-041"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "規模・発売年は資料間で食い違う",
+     "fact_ids": [
+      "F-001-040",
+      "F-001-042"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-001-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-012",
+   "kind": "signal_standard",
+   "name": "1V/oct と Hz/V(ピッチCV方式の違い)",
+   "maker": "業界慣習(Moog,Korg,Yamaha等)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "ピッチ制御電圧の2大方式の違いと歴史的背景。A-100は1V/oct側。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1V/oct: 対数、1V=1オクターブ",
+     "fact_ids": [
+      "F-001-043"
+     ]
+    },
+    {
+     "text": "Hz/V: 周波数に比例、Korg/Yamaha系",
+     "fact_ids": [
+      "F-001-044"
+     ]
+    },
+    {
+     "text": "換算式 V_hz=2^(V_oct-1)",
+     "fact_ids": [
+      "F-001-045"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "方式違いの接続は調子外れになる",
+     "fact_ids": [
+      "F-001-046"
+     ]
+    },
+    {
+     "text": "1V/octの絶対基準電圧・範囲は実装で異なる",
+     "fact_ids": [
+      "F-001-048"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-013",
+   "kind": "signal_standard",
+   "name": "トリガ/ゲートの種別と閾値(一般論)",
+   "maker": "業界慣習",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "トリガとゲートの定義、V-trig/S-trig、電圧閾値のばらつき。A-100のゲート仕様の位置づけを一般論で補う。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "トリガ=パルス、ゲート=持続",
+     "fact_ids": [
+      "F-001-049"
+     ]
+    },
+    {
+     "text": "V-trigは2〜10Vの範囲、S-trigは初期Moog",
+     "fact_ids": [
+      "F-001-050",
+      "F-001-051"
+     ]
+    },
+    {
+     "text": "Eurorackは0〜5Vパルスが慣習",
+     "fact_ids": [
+      "F-001-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "不一致接続は無音または逆転",
+     "fact_ids": [
+      "F-001-052"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-001-014",
+   "kind": "system",
+   "name": "Doepfer Musikelektronik とA-100の歴史的位置づけ",
+   "maker": "Doepfer Musikelektronik",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "Doepferの沿革とA-100の位置づけ(メーカー外の百科事典による)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDI機器とモジュラーの両方を長く手がけた",
+     "fact_ids": [
+      "F-001-054"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "沿革年は同記事内でも食い違う",
+     "fact_ids": [
+      "F-001-055"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
   }
  ],
  "facts": [
@@ -1329,6 +1545,226 @@
    "source_id": "SRC-001-09",
    "locator": "A-160 仕様行",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-001-037",
+   "entity_id": "REF-001-011",
+   "topic": "定義",
+   "statement": "Wikipediaは、Eurorackは1995年にDoepfer社が仕様化した形式で、他社モジュールが互換を保つ事実上の標準と述べる。基準はDoepferのConstruction/Technical Detailsとされる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭・節Standards",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-038",
+   "entity_id": "REF-001-011",
+   "topic": "形状",
+   "statement": "3U高(128.5mm)、幅はHP(5.08mm)の整数倍(一部メーカーは0.5HP単位)、電源は+12V/0V/-12Vで10ピンまたは16ピン(Gate,CV,+5V含む)リボン、2.54mmピッチ。Doepfer一次資料の記述(F-001-002,003)と一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "節Physical・Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-039",
+   "entity_id": "REF-001-011",
+   "topic": "信号レベル",
+   "statement": "音声は最大約10Vpp(-5〜+5V)、双極CVは約5Vpp(-2.5〜+2.5V)、単極CVは0〜8V、トリガ/ゲート/クロックは0〜5Vのデジタルパルス。3.5mmモノジャック。「緩く定義された3分類」と明記。Doepfer一次資料(F-001-007)と数値が一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-11",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-040",
+   "entity_id": "REF-001-011",
+   "topic": "普及規模",
+   "statement": "2022年時点で600社超・15000モジュール超とWikipedia Eurorack記事は述べる。CV/gate記事は別の時点で316社・7000モジュール超と述べ、数値は記事間で異なる(時点差とみられるが記事は日付を示さない)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭(CV/gate記事の節CV併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-041",
+   "entity_id": "REF-001-011",
+   "topic": "先行規格",
+   "statement": "1970年代末にはEuroカード筐体の先行システム(Elektor Formant: 3U/6U×7HP・3.5mmジャック・31ピンバス・±15V、BME PM10/Axiom: 8HP・RCA、Synton 3000: 8HP・4mmバナナ・±15V)があり、1980年代末に生産終了したとされる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "節History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-042",
+   "entity_id": "REF-001-011",
+   "topic": "発売年",
+   "statement": "Eurorack記事は最初のA-100の発売を1996年とし、Doepfer記事の製品年表は1995年にA-100を載せる。年は資料間で1年異なる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "Product History(1995の項)/Eurorack節History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-043",
+   "entity_id": "REF-001-012",
+   "topic": "1V/oct",
+   "statement": "1V/octでは電圧が1V増えるごとに1オクターブ上がる(対数的)。Bob Moogが1960年代に普及させ、Roland、Moog、Sequential、Oberheim、ARP、Doepferが採用した。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-044",
+   "entity_id": "REF-001-012",
+   "topic": "Hz/V",
+   "statement": "Hz/Vは電圧の倍加で1オクターブ上がる(周波数が電圧に比例)。KorgとYamahaの多くの機種が採用。2Vは4Vの1オクターブ下、1Vの1オクターブ上。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-045",
+   "entity_id": "REF-001-012",
+   "topic": "換算式",
+   "statement": "両方式の関係は V_hz = 2^(V_oct − 1)。同記事の表(1V/oct基準と55Hz/V例: A1=1V/1V、A2=2V/2V、A3=3V/4V、A4=4V/8V、A5=5V/16V)で示される。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CVの表と式",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-046",
+   "entity_id": "REF-001-012",
+   "topic": "非互換",
+   "statement": "電圧範囲が近いため機器は壊れにくいが、方式違いを接続すると音は鳴っても調子外れになる。変換用にKorg MS-02などのインターフェースがある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節CV",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-047",
+   "entity_id": "REF-001-012",
+   "topic": "Moogと1V/oct",
+   "statement": "Moog synthesizer記事は、Moogが指数特性のトランジスタを用いたVCOを1V/octを基準に設計したと述べる。Modular synthesizer記事も、Moogが1V/octを定めたと述べる。複数のWikipedia記事は互いに独立した一次調査ではない点に注意。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-15",
+   "locator": "節Development(Modular synthesizer記事の節Historyと併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-048",
+   "entity_id": "REF-001-012",
+   "topic": "実装差",
+   "statement": "1V/oct内でも実装(制御電圧の範囲0〜5V/0〜10V/-5〜5V等、TRSでの給電)は一様でなく、モジュール間互換が問題になるとCV/gate記事は述べる。Modular synthesizer記事も「1V/octとゲート/トリガ閾値が一般的互換性を与える」が異種メーカー間はプラグ違いで追加ケーブルが必要と述べる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-14",
+   "locator": "節Overview/Standards(CV/gate記事の節CVと併読)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-049",
+   "entity_id": "REF-001-013",
+   "topic": "定義",
+   "statement": "トリガは音の開始を示すパルス(多くは立ち上がりエッジで起動)、ゲートは出来事の間ずっとhighを保つ信号。キーボードが送るCVは音高、ゲートが発音のオン/オフ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Basic usage",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-050",
+   "entity_id": "REF-001-013",
+   "topic": "V-trigger",
+   "statement": "V-trig(正トリガ)は通常0V付近でトリガ時に一定の正電圧を出す。電圧はメーカーにより2V〜10V。RolandやSequential Circuitsが採用。Doepfer A-100の+3V超でhigh(F-001-006)はこの範囲内にある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-051",
+   "entity_id": "REF-001-013",
+   "topic": "S-trigger",
+   "statement": "S-trig(ショートトリガ)は通常high状態で、発音時にグランドへ短絡する。初期のMoogモジュラーで使われ、現在はまれ。KorgやYamahaの反転ゲートとは別。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-052",
+   "entity_id": "REF-001-013",
+   "topic": "不一致時の症状",
+   "statement": "方式や電圧の合わない機器を接続すると、鳴らない、または押鍵と発音が逆転する。ゲート電圧もメーカーで異なり、負電圧側へ振れる実装もあり、入力は保護のためバッファされることが多い。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-001-12",
+   "locator": "節Trigger・Gate",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-053",
+   "entity_id": "REF-001-013",
+   "topic": "Eurorackでの標準",
+   "statement": "Eurorack記事はトリガ/ゲート/クロックを0〜5Vのデジタルパルスと説明する。VCV Rackは10Vの出力(別対象T-005)で、実機の0〜5V慣習より高い。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "節Electrical",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-054",
+   "entity_id": "REF-001-014",
+   "topic": "沿革",
+   "statement": "Dieter DoepferはElektor Formant用VCフェイザー(1977年着手とする記述、年表では1979年)を作り、1980年PMS、1982年Voice Modular System、1986年MCV1(MIDI-CV)、1992年Kraftwerkと共同でMAQ16/3シーケンサーを出した。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "冒頭・Product History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-055",
+   "entity_id": "REF-001-014",
+   "topic": "年表の食い違い",
+   "statement": "同じDoepfer記事の冒頭は1977年にフェイザー開発開始、年表は1979年と記す。年は未確定。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-13",
+   "locator": "冒頭/Product History",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-001-056",
+   "entity_id": "REF-001-014",
+   "topic": "形式の特徴",
+   "statement": "Eurorack記事はコンパクトな寸法、全信号3.5mmモノジャック、特定メーカーの音の美学がないことを普及理由に挙げる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-001-11",
+   "locator": "冒頭",
+   "verified_on": "2026-11-13"
   }
  ],
  "unconfirmed": [
@@ -1379,6 +1815,42 @@
     "SRC-001-04"
    ],
    "impact_on_spec": "ページ記載を超えるポート詳細は未確認。"
+  },
+  {
+   "entity_id": "REF-001-011",
+   "item": "Eurorack公称の基準年(1995仕様化か1996発売か)とモジュール数の最新値",
+   "tried_sources": [
+    "SRC-001-11",
+    "SRC-001-13"
+   ],
+   "impact_on_spec": "歴史年表に使う場合は両説を併記し、数値は出典日付付きで扱う。"
+  },
+  {
+   "entity_id": "REF-001-012",
+   "item": "1V/octを最初に導入した歴史的一次資料(Moog 1964年論文等)",
+   "tried_sources": [
+    "SRC-001-15",
+    "SRC-001-12"
+   ],
+   "impact_on_spec": "歴史的起源の記述は二次資料に依存。仕様化では「普及させた」の程度に留める。"
+  },
+  {
+   "entity_id": "REF-001-013",
+   "item": "Doepfer以外のEurorackモジュールの個別ゲート閾値",
+   "tried_sources": [
+    "SRC-001-11",
+    "SRC-001-12"
+   ],
+   "impact_on_spec": "閾値は個体差があるため、仕様化では範囲で記し、モジュール別は各取扱説明書で確認が必要。"
+  },
+  {
+   "entity_id": "REF-001-014",
+   "item": "Doepferフェイザーの開発年(1977年か1979年か)とA-100初出年",
+   "tried_sources": [
+    "SRC-001-13",
+    "SRC-001-11"
+   ],
+   "impact_on_spec": "沿革の年表に使う場合は不確実性を明示。公式の「Zeit-Tabelle」(doepfer.de)は未取得。"
   }
  ]
 }

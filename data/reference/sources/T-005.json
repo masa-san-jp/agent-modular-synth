@@ -59,6 +59,42 @@
    "id": "SRC-005-05",
    "accessed_on": "2026-11-12",
    "link_status": "ok"
+  },
+  {
+   "id": "SRC-005-06",
+   "title": "VCV Rack (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/VCV_Rack",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Whole article read (stub): Overview, Interconnectivity.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-005-07",
+   "title": "Eurorack (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Eurorack",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Section Electrical read, to compare with VCV Rack levels.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
+  },
+  {
+   "id": "SRC-005-08",
+   "title": "CV/gate (Wikipedia, English)",
+   "publisher": "Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Sections CV and Trigger read, to compare with VCV Rack levels.",
+   "link_status": "ok",
+   "license_note": "Wikipedia(CC BY-SA 4.0)の百科事典記事。事実のみ自分の言葉で要約し、本文・図は転載・再利用しない。二次資料のため単独ではconfidenceを上げない。"
   }
  ]
 }
