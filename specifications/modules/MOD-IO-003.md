@@ -54,12 +54,14 @@ stateful: true
 ## 4. パラメータ
 | 名前 | 単位 | 範囲 | 既定値 | 変調 | 更新タイミング | 補間 |
 |---|---|---|---|---|---|---|
-| window_ms | ミリ秒 | 1〜1000。範囲外はクランプ | 100 | なし(CV入力を持たない) | 次のステップ。窓長 `W` は閉じ判定のたびに再計算(進行中の累積は保持) | なし |
-| capture_len | サンプル(整数) | 4〜4096。範囲外はクランプ、非整数は切り捨て | 512 | なし | 次のステップ。値が変わるとスクラッチ状態(リング、フレーム、トリガ進行)を初期化(§5) | なし |
-| trig_mode | 列挙(0=連続、1=立ち上がり、2=立ち下がり) | 0〜2。範囲外は既定へ | 1 | なし | 次のステップ | なし |
-| trig_level | V | −12〜+12。範囲外はクランプ | 0 | なし | 次のステップ | なし |
-| pre | サンプル(整数) | 0〜`capture_len−1`。範囲外はクランプ。トリガ時点の値を使う | 0 | なし | 次のステップ(進行中の取得は開始時の値を使う) | なし |
+| window_ms | ミリ秒 | 1〜1000。有限の範囲外はクランプ。NaN/∞は既定100 | 100 | なし(CV入力を持たない) | 次のステップ。窓長 `W` は閉じ判定のたびに再計算(進行中の累積は保持) | なし |
+| capture_len | サンプル(整数) | 4〜4096。最近接整数へ四捨五入(0.5は切り上げ。例 7.5→8)後にクランプ(COM-13)。NaN/∞は既定512 | 512 | なし | 次のステップ。値が変わるとスクラッチ状態(リング、フレーム、トリガ進行)を初期化(§5) | なし |
+| trig_mode | 列挙(0=連続、1=立ち上がり、2=立ち下がり。整数型として扱う) | 0〜2。四捨五入後にクランプ(COM-13)。NaN/∞は既定1 | 1 | なし | 次のステップ | なし |
+| trig_level | V | −12〜+12。有限の範囲外はクランプ。NaN/∞は既定0 | 0 | なし | 次のステップ | なし |
+| pre | サンプル(整数) | 0〜`capture_len−1`。四捨五入後にクランプ(COM-13)。NaN/∞は既定0。トリガ時点の値を使う | 0 | なし | 次のステップ(進行中の取得は開始時の値を使う) | なし |
 
+- パラメータのNaN/∞は**既定値**(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0)として扱い、有限の範囲外値はクランプする(COM-12/13)。この置換は `nonfinite_count` に数えない(`nonfinite_count` は入力 IN のNaN/∞の回数)。
+- CV入力を持たないため、CV感度(COM-18)はない。
 - 乱数は使わない(`seed` なし)。
 
 ## 5. 内部状態と初期化・リセット
@@ -80,8 +82,9 @@ stateful: true
 | frame[capture_len] | float | 全て0 | 直近の完了フレーム |
 | frame_seq | uint32 | 0 | 完了フレーム数 |
 
+- リセットの種類(COM-10): `reset()` の**全体リセット**のみ(位相・音楽的リセットはない)。
 - `reset()`(COM-10): 上表を全て初期値へ(`frame_seq` と `windows` も0)。パラメータは変えない。
-- `capture_len` が変わったとき: `ring`、`wp`、`remain`、`fc`、`frame`(全て0、新しい長さ)を初期化。`frame_seq`、`prev`、窓の統計は保持する。
+- `capture_len` が(整形後の値で)変わったとき: `ring`、`wp`、`remain`、`fc`、`frame`(全て0、新しい長さ)を初期化。`frame_seq`、`prev`、窓の統計は保持する。
 - RESET入力ポートはない(該当なし。理由: 測定の初期化は`reset()`で行い、音楽的リセットの概念がない)。
 
 ## 6. 振る舞い
@@ -95,22 +98,25 @@ level = x
 // 1. 窓の累積
 cnt += 1;  sum += x;  sumsq += x*x
 mn = min(mn, x);  mx = max(mx, x);  am = max(am, abs(x));  peak_hold = max(peak_hold, abs(x))
-W = max(1, floor(window_ms*fs/1000 + 0.5))
+W = max(1, floor(clamp(finite(window_ms) ? window_ms : 100, 1, 1000)*fs/1000 + 0.5))
 if cnt >= W:                                // 窓が閉じる (このサンプルを含む)
     peak = am;  rms = sqrt(sumsq / cnt);  mean = sum / cnt
     vmin = mn;  vmax = mx;  windows += 1
     cnt = 0;  sum = 0;  sumsq = 0;  mn = +inf;  mx = -inf;  am = 0
 // 2. 波形フレーム
-L = capture_len;  pre_e = clamp(pre, 0, L - 1)
+// パラメータの整形(§4): NaN/∞は既定値、四捨五入(0.5切り上げ)→クランプ(COM-13)。window_ms/trig_level は有限の範囲外をクランプ
+L = clamp(round(finite(capture_len) ? capture_len : 512), 4, 4096)
+pre_e = clamp(round(finite(pre) ? pre : 0), 0, L - 1)
+mode = clamp(round(finite(trig_mode) ? trig_mode : 1), 0, 2);   tl = clamp(finite(trig_level) ? trig_level : 0, -12, 12)
 ring[wp] = x;  wp = (wp + 1) mod L;  done = false
-if trig_mode == 0:                          // 連続: Lサンプルごとに完了
+if mode == 0:                          // 連続: Lサンプルごとに完了
     remain = -1;  fc += 1;  if fc >= L: fc = 0; done = true
 else:
     if remain >= 0:                         // 取得中。この間はトリガを評価しない
         remain -= 1;  if remain == 0: done = true; remain = -1
     else:
-        fired = (trig_mode == 1) ? (prev < trig_level && trig_level <= x)
-                                 : (prev >= trig_level && trig_level > x)
+        fired = (mode == 1) ? (prev < tl && tl <= x)
+                             : (prev >= tl && tl > x)
         if fired:
             remain = L - pre_e - 1                  // トリガ点の後に取るサンプル数
             if remain == 0: done = true; remain = -1
@@ -132,7 +138,8 @@ THRU = x
 - COM-09: IN未接続は0 V(正規化なし)。
 - COM-10: `reset()`(§5)。
 - COM-12: NaN/∞は0に置換(THRUと統計)、回数は`nonfinite_count`。累積用の `sum`/`sumsq` は倍精度で、float32の丸め誤差とオーバーフローを避ける。
-- COM-13: パラメータ範囲外はクランプ。COM-14: §9。
+- COM-12: 入力のNaN/∞は0に置換して `nonfinite_count` に数える。パラメータのNaN/∞は既定値(数えない)。
+- COM-13: パラメータ範囲外はクランプ、整数型(`capture_len`, `trig_mode`, `pre`)は四捨五入→クランプ。COM-14: §9。
 - 固有: 読出し値(ポートではない)の伝送形式・取得タイミングは#3(データ契約)。読出しは「あるサンプルの処理が終わった直後の値」を返すものとする。
 
 ## 8. 異常入力・境界・数値安定性
@@ -140,7 +147,8 @@ THRU = x
 - 非常に大きな有限値(例 ±1e30): そのまま累積される。`sumsq` が倍精度で 1e60 程度となりoverflowはしない。`x*x` が倍精度で±∞になる規模(約1e154)を超える入力は、`rms` が +∞ になりうる。その場合は `rms` に 0 を書く(COM-12。実機入力は float32 で最大約3.4e38 のため倍精度の `x*x`≈1.2e77 に収まり、通常は起きない)。
 - 窓が閉じる前: `peak`、`rms`、`mean`、`vmin`、`vmax` は直前の値(初期は0)を保持。`peak_hold` と `level` は逐次更新される。
 - `window_ms` を縮めて `cnt ≥ W` になった場合、次の判定のサンプルで即座に窓が閉じる(累積途中の値で `rms` 等を計算)。
-- `capture_len` 範囲外は4〜4096にクランプ。`pre ≥ capture_len` は `capture_len−1` にクランプ(その場合トリガ点が最後のサンプル、完了は即時)。
+- パラメータのNaN/∞は既定値(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0。TV-13)。`nonfinite_count` には数えない。
+- `capture_len` は四捨五入(0.5は切り上げ。7.5→8、3.4→4)後に4〜4096にクランプ。`pre ≥ capture_len` は `capture_len−1` にクランプ(その場合トリガ点が最後のサンプル、完了は即時)。
 - 立ち上がりトリガ: 条件は `prev < trig_level ≤ x`(下から上へ、または等しくなる点)。同じ値に留まるときは発火しない。ノイズ混じりの信号では複数回発火しうる(取得中は無視される)。ヒステリシスはない。[A]
 - `trig_level > 0` のとき、最初のサンプル(`prev=0`)が `trig_level` 以上ならそのサンプルで発火する。
 - DC・ゼロ入力: `rms`=|DC|、`mean`=DC。0入力では全て0、フレームは(トリガなしなら)更新されない。
@@ -168,6 +176,7 @@ THRU = x
 | TV-MOD-IO-003-10 | リセット | window_ms=1, capture_len=4, trig_mode=0。x=2.0 を n=0..59 | n=59 の直後に `reset()`、その後の1サンプル(x=2.0) | reset前(n=59): windows=1, peak=rms=mean=2.0, frame_seq=15, peak_hold=2.0。reset直後(1サンプル処理後): windows=0, peak=rms=mean=vmin=vmax=0(窓の途中のため未ラッチ), peak_hold=2.0(その1サンプル分のみ), nonfinite_count=0, frame=[0,0,0,0], frame_seq=0。パラメータは不変 | カウンタ完全一致、値は絶対1e-6。COM-10(reset()は全状態を初期値へ。frame_seq=15は 60/4) |
 | TV-MOD-IO-003-11 | 境界 | window_ms=1000(最大), capture_len=4, trig_mode=1 | x=0.5 一定、n=0..47999 | W=48000。n=47999 で windows=1, peak=rms=mean=0.5。n=47998 では windows=0 | 完全一致(窓の位置)、値は絶対1e-6。`window_ms` 上限 |
 | TV-MOD-IO-003-12 | 保存復元 | window_ms=2, capture_len=32, trig_mode=1, trig_level=0.5, pre=5。x[n]=3·sin(2π·997·n/48000)+0.1·cos(n)(n=0..1999)。n=776 の直後に全状態を保存し新インスタンスへ復元 | n=777..1999 を継続 | 復元側のTHRUと全読出し値(各サンプルの peak, rms, mean, vmin, vmax, windows, peak_hold, nonfinite_count, frame, frame_seq)が、保存せずに継続した場合とビット同一。参考値(n=1999 時点): windows=20, frame_seq=41, peak=3.0929368214, rms=2.1233103635, mean=0.0054306410, vmin=−3.0833428140, vmax=3.0929368214, peak_hold=3.0935907455。frame[0..2]=−0.9696320, −0.6672800, −0.3737560 | 完全一致(ビット同一, COM-14)。参考値は絶対1e-6(倍精度累積の値) |
+| TV-MOD-IO-003-13 | 無効入力 | パラメータだけを変えた別実行 (a)〜(e)(特記以外は §4 の既定値) | (a) capture_len=7.5, trig_mode=0: x[n]=n+1(n=0..7)。(b) capture_len=3.4, trig_mode=0: x[n]=n+1(n=0..3)。(c) window_ms=NaN, capture_len=NaN: x=1.0 一定、n=0..4799。(d) trig_mode=NaN, trig_level=0.5, pre=NaN, capture_len=4: x=0,0,0,1,2,3,4,5,6(n=0..8)。(e) pre=1.5, trig_mode=1, trig_level=0.5, capture_len=4: x=0,0,0,1,2,3(n=0..5) | (a) 7.5→8: n=7 で frame=[1,2,3,4,5,6,7,8], frame_seq=1(切り捨てなら7要素)。(b) 3.4→4: n=3 で frame=[1,2,3,4], frame_seq=1。(c) window_ms→既定100(W=4800)、capture_len→既定512: n=4798 で windows=0、n=4799 で windows=1, peak=rms=mean=1.0。frameは長さ512。(d) trig_mode→1(立ち上がり)、pre→0: トリガ n=3、n=6 で完了 frame=[1,2,3,4], frame_seq=1(TV-06 (a) と同じ)。(e) pre→2(1.5→2。0.5は切り上げ): トリガ n=3、remain=1、n=4 で完了 frame=[0,0,1,2]、frame[2]=1(トリガ点)、frame_seq=1。いずれも nonfinite_count=0 | 絶対1e-6、カウンタ・配置は完全一致。COM-12(パラメータNaN/∞→既定値)、COM-13(整数型は四捨五入→クランプ)。スクラッチの参照実装で算出 |
 
 ### 音質・測定精度に関する要件(機能再現とは別項)
 - 本モジュールは信号を変えない(THRU=x)。音質への影響はない(加算・乗算・フィルタなし)。確認方法: THRUが入力と完全に一致することを、任意の入力列で比較する(NaN/∞を除く)。
