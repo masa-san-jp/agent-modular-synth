@@ -585,7 +585,7 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | AX-14 | セッションなし | タブを閉じた状態で `{"command":"patch.get"}`、続けて `{"command":"patch.list"}` | 1つ目 `ok:false`, `error.id:"ERR-006"`, `revision:null`。2つ目 `ok:true`, `result.patches` | 不変 |
 | AX-15 | 同じ値の設定 | `{"command":"param.set","args":{"module_id":"vcf1","param":"cutoff","value":1.0}}`(P0で既に 1.0) | `ok:true`, `revision:10`, `result.changed:false` | 不変。履歴・通知なし |
 
-受入例と検証IDの対応: AX-01 → VER-F-007、AX-02/03/04 → VER-A-004・VER-F-002・VER-F-003、AX-05/06 → VER-A-005、AX-07 → VER-F-011、AX-08 → VER-F-012、AX-09 → VER-A-008、AX-10 → VER-S-002・VER-S-004・VER-S-005・VER-S-007、AX-11 → VER-F-009・VER-A-006、AX-12 → VER-F-007、AX-13 → VER-NF-003、AX-14 → VER-A-004。
+受入例と検証IDの対応: AX-01 → VER-F-007、AX-02/03/04 → VER-A-004・VER-F-002・VER-F-003、AX-05/06 → VER-A-005、AX-07 → VER-F-011、AX-08 → VER-F-012、AX-09 → VER-A-008、AX-10 → VER-S-002・VER-S-004・VER-S-005・VER-S-007、AX-11 → VER-F-009・VER-A-006、AX-12 → VER-F-007、AX-13 → VER-F-001(関連: VER-NF-003)、AX-14 → VER-A-004、AX-15 → VER-A-003・VER-F-003。
 
 ## 19. 未決・確認事項
 | 項目 | 状態 |
