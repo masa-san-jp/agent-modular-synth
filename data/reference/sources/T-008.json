@@ -1,0 +1,88 @@
+{
+ "sources": [
+  {
+   "id": "SRC-008-01",
+   "title": "Pd Manual - Chapter 2: Theory of operation",
+   "publisher": "Pure Data project (pure-data/pure-data)",
+   "url": "https://raw.githubusercontent.com/pure-data/pure-data/master/doc/1.manual/2.theory.of.operation.htm",
+   "doc_version": "master (取得日時点)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "第2章のうち 2.1.4, 2.4(メッセージ), 2.5(オーディオ信号), 2.6(スケジューリング)を通読",
+   "link_status": "ok",
+   "license_note": "Standard Improved BSD License(LICENSE.txt)。ソースコード・ヘルプパッチ・マニュアル本文・画像は再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-008-02",
+   "title": "Pd Manual - Chapter 3: Installing and configuring",
+   "publisher": "Pure Data project (pure-data/pure-data)",
+   "url": "https://raw.githubusercontent.com/pure-data/pure-data/master/doc/1.manual/3.installing.configuring.htm",
+   "doc_version": "master (取得日時点)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "起動フラグ一覧(-open, -nogui, -send, -stderr)の箇所",
+   "link_status": "ok",
+   "license_note": "Standard Improved BSD License(LICENSE.txt)。ソースコード・ヘルプパッチ・マニュアル本文・画像は再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-008-03",
+   "title": "Pd 付属ヘルプパッチ(osc~, lop~, line~, metro, random)",
+   "publisher": "Pure Data project (pure-data/pure-data)",
+   "url": "https://raw.githubusercontent.com/pure-data/pure-data/master/doc/5.reference/",
+   "doc_version": "help各ファイルの更新表記: osc~ 0.55, lop~ 0.54, line~ 0.33, metro 0.48, random 0.56",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "osc~-help.pd, lop~-help.pd, line~-help.pd, metro-help.pd, random-help.pd のテキスト注記と #N/#X/#connect 行",
+   "link_status": "ok",
+   "license_note": "Standard Improved BSD License(LICENSE.txt)。ソースコード・ヘルプパッチ・マニュアル本文・画像は再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-008-04",
+   "title": "Pd ソースコード(u_pdsend.c, x_net.c, x_misc.c, m_pd.h)",
+   "publisher": "Pure Data project (pure-data/pure-data)",
+   "url": "https://raw.githubusercontent.com/pure-data/pure-data/master/src/",
+   "doc_version": "master: PD_MAJOR/MINOR/BUGFIX = 0.57.0",
+   "doc_type": "source_code",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "u_pdsend.c の冒頭コメントと usage、x_net.c のnetsend/netreceiveのオプション判定箇所、x_misc.c の oscparse 実装冒頭、m_pd.h のバージョン定義",
+   "link_status": "ok",
+   "license_note": "Standard Improved BSD License(LICENSE.txt)。ソースコード・ヘルプパッチ・マニュアル本文・画像は再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-008-05",
+   "title": "Pd Documentation(msp.ucsd.edu)",
+   "publisher": "Miller Puckette (UCSD)",
+   "url": "https://msp.ucsd.edu/Pd_documentation/index.htm",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "アクセス不能(プロキシが接続拒否/TLS検証失敗)。内容は未読",
+   "link_status": "unreachable",
+   "license_note": "未取得のため再利用条件は未確認。取得できても本文は転載しない。"
+  },
+  {
+   "id": "SRC-008-06",
+   "title": "Pure Data コミュニティサイト(puredata.info)",
+   "publisher": "Pure Data community",
+   "url": "https://puredata.info/",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "トップページのみ取得。事実の根拠としては未使用",
+   "link_status": "ok",
+   "license_note": "サイト本文は転載しない。"
+  },
+  {
+   "id": "SRC-008-07",
+   "title": "Pure Data LICENSE.txt",
+   "publisher": "Miller Puckette ほか",
+   "url": "https://raw.githubusercontent.com/pure-data/pure-data/master/LICENSE.txt",
+   "doc_version": "master (取得日時点)",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "冒頭の許諾条件部分",
+   "link_status": "ok",
+   "license_note": "Standard Improved BSD License。本DBはライセンス本文を転載しない。"
+  }
+ ]
+}

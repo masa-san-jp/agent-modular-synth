@@ -1,0 +1,595 @@
+{
+  "main_json": [
+    {
+      "path": "references/modules/M004.json",
+      "sha256": "c2eae31cf2ea142fb82a0aa673fd009f2e3a5843a40cac5ee183c3fe6c23b583"
+    },
+    {
+      "path": "references/modules/M005.json",
+      "sha256": "de12cf753c49f3bf5cf1be0c80cc87f461420f8d7fac9a5cfbe5b77032ca69b6"
+    },
+    {
+      "path": "references/modules/M006.json",
+      "sha256": "a11d36b68d5f55c7d1619cd6e3d0b45d7be123ad7861f474c6a60d19c47ee483"
+    },
+    {
+      "path": "references/modules/M002.json",
+      "sha256": "8598f264bbee176b3c87aee4521cf1375ca6a191910f6a44213cc48cc32fd330"
+    },
+    {
+      "path": "references/modules/M003.json",
+      "sha256": "1da28aaeafab84d993f051fae25d46f6971a841574916bec19246cf64fc550f2"
+    },
+    {
+      "path": "references/modules/M007.json",
+      "sha256": "dc5d7778f3b3c4030d7c0262c792257dc45365239eb289546a198004f1674d2f"
+    },
+    {
+      "path": "references/modules/M001.json",
+      "sha256": "86f93919d18e31fceb64e8d55b2efd53704938fdb9d3e630a2eb44c855937610"
+    },
+    {
+      "path": "references/sources/catalog.json",
+      "sha256": "f523f60f5c71ed1fcd84faa41f87f77fed521af01846567734da80ff4f2e8e73"
+    },
+    {
+      "path": "references/instruments/I002.json",
+      "sha256": "313c169466eaa3ccc879e6dfbc0bcff2b2afcc1c23e1d2ed89d00261e3f0c3d9"
+    },
+    {
+      "path": "references/instruments/I005.json",
+      "sha256": "c5e3d67b08c6b6325a8cc34845b35111da9c4b8d755f1939f9cd6507f1f1df43"
+    },
+    {
+      "path": "references/instruments/I003.json",
+      "sha256": "40cdebc5b1c0734be79bf109108946135626d68ef7a23d6ec56ee379b6bd2a8d"
+    },
+    {
+      "path": "references/instruments/I004.json",
+      "sha256": "ed70209c481ea2e6dd608b18b1f8b3f0e9ce4067ba095adb70c4451325bf4ef4"
+    },
+    {
+      "path": "references/instruments/I006.json",
+      "sha256": "78654c24af4edf75c4b9bd4a94462eae1ef4552eb8988e55650bf1a5ac320731"
+    },
+    {
+      "path": "references/instruments/I001.json",
+      "sha256": "342b97c3c3a5e90602eb017fa3699f7da5524cfd55468444335a3e94c9ea319c"
+    }
+  ],
+  "pr4_files": [
+    {
+      "path": "data/reference/targets.json",
+      "sha256": "980330968a7bf3fd31294a98a17d4c1c0fb9cdaeb5ab438014575e6a8f9e0c73",
+      "lengths": {
+        "targets": 17,
+        "out_of_scope": 2
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/records/T-002.json",
+      "sha256": "da781edb145abe2f7c940a6940748b61e843c75378c47fb23f273ce67da9bf20",
+      "lengths": {
+        "entities": 6,
+        "facts": 32,
+        "unconfirmed": 7
+      },
+      "feature_lengths": {
+        "REF-002-001": 3,
+        "REF-002-002": 6,
+        "REF-002-003": 4,
+        "REF-002-004": 4,
+        "REF-002-005": 2,
+        "REF-002-006": 0
+      }
+    },
+    {
+      "path": "data/reference/records/T-006.json",
+      "sha256": "2bc21f5b115ddec845666ff7e736545253c488d316d7247d0a66d9b2fb9bc8a3",
+      "lengths": {
+        "entities": 8,
+        "facts": 19,
+        "unconfirmed": 4
+      },
+      "feature_lengths": {
+        "REF-006-001": 5,
+        "REF-006-002": 1,
+        "REF-006-003": 1,
+        "REF-006-004": 1,
+        "REF-006-005": 1,
+        "REF-006-006": 1,
+        "REF-006-007": 1,
+        "REF-006-008": 2
+      }
+    },
+    {
+      "path": "data/reference/records/T-004.json",
+      "sha256": "7df7658b0c83d291650022450605e827c724b66a38ec39a46ae90c9c7239c738",
+      "lengths": {
+        "entities": 11,
+        "facts": 51,
+        "unconfirmed": 7
+      },
+      "feature_lengths": {
+        "REF-004-001": 3,
+        "REF-004-002": 3,
+        "REF-004-003": 3,
+        "REF-004-004": 2,
+        "REF-004-005": 2,
+        "REF-004-006": 2,
+        "REF-004-007": 2,
+        "REF-004-008": 2,
+        "REF-004-009": 1,
+        "REF-004-010": 2,
+        "REF-004-011": 2
+      }
+    },
+    {
+      "path": "data/reference/records/T-012.json",
+      "sha256": "1b3eca25c2d693e95abc9ead10c42d12fb3ac2b72ad2c1fe0b6ac7fcbd61163d",
+      "lengths": {
+        "entities": 17,
+        "facts": 45,
+        "unconfirmed": 8
+      },
+      "feature_lengths": {
+        "REF-012-001": 3,
+        "REF-012-002": 1,
+        "REF-012-003": 3,
+        "REF-012-004": 2,
+        "REF-012-005": 2,
+        "REF-012-006": 3,
+        "REF-012-007": 2,
+        "REF-012-008": 3,
+        "REF-012-009": 2,
+        "REF-012-010": 4,
+        "REF-012-011": 3,
+        "REF-012-012": 2,
+        "REF-012-013": 3,
+        "REF-012-014": 2,
+        "REF-012-015": 2,
+        "REF-012-016": 1,
+        "REF-012-017": 2
+      }
+    },
+    {
+      "path": "data/reference/records/T-010.json",
+      "sha256": "13fb7b799d5ac753cf8d8adbbc240ae292c08577e5dffa6f4ee1c9e6ba7fbfc8",
+      "lengths": {
+        "entities": 11,
+        "facts": 36,
+        "unconfirmed": 11
+      },
+      "feature_lengths": {
+        "REF-010-001": 3,
+        "REF-010-002": 2,
+        "REF-010-003": 3,
+        "REF-010-004": 4,
+        "REF-010-005": 2,
+        "REF-010-006": 1,
+        "REF-010-007": 1,
+        "REF-010-008": 2,
+        "REF-010-009": 1,
+        "REF-010-010": 1,
+        "REF-010-011": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-005.json",
+      "sha256": "4291e5af91b23f620c236017b7898fe32db916817e17960e791e876fdf1d50ea",
+      "lengths": {
+        "entities": 10,
+        "facts": 42,
+        "unconfirmed": 6
+      },
+      "feature_lengths": {
+        "REF-005-001": 6,
+        "REF-005-002": 7,
+        "REF-005-003": 5,
+        "REF-005-004": 3,
+        "REF-005-005": 1,
+        "REF-005-006": 1,
+        "REF-005-007": 1,
+        "REF-005-008": 2,
+        "REF-005-009": 2,
+        "REF-005-010": 3
+      }
+    },
+    {
+      "path": "data/reference/records/T-007.json",
+      "sha256": "b2ea7f554964bbca9602a6a82296d93789c08e92b5395678f33185a828205318",
+      "lengths": {
+        "entities": 10,
+        "facts": 26,
+        "unconfirmed": 9
+      },
+      "feature_lengths": {
+        "REF-007-001": 2,
+        "REF-007-002": 3,
+        "REF-007-003": 2,
+        "REF-007-004": 1,
+        "REF-007-005": 1,
+        "REF-007-006": 1,
+        "REF-007-007": 1,
+        "REF-007-008": 3,
+        "REF-007-009": 2,
+        "REF-007-010": 3
+      }
+    },
+    {
+      "path": "data/reference/records/T-016.json",
+      "sha256": "f31b153e1e3cb2e82051a458d75adcb0558fb631fb6329758e28c17e53967d0c",
+      "lengths": {
+        "entities": 11,
+        "facts": 26,
+        "unconfirmed": 7
+      },
+      "feature_lengths": {
+        "REF-016-001": 1,
+        "REF-016-002": 3,
+        "REF-016-003": 2,
+        "REF-016-004": 2,
+        "REF-016-005": 1,
+        "REF-016-006": 2,
+        "REF-016-007": 1,
+        "REF-016-008": 1,
+        "REF-016-009": 1,
+        "REF-016-010": 1,
+        "REF-016-011": 3
+      }
+    },
+    {
+      "path": "data/reference/records/T-008.json",
+      "sha256": "67cc21c716c9edc25b1b61a0cfbfc7b134175d05300e42bd95ba7bbd915ee230",
+      "lengths": {
+        "entities": 9,
+        "facts": 40,
+        "unconfirmed": 10
+      },
+      "feature_lengths": {
+        "REF-008-001": 3,
+        "REF-008-002": 4,
+        "REF-008-003": 2,
+        "REF-008-004": 3,
+        "REF-008-005": 2,
+        "REF-008-006": 2,
+        "REF-008-007": 1,
+        "REF-008-008": 2,
+        "REF-008-009": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-017.json",
+      "sha256": "f8f384123c8f636dc5a032446dac40fa2289406c96ba02b1e3a0bd1ed4812e62",
+      "lengths": {
+        "entities": 12,
+        "facts": 62,
+        "unconfirmed": 13
+      },
+      "feature_lengths": {
+        "REF-017-001": 2,
+        "REF-017-002": 3,
+        "REF-017-003": 3,
+        "REF-017-004": 3,
+        "REF-017-005": 2,
+        "REF-017-006": 3,
+        "REF-017-007": 2,
+        "REF-017-008": 2,
+        "REF-017-009": 1,
+        "REF-017-010": 3,
+        "REF-017-011": 3,
+        "REF-017-012": 4
+      }
+    },
+    {
+      "path": "data/reference/records/T-001.json",
+      "sha256": "1b7a3d4881d55df7c18b44be760e8b50faf4629c800a17b8729ffc0e8138cf74",
+      "lengths": {
+        "entities": 10,
+        "facts": 36,
+        "unconfirmed": 6
+      },
+      "feature_lengths": {
+        "REF-001-001": 2,
+        "REF-001-002": 4,
+        "REF-001-003": 0,
+        "REF-001-004": 3,
+        "REF-001-005": 2,
+        "REF-001-006": 1,
+        "REF-001-007": 2,
+        "REF-001-008": 2,
+        "REF-001-009": 2,
+        "REF-001-010": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-009.json",
+      "sha256": "d3a6a206bb0f28cb2cf491fbbe29477dc8dd8d9cc3b0acd73bdbda5d9330eb56",
+      "lengths": {
+        "entities": 13,
+        "facts": 47,
+        "unconfirmed": 10
+      },
+      "feature_lengths": {
+        "REF-009-001": 3,
+        "REF-009-002": 2,
+        "REF-009-003": 3,
+        "REF-009-004": 4,
+        "REF-009-005": 2,
+        "REF-009-006": 3,
+        "REF-009-007": 2,
+        "REF-009-008": 1,
+        "REF-009-009": 1,
+        "REF-009-010": 1,
+        "REF-009-011": 1,
+        "REF-009-012": 1,
+        "REF-009-013": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-003.json",
+      "sha256": "8ec6c1c4b3151eb299bb479bc164c24b3abdfa0e4b70d7e61636e165d68ed426",
+      "lengths": {
+        "entities": 10,
+        "facts": 25,
+        "unconfirmed": 5
+      },
+      "feature_lengths": {
+        "REF-003-001": 3,
+        "REF-003-002": 2,
+        "REF-003-003": 2,
+        "REF-003-004": 1,
+        "REF-003-005": 1,
+        "REF-003-006": 1,
+        "REF-003-007": 3,
+        "REF-003-008": 1,
+        "REF-003-009": 1,
+        "REF-003-010": 2
+      }
+    },
+    {
+      "path": "data/reference/records/T-014.json",
+      "sha256": "7b00eeb6833e6cd04508ebf42b1e99ccc1847a5918324a3157ea249f56da8fd5",
+      "lengths": {
+        "entities": 16,
+        "facts": 48,
+        "unconfirmed": 8
+      },
+      "feature_lengths": {
+        "REF-014-001": 1,
+        "REF-014-002": 1,
+        "REF-014-003": 3,
+        "REF-014-004": 4,
+        "REF-014-005": 2,
+        "REF-014-006": 2,
+        "REF-014-007": 1,
+        "REF-014-008": 3,
+        "REF-014-009": 2,
+        "REF-014-010": 3,
+        "REF-014-011": 1,
+        "REF-014-012": 1,
+        "REF-014-013": 2,
+        "REF-014-014": 3,
+        "REF-014-015": 1,
+        "REF-014-016": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-011.json",
+      "sha256": "60c68c98c6445601abf833f3622a587c1bb2a75c230e08daa9e9fb921b438d1b",
+      "lengths": {
+        "entities": 15,
+        "facts": 44,
+        "unconfirmed": 9
+      },
+      "feature_lengths": {
+        "REF-011-001": 3,
+        "REF-011-002": 3,
+        "REF-011-003": 4,
+        "REF-011-004": 2,
+        "REF-011-005": 1,
+        "REF-011-006": 1,
+        "REF-011-007": 4,
+        "REF-011-008": 3,
+        "REF-011-009": 4,
+        "REF-011-010": 4,
+        "REF-011-011": 3,
+        "REF-011-012": 2,
+        "REF-011-013": 1,
+        "REF-011-014": 1,
+        "REF-011-015": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-013.json",
+      "sha256": "a93f773c5fa03c904ac43afb7b4a004538dd1850711cc8c7d876223093fd46e2",
+      "lengths": {
+        "entities": 20,
+        "facts": 57,
+        "unconfirmed": 8
+      },
+      "feature_lengths": {
+        "REF-013-001": 3,
+        "REF-013-002": 5,
+        "REF-013-003": 5,
+        "REF-013-004": 2,
+        "REF-013-005": 3,
+        "REF-013-006": 6,
+        "REF-013-007": 2,
+        "REF-013-008": 2,
+        "REF-013-009": 2,
+        "REF-013-010": 2,
+        "REF-013-011": 2,
+        "REF-013-012": 1,
+        "REF-013-013": 2,
+        "REF-013-014": 2,
+        "REF-013-015": 2,
+        "REF-013-016": 1,
+        "REF-013-017": 1,
+        "REF-013-018": 1,
+        "REF-013-019": 1,
+        "REF-013-020": 1
+      }
+    },
+    {
+      "path": "data/reference/records/T-015.json",
+      "sha256": "c27da8e206c1f25055d30b17f166804f05aa88c6d35caf0716632b623e540fc2",
+      "lengths": {
+        "entities": 12,
+        "facts": 23,
+        "unconfirmed": 6
+      },
+      "feature_lengths": {
+        "REF-015-001": 2,
+        "REF-015-002": 2,
+        "REF-015-003": 2,
+        "REF-015-004": 2,
+        "REF-015-005": 2,
+        "REF-015-006": 1,
+        "REF-015-007": 1,
+        "REF-015-008": 1,
+        "REF-015-009": 1,
+        "REF-015-010": 3,
+        "REF-015-011": 1,
+        "REF-015-012": 1
+      }
+    },
+    {
+      "path": "data/reference/sources/T-002.json",
+      "sha256": "dc15a8e93eeaa70218ef85dc8c567211e957043bd0061425827ec42f01178c96",
+      "lengths": {
+        "sources": 8
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-006.json",
+      "sha256": "98751c8f53e7badae0b5bd69f70b1d3229901f3901c6ebd206124e2a4d960df1",
+      "lengths": {
+        "sources": 4
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-004.json",
+      "sha256": "2676afe37d5696731c7023915247572e2a6b6b650eca94c39b6815f41d651655",
+      "lengths": {
+        "sources": 4
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-012.json",
+      "sha256": "640a2287745ad715e86de752a7253a032115de376459023c9a984b7434bcb5cc",
+      "lengths": {
+        "sources": 15
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-010.json",
+      "sha256": "b13a89fc84c95d978ade68ca28892dc8c13dbcdadb6bf90041ab13732fbab726",
+      "lengths": {
+        "sources": 14
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-005.json",
+      "sha256": "de6ef8facc4e09a9082f6e2b3db6afb3a3b7fc90396453c03dace806ff927d06",
+      "lengths": {
+        "sources": 5
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-007.json",
+      "sha256": "27f65ee231d6acb60af30ca74197f5f435e9296210c6d2b5396ff3d74cbc84ef",
+      "lengths": {
+        "sources": 17
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-016.json",
+      "sha256": "7c323c6e8976bbb5b2c54bf045aaa59961805838886579d8d7047efd2a0c1a08",
+      "lengths": {
+        "sources": 11
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-008.json",
+      "sha256": "7d12539d855fddf1d729ada1e947576541ed4ba4c38da16269c8d63406eda81d",
+      "lengths": {
+        "sources": 7
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-017.json",
+      "sha256": "a2e9a159eba8f84b462eda17e8af837132857c2f8e4cee075fea9e40f8058d36",
+      "lengths": {
+        "sources": 14
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-001.json",
+      "sha256": "1e77e654fc16aa5c8cc41e9c37a49ec8dd2a11d3d51a2aae16524e3eb1c7de86",
+      "lengths": {
+        "sources": 10
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-009.json",
+      "sha256": "4f363086223db4edccb15bec26c6cc3bde21275041fff3d898a5b0067ee9cfd0",
+      "lengths": {
+        "sources": 11
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-003.json",
+      "sha256": "f88930f365bb1d5050c3214a8b6e3d12a2eab37cc06f6b1fc46ecb914fd972fd",
+      "lengths": {
+        "sources": 2
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-014.json",
+      "sha256": "90d505559ea296a7044b9e8b8d2402eae2926251e9370e8d30c5e2f68298b85b",
+      "lengths": {
+        "sources": 20
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-011.json",
+      "sha256": "a0984569d05edd84bf1d15ccde27d867f2829e332fc785059393c866ad7f580a",
+      "lengths": {
+        "sources": 12
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-013.json",
+      "sha256": "dbab9679575677963eea111d8e5a97653093d309e577b47bef0127b16e42ba01",
+      "lengths": {
+        "sources": 15
+      },
+      "feature_lengths": {}
+    },
+    {
+      "path": "data/reference/sources/T-015.json",
+      "sha256": "7459a2739eb725e437d7e6e8e6d5afc820185fcabf6edceb6b761fa3018256d1",
+      "lengths": {
+        "sources": 5
+      },
+      "feature_lengths": {}
+    }
+  ]
+}

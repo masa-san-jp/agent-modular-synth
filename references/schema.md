@@ -1,3 +1,5 @@
+> 互換スナップショット（main 6100022）。以後の編集正本は [統合DB](../docs/reference/index.md) です。この旧資料は履歴保持のため凍結し、現在の完了判定には使いません。旧ID対応は [legacy-map](../data/reference/legacy-map.json) を参照。
+
 # DB v1 スキーマと識別規則
 
 このDBは調査事実の正本。文字コードUTF-8、JSON。確認日2026-11-12。製品実測・動作試験は未実施。

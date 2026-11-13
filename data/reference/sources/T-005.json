@@ -1,0 +1,219 @@
+{
+  "sources": [
+    {
+      "title": "VCV Rack Manual(Voltage Standards, Polyphony, Core, Menu Bar, Installing, Version, Rack Pro, Plugin Licensing)",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/",
+      "doc_version": "Rack 2 manual (unknown date)",
+      "doc_type": "manufacturer_manual",
+      "checked_scope": "VoltageStandards, Polyphony, Core, MenuBar, GettingStarted, Installing, Version, RackPro, PluginLicensing を通読",
+      "license_note": "VCV著作物。要約のみ記録し転載しない。",
+      "id": "SRC-005-01",
+      "accessed_on": "2026-11-12",
+      "link_status": "ok"
+    },
+    {
+      "title": "VCV Free Modules(Fundamental)モジュールマニュアル",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/Fundamental",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "checked_scope": "VCO, VCF, VCA, LFO, ADSR, Noise, Random の説明",
+      "license_note": "Fundamentalのビジュアルデザインは CC BY-NC-ND 4.0(商用・派生不可)。ソースはGPLv3+。コード・画像・パネルは再利用しない。",
+      "id": "SRC-005-02",
+      "accessed_on": "2026-11-12",
+      "link_status": "ok"
+    },
+    {
+      "title": "VCV Rack LICENSE.md / README.md (v2 branch)",
+      "publisher": "VCV",
+      "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/LICENSE.md",
+      "doc_version": "v2 branch",
+      "doc_type": "source_code",
+      "checked_scope": "LICENSE.md と README.md",
+      "license_note": "GPLv3+に、非商用プラグイン例外と商用ライセンス選択肢。GPLコードは取り込めない前提のため、ソース・アセットは再利用しない。VCV名称・ロゴは商標。",
+      "id": "SRC-005-03",
+      "accessed_on": "2026-11-12",
+      "link_status": "ok"
+    },
+    {
+      "title": "VCV Rack src/patch.cpp, include/engine/Port.hpp (v2)",
+      "publisher": "VCV",
+      "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/src/patch.cpp",
+      "doc_version": "v2 branch",
+      "doc_type": "source_code",
+      "checked_scope": "patch.cpp(保存・読込・アーカイブ判定)、Port.hpp(チャンネル上限)",
+      "license_note": "GPLv3+。実装の理解のみに使い、コードは再利用しない。",
+      "id": "SRC-005-04",
+      "accessed_on": "2026-11-12",
+      "link_status": "ok"
+    },
+    {
+      "title": "VCV Rack include/engine/Module.hpp (v2)",
+      "publisher": "VCV",
+      "url": "https://raw.githubusercontent.com/VCVRack/Rack/v2/include/engine/Module.hpp",
+      "doc_version": "v2 branch",
+      "doc_type": "api_doc",
+      "checked_scope": "Module構造体の主要メソッド宣言(process, dataToJson)のみ",
+      "license_note": "GPLv3+(プラグイン例外あり)。コードは再利用しない。",
+      "id": "SRC-005-05",
+      "accessed_on": "2026-11-12",
+      "link_status": "ok"
+    },
+    {
+      "id": "SRC-005-06",
+      "title": "Voltage Standards",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/VoltageStandards",
+      "doc_version": "Rack 2オンライン手引き、改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "該当節本文。推奨規約と製品実測を区別; Levels; Triggers and Gates; Timing; Pitch and Frequencies",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S006",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S006",
+            "publisher": "VCV",
+            "title": "Voltage Standards",
+            "url": "https://vcvrack.com/manual/VoltageStandards",
+            "version": "Rack 2オンライン手引き、改訂日なし",
+            "sections": "Levels; Triggers and Gates; Timing; Pitch and Frequencies",
+            "checked_on": "2026-11-12",
+            "scope": "該当節本文。推奨規約と製品実測を区別",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-005-07",
+      "title": "Menu Bar",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/MenuBar",
+      "doc_version": "Rack 2オンライン手引き、改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "該当節本文。実行未検証; File; Engine / Sample rate",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S007",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S007",
+            "publisher": "VCV",
+            "title": "Menu Bar",
+            "url": "https://vcvrack.com/manual/MenuBar",
+            "version": "Rack 2オンライン手引き、改訂日なし",
+            "sections": "File; Engine / Sample rate",
+            "checked_on": "2026-11-12",
+            "scope": "該当節本文。実行未検証",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-005-08",
+      "title": "Plugin API Guide",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/PluginGuide",
+      "doc_version": "Rack 2オンライン手引き、改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "該当節本文。SDK・コード実行なし; Parameters; Data serialization / JSON",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S009",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S009",
+            "publisher": "VCV",
+            "title": "Plugin API Guide",
+            "url": "https://vcvrack.com/manual/PluginGuide",
+            "version": "Rack 2オンライン手引き、改訂日なし",
+            "sections": "Parameters; Data serialization / JSON",
+            "checked_on": "2026-11-12",
+            "scope": "該当節本文。SDK・コード実行なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-005-09",
+      "title": "Plugin Licensing",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/PluginLicensing",
+      "doc_version": "オンライン案内、改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "案内本文。リンク先の個別契約全文は未確認; GPLv3; other licenses; Ethics Guidelines",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S010",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S010",
+            "publisher": "VCV",
+            "title": "Plugin Licensing",
+            "url": "https://vcvrack.com/manual/PluginLicensing",
+            "version": "オンライン案内、改訂日なし",
+            "sections": "GPLv3; other licenses; Ethics Guidelines",
+            "checked_on": "2026-11-12",
+            "scope": "案内本文。リンク先の個別契約全文は未確認",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-005-10",
+      "title": "Core Modules",
+      "publisher": "VCV",
+      "url": "https://vcvrack.com/manual/Core",
+      "doc_version": "Rack 2オンライン手引き、改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "該当節本文。ホストや実機は未操作; Audio; MIDI-CV; MIDI-CC; MIDI-Map",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S008",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S008",
+            "publisher": "VCV",
+            "title": "Core Modules",
+            "url": "https://vcvrack.com/manual/Core",
+            "version": "Rack 2オンライン手引き、改訂日なし",
+            "sections": "Audio; MIDI-CV; MIDI-CC; MIDI-Map",
+            "checked_on": "2026-11-12",
+            "scope": "該当節本文。ホストや実機は未操作",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    }
+  ]
+}

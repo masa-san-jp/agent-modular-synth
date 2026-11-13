@@ -1,3 +1,5 @@
+> 互換スナップショット（main 6100022）。以後の編集正本は [統合DB](../docs/reference/index.md) です。この旧資料は履歴保持のため凍結し、現在の完了判定には使いません。旧ID対応は [legacy-map](../data/reference/legacy-map.json) を参照。
+
 # 初期版対象・調査方法
 
 調査日: 2026-11-12 / 対応Issue: [#1](https://github.com/masa-san-jp/agent-modular-synth/issues/1)

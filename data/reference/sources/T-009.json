@@ -1,0 +1,136 @@
+{
+ "sources": [
+  {
+   "id": "SRC-009-01",
+   "title": "Client vs Server",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Guides/ClientVsServer.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-02",
+   "title": "Server Command Reference",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Reference/Server-Command-Reference.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "api_doc",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "コマンド一覧と /quit, /notify, /status, /dumpOSC, /s_new, /s_get, /g_new, /p_new, add actions の説明",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-03",
+   "title": "Server Architecture",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Reference/Server-Architecture.html",
+   "doc_version": "SuperCollider 3.14.0 Help(注記: 一部古い記述あり)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "導入、Main Design Concepts(Node/Group/Synth/Bus/Buffer)、コマンドライン引数の一部",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-04",
+   "title": "Order of execution",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Guides/Order-of-execution.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "前半(導入、add actions、move、Groups、Parallel Groups)",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-05",
+   "title": "UGenクラスヘルプ(SinOsc, LPF, EnvGen, Impulse, Dust, Out)",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Classes/",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "api_doc",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "各クラスの説明・引数一覧",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-06",
+   "title": "Bus / Group クラスヘルプ",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Classes/Bus.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "api_doc",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Bus・Group の説明冒頭部分(索引予約、ルート/デフォルトグループ、追加動作)",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-07",
+   "title": "Synth Definition File Format",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Reference/Synth-Definition-File-Format.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "File Format の節(型、ヘッダ、synth-definition構造)",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-08",
+   "title": "OSC Communication",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Guides/OSC_communication.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "送受信の節(NetAddr, OSCFunc, 既定ポート)",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-09",
+   "title": "Scheduling and Server timing",
+   "publisher": "SuperCollider project",
+   "url": "https://doc.sccode.org/Guides/ServerTiming.html",
+   "doc_version": "SuperCollider 3.14.0 Help",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "冒頭のタイムスタンプ/latencyの説明",
+   "link_status": "ok",
+   "license_note": "GNU GPL v3(リポジトリのCOPYING)。ヘルプ本文・サンプルコード・ソースは再利用・転載しない。事実は要約のみ記録。"
+  },
+  {
+   "id": "SRC-009-10",
+   "title": "SuperCollider 公式サイト",
+   "publisher": "SuperCollider project",
+   "url": "https://supercollider.github.io/",
+   "doc_version": "公式サイト(現行版 3.14.1 と記載)",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "トップページの構成と版表示",
+   "link_status": "ok",
+   "license_note": "サイト本文は転載しない。"
+  },
+  {
+   "id": "SRC-009-11",
+   "title": "SuperCollider COPYING",
+   "publisher": "SuperCollider project",
+   "url": "https://raw.githubusercontent.com/supercollider/supercollider/develop/COPYING",
+   "doc_version": "develop",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "冒頭(GPL v3 であること)のみ確認",
+   "link_status": "ok",
+   "license_note": "GPLv3全文は転載しない。ソースコード・アセットは再利用しない。"
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+  "sources": [
+    {
+      "id": "SRC-019-01",
+      "title": "Music Easel Modern / Manual",
+      "publisher": "Buchla",
+      "url": "https://buchla.com/product/music-easel-modern/",
+      "doc_version": "未確認",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "製品ページおよび https://buchla.com/guides/Buchla_Music_Easel_Manual.pdf を試行。双方422で本文未取得; 未確認",
+      "link_status": "unreachable",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S012",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S012",
+            "publisher": "Buchla",
+            "title": "Music Easel Modern / Manual",
+            "url": "https://buchla.com/product/music-easel-modern/",
+            "version": "未確認",
+            "sections": "未確認",
+            "checked_on": "2026-11-12",
+            "scope": "製品ページおよび https://buchla.com/guides/Buchla_Music_Easel_Manual.pdf を試行。双方422で本文未取得",
+            "access_status": "unavailable",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "target_id": "T-018",
+  "entities": [
+    {
+      "id": "REF-018-001",
+      "kind": "system",
+      "name": "0-COAST",
+      "maker": "Make Noise",
+      "version": "製品ページ（firmware案内1.6.8）",
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "接続（旧 I002 調査の補足）",
+          "fact_ids": [
+            "F-018-001"
+          ]
+        },
+        {
+          "text": "音源・音色（旧 I002 調査の補足）",
+          "fact_ids": [
+            "F-018-002"
+          ]
+        },
+        {
+          "text": "外部制御（旧 I002 調査の補足）",
+          "fact_ids": [
+            "F-018-003"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "legacy_ids": [
+        "I002"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "I002",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "0-COAST",
+          "version": "製品ページ（firmware案内1.6.8）",
+          "kind": "hardware_semi_modular",
+          "categories": [
+            "oscillator",
+            "waveshaping",
+            "lowpass_gate",
+            "midi"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": null
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-018-001",
+      "entity_id": "REF-018-001",
+      "topic": "接続",
+      "statement": "単声で、内部接続によりケーブルなしでも発音でき、外部パッチで接続を変更できる。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "Introduction",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I002",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-018-002",
+      "entity_id": "REF-018-001",
+      "topic": "音源・音色",
+      "statement": "triangle-core VCO、OVERTONE/MULTIPLY、DYNAMICS low-pass gateを持つ。独自呼称と一般機能は同一と決めつけない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "FEATURES",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I002",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-018-003",
+      "entity_id": "REF-018-001",
+      "topic": "外部制御",
+      "statement": "MIDI-CV/Gateは2チャンネル、MIDI Clock同期を案内。13 sourcesと14 destinationsを案内。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-018-01",
+      "locator": "FEATURES",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I002",
+        "legacy_fact_index": 2,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-018-001",
+      "item": "各ジャックの電圧・既定値・内部接続の正確な切断条件・全状態保存・遠隔読み取りは未確認（S005取得不能）。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "I002"
+      }
+    }
+  ]
+}

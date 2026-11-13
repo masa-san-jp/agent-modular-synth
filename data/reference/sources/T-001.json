@@ -1,0 +1,274 @@
+{
+  "sources": [
+    {
+      "id": "SRC-001-01",
+      "title": "A-100 English Main Page",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a100e.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "ページ全体(概要部分)",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-02",
+      "title": "A-100 Technical Details",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a100_man/a100t_e.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "電圧制御原理、信号種別、電源、システムバスのCV/Gate節",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-03",
+      "title": "A-100 Construction Details",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a100_man/a100m_e.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "筐体・パネル寸法・電源容量の節",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-04",
+      "title": "A-110-1 Standard VCO",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a110.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S002",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S002",
+            "publisher": "Doepfer",
+            "title": "A-110-1 Standard VCO",
+            "url": "https://doepfer.de/a110.htm",
+            "version": "A-110-1（Tune幅は2015年頃に変更）",
+            "sections": "製品説明・Technical notes",
+            "checked_on": "2026-11-12",
+            "scope": "本文の波形・範囲・CV1 normaling記述。PDF・実測なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-001-05",
+      "title": "A-120 24dB Low Pass (Transistor Ladder)",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a120.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S013",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S013",
+            "publisher": "Doepfer",
+            "title": "A-120 24dB Low Pass",
+            "url": "https://doepfer.de/a120.htm",
+            "version": "A-120、2009年回路改訂あり",
+            "sections": "English description / Technical note",
+            "checked_on": "2026-11-12",
+            "scope": "本文のみ。PDF・実測なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-001-06",
+      "title": "A-140-1 ADSR Envelope Generator",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a140.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S003",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S003",
+            "publisher": "Doepfer",
+            "title": "A-140-1 ADSR",
+            "url": "https://doepfer.de/a140.htm",
+            "version": "A-140/A-140-1名称変更を併記",
+            "sections": "English description / time ranges",
+            "checked_on": "2026-11-12",
+            "scope": "英語本文・出力と再トリガ記述。PDF・実測なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-001-07",
+      "title": "A-145-1 Low Frequency Oscillator",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a145.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-08",
+      "title": "A-138s Mini Stereo Mixer",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a138s.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-09",
+      "title": "A-160-1 Clock/Trigger Divider",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a160.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英語説明部と仕様行",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-10",
+      "title": "A-190-3 USB/MIDI-to-CV/Gate Interface",
+      "publisher": "Doepfer Musikelektronik GmbH",
+      "url": "https://doepfer.de/a1903.htm",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "ドイツ語説明部(入出力・ジャンパ節)。英語版は未確認(英語マニュアルPDFは取得せず)",
+      "link_status": "ok",
+      "license_note": "Doepfer公開Webページ(著作権はDoepfer Musikelektronik)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+    },
+    {
+      "id": "SRC-001-11",
+      "title": "A-100 Modules Overview",
+      "publisher": "Doepfer",
+      "url": "https://doepfer.de/a100.htm",
+      "doc_version": "版表記なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "本文の分類表・リンク; Modules Overview",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S001",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S001",
+            "publisher": "Doepfer",
+            "title": "A-100 Modules Overview",
+            "url": "https://doepfer.de/a100.htm",
+            "version": "版表記なし",
+            "sections": "Modules Overview",
+            "checked_on": "2026-11-12",
+            "scope": "本文の分類表・リンク",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-001-12",
+      "title": "A-130-1/131 Voltage Controlled Amplifiers",
+      "publisher": "Doepfer",
+      "url": "https://doepfer.de/a130.htm",
+      "doc_version": "A-130-1、3世代の区別を記述",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英独本文の利得、CV、結合方式の版差。PDF・実測なし; English description; Version 1–3",
+      "link_status": "ok",
+      "license_note": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S014",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S014",
+            "publisher": "Doepfer",
+            "title": "A-130-1/131 Voltage Controlled Amplifiers",
+            "url": "https://doepfer.de/a130.htm",
+            "version": "A-130-1、3世代の区別を記述",
+            "sections": "English description; Version 1–3",
+            "checked_on": "2026-11-12",
+            "scope": "英独本文の利得、CV、結合方式の版差。PDF・実測なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-001-13",
+      "title": "A-155 Analog/Trigger Sequencer",
+      "publisher": "Doepfer",
+      "url": "https://doepfer.de/a155.htm",
+      "doc_version": "A-155、ページ改訂日なし",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "英独本文。PDF・実測なし; Features of analog rows / trigger rows / Control inputs",
+      "link_status": "ok",
+      "license_note": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S015",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S015",
+            "publisher": "Doepfer",
+            "title": "A-155 Analog/Trigger Sequencer",
+            "url": "https://doepfer.de/a155.htm",
+            "version": "A-155、ページ改訂日なし",
+            "sections": "Features of analog rows / trigger rows / Control inputs",
+            "checked_on": "2026-11-12",
+            "scope": "英独本文。PDF・実測なし",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    }
+  ]
+}

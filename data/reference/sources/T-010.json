@@ -1,0 +1,172 @@
+{
+ "sources": [
+  {
+   "id": "SRC-010-01",
+   "title": "Messages(Max User Guide)",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/messages/",
+   "doc_version": "docs.cycling74.com 現行(Max 9系の注記あり)",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-02",
+   "title": "Message Types(Max User Guide)",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/message_types/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-03",
+   "title": "Patch Cords(Max User Guide)",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/patch_cords/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-04",
+   "title": "Scheduler and Priority",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/scheduler/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体(Overdrive, Scheduler in Audio Interrupt, 深さ優先処理)",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-05",
+   "title": "Sample Accurate Messages",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/sample_accurate_messages/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "冒頭〜sig~の説明",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-06",
+   "title": "File Types",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/filetypes/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "拡張子一覧(.maxpat等)",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-07",
+   "title": "Saving State with pattr",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/pattr/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "冒頭〜Quickstart",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-08",
+   "title": "OpenSoundControl",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/OSC/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "全体",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-09",
+   "title": "Gen overview / RNBO",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/gen/_gen_overview/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Gen概要の冒頭と、userguide/rnbo/ のRNBO概要(範囲限定)",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-10",
+   "title": "Object Reference: cycle~, lores~, line~, metro, random, noise~, gen~, udpreceive, udpsend, adsr~",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/reference/",
+   "doc_version": "同上(udpreceive等に >=9.2.0 の記述あり)",
+   "doc_type": "api_doc",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "各オブジェクトの説明・引数・属性・メッセージ",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-11",
+   "title": "Patcher Lifecycle",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/patcher_lifecycle/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "初期化段階の一覧",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-12",
+   "title": "Multi-Channel Audio I/O",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/audio_channels/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "論理/物理チャンネルの冒頭",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-14",
+   "title": "MC(Multi-channel)Overview",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/userguide/mc/",
+   "doc_version": "同上",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "概要ページ",
+   "link_status": "ok",
+   "license_note": "© Cycling '74。ドキュメント本文・図・サンプルパッチは転載・再利用しない(事実は要約のみ)。商用ソフトであり、ソースコード・アセットは参照しない。"
+  },
+  {
+   "id": "SRC-010-13",
+   "title": "Legal / 利用条件ページ",
+   "publisher": "Cycling '74",
+   "url": "https://docs.cycling74.com/legal",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "/legal は404。フッタの著作権表記のみ確認",
+   "link_status": "unreachable",
+   "license_note": "利用条件の詳細は未確認のため全て非転載で扱う。"
+  }
+ ]
+}

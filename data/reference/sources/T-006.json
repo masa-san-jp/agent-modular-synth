@@ -1,0 +1,52 @@
+{
+ "sources": [
+  {
+   "title": "DISTRHO Cardinal README.md",
+   "publisher": "DISTRHO",
+   "url": "https://raw.githubusercontent.com/DISTRHO/Cardinal/main/README.md",
+   "doc_version": "main branch",
+   "doc_type": "source_code",
+   "checked_scope": "README全体(概要、バリアント、同梱モジュール、ライセンス節)",
+   "license_note": "プロジェクトはGPLv3+。README文は要約のみで転載せず、コードは再利用しない。",
+   "id": "SRC-006-01",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "Cardinal docs/LICENSES.md, LICENSE, docs/FAQ.md",
+   "publisher": "DISTRHO",
+   "url": "https://raw.githubusercontent.com/DISTRHO/Cardinal/main/docs/LICENSES.md",
+   "doc_version": "main branch",
+   "doc_type": "source_code",
+   "checked_scope": "LICENSES.md(コード/アートワーク一覧の冒頭部分)、LICENSE(GPLv3表題)、FAQ.md",
+   "license_note": "GPLv3+。同梱モジュールは個別ライセンスでアートワークはCC-NC-ND等を含む。コードとアートワークは再利用しない。",
+   "id": "SRC-006-02",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "Cardinal docs/DIFFERENCES.md",
+   "publisher": "DISTRHO",
+   "url": "https://raw.githubusercontent.com/DISTRHO/Cardinal/main/docs/DIFFERENCES.md",
+   "doc_version": "main branch",
+   "doc_type": "source_code",
+   "checked_scope": "文書全体(Rack Proとの比較表、独自モジュール一覧)",
+   "license_note": "GPLv3+プロジェクトの文書。要約のみ。Rack Proに関する記述は作者の推測を含むと文書自身が述べる。",
+   "id": "SRC-006-03",
+   "accessed_on": "2026-11-12",
+   "link_status": "ok"
+  },
+  {
+   "title": "GitHub API releases/latest (DISTRHO/Cardinal)",
+   "publisher": "GitHub",
+   "url": "https://api.github.com/repos/DISTRHO/Cardinal/releases/latest",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "checked_scope": "取得不可(HTTP 403/プロキシで拒否)",
+   "license_note": "未取得。",
+   "link_status": "unreachable",
+   "id": "SRC-006-04",
+   "accessed_on": "2026-11-12"
+  }
+ ]
+}
