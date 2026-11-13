@@ -1,0 +1,1166 @@
+{
+ "target_id": "T-008",
+ "entities": [
+  {
+   "id": "REF-008-001",
+   "kind": "system",
+   "name": "Pure Data (Pd)",
+   "maker": "Miller Puckette ほか",
+   "version": "0.57.0 (ソースmasterのm_pd.h値)",
+   "function_category": "system",
+   "purpose": "データフロー型パッチ環境。制御メッセージと音声信号を同一パッチ上で扱う",
+   "synthesis_method": "オブジェクトボックスをパッチコードで接続するグラフ処理",
+   "features": [
+    {
+     "text": "メッセージ(制御)と信号(音声)の2系統を同一パッチで接続できる",
+     "fact_ids": [
+      "F-008-003"
+     ]
+    },
+    {
+     "text": "スケジューラは論理時間で決定的に動く",
+     "fact_ids": [
+      "F-008-005",
+      "F-008-004"
+     ]
+    },
+    {
+     "text": "BSD系ライセンスで公開されている",
+     "fact_ids": [
+      "F-008-001"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ブロック処理中はメッセージが渡されない(制御は音声ブロック境界で反映)",
+     "fact_ids": [
+      "F-008-004"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "音声ブロック間にメッセージ連鎖を実行し、論理時間で順序を保証する",
+     "fact_ids": [
+      "F-008-004",
+      "F-008-005"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-008-002",
+   "kind": "signal_standard",
+   "name": "Pd メッセージ/音声信号規約",
+   "maker": "Miller Puckette ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "制御(メッセージ)と音声(信号)の区別と接続規則",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "音声信号は32bit浮動小数、既定48kHz・64サンプルブロック",
+     "fact_ids": [
+      "F-008-008",
+      "F-008-009",
+      "F-008-010"
+     ]
+    },
+    {
+     "text": "音声オブジェクトは~付きで、信号接続とメッセージ接続は混在不可",
+     "fact_ids": [
+      "F-008-011"
+     ]
+    },
+    {
+     "text": "制御値は第2以降の音声入口で自動的に信号へ昇格する",
+     "fact_ids": [
+      "F-008-012"
+     ]
+    },
+    {
+     "text": "メッセージはセレクタ+引数で、ホット/コールド入口と右→左出力順を持つ",
+     "fact_ids": [
+      "F-008-015",
+      "F-008-016"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "音声グラフは非循環でなければならない",
+     "fact_ids": [
+      "F-008-013"
+     ]
+    },
+    {
+     "text": "電圧規約に相当する物理単位は無い(正規化値-1〜1が通常範囲)",
+     "fact_ids": [
+      "F-008-008"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "メッセージは深さ優先・右から左、音声はブロック単位の線形順で実行",
+     "fact_ids": [
+      "F-008-016",
+      "F-008-010"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-008-003",
+   "kind": "patch_storage",
+   "name": "Pd パッチファイル(.pd)",
+   "maker": "Miller Puckette ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "パッチの保存形式と保存される状態の範囲",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "保存されるのは作成引数と接続のみ",
+     "fact_ids": [
+      "F-008-017"
+     ]
+    },
+    {
+     "text": "平文の行指向形式(#N/#X、セミコロン終端)",
+     "fact_ids": [
+      "F-008-018"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "内部状態は保存されない",
+     "fact_ids": [
+      "F-008-017"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "作成引数と接続のみ保存。状態は[savestate]/[text]等で別途保存",
+     "fact_ids": [
+      "F-008-017"
+     ]
+    },
+    "patching": {
+     "summary": "接続は #X connect 行で記述",
+     "fact_ids": [
+      "F-008-018"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-008-004",
+   "kind": "control_interface",
+   "name": "Pd 外部制御(FUDI/netsend/pdsend/起動フラグ/OSC解析)",
+   "maker": "Miller Puckette ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "外部プロセスやネットワークからPdへ制御メッセージを送る手段",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "pdsend/netsend/netreceive経由のネットワーク(TCP/UDP)制御",
+     "fact_ids": [
+      "F-008-020",
+      "F-008-021",
+      "F-008-022"
+     ]
+    },
+    {
+     "text": "OSCは[oscparse]等でパッチ内で解析する形で扱う",
+     "fact_ids": [
+      "F-008-023"
+     ]
+    },
+    {
+     "text": "-nogui/-sendでGUI無し運用ができる",
+     "fact_ids": [
+      "F-008-024",
+      "F-008-007"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ネットワーク制御はPd側でnetreceive等の受信オブジェクトを置く必要がある(pdsendの説明より)",
+     "fact_ids": [
+      "F-008-020"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "FUDIをTCP/UDPで送受信。OSCはバイト列としてパッチ内で解析",
+     "fact_ids": [
+      "F-008-020",
+      "F-008-023"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-008-005",
+   "kind": "module",
+   "name": "osc~",
+   "maker": "Miller Puckette ほか",
+   "version": "0.55 (ヘルプ表記)",
+   "function_category": "oscillator",
+   "purpose": "余弦波オシレータ",
+   "synthesis_method": "波形テーブル(余弦)参照",
+   "features": [
+    {
+     "text": "余弦波生成。周波数は制御値でも信号でも与えられる",
+     "fact_ids": [
+      "F-008-025"
+     ]
+    },
+    {
+     "text": "テーブルは0.55で2048点",
+     "fact_ids": [
+      "F-008-028"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 周波数",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-025"
+     ]
+    },
+    {
+     "name": "右入口: 位相リセット(0〜1)",
+     "direction": "in",
+     "signal_type": "other",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "cycle"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-008-025"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": {
+      "min": -1,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-008-026"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "初期周波数",
+     "unit": "Hz",
+     "range": null,
+     "default": 0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-008-027"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-008-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-008-006",
+   "kind": "module",
+   "name": "lop~",
+   "maker": "Miller Puckette ほか",
+   "version": "0.54 (ヘルプ表記)",
+   "function_category": "filter",
+   "purpose": "1極ローパスフィルタ",
+   "synthesis_method": "一次IIRローパス",
+   "features": [
+    {
+     "text": "カットオフを信号で変調可能",
+     "fact_ids": [
+      "F-008-029"
+     ]
+    },
+    {
+     "text": "clearで内部状態をリセット",
+     "fact_ids": [
+      "F-008-030"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 信号",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-029"
+     ]
+    },
+    {
+     "name": "右入口: カットオフ",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-029"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-029"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "カットオフ",
+     "unit": "Hz",
+     "range": null,
+     "default": 0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-008-031"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-008-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-008-007",
+   "kind": "module",
+   "name": "line~",
+   "maker": "Miller Puckette ほか",
+   "version": "0.33 (ヘルプ表記)",
+   "function_category": "envelope",
+   "purpose": "目標値と時間から直線ランプ信号を出す",
+   "synthesis_method": "メッセージ駆動の直線補間",
+   "features": [
+    {
+     "text": "メッセージでエンベロープ区間を指定する",
+     "fact_ids": [
+      "F-008-032"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ランプ開始・終了はブロック境界に束縛される",
+     "fact_ids": [
+      "F-008-034"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "左入口: 目標値/目標+時間",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-032"
+     ]
+    },
+    {
+     "name": "右入口: ランプ時間",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-033"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-032"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-008-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-008-008",
+   "kind": "module",
+   "name": "metro",
+   "maker": "Miller Puckette ほか",
+   "version": "0.48 (ヘルプ表記)",
+   "function_category": "clock_sequencer",
+   "purpose": "一定間隔でbangを出すメトロノーム",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "時間単位をmsec/sec/min/sampから選べる",
+     "fact_ids": [
+      "F-008-036"
+     ]
+    },
+    {
+     "text": "開始/停止はbang・数値・stopで制御",
+     "fact_ids": [
+      "F-008-035"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "左入口: 開始/停止",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-035"
+     ]
+    },
+    {
+     "name": "右入口: 時間",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-036"
+     ]
+    },
+    {
+     "name": "出力: bang",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-035"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "初期時間",
+     "unit": null,
+     "range": null,
+     "default": 1,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-008-037"
+     ]
+    },
+    {
+     "name": "時間単位",
+     "unit": null,
+     "range": null,
+     "default": "msec",
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-008-037"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-008-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-008-009",
+   "kind": "module",
+   "name": "random",
+   "maker": "Miller Puckette ほか",
+   "version": "0.56 (ヘルプ表記)",
+   "function_category": "random_logic",
+   "purpose": "擬似乱数整数を出す",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "seedで列を再現できる",
+     "fact_ids": [
+      "F-008-039"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "乱数品質は保証されない旨がヘルプに注記",
+     "fact_ids": [
+      "F-008-039"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "左入口: bang/範囲+生成",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-038"
+     ]
+    },
+    {
+     "name": "右入口: 範囲",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-038"
+     ]
+    },
+    {
+     "name": "出力: 整数",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-008-038"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "範囲N",
+     "unit": null,
+     "range": null,
+     "default": 1,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-008-040"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-008-001"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-008-001",
+   "entity_id": "REF-008-001",
+   "topic": "ライセンス",
+   "statement": "Pdのソースは Standard Improved BSD License で配布されている。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-008-07",
+   "locator": "LICENSE.txt 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-002",
+   "entity_id": "REF-008-001",
+   "topic": "バージョン",
+   "statement": "ソースmasterの m_pd.h は 0.57.0 を定義している(取得日時点の開発版)。リリース版との一致は未確認。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-008-04",
+   "locator": "src/m_pd.h PD_MAJOR/MINOR/BUGFIX_VERSION",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-003",
+   "entity_id": "REF-008-001",
+   "topic": "制御と信号",
+   "statement": "ボックス間は「メッセージ」と「音声信号」の2種で通信し、メッセージは不定期発生の制御領域として扱われ、音声信号とは別と説明される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.4 Messages 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-004",
+   "entity_id": "REF-008-001",
+   "topic": "スケジューラ",
+   "statement": "音声処理はブロック単位(既定64サンプル)で走り、メッセージ連鎖は音声ブロックの間にのみ実行される。ブロック処理中にメッセージは渡されない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.6.1 Audio and messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-005",
+   "entity_id": "REF-008-001",
+   "topic": "決定性",
+   "statement": "時間は論理時間で管理され、遅延で予約された連鎖は実時間の遅れに関わらず予約どおり実行される(決定的動作)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.6.3 Determinism",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-006",
+   "entity_id": "REF-008-001",
+   "topic": "時間表現",
+   "statement": "時間は64ビット浮動小数で表され、ユーザには ミリ秒で見える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.6 Scheduling 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-007",
+   "entity_id": "REF-008-001",
+   "topic": "起動フラグ",
+   "statement": "起動フラグに -open(起動時にファイルを開く)、-nogui(GUI無し)、-send(起動時メッセージ送信)、-stderr(出力を標準エラーへ)がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-02",
+   "locator": "Ch.3 起動フラグ一覧",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-008",
+   "entity_id": "REF-008-002",
+   "topic": "サンプル形式",
+   "statement": "音声信号は内部で32ビット浮動小数。通常の入出力範囲は-1〜1で、範囲外は経路次第でクリップし得る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.1 Sample rate and format",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-009",
+   "entity_id": "REF-008-002",
+   "topic": "サンプルレート",
+   "statement": "既定のサンプルレートは48000Hzで、コマンドラインやオーディオ設定で変更できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.1",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-010",
+   "entity_id": "REF-008-002",
+   "topic": "ブロック長",
+   "statement": "音声ネットワークは既定で64サンプルのブロック単位で実行され、48kHzで約1.33msごとに走る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.2 Tilde objects and audio connections",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-011",
+   "entity_id": "REF-008-002",
+   "topic": "接続規則",
+   "statement": "音声処理は名前が~で終わるオブジェクトが担い、音声接続は専用で、音声出口を非音声入口へ接続することはできない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.2",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-012",
+   "entity_id": "REF-008-002",
+   "topic": "自動昇格",
+   "statement": "左入口以外の音声入口は、制御レートのfloatを受け取ると自動的に信号へ昇格させる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.2",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-013",
+   "entity_id": "REF-008-002",
+   "topic": "非循環",
+   "statement": "音声ネットワークは非循環でなければならず、ループがあるとDSPループ検出のエラーになる(フィードバックは非局所信号接続で実現)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.2 / 2.5.5",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-014",
+   "entity_id": "REF-008-002",
+   "topic": "変換",
+   "statement": "制御→信号は[sig~]や[line~]、信号→制御は[snapshot~]や[env~]等で明示的に変換する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.5.3 Converting audio to and from messages",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-015",
+   "entity_id": "REF-008-002",
+   "topic": "メッセージ型",
+   "statement": "メッセージはセレクタ(float, symbol, list, bang, pointer等)と引数からなり、数値のみで始まる複数要素はlist扱いになる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.4.1 Message types",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-016",
+   "entity_id": "REF-008-002",
+   "topic": "メッセージ順序",
+   "statement": "メッセージは深さ優先で処理され、複数出口は右から左の順に出力される。左入口が「ホット」で他は値を保持するだけの「コールド」入口。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.4.3, 2.4.4",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-017",
+   "entity_id": "REF-008-003",
+   "topic": "保存範囲",
+   "statement": "保存時はオブジェクトの作成引数と接続のみが書かれ、内部状態は保存されない。状態保存は[savestate]や[text]等のファイル入出力で補う。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.1.4 Patches and files",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-018",
+   "entity_id": "REF-008-003",
+   "topic": "行形式",
+   "statement": "ヘルプパッチの実ファイルは平文で、#N canvas、#X obj/msg/floatatom/text、#X connect(元オブジェクト番号 出口 先オブジェクト番号 入口)の各行がセミコロン終端で並ぶ。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-008-03",
+   "locator": "lop~-help.pd, osc~-help.pd の冒頭および末尾行",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-019",
+   "entity_id": "REF-008-003",
+   "topic": "サブパッチ",
+   "statement": "サブパッチは #N canvas ... から #X restore までの入れ子として同じファイル内に書かれる(ヘルプパッチの reference サブパッチで確認)。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-008-03",
+   "locator": "lop~-help.pd #N canvas ... reference / #X restore",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-020",
+   "entity_id": "REF-008-004",
+   "topic": "FUDI",
+   "statement": "同梱コマンド pdsend は標準入力のメッセージをnetsend/netreceive(「FUDI」プロトコル)経由でPdへ転送する。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-008-04",
+   "locator": "src/u_pdsend.c 冒頭コメント",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-021",
+   "entity_id": "REF-008-004",
+   "topic": "pdsendの引数",
+   "statement": "pdsend の引数はポート番号、省略可能なホスト、udp|tcp、タイムアウト秒で、既定はlocalhost・TCP・10秒。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-008-04",
+   "locator": "src/u_pdsend.c usage 出力",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-022",
+   "entity_id": "REF-008-004",
+   "topic": "netsend/netreceive",
+   "statement": "[netsend]と[netreceive]は-u(UDP)と-b(バイナリ)の起動オプションを解釈し、[netreceive]はさらに-fを解釈する。-bの厳密な意味は未読。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-008-04",
+   "locator": "src/x_net.c オプション判定部",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-023",
+   "entity_id": "REF-008-004",
+   "topic": "OSC解析",
+   "statement": "[oscparse]はバイト列(数値リスト)として渡されたOSCメッセージ/バンドルを解析し、先頭が/でなければエラーにする。入力は数値のみ。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-008-04",
+   "locator": "src/x_misc.c oscparse 実装",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-024",
+   "entity_id": "REF-008-004",
+   "topic": "起動時制御",
+   "statement": "-nogui と -send はGUIなしのバッチ運用を補助する起動フラグとして説明されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-01",
+   "locator": "Ch.2 2.6.2 Computation load",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-025",
+   "entity_id": "REF-008-005",
+   "topic": "機能",
+   "statement": "余弦波を出力し、周波数入力はfloatまたは信号で与えられる。右入口は位相リセットで0〜1。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "osc~-help.pd のテキスト注記",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-026",
+   "entity_id": "REF-008-005",
+   "topic": "出力範囲",
+   "statement": "信号出力は-1〜1の余弦波と注記されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "osc~-help.pd reference サブパッチ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-027",
+   "entity_id": "REF-008-005",
+   "topic": "引数",
+   "statement": "作成引数は初期周波数(Hz)で既定0。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "osc~-help.pd reference サブパッチ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-028",
+   "entity_id": "REF-008-005",
+   "topic": "波形テーブル",
+   "statement": "0.54以前は512点の余弦テーブルで、現行は2048点(互換レベルで旧設定に戻せる)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "osc~-help.pd 互換性注記",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-029",
+   "entity_id": "REF-008-006",
+   "topic": "機能",
+   "statement": "1極ローパス。左入口は被フィルタ信号、右入口はカットオフ(Hz)でfloatまたは信号。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "lop~-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-030",
+   "entity_id": "REF-008-006",
+   "topic": "最適化",
+   "statement": "右入口がfloatの場合は信号接続時より速い計算経路になる。clearメッセージで内部状態を消去できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "lop~-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-031",
+   "entity_id": "REF-008-006",
+   "topic": "引数",
+   "statement": "作成引数はカットオフ周波数(Hz)で既定0。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "lop~-help.pd reference サブパッチ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-032",
+   "entity_id": "REF-008-007",
+   "topic": "機能",
+   "statement": "目標値と時間(ms)を受けて直線ランプ信号を出す。2要素リストで目標値+時間を与え、stopで現在値に固定する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "line~-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-033",
+   "entity_id": "REF-008-007",
+   "topic": "時間入力",
+   "statement": "右入口はランプ時間(ms)で、ランプ開始時に消去されるため設定しないと目標へ即ジャンプする。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "line~-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-034",
+   "entity_id": "REF-008-007",
+   "topic": "ブロック境界",
+   "statement": "[line~]のランプは常に音声ブロックの開始/終了に束縛される。より細かい精度が要る場合は[vline~]を使う。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "line~-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-035",
+   "entity_id": "REF-008-008",
+   "topic": "機能",
+   "statement": "bangまたは非ゼロ値で開始し、0またはstopで停止。周期的にbangを出す。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "metro-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-036",
+   "entity_id": "REF-008-008",
+   "topic": "時間指定",
+   "statement": "tempoメッセージで値と時間単位(msec, sec, min, samp)を設定でき、右入口は次の拍から有効になる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "metro-help.pd reference",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-037",
+   "entity_id": "REF-008-008",
+   "topic": "引数",
+   "statement": "作成引数は初期時間(既定1)、テンポ値(既定1)、時間単位(既定msec)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "metro-help.pd reference",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-038",
+   "entity_id": "REF-008-009",
+   "topic": "機能",
+   "statement": "0からN-1までの擬似乱数整数を出す(Nは作成引数)。bangで生成、floatで範囲設定と同時に生成。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "random-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-039",
+   "entity_id": "REF-008-009",
+   "topic": "シード",
+   "statement": "seedメッセージで再現可能な列を作れる。シード未指定ならオブジェクトごとに別シード。品質は標準的な生成器ではなく不明と注記される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "random-help.pd",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-008-040",
+   "entity_id": "REF-008-009",
+   "topic": "引数",
+   "statement": "作成引数は範囲で既定1。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-008-03",
+   "locator": "random-help.pd reference",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "item": "パッチファイル形式の正式な文法定義(全#Xコマンド、座標・フォント指定の意味)",
+   "tried_sources": [
+    "SRC-008-03",
+    "SRC-008-05"
+   ],
+   "impact_on_spec": "保存形式をインポート/エクスポートする仕様化では、観察できた行種別のみ実装根拠にでき、完全な文法は別途確認が要る",
+   "entity_id": "REF-008-003"
+  },
+  {
+   "item": "FUDIメッセージの厳密なワイヤ形式(区切り・エスケープ)",
+   "tried_sources": [
+    "SRC-008-04",
+    "SRC-008-05"
+   ],
+   "impact_on_spec": "外部制御クライアントを実装する際、メッセージ終端規則を別資料で確認する必要がある",
+   "entity_id": "REF-008-004"
+  },
+  {
+   "item": "[oscformat]の仕様とOSC送出側の扱い",
+   "tried_sources": [
+    "SRC-008-04"
+   ],
+   "impact_on_spec": "OSC出力経路の仕様化にはoscformatの資料確認が必要",
+   "entity_id": "REF-008-004"
+  },
+  {
+   "item": "netsend/netreceiveのヘルプパッチ(ポート、プロトコル既定値の公式説明)",
+   "tried_sources": [
+    "SRC-008-03",
+    "SRC-008-04"
+   ],
+   "impact_on_spec": "ヘルプパッチのURLが取得できず、引数仕様はソースのみから部分的にしか確認できていない",
+   "entity_id": "REF-008-004"
+  },
+  {
+   "item": "周波数入力の許容範囲(下限・上限)",
+   "tried_sources": [
+    "SRC-008-03"
+   ],
+   "impact_on_spec": "周波数入力の範囲検証は仕様側で決める必要がある",
+   "entity_id": "REF-008-005"
+  },
+  {
+   "item": "カットオフの有効範囲と極値での挙動",
+   "tried_sources": [
+    "SRC-008-03"
+   ],
+   "impact_on_spec": "フィルタ係数の安全域を仕様化できない",
+   "entity_id": "REF-008-006"
+  },
+  {
+   "item": "ランプ時間・目標値の許容範囲と最大リスト長",
+   "tried_sources": [
+    "SRC-008-03"
+   ],
+   "impact_on_spec": "エンベロープ生成のパラメータ範囲を仕様化できない",
+   "entity_id": "REF-008-007"
+  },
+  {
+   "item": "最小間隔や最大精度",
+   "tried_sources": [
+    "SRC-008-03"
+   ],
+   "impact_on_spec": "クロック精度の下限を仕様化できない",
+   "entity_id": "REF-008-008"
+  },
+  {
+   "item": "乱数アルゴリズムの詳細",
+   "tried_sources": [
+    "SRC-008-03"
+   ],
+   "impact_on_spec": "再現性は同一実装内に限られ、他実装との一致は仕様化できない",
+   "entity_id": "REF-008-009"
+  },
+  {
+   "item": "msp.ucsd.edu の Pd ドキュメント(マニュアル原本)",
+   "tried_sources": [
+    "SRC-008-05"
+   ],
+   "impact_on_spec": "アクセス不能のためGitHub上の同梱マニュアルで代替。内容差異は未確認"
+  }
+ ]
+}

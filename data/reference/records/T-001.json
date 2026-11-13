@@ -1,0 +1,1924 @@
+{
+  "target_id": "T-001",
+  "entities": [
+    {
+      "id": "REF-001-001",
+      "kind": "system",
+      "name": "Doepfer A-100",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "19インチ系ラックに3U(128.5mm)パネルのモジュールを組み込むアナログ・モジュラーシステム(Eurorack規格の基準)。",
+      "synthesis_method": "電圧制御によるアナログ減算/モジュラー合成",
+      "features": [
+        {
+          "text": "電源は+12V/-12V(一部+5V)、バスで供給",
+          "fact_ids": [
+            "F-001-003"
+          ]
+        },
+        {
+          "text": "3U高パネル・HP幅・84HP/段のラック",
+          "fact_ids": [
+            "F-001-002",
+            "F-001-004"
+          ]
+        },
+        {
+          "text": "構成（旧 I001 調査の補足）",
+          "fact_ids": [
+            "F-001-037"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "全モジュールの合計電流が電源容量を超えないこと",
+          "fact_ids": [
+            "F-001-003",
+            "F-001-004"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "フロントパネルのソケットをパッチケーブルで接続。内部バスのCV/Gateも任意で併用可能。",
+          "fact_ids": [
+            "F-001-001"
+          ]
+        },
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "legacy_ids": [
+        "I001"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "I001",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-100",
+          "version": "モジュール群（単一版なし）",
+          "kind": "hardware_modular",
+          "categories": [
+            "oscillator",
+            "filter",
+            "amplifier",
+            "modulation",
+            "sequencer",
+            "interface"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": null
+        }
+      ]
+    },
+    {
+      "id": "REF-001-002",
+      "kind": "signal_standard",
+      "name": "A-100 信号・電圧規約",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "A-100内の音声・制御電圧・トリガ/ゲートの電圧と基準の取り決め。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "1V/octのピッチ規約",
+          "fact_ids": [
+            "F-001-005"
+          ]
+        },
+        {
+          "text": "約+3V超でhighとなるゲート閾値",
+          "fact_ids": [
+            "F-001-006"
+          ]
+        },
+        {
+          "text": "バスに共有CV/Gate線(送信元は各1つ)",
+          "fact_ids": [
+            "F-001-010"
+          ]
+        },
+        {
+          "text": "任意の出力を任意の用途に使える",
+          "fact_ids": [
+            "F-001-009"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "トリガ系には矩形波のみ",
+          "fact_ids": [
+            "F-001-008"
+          ]
+        },
+        {
+          "text": "バスCV/Gateの送信元は1つだけ",
+          "fact_ids": [
+            "F-001-010"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "音声レベル(典型)",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": {
+            "min": -5,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-007"
+          ]
+        },
+        {
+          "name": "ゲート/トリガ(典型)",
+          "direction": "out",
+          "signal_type": "gate",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-006",
+            "F-001-007"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "バスのINT.CV/INT.Gateをジャンパで受信/送信するかを選択可能。",
+          "fact_ids": [
+            "F-001-010"
+          ]
+        },
+        "timing": {
+          "summary": "トリガは立ち上がりエッジで起動。",
+          "fact_ids": [
+            "F-001-006"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-003",
+      "kind": "patch_storage",
+      "name": "A-100 パッチ保存(ハードウェア)",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "A-100の音色はパッチケーブルとつまみ配置で決まり、公式資料に電子的なパッチ保存の機能は記載されていない。",
+      "synthesis_method": null,
+      "features": [],
+      "constraints": [
+        {
+          "text": "パッチはケーブルとつまみで保持され、本体にプリセット保存の記述はない(資料上は未確認)",
+          "fact_ids": [
+            "F-001-011"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": {
+          "summary": "電子的保存の記述なし(確認範囲内)。",
+          "fact_ids": [
+            "F-001-011"
+          ]
+        },
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-004",
+      "kind": "control_interface",
+      "name": "Doepfer A-190-3 USB/MIDI-to-CV/Gate",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "MIDIまたはUSBからCV4本とゲート1本を生成し、A-100を外部制御する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "MIDI/USBからCV4本+ゲート1本",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        },
+        {
+          "text": "学習ボタンで設定",
+          "fact_ids": [
+            "F-001-013"
+          ]
+        },
+        {
+          "text": "内部バスへCV/Gate送出",
+          "fact_ids": [
+            "F-001-014"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "CV1(ノート)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        },
+        {
+          "name": "CV2(ピッチベンド)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        },
+        {
+          "name": "CV3(ベロシティ)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        },
+        {
+          "name": "CV4(CC)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        },
+        {
+          "name": "Gate",
+          "direction": "out",
+          "signal_type": "gate",
+          "range": {
+            "min": 0,
+            "max": 5,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-012",
+            "F-001-013"
+          ]
+        },
+        {
+          "name": "USB/MIDI in",
+          "direction": "in",
+          "signal_type": "event",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": {
+          "summary": "MIDI/USB入力で外部制御。",
+          "fact_ids": [
+            "F-001-012"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-005",
+      "kind": "module",
+      "name": "A-110-1 Standard VCO",
+      "maker": "Doepfer Musikelektronik",
+      "version": "A-110-1(旧A-110)",
+      "version_status": "confirmed",
+      "function_category": "oscillator",
+      "purpose": "電圧制御オシレータ。4波形を同時出力。",
+      "synthesis_method": "ノコギリ波コアから他波形を派生",
+      "features": [
+        {
+          "text": "4波形同時出力",
+          "fact_ids": [
+            "F-001-015"
+          ]
+        },
+        {
+          "text": "PWMとバスCV正規化",
+          "fact_ids": [
+            "F-001-017",
+            "F-001-018"
+          ]
+        },
+        {
+          "text": "音源（旧 M001 調査の補足）",
+          "fact_ids": [
+            "F-001-046"
+          ]
+        },
+        {
+          "text": "出力（旧 M001 調査の補足）",
+          "fact_ids": [
+            "F-001-047"
+          ]
+        },
+        {
+          "text": "接続とパラメータ（旧 M001 調査の補足）",
+          "fact_ids": [
+            "F-001-048"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "三角・正弦は不完全な波形",
+          "fact_ids": [
+            "F-001-019"
+          ]
+        },
+        {
+          "text": "幅10HP、+90/-20mA",
+          "fact_ids": [
+            "F-001-020"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "CV1",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-018"
+          ]
+        },
+        {
+          "name": "Saw/Square out",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-016"
+          ]
+        },
+        {
+          "name": "Triangle/Sine out",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-016"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "Range",
+          "unit": "octave",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-017"
+          ]
+        },
+        {
+          "name": "Tune",
+          "unit": null,
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-017"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": {
+          "summary": "CV1はバスCVに正規化。",
+          "fact_ids": [
+            "F-001-018"
+          ]
+        },
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M001"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M001",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-110-1 Standard VCO",
+          "version": "A-110-1",
+          "kind": "hardware_module",
+          "categories": [
+            "oscillator",
+            "fm",
+            "pwm"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": "I001"
+        }
+      ]
+    },
+    {
+      "id": "REF-001-006",
+      "kind": "module",
+      "name": "A-120 24dB Low Pass (Transistor Ladder)",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "filter",
+      "purpose": "電圧制御24dB/oct低域通過フィルタ。",
+      "synthesis_method": "トランジスタ・ラダー",
+      "features": [
+        {
+          "text": "3CV加算入力と自己発振",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        },
+        {
+          "text": "機能・ポート（旧 M004 調査の補足）",
+          "fact_ids": [
+            "F-001-038"
+          ]
+        },
+        {
+          "text": "共振・版差（旧 M004 調査の補足）",
+          "fact_ids": [
+            "F-001-039"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "幅8HP、+30/-20mA",
+          "fact_ids": [
+            "F-001-022"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "CV in (x3)",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        },
+        {
+          "name": "Audio in",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        },
+        {
+          "name": "Audio out",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "Cutoff",
+          "unit": "Hz",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        },
+        {
+          "name": "Resonance (Emphasis)",
+          "unit": null,
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-021"
+          ]
+        }
+      ],
+      "mechanisms": null,
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M004"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M004",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-120 24dB Low Pass",
+          "version": "A-120（2009年にtransistor arraysへ改訂）",
+          "kind": "hardware_module",
+          "categories": [
+            "filter",
+            "resonance"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。",
+          "parent_id": "I001"
+        }
+      ]
+    },
+    {
+      "id": "REF-001-007",
+      "kind": "module",
+      "name": "A-140-1 ADSR Envelope Generator",
+      "maker": "Doepfer Musikelektronik",
+      "version": "A-140-1(旧A-140)",
+      "version_status": "confirmed",
+      "function_category": "envelope",
+      "purpose": "Gateで起動するADSRエンベロープ発生器。",
+      "synthesis_method": "ゲート駆動のADSR",
+      "features": [
+        {
+          "text": "Retrigとバスゲート受信",
+          "fact_ids": [
+            "F-001-023"
+          ]
+        },
+        {
+          "text": "3段の時間レンジ",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        },
+        {
+          "text": "状態とポート（旧 M002 調査の補足）",
+          "fact_ids": [
+            "F-001-044"
+          ]
+        },
+        {
+          "text": "出力と時間（旧 M002 調査の補足）",
+          "fact_ids": [
+            "F-001-045"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "減衰時間は指数的で厳密な規定が難しい",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "Gate in",
+          "direction": "in",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-023"
+          ]
+        },
+        {
+          "name": "Retrig in",
+          "direction": "in",
+          "signal_type": "trigger",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-023"
+          ]
+        },
+        {
+          "name": "Env out (+)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 8,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-025"
+          ]
+        },
+        {
+          "name": "Env out (inverted)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": -8,
+            "max": 0,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-025"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "Attack",
+          "unit": "s",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        },
+        {
+          "name": "Decay",
+          "unit": "s",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        },
+        {
+          "name": "Release",
+          "unit": "s",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        },
+        {
+          "name": "Sustain",
+          "unit": null,
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-023"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": {
+          "summary": "GateはバスINT.GATEまたはフロント入力。",
+          "fact_ids": [
+            "F-001-023"
+          ]
+        },
+        "timing": {
+          "summary": "3段の時間レンジ。",
+          "fact_ids": [
+            "F-001-024"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M002"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M002",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-140-1 ADSR",
+          "version": "A-140 / A-140-1（名称変更）",
+          "kind": "hardware_module",
+          "categories": [
+            "envelope",
+            "gate",
+            "retrigger"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": "I001"
+        }
+      ]
+    },
+    {
+      "id": "REF-001-008",
+      "kind": "module",
+      "name": "A-145-1 Low Frequency Oscillator",
+      "maker": "Doepfer Musikelektronik",
+      "version": "A-145-1(旧A-145)",
+      "version_status": "confirmed",
+      "function_category": "lfo",
+      "purpose": "低周波オシレータ。5波形、リセット同期付き。",
+      "synthesis_method": "三角コアのLFO",
+      "features": [
+        {
+          "text": "5波形と3段の周波数レンジ",
+          "fact_ids": [
+            "F-001-027",
+            "F-001-028"
+          ]
+        },
+        {
+          "text": "Resetによる同期",
+          "fact_ids": [
+            "F-001-029"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "ノコギリ出力は他波形の2倍周波数",
+          "fact_ids": [
+            "F-001-027"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "Reset in",
+          "direction": "in",
+          "signal_type": "trigger",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-029"
+          ]
+        },
+        {
+          "name": "Waveform outs",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": {
+            "min": -4,
+            "max": 4,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-029"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "Frequency range",
+          "unit": "Hz",
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-028"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "3段の周波数レンジ。",
+          "fact_ids": [
+            "F-001-028"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-009",
+      "kind": "module",
+      "name": "A-138s Mini Stereo Mixer",
+      "maker": "Doepfer Musikelektronik",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "amplifier_mixer",
+      "purpose": "4入力2出力のパン付きミキサー。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "4入力パン付き2出力、DC結合",
+          "fact_ids": [
+            "F-001-031"
+          ]
+        },
+        {
+          "text": "並列ルーティングやフィードバックにも使える",
+          "fact_ids": [
+            "F-001-031"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "ゲイン約1.6〜1.9",
+          "fact_ids": [
+            "F-001-032"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "In 1-4",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-031"
+          ]
+        },
+        {
+          "name": "Out L/R",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-031"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "Level/Pan (x4)",
+          "unit": null,
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-032"
+          ]
+        }
+      ],
+      "mechanisms": null,
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-010",
+      "kind": "module",
+      "name": "A-160-1 Clock/Trigger Divider",
+      "maker": "Doepfer Musikelektronik",
+      "version": "A-160-1(旧A-160)",
+      "version_status": "confirmed",
+      "function_category": "clock_sequencer",
+      "purpose": "クロック/トリガ周波数を分周する。",
+      "synthesis_method": "デジタル分周",
+      "features": [
+        {
+          "text": "1/2〜1/64分周とReset",
+          "fact_ids": [
+            "F-001-034"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "出力high約+10V(標準ゲート+5Vと異なる)",
+          "fact_ids": [
+            "F-001-035"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "Trigger in",
+          "direction": "in",
+          "signal_type": "clock",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-034"
+          ]
+        },
+        {
+          "name": "Reset in",
+          "direction": "in",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-001-034"
+          ]
+        },
+        {
+          "name": "Divided outs",
+          "direction": "out",
+          "signal_type": "clock",
+          "range": {
+            "min": 0,
+            "max": 10,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-001-035"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "1/2〜1/64分周。",
+          "fact_ids": [
+            "F-001-034"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-001-011",
+      "kind": "module",
+      "name": "A-130-1 Linear VCA",
+      "maker": "Doepfer",
+      "version": "version 3（2013年3月以降の説明）",
+      "version_status": "confirmed",
+      "function_category": "amplifier_mixer",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "制御（旧 M005 調査の補足）",
+          "fact_ids": [
+            "F-001-040"
+          ]
+        },
+        {
+          "text": "接続・版差（旧 M005 調査の補足）",
+          "fact_ids": [
+            "F-001-041"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M005"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M005",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-130-1 Linear VCA",
+          "version": "version 3（2013年3月以降の説明）",
+          "kind": "hardware_module",
+          "categories": [
+            "amplifier",
+            "mixer",
+            "cv_processing"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。",
+          "parent_id": "I001"
+        }
+      ]
+    },
+    {
+      "id": "REF-001-012",
+      "kind": "module",
+      "name": "A-155 Analog/Trigger Sequencer",
+      "maker": "Doepfer",
+      "version": "A-155（A-154拡張は対象外）",
+      "version_status": "unconfirmed",
+      "function_category": "clock_sequencer",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "段と電圧（旧 M006 調査の補足）",
+          "fact_ids": [
+            "F-001-042"
+          ]
+        },
+        {
+          "text": "時間・イベント（旧 M006 調査の補足）",
+          "fact_ids": [
+            "F-001-043"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-001-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M006"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M006",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "A-155 Analog/Trigger Sequencer",
+          "version": "A-155（A-154拡張は対象外）",
+          "kind": "hardware_module",
+          "categories": [
+            "sequencer",
+            "clock",
+            "gate",
+            "sample_hold",
+            "slew"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。",
+          "parent_id": "I001"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-001-001",
+      "entity_id": "REF-001-001",
+      "topic": "概要",
+      "statement": "A-100は70年代の古典的モジュラーを範とするアナログ・モジュラー。2016年夏時点で125種超のモジュールがある。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-01",
+      "locator": "A-100 English Main Page 冒頭",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-002",
+      "entity_id": "REF-001-001",
+      "topic": "パネル寸法",
+      "statement": "パネル高は128.5mm(3U)、幅はHP単位(1HP=5.08mm)。ラックの有効幅は84HP。A-100のパネル幅は2HPの倍数。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-03",
+      "locator": "Construction Details 冒頭〜Table 1; Order Notes",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-003",
+      "entity_id": "REF-001-001",
+      "topic": "電源",
+      "statement": "標準電源は+12V/-12Vで、世代により650mA/1200mA/2000mA(-12Vは1200mA)。一部モジュールは+5Vも必要。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Power Supply and System Bus",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-004",
+      "entity_id": "REF-001-001",
+      "topic": "筐体構成",
+      "statement": "6Uの標準筐体は3U段2つ、各段にバスボード1枚、1枚あたり最大14モジュールを接続可能。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-03",
+      "locator": "Construction Details 後半",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-005",
+      "entity_id": "REF-001-002",
+      "topic": "1V/oct",
+      "statement": "VCOピッチは1V/oct。CVは絶対音高でなく相対量で、実ピッチはtune、レンジ、他CV入力の合算で決まる。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Principles of Voltage Control",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-006",
+      "entity_id": "REF-001-002",
+      "topic": "ゲート閾値",
+      "statement": "約+3V超をhigh、1V未満をlowと扱う。+5V〜+12Vで動作し、トリガは立ち上がりエッジで起動。全モジュールは+12Vまで耐える。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Principles / Signals in the A-100",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-007",
+      "entity_id": "REF-001-002",
+      "topic": "信号種別と典型レベル",
+      "statement": "信号は音声・制御電圧・トリガの3種。音声は約10Vpp(-5〜+5V)、LFOのCVは約-2.5〜+2.5V、ADSRは0〜+8V、トリガ/ゲート/クロックは0/+5V程度。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Signals in the A-100",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-008",
+      "entity_id": "REF-001-002",
+      "topic": "トリガ波形",
+      "statement": "トリガ/ゲート/クロックには矩形波のみ使うこと。三角やノコギリなど立上りの遅い信号は不適。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Signals in the A-100",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-009",
+      "entity_id": "REF-001-002",
+      "topic": "役割の混用",
+      "statement": "どのモジュール出力も音声・CV・トリガとして使え、信号種別の区別は原理的なもの。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Signals in the A-100 末尾",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-010",
+      "entity_id": "REF-001-002",
+      "topic": "内部バスCV/Gate",
+      "statement": "バスにはCVとGateの線があり、CV送信元とGate送信元はそれぞれ1つのみ許される。複数モジュールが受信可能。バス中央のジャンパで2領域に分割できる。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-02",
+      "locator": "Technical Details Meaning and usage of the bus signal CV and Gate",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-011",
+      "entity_id": "REF-001-003",
+      "topic": "再現性",
+      "statement": "音色は都度組み立てるもので、正確に再現できない場合があると公式概要が述べている。パッチ保存機能への言及は確認されない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-01",
+      "locator": "A-100 English Main Page 第2段落",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-012",
+      "entity_id": "REF-001-004",
+      "topic": "出力",
+      "statement": "CV1はMIDIノートで1V/oct 0〜+5V、CV2はピッチベンド、CV3はベロシティ(0〜+5V)、CV4は任意のコントロールチェンジ(0〜+5V)。ゲートは0/+5V。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-10",
+      "locator": "A-190-3 入出力と操作部の節",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-013",
+      "entity_id": "REF-001-004",
+      "topic": "設定",
+      "statement": "MIDIチャンネル、基準音、CV4のコントローラ番号は学習ボタンで設定。ゲート電圧は+5Vまたは+12Vにジャンパ選択でき、他社機器にはS-Trigger用ケーブルがある。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-10",
+      "locator": "A-190-3 入出力と操作部/ジャンパの節",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-014",
+      "entity_id": "REF-001-004",
+      "topic": "バス連携",
+      "statement": "ジャンパによりCV1とGateを内部バスへ送出でき、A-110/A-111やA-140をフロント配線なしで制御可能。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-10",
+      "locator": "A-190-3 説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-015",
+      "entity_id": "REF-001-005",
+      "topic": "周波数と波形",
+      "statement": "約8オクターブ(約15Hz〜8kHz)。矩形・ノコギリ・三角・正弦を同時出力。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-016",
+      "entity_id": "REF-001-005",
+      "topic": "出力レベル",
+      "statement": "出力は典型的にノコギリと矩形が8Vpp、三角と正弦が10Vpp。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-017",
+      "entity_id": "REF-001-005",
+      "topic": "制御",
+      "statement": "ピッチはレンジスイッチ(5段)、Tuneつまみ、CV入力で決まり、パルス幅は手動またはCVで変調可。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-018",
+      "entity_id": "REF-001-005",
+      "topic": "バス正規化",
+      "statement": "CV1はバスの内部CVに正規化され、ジャンパで解除可。CV1にケーブルを挿すとバスCVは切断される。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 Technical remarks",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-019",
+      "entity_id": "REF-001-005",
+      "topic": "波形の制約",
+      "statement": "三角・正弦はノコギリのリセットによる切れ込みがあり完全ではない。正弦は丸めた三角に近い。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 Technical remarks",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-020",
+      "entity_id": "REF-001-005",
+      "topic": "物理仕様",
+      "statement": "幅10HP、電流は+90mA/-20mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-04",
+      "locator": "A-110 仕様行",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-021",
+      "entity_id": "REF-001-006",
+      "topic": "特性",
+      "statement": "3つのCV入力が加算されカットオフを変える。-24dB/octのトランジスタ・ラダーで、レゾナンスは自己発振まで上げられ正弦波源として働く。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-05",
+      "locator": "A-120 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-022",
+      "entity_id": "REF-001-006",
+      "topic": "物理仕様",
+      "statement": "幅8HP、電流+30mA/-20mA。2009年にトランジスタ・アレイへ改訂。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-05",
+      "locator": "A-120 仕様行/Technical note",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-023",
+      "entity_id": "REF-001-007",
+      "topic": "動作",
+      "statement": "ゲート(入力またはバスのINT.GATE)で起動し、Retrig入力でゲート中の再起動が可能。出力は正と反転。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-06",
+      "locator": "A-140 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-024",
+      "entity_id": "REF-001-007",
+      "topic": "時間範囲",
+      "statement": "3段スイッチで時間比約1:20:1000。Attackは約20us〜100ms/400us〜2s/20ms〜120s、Decay/Releaseは約3〜4倍。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-06",
+      "locator": "A-140 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-025",
+      "entity_id": "REF-001-007",
+      "topic": "出力電圧",
+      "statement": "通常出力は約0〜+8V、反転出力は約0〜-8V。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-06",
+      "locator": "A-140 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-026",
+      "entity_id": "REF-001-007",
+      "topic": "物理仕様",
+      "statement": "幅8HP、電流+20mA/-20mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-06",
+      "locator": "A-140 仕様行",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-027",
+      "entity_id": "REF-001-008",
+      "topic": "波形",
+      "statement": "ノコギリ、反転ノコギリ、三角、正弦、矩形の5波形。ノコギリ出力の周波数は他の2倍。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-07",
+      "locator": "A-145 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-028",
+      "entity_id": "REF-001-008",
+      "topic": "周波数レンジ",
+      "statement": "3段スイッチ。H約10Hz〜4.5kHz、M約0.1〜50Hz、L約0.005〜5Hz。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-07",
+      "locator": "A-145 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-029",
+      "entity_id": "REF-001-008",
+      "topic": "リセットと出力",
+      "statement": "Reset入力の立ち上がりで三角波が0Vに戻り上昇から再開。出力は約±4V(約8Vpp)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-07",
+      "locator": "A-145 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-030",
+      "entity_id": "REF-001-008",
+      "topic": "物理仕様",
+      "statement": "幅8HP、電流+30mA/-20mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-07",
+      "locator": "A-145 仕様行",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-031",
+      "entity_id": "REF-001-009",
+      "topic": "構成",
+      "statement": "4入力に各Level/Panを持ち、L/Rの2出力。入出力はDC結合で制御信号の混合にも使える。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-08",
+      "locator": "A-138s 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-032",
+      "entity_id": "REF-001-009",
+      "topic": "ゲイン",
+      "statement": "Level全開・Pan中央で両出力約1.6倍、Pan端では片出力約1.9倍でもう一方は0。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-08",
+      "locator": "A-138s Technical notes",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-033",
+      "entity_id": "REF-001-009",
+      "topic": "物理仕様",
+      "statement": "幅8HP、電流+10mA/-10mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-08",
+      "locator": "A-138s 仕様行",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-034",
+      "entity_id": "REF-001-010",
+      "topic": "機能",
+      "statement": "Trigger入力のクロックを1/2〜1/64に分周して出力。Reset入力high中は全出力が0。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-09",
+      "locator": "A-160 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-035",
+      "entity_id": "REF-001-010",
+      "topic": "出力レベル",
+      "statement": "出力のlow/highは0Vと約+10V。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-09",
+      "locator": "A-160 英語説明部",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-036",
+      "entity_id": "REF-001-010",
+      "topic": "物理仕様",
+      "statement": "幅4HP、電流+40mA/-0mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-001-09",
+      "locator": "A-160 仕様行",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-001-037",
+      "entity_id": "REF-001-001",
+      "topic": "構成",
+      "statement": "音源・フィルタ・VCA・ミキサー・変調・シーケンサー・クロック/ゲート・インターフェースを独立モジュールとして分類する。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-11",
+      "locator": "Modules Overview",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I001",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-038",
+      "entity_id": "REF-001-006",
+      "topic": "機能・ポート",
+      "statement": "transistor ladder型low-pass。cutoffは手動および3 CV入力の合計で制御。傾きは−24 dB/octaveと説明。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-05",
+      "locator": "English description",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M004",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-039",
+      "entity_id": "REF-001-006",
+      "topic": "共振・版差",
+      "statement": "resonanceを上げるとself-oscillationに至りsine oscillatorとして振る舞うと説明。2009年の部品変更後もladder方式を維持。音質広告は検証事実として採用しない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-05",
+      "locator": "English description / Technical note",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M004",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-040",
+      "entity_id": "REF-001-011",
+      "topic": "制御",
+      "statement": "linear VCA。CV1/CV2とmanual Gainの合計が利得を決め、外部CVなしでもGainで開ける。CV範囲約0–5 Vで利得0–1を得ると説明。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-12",
+      "locator": "English description",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M005",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-041",
+      "entity_id": "REF-001-011",
+      "topic": "接続・版差",
+      "statement": "2信号入力を各attenuator経由で合計し増幅。CV2と出力にもattenuator。version 3はDC coupledで低速CVも処理可能。旧version 1はAC coupledで同条件ではない。A-131 exponential型とは別製品。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-12",
+      "locator": "English description; Version 1–3",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M005",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-042",
+      "entity_id": "REF-001-012",
+      "topic": "段と電圧",
+      "statement": "2 analog rows、各8 steps。上段出力は0–1/2/4 V切替、下段はscale可変で最大約6.5 V。下段external入力は−5–12 V範囲とされ接続時knobはattenuatorになる。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-13",
+      "locator": "Features of analog rows",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M006",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-043",
+      "entity_id": "REF-001-012",
+      "topic": "時間・イベント",
+      "statement": "3 trigger tracksの幅はclock/step入力の幅に対応。1 gate trackは選択step全体でhigh。Stepで進み、Resetで全rowをstep1へ、Start/Stopは現在位置から開始/停止。Glide/S&H前後に出力を持つ。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-13",
+      "locator": "Features of trigger rows; Control inputs",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M006",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-044",
+      "entity_id": "REF-001-007",
+      "topic": "状態とポート",
+      "statement": "Attack/Decay/Sustain/Releaseで包絡を設定。gate active中のRetrig入力で再開始。通常出力2系統と反転出力を持つ。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-06",
+      "locator": "English description",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M002",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-045",
+      "entity_id": "REF-001-007",
+      "topic": "出力と時間",
+      "statement": "通常出力は約0–8 V、反転は約0–−8 V。AttackはL:20 µs–100 ms、M:400 µs–2 s、H:20 ms–120 s。Decay/Releaseは約3–4倍で減衰時定義は曖昧と注記。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-06",
+      "locator": "English description / time ranges",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M002",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-046",
+      "entity_id": "REF-001-005",
+      "topic": "音源",
+      "statement": "saw-coreからpulse/saw/triangle/sineを同時出力。周波数は概ね15 Hz–8 kHz。波形の非理想性をメーカー自身が注意する。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-04",
+      "locator": "製品説明",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M001",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-047",
+      "entity_id": "REF-001-005",
+      "topic": "出力",
+      "statement": "typical peak-to-peak値はsaw/pulse 8 V、triangle/sine 10 V。保証された上下限ではない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-04",
+      "locator": "製品説明",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M001",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-001-048",
+      "entity_id": "REF-001-005",
+      "topic": "接続とパラメータ",
+      "statement": "Range/TuneとCVで音高を制御しpulse widthを手動/CVで制御。CV1への挿入は内部bus CV接続を切る。Tune幅には2015年頃の版差がある。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-001-04",
+      "locator": "製品説明・Technical notes",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M001",
+        "legacy_fact_index": 2,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-001-001",
+      "item": "A-100の電子的なパッチ保存機能の有無",
+      "tried_sources": [
+        "SRC-001-01",
+        "SRC-001-02"
+      ],
+      "impact_on_spec": "保存機能がないと仮定して良いか未確定。DAW等の保存要件は別途決める必要がある。"
+    },
+    {
+      "entity_id": "REF-001-002",
+      "item": "ゲート/トリガのパルス幅・立ち上がり時間の最小要件",
+      "tried_sources": [
+        "SRC-001-02"
+      ],
+      "impact_on_spec": "トリガ検出の最小パルス幅をモデル化できない。"
+    },
+    {
+      "entity_id": "REF-001-005",
+      "item": "A-110-1のCV入力感度・Tune/Range・パルス幅の数値範囲",
+      "tried_sources": [
+        "SRC-001-04"
+      ],
+      "impact_on_spec": "パラメータ範囲はA-110_man.pdf未取得のため未確定。"
+    },
+    {
+      "entity_id": "REF-001-006",
+      "item": "A-120のカットオフ範囲とCV感度",
+      "tried_sources": [
+        "SRC-001-05"
+      ],
+      "impact_on_spec": "フィルタのパラメータ範囲を仕様化できない。"
+    },
+    {
+      "entity_id": "REF-001-004",
+      "item": "A-190-3の英語マニュアル(ベンド範囲等の詳細)",
+      "tried_sources": [
+        "SRC-001-10"
+      ],
+      "impact_on_spec": "MIDI対応詳細は説明ページのみに基づく。"
+    },
+    {
+      "item": "各モジュールのPDFマニュアル(A110_man.pdf等)",
+      "tried_sources": [
+        "SRC-001-04"
+      ],
+      "impact_on_spec": "ページ記載を超えるポート詳細は未確認。"
+    },
+    {
+      "entity_id": "REF-001-001",
+      "item": "系全体の保存・外部API・互換電圧の一律規約は未確認。個別モデルへ分解して判断する。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "I001"
+      }
+    },
+    {
+      "entity_id": "REF-001-006",
+      "item": "cutoff上下限、入力許容値、共振閾値、既定値、係数・非線形回路式、発振時の精度は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M004"
+      }
+    },
+    {
+      "entity_id": "REF-001-011",
+      "item": "最大利得・入力上下限・飽和・応答速度・既定ノブ値・CV合計超過時の挙動は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M005"
+      }
+    },
+    {
+      "entity_id": "REF-001-012",
+      "item": "clock/reset同時入力の優先順、閾値、最大clock、停止中出力、初期step、保存、glide時間式・境界条件は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M006"
+      }
+    },
+    {
+      "entity_id": "REF-001-007",
+      "item": "gate閾値、初期値、再トリガ開始レベル、曲線式、ゼロ到達判定、ノブ既定値は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M002"
+      }
+    },
+    {
+      "entity_id": "REF-001-005",
+      "item": "各入力の許容上下限・既定値・同期/リセット条件・チューニング精度は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M001"
+      }
+    }
+  ]
+}

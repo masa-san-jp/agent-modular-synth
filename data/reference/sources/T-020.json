@@ -1,0 +1,97 @@
+{
+  "sources": [
+    {
+      "id": "SRC-020-01",
+      "title": "Music Easel Aux Card User’s Guide",
+      "publisher": "Buchla / Joel Davel",
+      "url": "https://buchla.com/wp-content/uploads/2017/01/AuxCard-Manual-v1_0.pdf",
+      "doc_version": "v1.0, 2017-01-15",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "全7頁の抽出テキストを取得。記録根拠は歴史・pitch・bus節。図の視覚検証なし。Modern版全体に一般化しない; PDF pp.1,4,7（1始まり）",
+      "link_status": "ok",
+      "license_note": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S016",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S016",
+            "publisher": "Buchla / Joel Davel",
+            "title": "Music Easel Aux Card User’s Guide",
+            "url": "https://buchla.com/wp-content/uploads/2017/01/AuxCard-Manual-v1_0.pdf",
+            "version": "v1.0, 2017-01-15",
+            "sections": "PDF pp.1,4,7（1始まり）",
+            "checked_on": "2026-11-12",
+            "scope": "全7頁の抽出テキストを取得。記録根拠は歴史・pitch・bus節。図の視覚検証なし。Modern版全体に一般化しない",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-020-02",
+      "title": "Easel Module / Music Easel",
+      "publisher": "Buchla USA Documentation",
+      "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/module",
+      "doc_version": "版不明（copyright 2023）",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "本文取得。https://buchlausa.github.io/buchla_doc/docs/easel-family/easel も確認。placeholder的な説明が多く数値仕様根拠には不採用; Easel Module; Music Easel",
+      "link_status": "ok",
+      "license_note": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S017",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S017",
+            "publisher": "Buchla USA Documentation",
+            "title": "Easel Module / Music Easel",
+            "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/module",
+            "version": "版不明（copyright 2023）",
+            "sections": "Easel Module; Music Easel",
+            "checked_on": "2026-11-12",
+            "scope": "本文取得。https://buchlausa.github.io/buchla_doc/docs/easel-family/easel も確認。placeholder的な説明が多く数値仕様根拠には不採用",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-020-03",
+      "title": "Buchla 208MIDI",
+      "publisher": "Buchla USA Documentation",
+      "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/208midi",
+      "doc_version": "208C対象、改訂日不明",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "本文取得。Modern製品との対応版・誤記らしき箇所の確認が必要なため今回の確認済み仕様へ採用しない; Introduction; MIDI sections",
+      "link_status": "ok",
+      "license_note": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S018",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S018",
+            "publisher": "Buchla USA Documentation",
+            "title": "Buchla 208MIDI",
+            "url": "https://buchlausa.github.io/buchla_doc/docs/easel-family/208midi",
+            "version": "208C対象、改訂日不明",
+            "sections": "Introduction; MIDI sections",
+            "checked_on": "2026-11-12",
+            "scope": "本文取得。Modern製品との対応版・誤記らしき箇所の確認が必要なため今回の確認済み仕様へ採用しない",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "全文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    }
+  ]
+}

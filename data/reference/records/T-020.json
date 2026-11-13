@@ -1,0 +1,200 @@
+{
+  "target_id": "T-020",
+  "entities": [
+    {
+      "id": "REF-020-001",
+      "kind": "system",
+      "name": "Music Easel（2017 Aux Card guideの対象）",
+      "maker": "Buchla",
+      "version": "2017 guide対象。Modern版I005とは仕様を共通化しない",
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "歴史・拡張（旧 I006 調査の補足）",
+          "fact_ids": [
+            "F-020-001"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "legacy_ids": [
+        "I006"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "I006",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "Music Easel（2017 Aux Card guideの対象）",
+          "version": "2017 guide対象。Modern版I005とは仕様を共通化しない",
+          "kind": "hardware_patchable",
+          "categories": [
+            "history",
+            "program_card",
+            "expansion"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。",
+          "parent_id": null
+        }
+      ]
+    },
+    {
+      "id": "REF-020-002",
+      "kind": "module",
+      "name": "Music Easel Auxiliary Card",
+      "maker": "Buchla",
+      "version": "User’s Guide v1.0（2017-01-15）",
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "音高・範囲（旧 M007 調査の補足）",
+          "fact_ids": [
+            "F-020-002"
+          ]
+        },
+        {
+          "text": "busと保存（旧 M007 調査の補足）",
+          "fact_ids": [
+            "F-020-003"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-020-001"
+      },
+      "status": "active",
+      "legacy_ids": [
+        "M007"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "M007",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "Music Easel Auxiliary Card",
+          "version": "User’s Guide v1.0（2017-01-15）",
+          "kind": "hardware_accessory",
+          "categories": [
+            "oscillator",
+            "cv_routing",
+            "internal_bus"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。",
+          "parent_id": "I006"
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-020-001",
+      "entity_id": "REF-020-001",
+      "topic": "歴史・拡張",
+      "statement": "2017年の公式guideは1973年のProgram Card接続をpresetと機能拡張に使う経緯を説明し、208とAux Cardの連携を記述する。歴史的原機の全仕様を読めたことにはしない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-020-01",
+      "locator": "PDF p.1 Introducing the Music Easel Auxiliary Card",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I006",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-020-002",
+      "entity_id": "REF-020-002",
+      "topic": "音高・範囲",
+      "statement": "mod amt最大時は1.2 V/oct、反対端は負方向。oscillator low範囲0.12–64 Hz、high範囲16.35–5274 Hzと記述。1 V/oct規約へ自動で同一視できない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-020-01",
+      "locator": "PDF p.4 The Oscillator pitch controls",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M007",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-020-003",
+      "entity_id": "REF-020-002",
+      "topic": "busと保存",
+      "statement": "Aux Cardのinternal bus既定はC。対応218eでのbus出力設定は起動後に再設定が必要と記述。すべての設定やModern版へ一般化しない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-020-01",
+      "locator": "PDF p.7 Appendix A",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "M007",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-020-001",
+      "item": "旧Music Easel全体の再現仕様・Modernとの互換性・program cardデータ形式は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "I006"
+      }
+    },
+    {
+      "entity_id": "REF-020-002",
+      "item": "各入力の最大許容値、全状態保存、Modern版への対応、波形誤差、デジタル処理の詳細は未確認。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "M007"
+      }
+    }
+  ]
+}

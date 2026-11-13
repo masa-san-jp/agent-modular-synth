@@ -1,0 +1,28 @@
+{
+ "sources": [
+  {
+   "id": "SRC-003-01",
+   "title": "Mother-32 | Moog Music (product page, Specs and Overview)",
+   "publisher": "Moog Music Inc.",
+   "url": "https://www.moogmusic.com/synthesizers/mother-32",
+   "doc_version": "unknown",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Full page content as delivered by the site's public page-data (overview, specs table, resource links)",
+   "link_status": "ok",
+   "license_note": "Manufacturer web page; only own-words summaries of spec values recorded. No text, images or assets reused. Marketing text recorded as advertising."
+  },
+  {
+   "id": "SRC-003-02",
+   "title": "Mother-32 User Manual / Quickstart (Moog downloads listing)",
+   "publisher": "Moog Music Inc.",
+   "url": "https://www.moogmusic.com/downloads/?product=Mother 32&type=User Manual",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-12",
+   "checked_scope": "Not read: listing is client-rendered and no PDF link was exposed; a guessed PDF path on api.moogmusic.com was refused by the proxy (403)",
+   "link_status": "unreachable",
+   "license_note": "Not obtained; no content reproduced."
+  }
+ ]
+}

@@ -1,0 +1,1517 @@
+{
+ "target_id": "T-009",
+ "entities": [
+  {
+   "id": "REF-009-001",
+   "kind": "system",
+   "name": "SuperCollider",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版) / 公式サイトは3.14.1を現行と表示",
+   "function_category": "system",
+   "purpose": "オーディオサーバ(scsynth/supernova)・言語(sclang)・IDEで構成される音響合成/アルゴリズム作曲プラットフォーム",
+   "synthesis_method": "サーバ上のUGenグラフ(SynthDef)をOSCで生成・制御",
+   "features": [
+    {
+     "text": "サーバとクライアントが分離され、OSCで接続される",
+     "fact_ids": [
+      "F-009-001",
+      "F-009-002"
+     ]
+    },
+    {
+     "text": "クライアント停止でもサーバは動作継続できる",
+     "fact_ids": [
+      "F-009-003"
+     ]
+    },
+    {
+     "text": "任意のOSCクライアントから制御可能",
+     "fact_ids": [
+      "F-009-004"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "メッセージ経由のため小さな通信遅延が生じる",
+     "fact_ids": [
+      "F-009-003"
+     ]
+    },
+    {
+     "text": "処理完了の確認には応答の仕組み(非同期)が要る",
+     "fact_ids": [
+      "F-009-003"
+     ]
+    },
+    {
+     "text": "GPLライセンス",
+     "fact_ids": [
+      "F-009-005"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSC(UDP/TCP)でサーバを制御",
+     "fact_ids": [
+      "F-009-002"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-002",
+   "kind": "system",
+   "name": "scsynth (Synth Server)",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "コマンドライン型の音声サーバ。SCコードを知らず、OSCコマンドだけで動作する",
+   "synthesis_method": "UGenプラグインによるリアルタイム合成",
+   "features": [
+    {
+     "text": "ノードを動的に生成・削除・再配線できる",
+     "fact_ids": [
+      "F-009-007"
+     ]
+    },
+    {
+     "text": "UDPまたはTCPで待受",
+     "fact_ids": [
+      "F-009-009"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "MIDIを直接扱わない",
+     "fact_ids": [
+      "F-009-008"
+     ]
+    },
+    {
+     "text": "UDP/TCPのどちらかを必ず指定",
+     "fact_ids": [
+      "F-009-009"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "制御ブロック長(-z)",
+     "unit": "samples",
+     "range": null,
+     "default": 64,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-009"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSCコマンド(/s_new, /n_set など)で全操作",
+     "fact_ids": [
+      "F-009-007"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-003",
+   "kind": "system",
+   "name": "sclang (言語インタプリタ/クライアント)",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "SC言語を実行し、サーバへOSCを送るクライアント",
+   "synthesis_method": "オブジェクト指向言語",
+   "features": [
+    {
+     "text": "SynthDefをコンパイルしてサーバへ送る",
+     "fact_ids": [
+      "F-009-004"
+     ]
+    },
+    {
+     "text": "高水準操作をOSCへ変換する",
+     "fact_ids": [
+      "F-009-011"
+     ]
+    },
+    {
+     "text": "OSCを手書き送信することもできる",
+     "fact_ids": [
+      "F-009-012"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "言語側オブジェクトとサーバ上の実体(ノード・バス・バッファ)は別物",
+     "fact_ids": [
+      "F-009-011"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-004",
+   "kind": "signal_standard",
+   "name": "SuperCollider 信号・バス・ノード規約",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "ノード木・バス・実行順序・計算レートの規約",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ノード木(Synth/Group)で実行順序を決める",
+     "fact_ids": [
+      "F-009-013",
+      "F-009-015"
+     ]
+    },
+    {
+     "text": "追加動作でノード位置を制御",
+     "fact_ids": [
+      "F-009-016"
+     ]
+    },
+    {
+     "text": "グローバルな音声/制御バスで信号を受け渡す",
+     "fact_ids": [
+      "F-009-018"
+     ]
+    },
+    {
+     "text": "ar/krの計算レートがある",
+     "fact_ids": [
+      "F-009-021"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ソースはエフェクトより前に配置する必要がある",
+     "fact_ids": [
+      "F-009-015"
+     ]
+    },
+    {
+     "text": "バス数は起動後に変更不可",
+     "fact_ids": [
+      "F-009-019"
+     ]
+    },
+    {
+     "text": "並列グループの順序は不定(scsynthは並列化しない)",
+     "fact_ids": [
+      "F-009-017"
+     ]
+    },
+    {
+     "text": "ID -1のノードは後から個別操作できない",
+     "fact_ids": [
+      "F-009-022"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "バス番号の指定(In/Out)とノード順序で接続を決める",
+     "fact_ids": [
+      "F-009-018",
+      "F-009-015"
+     ]
+    },
+    "timing": {
+     "summary": "制御ブロック単位でノードを順に計算",
+     "fact_ids": [
+      "F-009-015",
+      "F-009-009"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-005",
+   "kind": "patch_storage",
+   "name": "SynthDef ファイル(.scsyndef, SCgf形式)",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "合成グラフ定義(UGen接続)のバイナリ保存形式",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "バイナリ(SCgf)でグラフ接続とパラメータを保存",
+     "fact_ids": [
+      "F-009-024",
+      "F-009-025"
+     ]
+    },
+    {
+     "text": "他プログラムからも生成可能",
+     "fact_ids": [
+      "F-009-027"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "UGen名はサーバのプラグインに依存",
+     "fact_ids": [
+      "F-009-025"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "ファイルはグラフ構造と初期値のみで、実行中ノードの状態は含まない(状態保存の仕組みは別途未確認)",
+     "fact_ids": [
+      "F-009-025"
+     ]
+    },
+    "patching": {
+     "summary": "UGenの入力は他UGenの出力または定数を指す索引で表現",
+     "fact_ids": [
+      "F-009-025"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-006",
+   "kind": "control_interface",
+   "name": "scsynth OSCコマンド",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "サーバを制御するOSCコマンド集合(UDP/TCP)",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "全合成・配線操作がOSCコマンドとして用意される",
+     "fact_ids": [
+      "F-009-028"
+     ]
+    },
+    {
+     "text": "タイムスタンプ付きバンドルで時刻指定",
+     "fact_ids": [
+      "F-009-033"
+     ]
+    },
+    {
+     "text": "/notifyで状態変化通知を購読",
+     "fact_ids": [
+      "F-009-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "MIDIはサーバが直接受けない",
+     "fact_ids": [
+      "F-009-008"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "UDP/TCPでOSCコマンドを受信",
+     "fact_ids": [
+      "F-009-028",
+      "F-009-009"
+     ]
+    },
+    "timing": {
+     "summary": "OSCタイムスタンプで発音時刻を指定",
+     "fact_ids": [
+      "F-009-033"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-007",
+   "kind": "control_interface",
+   "name": "外部アプリとのOSC通信(sclang側)",
+   "maker": "James McCartney ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "NetAddr/OSCFuncによる他アプリとのOSC送受信",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "NetAddrで送信、OSCFuncで受信",
+     "fact_ids": [
+      "F-009-034"
+     ]
+    },
+    {
+     "text": "Pd/Maxとの連携を想定した受信設定",
+     "fact_ids": [
+      "F-009-035"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "既定ポートは使用中なら変わる",
+     "fact_ids": [
+      "F-009-034"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSC(UDP/TCP)での他アプリ連携",
+     "fact_ids": [
+      "F-009-034"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-009-008",
+   "kind": "module",
+   "name": "SinOsc",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "oscillator",
+   "purpose": "補間付きテーブル参照の正弦波オシレータ",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "周波数・位相の音声レート変調に対応",
+     "fact_ids": [
+      "F-009-036"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "位相が±8πを超える場合は呼び出し側でmod(2pi)が必要",
+     "fact_ids": [
+      "F-009-037"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "freq",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-037"
+     ]
+    },
+    {
+     "name": "phase",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": {
+      "min": -25.1327412,
+      "max": 25.1327412,
+      "unit": "rad"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-009-037"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-036"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "freq",
+     "unit": "Hz",
+     "range": null,
+     "default": 440.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-037"
+     ]
+    },
+    {
+     "name": "phase",
+     "unit": "rad",
+     "range": {
+      "min": -25.1327412,
+      "max": 25.1327412
+     },
+     "default": 0.0,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-037"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-009",
+   "kind": "module",
+   "name": "LPF",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "filter",
+   "purpose": "2次バターワース低域通過フィルタ",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ar/krで使える2次ローパス",
+     "fact_ids": [
+      "F-009-038"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "freqが0付近だと危険",
+     "fact_ids": [
+      "F-009-039"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "in",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-040"
+     ]
+    },
+    {
+     "name": "freq",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-040"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-038"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "freq",
+     "unit": "Hz",
+     "range": null,
+     "default": 440.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-040"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-010",
+   "kind": "module",
+   "name": "EnvGen",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "envelope",
+   "purpose": "Envによるブレークポイント型エンベロープ生成",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "gateとdoneActionで寿命管理(例: freeSelf)",
+     "fact_ids": [
+      "F-009-041",
+      "F-009-042"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "区間長に下限がある(1サンプルまたは1ブロック)",
+     "fact_ids": [
+      "F-009-043"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "gate",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-041"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-041"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "gate",
+     "unit": null,
+     "range": null,
+     "default": 1.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-042"
+     ]
+    },
+    {
+     "name": "levelScale",
+     "unit": null,
+     "range": null,
+     "default": 1.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-042"
+     ]
+    },
+    {
+     "name": "timeScale",
+     "unit": null,
+     "range": null,
+     "default": 1.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-042"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-011",
+   "kind": "module",
+   "name": "Impulse",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "clock_sequencer",
+   "purpose": "非帯域制限の単一サンプルインパルス列を出す",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ar/krのインパルス列でトリガ/クロックに使える",
+     "fact_ids": [
+      "F-009-044"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "freq=0なら最初に一度だけ出力",
+     "fact_ids": [
+      "F-009-045"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "freq",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-045"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-009-044"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "freq",
+     "unit": "Hz",
+     "range": null,
+     "default": 440.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-045"
+     ]
+    },
+    {
+     "name": "phase",
+     "unit": "cycle",
+     "range": {
+      "min": 0,
+      "max": 1
+     },
+     "default": 0.0,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-045"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-012",
+   "kind": "module",
+   "name": "Dust",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "random_logic",
+   "purpose": "ランダム間隔のインパルスを出す",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "平均密度を指定してランダムトリガを生成",
+     "fact_ids": [
+      "F-009-046"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "density",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-046"
+     ]
+    },
+    {
+     "name": "出力",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "range_status": "confirmed",
+     "fact_ids": [
+      "F-009-046"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "density",
+     "unit": "impulses/s",
+     "range": null,
+     "default": 0.0,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-009-046"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-009-013",
+   "kind": "module",
+   "name": "Out",
+   "maker": "James McCartney ほか",
+   "version": "3.14.0 (ヘルプ版)",
+   "function_category": "io_utility",
+   "purpose": "信号をバスへ書き出す",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "バス番号指定で任意のバスへ出力",
+     "fact_ids": [
+      "F-009-047"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "チャンネル数はSynthDef構築後に変更不可",
+     "fact_ids": [
+      "F-009-047"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "bus",
+     "direction": "in",
+     "signal_type": "other",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-047"
+     ]
+    },
+    {
+     "name": "channelsArray",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-009-047"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-009-002"
+   },
+   "status": "active"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-009-001",
+   "entity_id": "REF-009-001",
+   "topic": "構成",
+   "statement": "SuperCollider は音声サーバ(scsynth/supernova)、言語、インタプリタ等から成り、サーバとクライアントは別プログラム。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-002",
+   "entity_id": "REF-009-001",
+   "topic": "通信",
+   "statement": "クライアントとサーバはOSCの限定サブセットで通信し、ネットワークはTCP/UDPで、同一マシン上でもよい。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-003",
+   "entity_id": "REF-009-001",
+   "topic": "利点と欠点",
+   "statement": "利点は安定性(クライアント故障でも音が止まらない)、モジュール性、遠隔制御。欠点は小さな通信遅延と非同期実行。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Pros/Cons",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-004",
+   "entity_id": "REF-009-001",
+   "topic": "他クライアント",
+   "statement": "OSCを話せれば sclang 以外(Java, Python, Max等)もサーバを制御できるが、SynthDefの作成・送信はできるとは限らない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server A final remark",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-005",
+   "entity_id": "REF-009-001",
+   "topic": "ライセンス",
+   "statement": "SuperCollider はGNU GPLで公開され、公式COPYINGはv3である。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-009-11",
+   "locator": "COPYING 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-006",
+   "entity_id": "REF-009-001",
+   "topic": "公式サイトの版",
+   "statement": "公式サイトのトップは現行版を3.14.1と表示し、supernova(マルチスレッド対応の代替サーバ)にも言及する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-10",
+   "locator": "トップページ",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-007",
+   "entity_id": "REF-009-002",
+   "topic": "役割",
+   "statement": "scsynth はSCコードやオブジェクト指向を知らない軽量なコマンドライン音声合成プログラム。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-008",
+   "entity_id": "REF-009-002",
+   "topic": "MIDI",
+   "statement": "サーバはMIDIを送受信せず、クライアントが受けてOSCに変換することが想定されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-009-03",
+   "locator": "Server Architecture Introduction(古い記述を含む注記あり)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-009",
+   "entity_id": "REF-009-002",
+   "topic": "起動引数",
+   "statement": "コマンドライン引数に -u(UDPポート)・-t(TCPポート)があり、どちらか一方は必須。制御ブロック長 -z の既定は64サンプル。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-03",
+   "locator": "Server Architecture Command Line Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-010",
+   "entity_id": "REF-009-003",
+   "topic": "役割",
+   "statement": "sclang はサーバへOSCを送るクライアントであり、同時にSC言語のインタプリタでもある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-011",
+   "entity_id": "REF-009-003",
+   "topic": "言語ラッピング",
+   "statement": "言語側のSynth/Group/Bus等はサーバ上のノード・バス等を表す抽象オブジェクトで、ノードIDを自動管理し高水準操作をOSCに変換する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-012",
+   "entity_id": "REF-009-003",
+   "topic": "直接送信",
+   "statement": "Server の sendMsg でOSCを手書き送信することも、IDを自分で管理すれば可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-01",
+   "locator": "Client vs Server Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-013",
+   "entity_id": "REF-009-004",
+   "topic": "ノード木",
+   "statement": "サーバ上の処理単位はSynthとGroupの2種のノードで、整数IDを持つ木構造がSynthの実行順序を決める。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-03",
+   "locator": "Server Architecture Main Design Concepts: Node/Group",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-014",
+   "entity_id": "REF-009-004",
+   "topic": "ルート/既定グループ",
+   "statement": "サーバ起動時にID 0のルートグループが存在し、sclangから起動した場合はID 1の既定グループも作られる。新規ノードは既定グループ内に作るのが推奨。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-04",
+   "locator": "Order of execution Introduction; Group RootNode節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-015",
+   "entity_id": "REF-009-004",
+   "topic": "実行順序",
+   "statement": "各制御周期でノードは木の順に計算され、あるSynthが別のSynthの出力を読む場合、読む側(エフェクト)を書く側(ソース)より後に置く必要がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-04",
+   "locator": "Order of execution Introduction",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-016",
+   "entity_id": "REF-009-004",
+   "topic": "追加動作",
+   "statement": "ノードの配置は追加動作(先頭・末尾・直前・直後・置換)で指定し、OSCでは/s_newと/g_newに0〜4の整数で与える。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /s_new, /g_new add actions",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-017",
+   "entity_id": "REF-009-004",
+   "topic": "並列グループ",
+   "statement": "並列グループ(/p_new)は子ノードの評価順を保証しない。マルチスレッドのsupernovaのみ別CPUへ振り分けられる。scsynthは分配不可。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-04",
+   "locator": "Order of execution Parallel Groups",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-018",
+   "entity_id": "REF-009-004",
+   "topic": "バス",
+   "statement": "シンセ間の信号はグローバルな音声バス/制御バス(整数インデックス、0始まり)経由で受け渡す。低いインデックスが音声ハードウェア出力、続いて入力。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-03",
+   "locator": "Server Architecture Audio Buses / Control Buses",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-019",
+   "entity_id": "REF-009-004",
+   "topic": "バス数",
+   "statement": "音声バス・制御バス・入出力バスの数は起動後に変更できない。Busクラスは連続インデックスの予約だけを行い、チャンネル数の整合は利用者の責任。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-06",
+   "locator": "Bus Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-020",
+   "entity_id": "REF-009-004",
+   "topic": "ハードウェアバス",
+   "statement": "ハードウェア出力は0〜(出力数-1)、その直後が入力、その次が最初のプライベートバス。ハードウェアI/Oをプライベートバスとして使ってはならない。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-06",
+   "locator": "Bus Description (NOTE部)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-021",
+   "entity_id": "REF-009-004",
+   "topic": "計算レート",
+   "statement": "UGenはar(音声レート)・kr(制御レート)で呼べ、制御レートは1制御ブロックごとに更新される。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "SinOsc/LPF/Impulse/Dust Class Methods",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-022",
+   "entity_id": "REF-009-004",
+   "topic": "ノードID規則",
+   "statement": "/s_newにID -1を渡すとサーバが負のIDを自動生成する。この場合、以降そのノードに個別アドレスできず、状態変化通知も来ない。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /s_new",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-023",
+   "entity_id": "REF-009-004",
+   "topic": "物理単位",
+   "statement": "信号規約はUGenごとの引数単位(Hz、ラジアン等)で定義され、モジュラー的な電圧規約は定義されていない。(UGen引数の記述を確認した範囲)",
+   "basis": "api_doc",
+   "confidence": "low",
+   "source_id": "SRC-009-05",
+   "locator": "SinOsc/LPF 引数説明",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-024",
+   "entity_id": "REF-009-005",
+   "topic": "ファイル形式",
+   "statement": "SynthDefファイルはビッグエンディアンの二進形式で、先頭4バイトのID 'SCgf'、版数、定義数、各定義の順に並ぶ。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-07",
+   "locator": "Synth Definition File Format: File Format",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-025",
+   "entity_id": "REF-009-005",
+   "topic": "定義内容",
+   "statement": "各定義は名前、定数、パラメータ初期値と名前、UGen(名前・レート・入出力・接続)、バリアントを持つ。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-07",
+   "locator": "Synth Definition File Format: synth-definition",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-026",
+   "entity_id": "REF-009-005",
+   "topic": "送信",
+   "statement": "/d_recv で定義をサーバへ送り(非同期)、/d_load でファイルから読み込む。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference Synth Definition Commands",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-027",
+   "entity_id": "REF-009-005",
+   "topic": "他プログラム生成",
+   "statement": "このファイルはSC言語アプリが生成するが、理論上は他のプログラムでも書ける(UGen知識が必要)。",
+   "basis": "api_doc",
+   "confidence": "medium",
+   "source_id": "SRC-009-07",
+   "locator": "Synth Definition File Format 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-028",
+   "entity_id": "REF-009-006",
+   "topic": "コマンド群",
+   "statement": "コマンドは最上位(/quit, /notify, /status, /dumpOSC, /sync 等)、SynthDef(/d_recv等)、ノード(/n_free, /n_set, /n_map, /n_order 等)、Synth(/s_new, /s_get)、Group(/g_new, /p_new 等)、UGen(/u_cmd)、Buffer(/b_*)、制御バス(/c_*)に分かれる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference 目次",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-029",
+   "entity_id": "REF-009-006",
+   "topic": "/s_new",
+   "statement": "/s_newは合成定義名、ノードID、追加動作、ターゲットID、続けて制御名/索引と値の組を受け取る。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /s_new",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-030",
+   "entity_id": "REF-009-006",
+   "topic": "/g_new",
+   "statement": "/g_newはグループID、追加動作、ターゲットIDの組を1組以上受け取り、追加動作は/s_newと同じ。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /g_new",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-031",
+   "entity_id": "REF-009-006",
+   "topic": "通知",
+   "statement": "/notifyで通知を購読し、サーバは返信元を記憶してクライアントIDを割り当てる(非同期、/doneで応答)。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /notify",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-032",
+   "entity_id": "REF-009-006",
+   "topic": "/status",
+   "statement": "/statusはUGen数、Synth数、Group数、定義数、CPU使用率(平均/ピーク)、公称/実サンプルレートを返信する。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-02",
+   "locator": "Server Command Reference /status",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-033",
+   "entity_id": "REF-009-006",
+   "topic": "タイムスタンプ",
+   "statement": "OSCにタイムスタンプを付けて、音がハードウェアに出る時刻を正確に指定できる。言語側はlatencyパラメータで自動付与する。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-09",
+   "locator": "Scheduling and Server timing 冒頭",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-034",
+   "entity_id": "REF-009-007",
+   "topic": "送信",
+   "statement": "外部アプリへはNetAddrを作って送信メッセージを出し、受信にはOSCFuncを作る。基本的な待受ポートは57120だが、使用中なら別になり得る。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-08",
+   "locator": "OSC Communication 送信/受信の節",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-035",
+   "entity_id": "REF-009-007",
+   "topic": "可変ポート",
+   "statement": "PdやMaxのように送信ポートが毎回変わるアプリからは、srcIDをnilにして任意の送信元を受ける必要がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-08",
+   "locator": "OSC Communication Receiving from an application that is sending from a variable port",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-036",
+   "entity_id": "REF-009-008",
+   "topic": "機能",
+   "statement": "正弦波を8192点の固定テーブルで線形補間して出す。周波数・位相はオーディオレートでサンプリングされる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "SinOsc Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-037",
+   "entity_id": "REF-009-008",
+   "topic": "引数",
+   "statement": "freq(Hz, 既定440)、phase(ラジアン, 既定0, 範囲は±8π程度)、mul(既定1)、add(既定0)。ar/krがある。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "SinOsc Class Methods",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-038",
+   "entity_id": "REF-009-009",
+   "topic": "機能",
+   "statement": "2次の低域通過フィルタ。入力信号とカットオフ(Hz)を取る。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "LPF Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-039",
+   "entity_id": "REF-009-009",
+   "topic": "注意",
+   "statement": "カットオフが0付近だとグリッチや非常に大きな音になる可能性があると警告されている。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "LPF Arguments freq",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-040",
+   "entity_id": "REF-009-009",
+   "topic": "引数",
+   "statement": "in(既定0)、freq(既定440)、mul、add。ar/kr。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "LPF Class Methods",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-041",
+   "entity_id": "REF-009-010",
+   "topic": "機能",
+   "statement": "Envで定義したブレークポイント包絡を再生する。gateで起動・保持し、固定長Envではトリガ、持続型EnvではgateがOFFでリリース。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "EnvGen Description/Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-042",
+   "entity_id": "REF-009-010",
+   "topic": "引数",
+   "statement": "envelope、gate(既定1)、levelScale、levelBias、timeScale、doneAction。値は起動時と区間開始時にだけ読み取られる。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "EnvGen Class Methods",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-043",
+   "entity_id": "REF-009-010",
+   "topic": "最小区間",
+   "statement": "区間の最小長はオーディオレートで1サンプル、制御レートで1ブロックで、ゼロではない。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "EnvGen Discussion",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-044",
+   "entity_id": "REF-009-011",
+   "topic": "機能",
+   "statement": "単一サンプルのインパルス(1.0)を周期周波数で出す。帯域制限はされない。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "Impulse Description",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-045",
+   "entity_id": "REF-009-011",
+   "topic": "引数",
+   "statement": "freq(Hz, 負も可, 既定440)、phase(周期単位0〜1, 既定0)、mul、add。ar/kr。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "Impulse Class Methods",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-046",
+   "entity_id": "REF-009-012",
+   "topic": "機能",
+   "statement": "0〜+1のランダムなインパルスを出す。densityは平均の毎秒インパルス数。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "Dust Description/Arguments",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-009-047",
+   "entity_id": "REF-009-013",
+   "topic": "機能",
+   "statement": "信号をバスへ書き込む。最小番号がオーディオハードウェアに出る。チャンネル配列は作成後にサイズ変更できない。",
+   "basis": "api_doc",
+   "confidence": "high",
+   "source_id": "SRC-009-05",
+   "locator": "Out Arguments",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "item": "音声レートのサンプル値範囲(正規化-1〜1の規約)",
+   "tried_sources": [
+    "SRC-009-03",
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "出力振幅の標準範囲を仕様化する際に別資料で確認が要る",
+   "entity_id": "REF-009-004"
+  },
+  {
+   "item": "モジュラー的な電圧規約の有無(ヘルプ上は未確認)",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "ハードウェア的な電圧対応は定義されない可能性があるが断定できない",
+   "entity_id": "REF-009-004"
+  },
+  {
+   "item": "SynthDef書き出しAPI(writeDefFile)の詳細と既定ディレクトリ",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "保存先やファイル配置を仕様化する際に別途確認が要る",
+   "entity_id": "REF-009-005"
+  },
+  {
+   "item": "実行中ノードの状態(コントロール値)を保存・復元する標準機構",
+   "tried_sources": [
+    "SRC-009-02",
+    "SRC-009-03"
+   ],
+   "impact_on_spec": "プリセット/状態保存の仕様化に影響",
+   "entity_id": "REF-009-005"
+  },
+  {
+   "item": "OSCメッセージのワイヤ形式の詳細(型タグ)とbundle構造",
+   "tried_sources": [
+    "SRC-009-03"
+   ],
+   "impact_on_spec": "独自クライアント実装時にOSC仕様側での確認が要る",
+   "entity_id": "REF-009-006"
+  },
+  {
+   "item": "出力振幅の標準範囲(mul=1時)",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "出力レンジをポートへ記載できない",
+   "entity_id": "REF-009-008"
+  },
+  {
+   "item": "カットオフの有効範囲(上限・ナイキスト関連)",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "周波数入力の検証範囲を決められない",
+   "entity_id": "REF-009-009"
+  },
+  {
+   "item": "gate/出力の電圧相当レンジ",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "CV範囲を仕様に書けない",
+   "entity_id": "REF-009-010"
+  },
+  {
+   "item": "乱数生成アルゴリズムとシード制御",
+   "tried_sources": [
+    "SRC-009-05"
+   ],
+   "impact_on_spec": "再現性の仕様化に影響",
+   "entity_id": "REF-009-012"
+  },
+  {
+   "item": "supernova(代替サーバ)固有の挙動",
+   "tried_sources": [
+    "SRC-009-04",
+    "SRC-009-10"
+   ],
+   "impact_on_spec": "並列グループ以外のサーバ差異は未確認"
+  }
+ ]
+}

@@ -1,0 +1,1945 @@
+{
+  "target_id": "T-014",
+  "entities": [
+    {
+      "id": "REF-014-001",
+      "kind": "system",
+      "name": "Roland SYSTEM-100M(原機)",
+      "maker": "Roland",
+      "version": "original",
+      "function_category": "system",
+      "purpose": "RolandのモジュラーシンセでSYSTEM-500の元の一つ(Roland公式の説明による)。原機の一次資料は未取得。",
+      "synthesis_method": "アナログ・モジュラー",
+      "features": [
+        {
+          "text": "SYSTEM-500の元になったモジュラー(Roland公式説明)",
+          "fact_ids": [
+            "F-014-001"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "原機の仕様は本調査の資料では確認していない(再発売品のページ記述のみ)",
+          "fact_ids": [
+            "F-014-001"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-014-002",
+      "kind": "system",
+      "name": "Roland SYSTEM-700(原機)",
+      "maker": "Roland",
+      "version": "original",
+      "function_category": "system",
+      "purpose": "RolandのモジュラーシンセでSYSTEM-500の元の一つ(Roland公式の説明による)。取扱説明書がRoland公式アーカイブに掲載。",
+      "synthesis_method": "アナログ・モジュラー",
+      "features": [
+        {
+          "text": "公式アーカイブに原機の取扱説明書あり(内容未読)",
+          "fact_ids": [
+            "F-014-003"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "原機の仕様はPDF取得不能のため未確認",
+          "fact_ids": [
+            "F-014-004"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-014-003",
+      "kind": "system",
+      "name": "Roland SYSTEM-500",
+      "maker": "Roland",
+      "version": "500 series (SYS-512/521/530/540/572)",
+      "function_category": "system",
+      "purpose": "SYSTEM-100M/700を元にしたEurorack形式の完全アナログ・モジュラー。Complete Setと単体モジュール。",
+      "synthesis_method": "アナログ・モジュラー(Eurorack)",
+      "features": [
+        {
+          "text": "5モジュール+ケースのCompleteセット",
+          "fact_ids": [
+            "F-014-005"
+          ]
+        },
+        {
+          "text": "Malekkoとの共同設計、日本製",
+          "fact_ids": [
+            "F-014-007"
+          ]
+        },
+        {
+          "text": "Eurorack他社モジュールとの互換設計をうたう",
+          "fact_ids": [
+            "F-014-008"
+          ]
+        },
+        {
+          "text": "歴史と境界（旧 I004 調査の補足）",
+          "fact_ids": [
+            "F-014-049"
+          ]
+        },
+        {
+          "text": "構成例（旧 I004 調査の補足）",
+          "fact_ids": [
+            "F-014-050"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": {
+          "summary": "3.5mm(ミニチュアフォン)ジャックとパッチケーブルによるEurorackパッチング。",
+          "fact_ids": [
+            "F-014-005"
+          ]
+        },
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": "REF-014-001",
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "legacy_ids": [
+        "I004"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "I004",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "SYSTEM-500 / SYSTEM-100m lineage",
+          "version": "SYSTEM-500（2015/2018公式紹介）",
+          "kind": "hardware_modular",
+          "categories": [
+            "oscillator",
+            "filter",
+            "amplifier",
+            "history"
+          ],
+          "status": "documented_partial",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": null
+        }
+      ]
+    },
+    {
+      "id": "REF-014-004",
+      "kind": "signal_standard",
+      "name": "Roland SYSTEM-500 信号・電圧規約",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "io_utility",
+      "purpose": "SYSTEM-500のCV入力レベル、ピッチ規約、ジャック形式、電源。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "CV入力レベル -10〜+10V",
+          "fact_ids": [
+            "F-014-010"
+          ]
+        },
+        {
+          "text": "ピッチCV 1V/oct",
+          "fact_ids": [
+            "F-014-011"
+          ]
+        },
+        {
+          "text": "3.5mmジャック",
+          "fact_ids": [
+            "F-014-012"
+          ]
+        },
+        {
+          "text": "±12V電源、モジュール別の消費電流が公開",
+          "fact_ids": [
+            "F-014-013"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "ゲート閾値電圧は取得した資料に記載なし",
+          "fact_ids": [
+            "F-014-014"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-005",
+      "kind": "module",
+      "name": "Roland SYSTEM-500 512 Dual VCO",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "oscillator",
+      "purpose": "独立した2基のVCO。",
+      "synthesis_method": "アナログVCO",
+      "features": [
+        {
+          "text": "パルス/三角/鋸歯の個別出力、PW可変",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "text": "ソフト/ハードの2種のシンク",
+          "fact_ids": [
+            "F-014-016"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "KEY IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "MODULATION IN 2",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "MODULATION IN 3",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "PULSE WIDTH IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "SYNC IN",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "SYNC OUT",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "SQUARE WAVE",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "TRIANGLE WAVE",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        },
+        {
+          "name": "SAW WAVE",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "RANGE",
+          "unit": "feet",
+          "range": {
+            "min": 2,
+            "max": 32,
+            "unit": "feet"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-017"
+          ]
+        },
+        {
+          "name": "PULSE WIDTH",
+          "unit": null,
+          "range": null,
+          "default": null,
+          "range_status": "unconfirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-015"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-006",
+      "kind": "module",
+      "name": "Roland SYSTEM-500 521 Dual VCF",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "filter",
+      "purpose": "2系統のローパスVCF。各系統に固定HPFを併設。",
+      "synthesis_method": "アナログVCF",
+      "features": [
+        {
+          "text": "LPF+2段切替の固定HPF",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        },
+        {
+          "text": "自己発振し音源として利用可",
+          "fact_ids": [
+            "F-014-020"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "SIGNAL IN 1-3",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        },
+        {
+          "name": "KEY IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        },
+        {
+          "name": "MODULATION IN 2",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        },
+        {
+          "name": "MODULATION IN 3",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        },
+        {
+          "name": "OUT",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-019"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-007",
+      "kind": "module",
+      "name": "Roland SYSTEM-500 530 Dual VCA",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "amplifier_mixer",
+      "purpose": "2基のVCA(または6チャンネルミキサー)。",
+      "synthesis_method": "アナログVCA",
+      "features": [
+        {
+          "text": "オーディオ3+CV3入力、LIN/EXP切替、SUM出力",
+          "fact_ids": [
+            "F-014-022"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "CV専用動作時のINITIAL設定に注意(LIN: 0、EXP: 約1)",
+          "fact_ids": [
+            "F-014-023"
+          ]
+        }
+      ],
+      "ports": [
+        {
+          "name": "SIGNAL IN 1-3",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-022"
+          ]
+        },
+        {
+          "name": "MODULATION IN 1-3",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-022"
+          ]
+        },
+        {
+          "name": "OUT",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-022"
+          ]
+        },
+        {
+          "name": "SUM",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-022"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-008",
+      "kind": "module",
+      "name": "Roland SYSTEM-500 540 Dual Envelope + LFO",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "envelope",
+      "purpose": "2基のADSRと電圧制御LFO。",
+      "synthesis_method": "アナログEG+LFO",
+      "features": [
+        {
+          "text": "ADSR×2、外部/手動/サイクル起動、反転出力",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "text": "5波形LFO、ディレイ/リセットをEnv 1/2で起動",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        },
+        {
+          "text": "F/S速度切替、CYCLで自走",
+          "fact_ids": [
+            "F-014-027"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "EXTERNAL",
+          "direction": "in",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "name": "ENVELOPE 1",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "name": "ENVELOPE 2",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "name": "INVERTED ENVELOPE",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "name": "CV FREQUENCY",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-025"
+          ]
+        },
+        {
+          "name": "SQUARE WAVE(LFO)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        },
+        {
+          "name": "TRIANGLE WAVE(LFO)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        },
+        {
+          "name": "SAW WAVE(LFO)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        },
+        {
+          "name": "INVERTED SAW WAVE(LFO)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        },
+        {
+          "name": "SINE WAVE(LFO)",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-026"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-009",
+      "kind": "module",
+      "name": "Roland SYSTEM-500 572 Phase Shifter/Delay/LFO",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "time_effect",
+      "purpose": "5段位相シフタ、アナログディレイ、ゲートディレイ、LFOの複合モジュール。",
+      "synthesis_method": "アナログ位相シフタ+BBDディレイ",
+      "features": [
+        {
+          "text": "位相シフタ/ディレイ/ゲートディレイ/LFOの複合",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "text": "LFOは変調用に高周波で振幅低下、外部CV未接続でLFO変調",
+          "fact_ids": [
+            "F-014-030"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "PHASE SHIFTER IN",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "PHASE SHIFTER OUT",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "DELAY IN",
+          "direction": "in",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "DELAY OUT",
+          "direction": "out",
+          "signal_type": "audio",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "LFO OUT",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "LFO INVERTED OUT",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "GATE DELAY IN",
+          "direction": "in",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        },
+        {
+          "name": "GATE DELAY OUT",
+          "direction": "out",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-029"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-010",
+      "kind": "system",
+      "name": "Behringer System 100",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "system",
+      "purpose": "System 100M回路の再現をうたうEurorackモジュール群(110/112/121/130/140/150/172/173/182/297/305)。",
+      "synthesis_method": "アナログ・モジュラー(Eurorack)",
+      "features": [
+        {
+          "text": "System 100M回路の再現をうたう(広告上の主張)",
+          "fact_ids": [
+            "F-014-033"
+          ]
+        },
+        {
+          "text": "確認したラインナップ: 110/112/121/130/140/150/172/173/182/297/305",
+          "fact_ids": [
+            "F-014-034"
+          ]
+        },
+        {
+          "text": "いずれも16HP",
+          "fact_ids": [
+            "F-014-035"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": "REF-014-001",
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-011",
+      "kind": "module",
+      "name": "Behringer System 100 110 VCO/VCF/VCA",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "oscillator",
+      "purpose": "VCO+ローパスVCF+VCAを一体化した発音ボイス。",
+      "synthesis_method": "アナログ(VCO+VCF+VCA)",
+      "features": [
+        {
+          "text": "内部結線済みのVCO→VCF→VCA",
+          "fact_ids": [
+            "F-014-036",
+            "F-014-037"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "VCO MOD IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": {
+            "min": 0,
+            "max": 10,
+            "unit": "V"
+          },
+          "range_status": "confirmed",
+          "fact_ids": [
+            "F-014-036"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "CUTOFF FREQ",
+          "unit": "Hz",
+          "range": {
+            "min": 20,
+            "max": 20000,
+            "unit": "Hz"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-037"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-010"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-012",
+      "kind": "module",
+      "name": "Behringer System 100 112 Dual VCO",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "oscillator",
+      "purpose": "デュアルVCO。",
+      "synthesis_method": "アナログVCO",
+      "features": [
+        {
+          "text": "各VCOに3波形、PWM、強弱シンク",
+          "fact_ids": [
+            "F-014-039"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "PW MOD IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-039"
+          ]
+        }
+      ],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-010"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-013",
+      "kind": "module",
+      "name": "Behringer System 100 140 Dual Envelope/LFO",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "envelope",
+      "purpose": "2基のADSRとLFO。",
+      "synthesis_method": "アナログEG+LFO",
+      "features": [
+        {
+          "text": "ADSR×2の時間範囲が公開",
+          "fact_ids": [
+            "F-014-041"
+          ]
+        },
+        {
+          "text": "LFO 0.05〜30Hz、ディレイ0〜7s",
+          "fact_ids": [
+            "F-014-042"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "EXT GATE",
+          "direction": "in",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-041"
+          ]
+        },
+        {
+          "name": "FREQ CV IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-042"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "ATTACK",
+          "unit": "s",
+          "range": {
+            "min": 0.0015,
+            "max": 7.5,
+            "unit": "s"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-041"
+          ]
+        },
+        {
+          "name": "LFO delay",
+          "unit": "s",
+          "range": {
+            "min": 0,
+            "max": 7,
+            "unit": "s"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-042"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-010"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-014",
+      "kind": "module",
+      "name": "Behringer System 100 182 Sequencer",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "clock_sequencer",
+      "purpose": "2チャンネル・ノブ式ステップシーケンサ。",
+      "synthesis_method": "アナログCVシーケンサ",
+      "features": [
+        {
+          "text": "並列8ステップ/直列16ステップ",
+          "fact_ids": [
+            "F-014-043"
+          ]
+        },
+        {
+          "text": "テンポ0.14〜33Hz、ゲート長10〜90%",
+          "fact_ids": [
+            "F-014-044"
+          ]
+        },
+        {
+          "text": "外部トリガで進行、SINGLE/REPEAT",
+          "fact_ids": [
+            "F-014-045"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [
+        {
+          "name": "CV OUT-1",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-043"
+          ]
+        },
+        {
+          "name": "CV OUT-2",
+          "direction": "out",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-043"
+          ]
+        },
+        {
+          "name": "GATE OUT",
+          "direction": "out",
+          "signal_type": "gate",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-045"
+          ]
+        },
+        {
+          "name": "TRIG OUT",
+          "direction": "out",
+          "signal_type": "trigger",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-045"
+          ]
+        },
+        {
+          "name": "TRIG IN",
+          "direction": "in",
+          "signal_type": "trigger",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-045"
+          ]
+        },
+        {
+          "name": "TEMPO CV IN",
+          "direction": "in",
+          "signal_type": "cv",
+          "range": null,
+          "range_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-044"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "TEMPO",
+          "unit": "Hz",
+          "range": {
+            "min": 0.14,
+            "max": 33,
+            "unit": "Hz"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-044"
+          ]
+        },
+        {
+          "name": "GATE TIME",
+          "unit": "%",
+          "range": {
+            "min": 10,
+            "max": 90,
+            "unit": "%"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-014-044"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-010"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-015",
+      "kind": "patch_storage",
+      "name": "Roland SYSTEM-500 パッチ記録(Patch Memo)",
+      "maker": "Roland",
+      "version": null,
+      "function_category": "system",
+      "purpose": "音色(パッチ)の記録・再現手段。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "紙のチャートでパッチを記録",
+          "fact_ids": [
+            "F-014-047"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": {
+          "summary": "デジタル保存ではなく、白紙チャートへ手書きで記録して再現する運用。",
+          "fact_ids": [
+            "F-014-047"
+          ]
+        },
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-003"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    },
+    {
+      "id": "REF-014-016",
+      "kind": "control_interface",
+      "name": "Behringer 182 Sequencer 外部同期/制御",
+      "maker": "Behringer",
+      "version": null,
+      "function_category": "clock_sequencer",
+      "purpose": "182の外部クロック入力、テンポCV、スタート/ストップ。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "外部トリガでステップ進行、TEMPO CVでテンポ制御",
+          "fact_ids": [
+            "F-014-048"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "内部テンポ0.14〜33Hz。外部トリガ入力で進行。",
+          "fact_ids": [
+            "F-014-048"
+          ]
+        },
+        "state_save": null,
+        "external_control": {
+          "summary": "TRIG INとTEMPO CV INによる外部同期。",
+          "fact_ids": [
+            "F-014-048"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-014-014"
+      },
+      "status": "active",
+      "version_status": "unconfirmed"
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-014-001",
+      "entity_id": "REF-014-001",
+      "topic": "lineage",
+      "statement": "Roland公式のSYSTEM-500ページは、SYSTEM-500がクラシックなSYSTEM-100Mモジュラーシンセを元にしたEurorack形式の完全アナログ再現である、と説明している。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-02",
+      "locator": "Product page 説明本文('Based on the classic SYSTEM-100M')",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-002",
+      "entity_id": "REF-014-001",
+      "topic": "reputation",
+      "statement": "Rolandは、SYSTEM-700とSYSTEM-100Mを当時画期的で今も評価の高いモジュラーシンセだと述べている。",
+      "basis": "advertising",
+      "confidence": "medium",
+      "source_id": "SRC-014-01",
+      "locator": "Product page 'Descended from Legends'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-003",
+      "entity_id": "REF-014-002",
+      "topic": "manual listing",
+      "statement": "Roland公式のアーカイブ(取扱説明書 N-S)に『SYSTEM700 Owner's Manual』のPDFが掲載されている(PDF本文は取得できず未読)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-13",
+      "locator": "Archive: Owner's Manuals (N-S) の SYSTEM700 項目",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-004",
+      "entity_id": "REF-014-002",
+      "topic": "lineage",
+      "statement": "Roland公式はSYSTEM-500 Complete SetをSYSTEM-700およびSYSTEM-100Mに着想を得た完全アナログのモジュラーと説明している。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-01",
+      "locator": "Product page 説明本文",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-005",
+      "entity_id": "REF-014-003",
+      "topic": "set contents",
+      "statement": "Complete Setの構成はSYS-512(VCO)、521(VCF)、530(VCA)、540(2ENV-LFO)、572(位相シフタ/ディレイ/LFO)とEurorackケースSYR-E84。パッチケーブル10本、ACアダプタ(DC12V)付属。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-01",
+      "locator": "Product page Specifications: Set Configuration / Accessories",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-006",
+      "entity_id": "REF-014-003",
+      "topic": "case",
+      "statement": "ケース込みの寸法は幅481×奥行135×高さ157mm、質量3.4kg。電流消費はACアダプタ時500mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-01",
+      "locator": "Product page Specifications: Size and Weight / Current draw",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-007",
+      "entity_id": "REF-014-003",
+      "topic": "origin",
+      "statement": "Malekkoとの共同開発(米国)で、日本で製造、と記載。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-01",
+      "locator": "Product page 説明本文",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-008",
+      "entity_id": "REF-014-003",
+      "topic": "tech",
+      "statement": "各モジュールは完全アナログで、他社Eurorackモジュールとの互換性を重視して設計されたと説明されている。",
+      "basis": "advertising",
+      "confidence": "medium",
+      "source_id": "SRC-014-02",
+      "locator": "Product page 'Classic System. New Format.'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-009",
+      "entity_id": "REF-014-003",
+      "topic": "modules power",
+      "statement": "モジュール電源はEurorack電源で、各モジュール幅は16HP(約81mm)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-07",
+      "locator": "Main Specifications table",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-010",
+      "entity_id": "REF-014-004",
+      "topic": "cv input level",
+      "statement": "CV入力レベルの仕様は−10〜+10V。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-01",
+      "locator": "Product page Specifications: CV Input Level",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-011",
+      "entity_id": "REF-014-004",
+      "topic": "pitch",
+      "statement": "512 VCOは1V/octトラッキング。RANGE 8'に設定し2Vを加えると中央Cの音が出ると注記。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-08",
+      "locator": "Parameter Guide: RANGE / MOD IN注記",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-012",
+      "entity_id": "REF-014-004",
+      "topic": "jacks",
+      "statement": "全ジャックは3.5mm(ミニチュアフォン)型。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-02",
+      "locator": "Product page Specifications: Connectors",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-013",
+      "entity_id": "REF-014-004",
+      "topic": "power",
+      "statement": "電源はEurorackの±12V。電流は512: +12V 70mA/-12V 55mA、521: 40/40、530: 50/35、540: 85/50、572: 110/90。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-07",
+      "locator": "Main Specifications table: Current Draw",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-014",
+      "entity_id": "REF-014-004",
+      "topic": "gate",
+      "statement": "GATEはエンベロープの開始・終了を制御するトリガ信号と説明される(閾値電圧の数値は未記載)。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-07",
+      "locator": "CV / GATE Input",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-015",
+      "entity_id": "REF-014-005",
+      "topic": "outputs",
+      "statement": "各VCOは1V/octトラッキングで、パルス・三角・鋸歯の個別出力を持つ。パルス幅はパネル操作またはCVで可変。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-02",
+      "locator": "Product page '512 Dual VCO'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-016",
+      "entity_id": "REF-014-005",
+      "topic": "sync",
+      "statement": "VCO間のSYNCは弱/強(パラメータガイド上はSoft/Hard)の2モード。Hardでは整数比にロックする。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-08",
+      "locator": "Parameter Guide: About SYNC",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-017",
+      "entity_id": "REF-014-005",
+      "topic": "range",
+      "statement": "RANGEは32'〜2'の5オクターブ範囲で1オクターブ刻み。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-08",
+      "locator": "Parameter Guide: RANGE",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-018",
+      "entity_id": "REF-014-005",
+      "topic": "power",
+      "statement": "幅16HP、+12V 70mA / -12V 55mA、奥行58mm。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-02",
+      "locator": "Product page Specifications",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-019",
+      "entity_id": "REF-014-006",
+      "topic": "design",
+      "statement": "2系統のローパスフィルタで、それぞれカットオフ、レゾナンス、切替2点の固定ハイパスを持つ。オーディオ入力3、CV入力のミキサーあり。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-03",
+      "locator": "Product page '521 Dual VCF'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-020",
+      "entity_id": "REF-014-006",
+      "topic": "res",
+      "statement": "レゾナンスを上げるとVCFが発振し、KYBD CVでピッチを演奏できる。FREQを最大にすると入力波形がそのまま通る。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-09",
+      "locator": "Parameter Guide: RES / FREQ",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-021",
+      "entity_id": "REF-014-006",
+      "topic": "power",
+      "statement": "幅16HP、+12V 40mA / -12V 40mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-03",
+      "locator": "Product page Specifications",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-022",
+      "entity_id": "REF-014-007",
+      "topic": "design",
+      "statement": "2基のVCAで、各々オーディオ入力ミキサー(スライダー3)、CV入力ミキサー(スライダー3)、リニア/エクスポネンシャルのスイッチを持つ。SUM出力で2系統を合算できる。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-04",
+      "locator": "Product page '530 Dual VCA'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-023",
+      "entity_id": "REF-014-007",
+      "topic": "initial gain",
+      "statement": "CVだけで動かす場合、INITIALはLinearなら0、Exponentialなら1付近にする必要がある。LOAD/OVERLOADインジケータで出力状態を示す。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-10",
+      "locator": "Parameter Guide: INITIAL / Indicators",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-024",
+      "entity_id": "REF-014-007",
+      "topic": "power",
+      "statement": "幅16HP、+12V 50mA / -12V 35mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-04",
+      "locator": "Product page Specifications",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-025",
+      "entity_id": "REF-014-008",
+      "topic": "env",
+      "statement": "独立した2基のADSR。外部ゲート、パネル内部、手動で起動でき、反転出力もある。出力は2系統の正出力と1系統の反転出力。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-05",
+      "locator": "Product page '540 Dual Envelope Generator + LFO'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-026",
+      "entity_id": "REF-014-008",
+      "topic": "lfo",
+      "statement": "電圧制御LFOは5波形出力(矩形/三角/鋸歯/反転鋸歯/サイン)で周波数とディレイ時間を調整可能。ディレイとリセットはEnv 1か2でトリガできる。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-05",
+      "locator": "Product page + Parameter Guide: WAVE FORM / DELAY TRIG / KYBD TRIG",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-027",
+      "entity_id": "REF-014-008",
+      "topic": "switches",
+      "statement": "F/Sスイッチでエンベロープ速度を切替。GATE TRIGGERはEXT(EXT/手動で起動)かCYCL(ATTACKとDECAYで自走)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-11",
+      "locator": "Parameter Guide: F/S switch / Gate trigger switch",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-028",
+      "entity_id": "REF-014-008",
+      "topic": "power",
+      "statement": "幅16HP、+12V 85mA / -12V 50mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-05",
+      "locator": "Product page Specifications",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-029",
+      "entity_id": "REF-014-009",
+      "topic": "sections",
+      "statement": "5段の位相シフタ、アナログのオーディオディレイ、CVのゲートディレイ、LFOの4セクション構成。ディレイはBBD式で、遅延が長いほどクロックノイズが目立つ。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-06",
+      "locator": "Product page + Parameter Guide DELAY section",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-030",
+      "entity_id": "REF-014-009",
+      "topic": "lfo",
+      "statement": "LFOは周波数が上がるほど出力電圧が下がるように設計され、三角波と反転三角波を出力。MOD外部CVに何も挿さない場合は内蔵LFOが変調する。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-12",
+      "locator": "Parameter Guide: LFO section / MOD EXT CV",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-031",
+      "entity_id": "REF-014-009",
+      "topic": "gate delay",
+      "statement": "GATE DELAYはTHRESHOLD、DELAY TIME、GATE TIMEの3つで入力ゲートを遅らせ整形する。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-12",
+      "locator": "Parameter Guide: GATE DELAY section",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-032",
+      "entity_id": "REF-014-009",
+      "topic": "power",
+      "statement": "幅16HP、+12V 110mA / -12V 90mA(取扱説明書の表)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-07",
+      "locator": "Main Specifications table",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-033",
+      "entity_id": "REF-014-010",
+      "topic": "positioning",
+      "statement": "Behringerは各モジュールを80年代のオリジナル『System 100M』回路の忠実な再現と宣伝している。",
+      "basis": "advertising",
+      "confidence": "medium",
+      "source_id": "SRC-014-16",
+      "locator": "Product page 0720-AAF 説明本文 / features",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-034",
+      "entity_id": "REF-014-010",
+      "topic": "lineup",
+      "statement": "検索で確認できた同シリーズの製品ページは、110、112、121、130、140、150、172、173、182、297、305の11種(うち110/112/140/182のみ内容を読んだ)。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-15",
+      "locator": "behringer.com 検索結果『SYSTEM 100』",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-035",
+      "entity_id": "REF-014-010",
+      "topic": "hp",
+      "statement": "読んだ4製品はいずれも幅16HPのEurorackモジュール。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-15",
+      "locator": "各ページ Eurorack specs",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-036",
+      "entity_id": "REF-014-011",
+      "topic": "vco",
+      "statement": "VCOは三角/鋸歯/パルスを選択。外部CVでは1Hz未満〜30kHzで動作し、モジュレーション入力は1V/octで0〜10V。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-15",
+      "locator": "Product page 'An oscillator with reach'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-037",
+      "entity_id": "REF-014-011",
+      "topic": "vcf",
+      "statement": "ローパスVCFのカットオフは20Hz〜20kHz、レゾナンスで発振可能。信号入力は4系統。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-15",
+      "locator": "Product page 'A filter that can sing'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-038",
+      "entity_id": "REF-014-011",
+      "topic": "power",
+      "statement": "幅16HP、+12V 60mA / -12V 50mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-15",
+      "locator": "Product page Eurorack specs",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-039",
+      "entity_id": "REF-014-012",
+      "topic": "spec",
+      "statement": "各VCOは三角/鋸歯/矩形を選択でき、PWMはパネルと外部CVの同時制御が可能。VCO間はストロング/ウィーク・シンク。CV入力は各VCOに3系統。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-16",
+      "locator": "Product page features",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-040",
+      "entity_id": "REF-014-012",
+      "topic": "power",
+      "statement": "幅16HP、+12V 130mA / -12V 70mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-16",
+      "locator": "Product page Eurorack specs",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-041",
+      "entity_id": "REF-014-013",
+      "topic": "env",
+      "statement": "ゲート入力または手動ボタンで起動。アタック1.5ms〜7.5s、ディケイとリリースは各4ms〜15s。出力は正2系統と反転1系統。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-17",
+      "locator": "Product page 'Shape every note'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-042",
+      "entity_id": "REF-014-013",
+      "topic": "lfo",
+      "statement": "LFOは5波形、3レンジで0.05〜30Hz、ディレイ0〜7s、FREQ CV INは1V/oct。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-17",
+      "locator": "Product page 'An LFO that can wait'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-043",
+      "entity_id": "REF-014-014",
+      "topic": "steps",
+      "statement": "PARALLELでは各ステップが2系統の独立電圧を持ち最大8ステップ、SERIESでは2列を連結して最大16ステップ。CV OUT-1/2から各列を出力する。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-18",
+      "locator": "Product page 'Two lines at once, or one long line'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-044",
+      "entity_id": "REF-014-014",
+      "topic": "timing",
+      "statement": "TEMPOは0.14〜33Hz。CV OUTをTEMPO CV INに戻すとステップごとにタイミングが変わる。GATE TIMEは10〜90%。DELAYはCV OUT-1のみ0〜10秒のグライド。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-18",
+      "locator": "Product page 'Timing with a pulse of its own'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-045",
+      "entity_id": "REF-014-014",
+      "topic": "io",
+      "statement": "GATE OUTは各ステップでゲートを出し、TRIG OUTは終了ステップ到達時に出す。TRIG INでステップを手動/外部クロックで進められ、REPEAT/SINGLEで繰り返し/1回再生を選択。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-18",
+      "locator": "Product page 'Plays with the rest of your rack'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-046",
+      "entity_id": "REF-014-014",
+      "topic": "power",
+      "statement": "幅16HP、+12V 30mA / -12V 30mA。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-18",
+      "locator": "Product page Eurorack specs",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-047",
+      "entity_id": "REF-014-015",
+      "topic": "patch memo",
+      "statement": "Roland公式サイトに『SYSTEM-500 Patch Memo』という白紙チャートが配布され、作った音を記録して後で再現するために使うと説明されている。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-014-20",
+      "locator": "Support: Owner's Manuals 欄 'SYSTEM-500 Patch Memo'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-048",
+      "entity_id": "REF-014-016",
+      "topic": "ext clock",
+      "statement": "TRIG INのトリガでステップが1つ進み、TEMPO CV INで外部CVからテンポを可変にできる。Quick Start Guideの内容は未確認。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-18",
+      "locator": "Product page 'Plays with the rest of your rack' / 'Timing...'",
+      "verified_on": "2026-11-12"
+    },
+    {
+      "id": "F-014-049",
+      "entity_id": "REF-014-003",
+      "topic": "歴史と境界",
+      "statement": "メーカーはSYSTEM-500を2015年に導入し、SYSTEM-100mを基にしたモジュール群と説明。SYSTEM-100m実機とSYSTEM-500を同一レコードの同一仕様とは扱わない。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-21",
+      "locator": "Introduction; The Stuff of Legend",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I004",
+        "legacy_fact_index": 0,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    },
+    {
+      "id": "F-014-050",
+      "entity_id": "REF-014-003",
+      "topic": "構成例",
+      "statement": "SYSTEM-500はアナログEurorackモジュール群。510はOSC/VCF/VCAの事前接続されたvoiceとして紹介される。",
+      "basis": "manufacturer_doc",
+      "confidence": "medium",
+      "source_id": "SRC-014-21",
+      "locator": "The New Classic; Experimentation is Rewarded",
+      "verified_on": "2026-11-12",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_record": "I004",
+        "legacy_fact_index": 1,
+        "certainty": "documented_not_measured",
+        "imported_on": "2026-11-13",
+        "review_status": "migration_not_reverification"
+      }
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-014-001",
+      "item": "SYSTEM-100M原機のモジュール構成・電圧規約・仕様(Roland公式の原機資料)",
+      "tried_sources": [
+        "SRC-014-01",
+        "SRC-014-13"
+      ],
+      "impact_on_spec": "roland.com/global/products/system-100m は404で原機の公式製品ページ未確認。SYSTEM-500/Behringer側の記述から関係を示すのみ"
+    },
+    {
+      "entity_id": "REF-014-002",
+      "item": "SYSTEM-700原機の取扱説明書(PDF)の内容",
+      "tried_sources": [
+        "SRC-014-14",
+        "SRC-014-13"
+      ],
+      "impact_on_spec": "公式アーカイブ(lib.roland.co.jp)のホスト名が解決できず取得不能。原機のモジュール構成と信号規約は記録不能"
+    },
+    {
+      "entity_id": "REF-014-004",
+      "item": "SYSTEM-500のゲート/トリガ閾値電圧、CV出力電圧範囲、オーディオ出力レベル",
+      "tried_sources": [
+        "SRC-014-07",
+        "SRC-014-01",
+        "SRC-014-08"
+      ],
+      "impact_on_spec": "取扱説明書とパラメータガイドに数値の記載なし。ゲート検出の仕様化に影響"
+    },
+    {
+      "entity_id": "REF-014-005",
+      "item": "512の『8'で2V印加で中央C』の対象ジャック(KEY INか他か)とピッチ基準の厳密値",
+      "tried_sources": [
+        "SRC-014-08"
+      ],
+      "impact_on_spec": "注記が簡略で対象ジャックが不明。ピッチ基準の定義に影響"
+    },
+    {
+      "entity_id": "REF-014-010",
+      "item": "System 100のうち121/130/150/172/173/297/305の詳細仕様",
+      "tried_sources": [
+        "SRC-014-15"
+      ],
+      "impact_on_spec": "検索結果の存在のみ確認し製品ページ本文は未読のため、エンティティ化していない"
+    },
+    {
+      "entity_id": "REF-014-013",
+      "item": "140 Dual Envelope/LFOの消費電流",
+      "tried_sources": [
+        "SRC-014-17"
+      ],
+      "impact_on_spec": "同一ページの概要欄(各レール40mA)と仕様欄(+12V 50mA/-12V 50mA)で数値が異なるため記録しない"
+    },
+    {
+      "entity_id": "REF-014-010",
+      "item": "Behringer System 100各モジュールのQuick Start Guide(PDF)の内容(ポート電圧範囲等)",
+      "tried_sources": [
+        "SRC-014-19"
+      ],
+      "impact_on_spec": "cdn-media.empowertribe.com が403で接続拒否。ポート単位の電圧・閾値は取得不能"
+    },
+    {
+      "entity_id": "REF-014-015",
+      "item": "SYSTEM-500/System 100にデジタルなパッチ保存・MIDI機能があるか",
+      "tried_sources": [
+        "SRC-014-01",
+        "SRC-014-07"
+      ],
+      "impact_on_spec": "仕様欄に該当の記載は確認できなかったが、無いことの明記はない"
+    },
+    {
+      "entity_id": "REF-014-003",
+      "item": "SYSTEM-100m原機の電圧・回路・年代の詳細、SYSTEM-500各型番のポート範囲は未確認。歴史的代表の原マニュアル調査は不足。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "I004"
+      }
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+> 2026-11-13 統合案: 以下の旧配置案を履歴として残します。調査の現行編集先は `data/reference/{targets.json,records/,sources/}`、生成文書は `docs/reference/`、検証・生成は `tools/`。旧 `references/` は互換用に凍結します。仕様・計画の配置案は変更しません。[統合記録](reference/integration.md)。
+
 # リポジトリ構成案
 
 状態：**提案**  

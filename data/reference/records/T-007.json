@@ -1,0 +1,1019 @@
+{
+ "target_id": "T-007",
+ "entities": [
+  {
+   "id": "REF-007-001",
+   "kind": "system",
+   "name": "BespokeSynth",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "ライブパッチ可能なソフトウェア・モジュラーシンセ。Pythonライブコーディングを備える。",
+   "synthesis_method": "ノート/パルス/モジュレーション/音声を別々の接続で扱うモジュラー環境",
+   "features": [
+    {
+     "text": "ライブパッチ",
+     "fact_ids": [
+      "F-007-001"
+     ]
+    },
+    {
+     "text": "テンポ20〜225BPMの共通トランスポート",
+     "fact_ids": [
+      "F-007-005"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "GPL v3",
+     "fact_ids": [
+      "F-007-003"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "共通トランスポート(テンポ・拍子・スウィング)にモジュールが同期する。",
+     "fact_ids": [
+      "F-007-005"
+     ]
+    },
+    "patching": {
+     "summary": "モジュール間をパッチケーブルで接続。受信側はノート/パルス/音声などの受信インターフェースを持つ。",
+     "fact_ids": [
+      "F-007-004"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-002",
+   "kind": "signal_standard",
+   "name": "BespokeSynth 信号の種類(音声・ノート・パルス・モジュレータ)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "音声ストリームとは別に、ノートメッセージ、パルス、モジュレータ値の経路を持つ接続体系。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ノートは音高・ベロシティ・ボイス・モジュレーションを持つ",
+     "fact_ids": [
+      "F-007-007"
+     ]
+    },
+    {
+     "text": "パルスにフラグが付く",
+     "fact_ids": [
+      "F-007-008"
+     ]
+    },
+    {
+     "text": "モジュレータは最大10対象",
+     "fact_ids": [
+      "F-007-009"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "note",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-007"
+     ]
+    },
+    {
+     "name": "pulse",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-008"
+     ]
+    },
+    {
+     "name": "modulator",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-009"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-003",
+   "kind": "module",
+   "name": "SingleOscillator (oscillator)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "波形を選べる単一オシレータ音源。ADSR・フィルタ・ユニゾンを内蔵。",
+   "synthesis_method": "サイン/矩形/三角/ノコギリ/ノイズ+ユニゾン,シンク",
+   "features": [
+    {
+     "text": "6種の波形",
+     "fact_ids": [
+      "F-007-010"
+     ]
+    },
+    {
+     "text": "ユニゾン・シンク・フィルタ内蔵",
+     "fact_ids": [
+      "F-007-011"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "note in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-010"
+     ]
+    },
+    {
+     "name": "audio out",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-010"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "vol",
+     "unit": "-",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "linear"
+     },
+     "default": 0.25,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-011"
+     ]
+    },
+    {
+     "name": "detune",
+     "unit": "-",
+     "range": {
+      "min": -0.05,
+      "max": 0.05,
+      "unit": "unknown"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-011"
+     ]
+    },
+    {
+     "name": "pw",
+     "unit": "-",
+     "range": {
+      "min": 0.01,
+      "max": 0.99,
+      "unit": "ratio"
+     },
+     "default": 0.5,
+     "range_status": "confirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-010"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-004",
+   "kind": "module",
+   "name": "EnvelopeModulator (envelope)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "ADSRでスライダ等の対象パラメータを変調するモジュレータ。",
+   "synthesis_method": "ADSRによるパラメータ変調",
+   "features": [
+    {
+     "text": "ノートのオン/オフでADSRを駆動",
+     "fact_ids": [
+      "F-007-012"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "note/pulse in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-012"
+     ]
+    },
+    {
+     "name": "modulation out",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-012"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "attack",
+     "unit": "ms",
+     "range": null,
+     "default": 10,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-013"
+     ]
+    },
+    {
+     "name": "decay",
+     "unit": "ms",
+     "range": null,
+     "default": 100,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-013"
+     ]
+    },
+    {
+     "name": "sustain",
+     "unit": "-",
+     "range": null,
+     "default": 0.5,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-013"
+     ]
+    },
+    {
+     "name": "release",
+     "unit": "ms",
+     "range": null,
+     "default": 100,
+     "range_status": "unconfirmed",
+     "default_status": "confirmed",
+     "fact_ids": [
+      "F-007-013"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-005",
+   "kind": "module",
+   "name": "NoteStepSequencer (notesequencer)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "トランスポートに同期してノートを出すステップシーケンサ。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ノート出力のステップシーケンサ",
+     "fact_ids": [
+      "F-007-014"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "note out",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-014"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-006",
+   "kind": "module",
+   "name": "PulseChance (pulsechance)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "random_logic",
+   "purpose": "受信したパルスを確率で通過させるパルス処理モジュール。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "確率でパルスを通す",
+     "fact_ids": [
+      "F-007-015"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "pulse in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-015"
+     ]
+    },
+    {
+     "name": "pulse out",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-015"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-007",
+   "kind": "module",
+   "name": "OSCOutput (oscoutput)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "ノートやスライダ値をOSCメッセージとして外部に送信する。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "ノート・スライダ値のOSC送信",
+     "fact_ids": [
+      "F-007-016"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "note in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-016"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "osc out port",
+     "unit": "-",
+     "range": {
+      "min": 0,
+      "max": 99999,
+      "unit": "port"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-016"
+     ]
+    }
+   ],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-008",
+   "kind": "module",
+   "name": "ScriptModule (script)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "other",
+   "purpose": "Pythonコードを実行し、ノート・パルス・MIDI・OSCを処理するスクリプトモジュール。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "Pythonフック(on_note/on_pulse/on_midi/on_osc)",
+     "fact_ids": [
+      "F-007-017"
+     ]
+    },
+    {
+     "text": "ノート/CC/UI値の時間指定出力",
+     "fact_ids": [
+      "F-007-018"
+     ]
+    },
+    {
+     "text": "OSC入力",
+     "fact_ids": [
+      "F-007-019"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "Python非搭載ビルドでは動かず、未信頼スクリプトは承認が必要",
+     "fact_ids": [
+      "F-007-020"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "note in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-017"
+     ]
+    },
+    {
+     "name": "pulse in",
+     "direction": "in",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-017"
+     ]
+    },
+    {
+     "name": "note out",
+     "direction": "out",
+     "signal_type": "event",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-007-018"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSC受信・MIDI受信をPythonコードで処理。",
+     "fact_ids": [
+      "F-007-017",
+      "F-007-019"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-009",
+   "kind": "patch_storage",
+   "name": "BespokeSynth ステート保存(.bsk)とレイアウト",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "system",
+   "purpose": "パッチのレイアウト(JSON)とモジュール状態(バイナリ)を.bskに保存する。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "bskfile+rev+PNG+レイアウトJSON+モジュール状態",
+     "fact_ids": [
+      "F-007-021"
+     ]
+    },
+    {
+     "text": "一時ファイル経由で保存",
+     "fact_ids": [
+      "F-007-023"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "state_save": {
+     "summary": "ヘッダ+レイアウトJSON+各モジュールのバイナリ状態。自動保存設定あり。",
+     "fact_ids": [
+      "F-007-021",
+      "F-007-023"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-007-010",
+   "kind": "control_interface",
+   "name": "BespokeSynth 外部制御(MIDI/OSC/Pythonスクリプト)",
+   "maker": "Ryan Challinor ほか",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "MIDI・OSCコントローラのマッピング、ScriptModuleのPythonフック、OSC出力。",
+   "synthesis_method": "",
+   "features": [
+    {
+     "text": "OSCコントローラの対応付け",
+     "fact_ids": [
+      "F-007-024"
+     ]
+    },
+    {
+     "text": "MIDIコントローラ",
+     "fact_ids": [
+      "F-007-025"
+     ]
+    },
+    {
+     "text": "Pythonスクリプト制御",
+     "fact_ids": [
+      "F-007-026"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "OSC(受信・送信)、MIDI、Pythonスクリプト。",
+     "fact_ids": [
+      "F-007-024",
+      "F-007-025",
+      "F-007-026"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-007-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-007-001",
+   "entity_id": "REF-007-001",
+   "topic": "概要",
+   "statement": "ライブでパッチしながら演奏できるソフトウェア・モジュラーシンセ。Windows/Mac/Linuxで動く。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-01",
+   "locator": "README.md 'Features'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-002",
+   "entity_id": "REF-007-001",
+   "topic": "機能",
+   "statement": "VST/VST3/LV2のホスティング、Pythonライブコーディング、MIDIとOSCのコントローラマッピングを備えると説明されている(広告的記述)。",
+   "basis": "advertising",
+   "confidence": "high",
+   "source_id": "SRC-007-01",
+   "locator": "README.md 'Features'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-003",
+   "entity_id": "REF-007-001",
+   "topic": "ライセンス",
+   "statement": "GPL v3で提供される。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-02",
+   "locator": "LICENSE",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-004",
+   "entity_id": "REF-007-001",
+   "topic": "モジュールカテゴリ",
+   "statement": "モジュールはAudio/Synth/Instrument/Note/Pulse/Modulator/Otherの区分で登録されており、100以上の型がある。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-03",
+   "locator": "Source/ModuleFactory.cpp REGISTER 群",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-005",
+   "entity_id": "REF-007-001",
+   "topic": "トランスポート",
+   "statement": "共通のトランスポートがテンポ(スライダ範囲20〜225、初期120)・拍子・スウィングを管理する。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-04",
+   "locator": "Source/Transport.cpp / Transport.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-006",
+   "entity_id": "REF-007-001",
+   "topic": "ボイス数",
+   "statement": "グローバル定数としてkNumVoices=16がある。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-05",
+   "locator": "Source/SynthGlobals.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-007",
+   "entity_id": "REF-007-002",
+   "topic": "ノート",
+   "statement": "ノートはtime, pitch, velocity, voiceIdx, modulationを持つNoteMessageとして送られる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-06",
+   "locator": "Source/INoteReceiver.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-008",
+   "entity_id": "REF-007-002",
+   "topic": "パルス",
+   "statement": "パルスは時刻・ベロシティ・フラグ(リセット、ランダム、トランスポート同期、逆方向、整列、リピート)を伴い、IPulseReceiver::OnPulseで受ける。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-07",
+   "locator": "Source/IPulseReceiver.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-009",
+   "entity_id": "REF-007-002",
+   "topic": "モジュレータ",
+   "statement": "IModulatorは値を返し、最大10個の対象(スライダ等)へ最小/最大範囲付きで割り当てられる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-08",
+   "locator": "Source/IModulator.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-010",
+   "entity_id": "REF-007-003",
+   "topic": "波形",
+   "statement": "波形はsin/squ/tri/saw/-saw/noiseから選ぶ。パルス幅は0.01〜0.99。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-09",
+   "locator": "Source/SingleOscillator.cpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-011",
+   "entity_id": "REF-007-003",
+   "topic": "パラメータ",
+   "statement": "vol(0〜1)、detune(-0.05〜0.05)、ユニゾン、位相、シンク周波数(10〜999.9)、フィルタ(fmax/fmin、Q 0.1〜20)、ADSRを持つ。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-09",
+   "locator": "Source/SingleOscillator.cpp CreateUIControls",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-012",
+   "entity_id": "REF-007-004",
+   "topic": "機能",
+   "statement": "ノートまたはパルスを受けるとADSRを開始し、値を対象パラメータの最小〜最大へ補間して出力する。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-10",
+   "locator": "Source/EnvelopeModulator.cpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-013",
+   "entity_id": "REF-007-004",
+   "topic": "既定ADSR",
+   "statement": "内部ADSRの既定値は10ms/100ms/0.5/100msで初期化される。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-10",
+   "locator": "Source/EnvelopeModulator.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-014",
+   "entity_id": "REF-007-005",
+   "topic": "機能",
+   "statement": "トランスポート同期のノート列を出力するステップシーケンサ。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-11",
+   "locator": "Source/NoteStepSequencer.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-015",
+   "entity_id": "REF-007-006",
+   "topic": "機能",
+   "statement": "パルスを確率で通過させるパルスカテゴリのモジュール(登録名pulsechance)。",
+   "basis": "licensed_source",
+   "confidence": "low",
+   "source_id": "SRC-007-03",
+   "locator": "Source/ModuleFactory.cpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-016",
+   "entity_id": "REF-007-007",
+   "topic": "機能",
+   "statement": "ノートと最大50個のスライダ値をOSCメッセージ(float/int/string)で送信できる。宛先アドレスとポートは設定項目。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-12",
+   "locator": "Source/OSCOutput.h, OSCOutput.cpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-017",
+   "entity_id": "REF-007-008",
+   "topic": "フック",
+   "statement": "Pythonのon_pulse、on_note、on_midi、on_osc、on_grid_button等の関数が、受信時に呼ばれる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-13",
+   "locator": "Source/ScriptModule.cpp",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-018",
+   "entity_id": "REF-007-008",
+   "topic": "出力",
+   "statement": "スクリプトからノート再生(遅延付き)、CC送信、UIコントロール値の予約、メソッドの予約実行ができる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-14",
+   "locator": "Source/ScriptModule.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-019",
+   "entity_id": "REF-007-008",
+   "topic": "OSC入力",
+   "statement": "ConnectOscInput(port)でOSC受信を開始し、メッセージはアドレスと引数を連結した文字列としてon_oscに渡される。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-13",
+   "locator": "Source/ScriptModule.cpp oscMessageReceived",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-020",
+   "entity_id": "REF-007-008",
+   "topic": "信頼",
+   "statement": "未信頼のスクリプトは、ユーザが信頼ボタンを押すまで実行されないUIになっている。Pythonが組み込まれていないビルドでは動かない。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-13",
+   "locator": "Source/ScriptModule.cpp (mIsScriptUntrusted, 'doesn't include Python')",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-021",
+   "entity_id": "REF-007-009",
+   "topic": "形式",
+   "statement": "保存状態(.bsk)は文字列\"bskfile\"で始まり、リビジョン番号、スクリーンショット(PNG)、レイアウトJSON文字列、続いてモジュールごとのバイナリ状態が書かれる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-15",
+   "locator": "Source/ModularSynth.cpp (CompleteQueuedSaveState)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-022",
+   "entity_id": "REF-007-009",
+   "topic": "互換",
+   "statement": "ヘッダ文字列がない旧ファイルは、先頭をJSONレイアウトとして読む。32bit時代のファイルを読む処理もある。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-15",
+   "locator": "Source/ModularSynth.cpp (LoadStateHeader)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-023",
+   "entity_id": "REF-007-009",
+   "topic": "レイアウト",
+   "statement": "レイアウトJSONはmodules、ui_modules、zoomlocationsを持つ。保存時は一時ファイルに書いてから置換し、起動時の自動保存設定がある。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-15",
+   "locator": "Source/ModularSynth.cpp (GetLayout, SaveState)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-024",
+   "entity_id": "REF-007-010",
+   "topic": "OSC",
+   "statement": "OscControllerがOSCアドレスを制御番号に対応付け、float/intを送受信するコントローラ機構を持つ(juce_osc使用)。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-16",
+   "locator": "Source/OscController.h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-025",
+   "entity_id": "REF-007-010",
+   "topic": "MIDI",
+   "statement": "MidiControllerとMidiDevice経由でMIDIコントローラを割り当てる。ScriptModuleはon_midiでMIDIメッセージを受ける。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-007-13",
+   "locator": "Source/ScriptModule.cpp (MidiReceived)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-007-026",
+   "entity_id": "REF-007-010",
+   "topic": "スクリプト",
+   "statement": "ScriptModuleを通じてPythonでノート・CC・UI値を制御できる。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-007-14",
+   "locator": "Source/ScriptModule.h",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-007-002",
+   "item": "音声信号の振幅の規約(±1正規化などの数値範囲)",
+   "tried_sources": [
+    "SRC-007-03",
+    "SRC-007-04",
+    "SRC-007-05",
+    "SRC-007-06"
+   ],
+   "impact_on_spec": "音声レベルは本DBで未確認。ソフトの内部は浮動小数と推定されるが記録しない。"
+  },
+  {
+   "entity_id": "REF-007-002",
+   "item": "CV相当のモジュレータ値の単位・範囲の一般則(対象スライダの最小/最大に依存するとみられる)",
+   "tried_sources": [
+    "SRC-007-08"
+   ],
+   "impact_on_spec": "電圧規約はなく対象範囲正規化とみなす案は仮説。"
+  },
+  {
+   "entity_id": "REF-007-005",
+   "item": "ステップ数・各ステップのパラメータ範囲",
+   "tried_sources": [
+    "SRC-007-11"
+   ],
+   "impact_on_spec": "数値範囲は未記録。"
+  },
+  {
+   "entity_id": "REF-007-006",
+   "item": "確率パラメータの範囲・既定値",
+   "tried_sources": [
+    "SRC-007-03"
+   ],
+   "impact_on_spec": "詳細を読んでいない。"
+  },
+  {
+   "entity_id": "REF-007-009",
+   "item": "保存状態リビジョン番号(kSaveStateRev)の値と変遷",
+   "tried_sources": [
+    "SRC-007-15"
+   ],
+   "impact_on_spec": "互換読込を設計する場合に必要。"
+  },
+  {
+   "entity_id": "REF-007-009",
+   "item": "レイアウトJSONの各モジュールのキー定義",
+   "tried_sources": [
+    "SRC-007-15"
+   ],
+   "impact_on_spec": "自前形式との相互運用には不十分。"
+  },
+  {
+   "item": "公式ドキュメント(bespokesynth.com/docs)の内容(接続が拒否された)",
+   "tried_sources": [
+    "SRC-007-17"
+   ],
+   "impact_on_spec": "モジュール別の公式パラメータ記述を確認できていない。パラメータは一部ソースから補完。"
+  },
+  {
+   "item": "サンプルレート・音声バッファの標準値",
+   "tried_sources": [
+    "SRC-007-05"
+   ],
+   "impact_on_spec": "本DBでは数値化しない。"
+  },
+  {
+   "entity_id": "REF-007-001",
+   "item": "リリースバージョン",
+   "tried_sources": [
+    "SRC-007-01",
+    "SRC-007-17"
+   ],
+   "impact_on_spec": "versionをnullにしている。"
+  }
+ ]
+}

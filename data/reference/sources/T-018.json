@@ -1,0 +1,66 @@
+{
+  "sources": [
+    {
+      "id": "SRC-018-01",
+      "title": "0-COAST",
+      "publisher": "Make Noise",
+      "url": "https://www.makenoisemusic.com/synthesizers-and-controllers/0-coast/",
+      "doc_version": "製品ページ、firmware 1.6.8の案内あり",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "公式製品説明。マニュアル本文は未取得; Introduction / FEATURES",
+      "link_status": "ok",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S004",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S004",
+            "publisher": "Make Noise",
+            "title": "0-COAST",
+            "url": "https://www.makenoisemusic.com/synthesizers-and-controllers/0-coast/",
+            "version": "製品ページ、firmware 1.6.8の案内あり",
+            "sections": "Introduction / FEATURES",
+            "checked_on": "2026-11-12",
+            "scope": "公式製品説明。マニュアル本文は未取得",
+            "access_status": "accessed",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SRC-018-02",
+      "title": "0-COAST Manual",
+      "publisher": "Make Noise",
+      "url": "https://www.makenoise-manuals.com/0-coast/0-coast-manual.pdf",
+      "doc_version": "未確認",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-12",
+      "checked_scope": "本文未取得：取得ツールのサイズ制限（26,239,093 bytes）; 未確認",
+      "link_status": "unreachable",
+      "license_note": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。",
+      "imported_observations": [
+        {
+          "legacy_id": "S005",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "metadata": {
+            "id": "S005",
+            "publisher": "Make Noise",
+            "title": "0-COAST Manual",
+            "url": "https://www.makenoise-manuals.com/0-coast/0-coast-manual.pdf",
+            "version": "未確認",
+            "sections": "未確認",
+            "checked_on": "2026-11-12",
+            "scope": "本文未取得：取得ツールのサイズ制限（26,239,093 bytes）",
+            "access_status": "unavailable",
+            "evidence_type": "manufacturer_documentation",
+            "reuse": "本文・画像・コード転載なし。独自要約のみ。公開閲覧を再利用許諾とみなさない。"
+          }
+        }
+      ]
+    }
+  ]
+}

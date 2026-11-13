@@ -1,0 +1,63 @@
+{
+  "target_id": "T-019",
+  "entities": [
+    {
+      "id": "REF-019-001",
+      "kind": "system",
+      "name": "Music Easel Modern（候補）",
+      "maker": "Buchla",
+      "version": "未確認",
+      "version_status": "unconfirmed",
+      "function_category": "system",
+      "purpose": "既存の公開資料調査を版の境界とともに保持する。",
+      "synthesis_method": null,
+      "features": [],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active",
+      "legacy_ids": [
+        "I005"
+      ],
+      "imported_context": [
+        {
+          "legacy_id": "I005",
+          "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+          "name": "Music Easel Modern（候補）",
+          "version": "未確認",
+          "kind": "hardware_patchable_candidate",
+          "categories": [
+            "historical_candidate"
+          ],
+          "status": "unavailable",
+          "rights": "独自要約。商標・外観・音源・コードは複製しない。個別再利用許諾は未確認。",
+          "parent_id": null
+        }
+      ]
+    }
+  ],
+  "facts": [],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-019-001",
+      "item": "S012のページ・PDFが取得不能。種別の厳密分類、旧版との関係、信号規約・機能とも未確認。確認済み仕様の根拠には使わない。",
+      "tried_sources": [],
+      "impact_on_spec": "未確認のため設計条件として断定しない。",
+      "provenance": {
+        "origin_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+        "legacy_id": "I005"
+      }
+    }
+  ]
+}

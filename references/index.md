@@ -1,3 +1,5 @@
+> 互換スナップショット（main 6100022）。以後の編集正本は [統合DB](../docs/reference/index.md) です。この旧資料は履歴保持のため凍結し、現在の完了判定には使いません。旧ID対応は [legacy-map](../data/reference/legacy-map.json) を参照。
+
 # モジュラーシンセ・リファレンスDB 初期版
 
 [範囲・方法](scope.md) / [スキーマ・ID規則](schema.md) / [出典台帳](sources/catalog.json) / [不足・引継ぎ](gaps.md) / [検査結果](validation.md)

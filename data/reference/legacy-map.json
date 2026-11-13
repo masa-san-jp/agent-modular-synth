@@ -1,0 +1,230 @@
+{
+  "main_commit": "61000220d6ec7f71ef7c0054a2befcf698045faa",
+  "pr4_head": "96d0cd7f8c6a0dfeaaca6054437107b6c0e0e24f",
+  "policy": "公開済みIDを保持。旧referencesは凍結した互換スナップショット。編集正本はdata/referenceのみ。旧事実は新規の独立証拠ではなく補足観察として保持。",
+  "records": [
+    {
+      "legacy_id": "I002",
+      "entity_id": "REF-018-001",
+      "fact_ids": [
+        "F-018-001",
+        "F-018-002",
+        "F-018-003"
+      ],
+      "legacy_path": "references/instruments/I002.json",
+      "canonical_path": "data/reference/records/T-018.json"
+    },
+    {
+      "legacy_id": "I005",
+      "entity_id": "REF-019-001",
+      "fact_ids": [],
+      "legacy_path": "references/instruments/I005.json",
+      "canonical_path": "data/reference/records/T-019.json"
+    },
+    {
+      "legacy_id": "I003",
+      "entity_id": "REF-005-001",
+      "fact_ids": [
+        "F-005-043",
+        "F-005-044",
+        "F-005-045",
+        "F-005-046",
+        "F-005-047",
+        "F-005-048"
+      ],
+      "legacy_path": "references/instruments/I003.json",
+      "canonical_path": "data/reference/records/T-005.json"
+    },
+    {
+      "legacy_id": "I004",
+      "entity_id": "REF-014-003",
+      "fact_ids": [
+        "F-014-049",
+        "F-014-050"
+      ],
+      "legacy_path": "references/instruments/I004.json",
+      "canonical_path": "data/reference/records/T-014.json"
+    },
+    {
+      "legacy_id": "I006",
+      "entity_id": "REF-020-001",
+      "fact_ids": [
+        "F-020-001"
+      ],
+      "legacy_path": "references/instruments/I006.json",
+      "canonical_path": "data/reference/records/T-020.json"
+    },
+    {
+      "legacy_id": "I001",
+      "entity_id": "REF-001-001",
+      "fact_ids": [
+        "F-001-037"
+      ],
+      "legacy_path": "references/instruments/I001.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    },
+    {
+      "legacy_id": "M004",
+      "entity_id": "REF-001-006",
+      "fact_ids": [
+        "F-001-038",
+        "F-001-039"
+      ],
+      "legacy_path": "references/modules/M004.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    },
+    {
+      "legacy_id": "M005",
+      "entity_id": "REF-001-011",
+      "fact_ids": [
+        "F-001-040",
+        "F-001-041"
+      ],
+      "legacy_path": "references/modules/M005.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    },
+    {
+      "legacy_id": "M006",
+      "entity_id": "REF-001-012",
+      "fact_ids": [
+        "F-001-042",
+        "F-001-043"
+      ],
+      "legacy_path": "references/modules/M006.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    },
+    {
+      "legacy_id": "M002",
+      "entity_id": "REF-001-007",
+      "fact_ids": [
+        "F-001-044",
+        "F-001-045"
+      ],
+      "legacy_path": "references/modules/M002.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    },
+    {
+      "legacy_id": "M003",
+      "entity_id": "REF-005-008",
+      "fact_ids": [
+        "F-005-049",
+        "F-005-050"
+      ],
+      "legacy_path": "references/modules/M003.json",
+      "canonical_path": "data/reference/records/T-005.json"
+    },
+    {
+      "legacy_id": "M007",
+      "entity_id": "REF-020-002",
+      "fact_ids": [
+        "F-020-002",
+        "F-020-003"
+      ],
+      "legacy_path": "references/modules/M007.json",
+      "canonical_path": "data/reference/records/T-020.json"
+    },
+    {
+      "legacy_id": "M001",
+      "entity_id": "REF-001-005",
+      "fact_ids": [
+        "F-001-046",
+        "F-001-047",
+        "F-001-048"
+      ],
+      "legacy_path": "references/modules/M001.json",
+      "canonical_path": "data/reference/records/T-001.json"
+    }
+  ],
+  "sources": [
+    {
+      "legacy_id": "S004",
+      "target_id": "T-018",
+      "source_id": "SRC-018-01"
+    },
+    {
+      "legacy_id": "S006",
+      "target_id": "T-005",
+      "source_id": "SRC-005-06"
+    },
+    {
+      "legacy_id": "S007",
+      "target_id": "T-005",
+      "source_id": "SRC-005-07"
+    },
+    {
+      "legacy_id": "S009",
+      "target_id": "T-005",
+      "source_id": "SRC-005-08"
+    },
+    {
+      "legacy_id": "S010",
+      "target_id": "T-005",
+      "source_id": "SRC-005-09"
+    },
+    {
+      "legacy_id": "S011",
+      "target_id": "T-014",
+      "source_id": "SRC-014-21"
+    },
+    {
+      "legacy_id": "S016",
+      "target_id": "T-020",
+      "source_id": "SRC-020-01"
+    },
+    {
+      "legacy_id": "S001",
+      "target_id": "T-001",
+      "source_id": "SRC-001-11"
+    },
+    {
+      "legacy_id": "S013",
+      "target_id": "T-001",
+      "source_id": "SRC-001-05"
+    },
+    {
+      "legacy_id": "S014",
+      "target_id": "T-001",
+      "source_id": "SRC-001-12"
+    },
+    {
+      "legacy_id": "S015",
+      "target_id": "T-001",
+      "source_id": "SRC-001-13"
+    },
+    {
+      "legacy_id": "S003",
+      "target_id": "T-001",
+      "source_id": "SRC-001-06"
+    },
+    {
+      "legacy_id": "S008",
+      "target_id": "T-005",
+      "source_id": "SRC-005-10"
+    },
+    {
+      "legacy_id": "S002",
+      "target_id": "T-001",
+      "source_id": "SRC-001-04"
+    },
+    {
+      "legacy_id": "S005",
+      "target_id": "T-018",
+      "source_id": "SRC-018-02"
+    },
+    {
+      "legacy_id": "S012",
+      "target_id": "T-019",
+      "source_id": "SRC-019-01"
+    },
+    {
+      "legacy_id": "S017",
+      "target_id": "T-020",
+      "source_id": "SRC-020-02"
+    },
+    {
+      "legacy_id": "S018",
+      "target_id": "T-020",
+      "source_id": "SRC-020-03"
+    }
+  ]
+}

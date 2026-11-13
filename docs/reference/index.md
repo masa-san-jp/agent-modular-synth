@@ -1,0 +1,573 @@
+# リファレンスDB 索引
+
+自動生成(`tools/build_reference_docs.py`)。事実の正本は `data/reference/`。本書はDBへの入口で、事実本文を複製しない。
+
+## 対象一覧
+
+| 対象ID | 名称 | 種別 | 時代 | 状態 | エンティティ | 事実 | 出典 | 未確認 | DB |
+|---|---|---|---|---|---|---|---|---|---|
+| T-001 | Doepfer A-100(Eurorack規格と代表モジュール) | ハード モジュラー | 現行 | 確認済み | 12 | 48 | 13 | 12 | [records](../../data/reference/records/T-001.json) / [sources](../../data/reference/sources/T-001.json) |
+| T-002 | Make Noise(Maths等の代表モジュール) | ハード モジュラー | 現行 | 確認済み | 6 | 32 | 8 | 7 | [records](../../data/reference/records/T-002.json) / [sources](../../data/reference/sources/T-002.json) |
+| T-003 | Moog Mother-32 | セミモジュラー | 現行 | 資料不足 | 10 | 25 | 2 | 5 | [records](../../data/reference/records/T-003.json) / [sources](../../data/reference/sources/T-003.json) |
+| T-004 | Korg MS-20 系(MS-20 mini) | セミモジュラー | 歴史的 | 確認済み | 11 | 51 | 4 | 7 | [records](../../data/reference/records/T-004.json) / [sources](../../data/reference/sources/T-004.json) |
+| T-005 | VCV Rack | ソフト モジュラー | 現行 | 確認済み | 10 | 50 | 10 | 8 | [records](../../data/reference/records/T-005.json) / [sources](../../data/reference/sources/T-005.json) |
+| T-006 | Cardinal | ソフト モジュラー | 現行 | 確認済み | 8 | 19 | 4 | 4 | [records](../../data/reference/records/T-006.json) / [sources](../../data/reference/sources/T-006.json) |
+| T-007 | BespokeSynth | ソフト モジュラー | 現行 | 確認済み | 10 | 26 | 17 | 9 | [records](../../data/reference/records/T-007.json) / [sources](../../data/reference/sources/T-007.json) |
+| T-008 | Pure Data(Pd) | ソフト 環境 | 歴史的 | 確認済み | 9 | 40 | 7 | 10 | [records](../../data/reference/records/T-008.json) / [sources](../../data/reference/sources/T-008.json) |
+| T-009 | SuperCollider | ソフト 環境 | 現行 | 確認済み | 13 | 47 | 11 | 10 | [records](../../data/reference/records/T-009.json) / [sources](../../data/reference/sources/T-009.json) |
+| T-010 | Max / MSP | ソフト 環境 | 現行 | 確認済み | 11 | 36 | 14 | 11 | [records](../../data/reference/records/T-010.json) / [sources](../../data/reference/sources/T-010.json) |
+| T-011 | Moog 大型モジュラー系(System 15/35/55、Behringer System 55) | ハード モジュラー | 歴史的 | 確認済み | 15 | 44 | 12 | 9 | [records](../../data/reference/records/T-011.json) / [sources](../../data/reference/sources/T-011.json) |
+| T-012 | Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue) | ハード モジュラー | 歴史的 | 確認済み | 17 | 45 | 15 | 8 | [records](../../data/reference/records/T-012.json) / [sources](../../data/reference/sources/T-012.json) |
+| T-013 | ARP 系(ARP 2500、ARP 2600、Behringer 2500) | セミモジュラー | 歴史的 | 確認済み | 20 | 57 | 15 | 8 | [records](../../data/reference/records/T-013.json) / [sources](../../data/reference/sources/T-013.json) |
+| T-014 | Roland System 系(System-100m、System-700、System-500、Behringer System 100) | ハード モジュラー | 歴史的 | 確認済み | 16 | 50 | 21 | 9 | [records](../../data/reference/records/T-014.json) / [sources](../../data/reference/sources/T-014.json) |
+| T-015 | EMS 系(VCS3、Synthi 100) | セミモジュラー | 歴史的 | 確認済み | 12 | 23 | 5 | 6 | [records](../../data/reference/records/T-015.json) / [sources](../../data/reference/sources/T-015.json) |
+| T-016 | Serge 系(Serge Modular、Random*Source Serge) | ハード モジュラー | 歴史的 | 確認済み | 11 | 26 | 11 | 7 | [records](../../data/reference/records/T-016.json) / [sources](../../data/reference/sources/T-016.json) |
+| T-017 | 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | ハード モジュラー | 現行 | 確認済み | 12 | 62 | 14 | 13 | [records](../../data/reference/records/T-017.json) / [sources](../../data/reference/sources/T-017.json) |
+| T-018 | Make Noise 0-COAST | セミモジュラー | 現行 | 確認済み | 1 | 3 | 2 | 1 | [records](../../data/reference/records/T-018.json) / [sources](../../data/reference/sources/T-018.json) |
+| T-019 | Buchla Music Easel Modern（未確認候補） | セミモジュラー | 現行 | 資料不足 | 1 | 0 | 1 | 1 | [records](../../data/reference/records/T-019.json) / [sources](../../data/reference/sources/T-019.json) |
+| T-020 | Buchla Music Easel（2017 Aux Card guide対象） | セミモジュラー | 歴史的 | 確認済み | 2 | 3 | 3 | 2 | [records](../../data/reference/records/T-020.json) / [sources](../../data/reference/sources/T-020.json) |
+
+## エンティティ索引
+
+### T-001 Doepfer A-100(Eurorack規格と代表モジュール)
+
+選定理由: Eurorack形式の事実上の基準。電圧規約・ゲート/トリガー仕様・基本機能モジュールの公式資料が公開されている。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-001-001 | system | Doepfer A-100 | system | 5 |
+| REF-001-002 | signal_standard | A-100 信号・電圧規約 | 入出力・ユーティリティ | 6 |
+| REF-001-003 | patch_storage | A-100 パッチ保存(ハードウェア) | system | 1 |
+| REF-001-004 | control_interface | Doepfer A-190-3 USB/MIDI-to-CV/Gate | 入出力・ユーティリティ | 3 |
+| REF-001-005 | module | A-110-1 Standard VCO | 発振 | 9 |
+| REF-001-006 | module | A-120 24dB Low Pass (Transistor Ladder) | フィルタ | 4 |
+| REF-001-007 | module | A-140-1 ADSR Envelope Generator | エンベロープ | 6 |
+| REF-001-008 | module | A-145-1 Low Frequency Oscillator | LFO | 4 |
+| REF-001-009 | module | A-138s Mini Stereo Mixer | 増幅・ミックス | 3 |
+| REF-001-010 | module | A-160-1 Clock/Trigger Divider | クロック・シーケンス | 3 |
+| REF-001-011 | module | A-130-1 Linear VCA | 増幅・ミックス | 2 |
+| REF-001-012 | module | A-155 Analog/Trigger Sequencer | クロック・シーケンス | 2 |
+
+### T-002 Make Noise(Maths等の代表モジュール)
+
+選定理由: 多機能モジュールの現行例。エンベロープ/LFO/関数発生器の統合設計の参考。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-002-001 | system | Make Noise(Eurorackモジュール群) | system | 3 |
+| REF-002-002 | module | Maths | その他変調 | 12 |
+| REF-002-003 | module | Wogglebug | ランダム・論理 | 7 |
+| REF-002-004 | module | Mimeophon | 時間系 | 7 |
+| REF-002-005 | signal_standard | Make Noise モジュールの信号レベル(マニュアル記載) | 入出力・ユーティリティ | 2 |
+| REF-002-006 | patch_storage | Make Noise パッチ保存(3モジュールのマニュアル範囲) | system | 1 |
+
+### T-003 Moog Mother-32
+
+選定理由: 現行セミモジュラーの代表。正規化接続とパッチ点の関係を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-003-001 | system | Mother-32 | system | 7 |
+| REF-003-002 | signal_standard | Mother-32 CV/gate/audio conventions | 入出力・ユーティリティ | 4 |
+| REF-003-003 | module | VCO | 発振 | 2 |
+| REF-003-004 | module | VCF | フィルタ | 1 |
+| REF-003-005 | module | Envelope (EG) | エンベロープ | 1 |
+| REF-003-006 | module | LFO | LFO | 1 |
+| REF-003-007 | module | 32-step sequencer | クロック・シーケンス | 4 |
+| REF-003-008 | module | Voltage controlled mixer | 増幅・ミックス | 1 |
+| REF-003-009 | patch_storage | Mother-32 sequence memory | クロック・シーケンス | 2 |
+| REF-003-010 | control_interface | Mother-32 MIDI and assignable output | 入出力・ユーティリティ | 2 |
+
+### T-004 Korg MS-20 系(MS-20 mini)
+
+選定理由: 歴史的な代表的セミモジュラー(原機1978年)の系譜。現行再発版のマニュアルを根拠にする。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-004-001 | system | MS-20 mini | system | 7 |
+| REF-004-002 | system | MS-20 (original) | system | 9 |
+| REF-004-003 | signal_standard | MS-20 patch panel voltage conventions | 入出力・ユーティリティ | 9 |
+| REF-004-004 | module | VCO 1 / VCO 2 | 発振 | 5 |
+| REF-004-005 | module | VCHPF + VCLPF | フィルタ | 3 |
+| REF-004-006 | module | Envelope Generator 2 (EG-2) | エンベロープ | 3 |
+| REF-004-007 | module | Modulation Generator (MG) | LFO | 2 |
+| REF-004-008 | module | External Signal Processor (ESP) | 入出力・ユーティリティ | 4 |
+| REF-004-009 | module | Sample and Hold (S/H) | ランダム・論理 | 2 |
+| REF-004-010 | patch_storage | MS-20 mini sound recall (charts and patch book) | system | 3 |
+| REF-004-011 | control_interface | MS-20 mini MIDI IN / USB MIDI | 入出力・ユーティリティ | 4 |
+
+### T-005 VCV Rack
+
+選定理由: ソフトのモジュラーとして電圧規約・ポリフォニー・パッチ保存・公開APIが公開されている主要例。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-005-001 | system | VCV Rack (Rack 2, Free) | system | 8 |
+| REF-005-002 | signal_standard | VCV Rack 電圧規約 | system | 11 |
+| REF-005-003 | signal_standard | VCV Rack ポリフォニックケーブル | ルーティング | 6 |
+| REF-005-004 | module | VCV VCO | 発振 | 5 |
+| REF-005-005 | module | VCV VCF | フィルタ | 2 |
+| REF-005-006 | module | VCV ADSR EG | エンベロープ | 1 |
+| REF-005-007 | module | VCV Noise | ノイズ | 2 |
+| REF-005-008 | module | MIDI-CV (Core) | 入出力・ユーティリティ | 5 |
+| REF-005-009 | patch_storage | VCV Rack パッチ保存(.vcv) | system | 4 |
+| REF-005-010 | control_interface | VCV Rack 外部制御(MIDI/ヘッドレス/プラグインAPI) | 入出力・ユーティリティ | 6 |
+
+### T-006 Cardinal
+
+選定理由: VCV Rack由来のプラグイン形式実装。ホスト統合・ライセンス構成の比較対象。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-006-001 | system | Cardinal | system | 9 |
+| REF-006-002 | signal_standard | Cardinal 信号規約(Rack由来) | system | 1 |
+| REF-006-003 | module | Host Parameters | 入出力・ユーティリティ | 1 |
+| REF-006-004 | module | Host Time | クロック・シーケンス | 1 |
+| REF-006-005 | module | Audio to CV Pitch | 入出力・ユーティリティ | 1 |
+| REF-006-006 | module | Carla Plugin Host / Ildaeil Host | ルーティング | 1 |
+| REF-006-007 | patch_storage | Cardinal パッチ保存 | system | 2 |
+| REF-006-008 | control_interface | Cardinal ホスト統合/MIDI/CVポート | 入出力・ユーティリティ | 3 |
+
+### T-007 BespokeSynth
+
+選定理由: ライブコーディング/スクリプトを備えたソフトのモジュラー。プログラムによる制御の参考。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-007-001 | system | BespokeSynth | system | 6 |
+| REF-007-002 | signal_standard | BespokeSynth 信号の種類(音声・ノート・パルス・モジュレータ) | system | 3 |
+| REF-007-003 | module | SingleOscillator (oscillator) | 発振 | 2 |
+| REF-007-004 | module | EnvelopeModulator (envelope) | エンベロープ | 2 |
+| REF-007-005 | module | NoteStepSequencer (notesequencer) | クロック・シーケンス | 1 |
+| REF-007-006 | module | PulseChance (pulsechance) | ランダム・論理 | 1 |
+| REF-007-007 | module | OSCOutput (oscoutput) | 入出力・ユーティリティ | 1 |
+| REF-007-008 | module | ScriptModule (script) | other | 4 |
+| REF-007-009 | patch_storage | BespokeSynth ステート保存(.bsk)とレイアウト | system | 3 |
+| REF-007-010 | control_interface | BespokeSynth 外部制御(MIDI/OSC/Pythonスクリプト) | 入出力・ユーティリティ | 3 |
+
+### T-008 Pure Data(Pd)
+
+選定理由: データフロー型パッチング環境の歴史的代表。パッチ保存形式と制御/信号レートの区別の参考。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-008-001 | system | Pure Data (Pd) | system | 7 |
+| REF-008-002 | signal_standard | Pd メッセージ/音声信号規約 | system | 9 |
+| REF-008-003 | patch_storage | Pd パッチファイル(.pd) | 入出力・ユーティリティ | 3 |
+| REF-008-004 | control_interface | Pd 外部制御(FUDI/netsend/pdsend/起動フラグ/OSC解析) | 入出力・ユーティリティ | 5 |
+| REF-008-005 | module | osc~ | 発振 | 4 |
+| REF-008-006 | module | lop~ | フィルタ | 3 |
+| REF-008-007 | module | line~ | エンベロープ | 3 |
+| REF-008-008 | module | metro | クロック・シーケンス | 3 |
+| REF-008-009 | module | random | ランダム・論理 | 3 |
+
+### T-009 SuperCollider
+
+選定理由: サーバー/クライアント分離とOSC制御により、プログラムによる制御の代表例。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-009-001 | system | SuperCollider | system | 6 |
+| REF-009-002 | system | scsynth (Synth Server) | system | 3 |
+| REF-009-003 | system | sclang (言語インタプリタ/クライアント) | system | 3 |
+| REF-009-004 | signal_standard | SuperCollider 信号・バス・ノード規約 | ルーティング | 11 |
+| REF-009-005 | patch_storage | SynthDef ファイル(.scsyndef, SCgf形式) | 入出力・ユーティリティ | 4 |
+| REF-009-006 | control_interface | scsynth OSCコマンド | 入出力・ユーティリティ | 6 |
+| REF-009-007 | control_interface | 外部アプリとのOSC通信(sclang側) | 入出力・ユーティリティ | 2 |
+| REF-009-008 | module | SinOsc | 発振 | 2 |
+| REF-009-009 | module | LPF | フィルタ | 3 |
+| REF-009-010 | module | EnvGen | エンベロープ | 3 |
+| REF-009-011 | module | Impulse | クロック・シーケンス | 2 |
+| REF-009-012 | module | Dust | ランダム・論理 | 1 |
+| REF-009-013 | module | Out | 入出力・ユーティリティ | 1 |
+
+### T-010 Max / MSP
+
+選定理由: 商用データフロー環境の代表。信号/メッセージの区別と外部制御の公式資料が公開されている。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-010-001 | system | Max / MSP | system | 7 |
+| REF-010-002 | signal_standard | Max メッセージ/MSP信号規約 | system | 6 |
+| REF-010-003 | patch_storage | Max パッチ(.maxpat)と状態保存 | 入出力・ユーティリティ | 4 |
+| REF-010-004 | control_interface | Max 外部制御(OSC/UDP/パラメータ) | 入出力・ユーティリティ | 6 |
+| REF-010-005 | module | cycle~ | 発振 | 2 |
+| REF-010-006 | module | lores~ | フィルタ | 2 |
+| REF-010-007 | module | line~ | エンベロープ | 2 |
+| REF-010-008 | module | metro | クロック・シーケンス | 2 |
+| REF-010-009 | module | random | ランダム・論理 | 2 |
+| REF-010-010 | module | noise~ | ノイズ | 1 |
+| REF-010-011 | module | gen~ | other | 2 |
+
+### T-011 Moog 大型モジュラー系(System 15/35/55、Behringer System 55)
+
+選定理由: 歴史的な大型モジュラーの代表系譜。原機(Moog)と再発売(Behringer)の関係を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-011-001 | system | Behringer SYSTEM 55 | system | 6 |
+| REF-011-002 | system | Behringer SYSTEM 35 | system | 3 |
+| REF-011-003 | system | Behringer SYSTEM 15 | system | 4 |
+| REF-011-004 | system | Moog Modular System 55 | system | 2 |
+| REF-011-005 | system | Moog Modular System 35 | system | 1 |
+| REF-011-006 | system | Moog Modular System 15 | system | 1 |
+| REF-011-007 | module | Behringer 921B OSCILLATOR | 発振 | 4 |
+| REF-011-008 | module | Behringer 904A VOLTAGE CONTROLLED LOW PASS FILTER | フィルタ | 4 |
+| REF-011-009 | module | Behringer 911 ENVELOPE GENERATOR | エンベロープ | 4 |
+| REF-011-010 | module | Behringer 960 SEQUENTIAL CONTROLLER | クロック・シーケンス | 4 |
+| REF-011-011 | module | Behringer 961 INTERFACE | 入出力・ユーティリティ | 3 |
+| REF-011-012 | module | Behringer 903A RANDOM SIGNAL GENERATOR | ノイズ | 2 |
+| REF-011-013 | signal_standard | Behringer SYSTEM 55 トリガ/信号規約 | 入出力・ユーティリティ | 3 |
+| REF-011-014 | patch_storage | Behringer SYSTEM 55 パッチ保存 | system | 1 |
+| REF-011-015 | control_interface | Behringer CM1A MIDI-to-CV インターフェース | 入出力・ユーティリティ | 2 |
+
+### T-012 Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue)
+
+選定理由: Moogと異なる設計思想(電圧規約・ペンタ/ファンクション系)の歴史的代表系譜と現行再発売。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-012-001 | system | Buchla 200 series (Electric Music Box) | system | 3 |
+| REF-012-002 | system | Buchla 100 series (Modular Electronic Music System) | system | 1 |
+| REF-012-003 | system | Buchla 200e series | system | 3 |
+| REF-012-004 | system | Buchla 200 Series Classic Reissue | system | 2 |
+| REF-012-005 | system | TipTop Audio Buchla 200t (Buchla & Tiptop Audio 200 series) | system | 2 |
+| REF-012-006 | module | Buchla 266 Classic Reissue - Source of Uncertainty | ランダム・論理 | 4 |
+| REF-012-007 | module | Buchla 258 Classic Reissue - Dual Oscillator | 発振 | 2 |
+| REF-012-008 | module | Buchla 281 Classic Reissue - Quad Function Generator | エンベロープ | 3 |
+| REF-012-009 | module | Buchla 292 Classic Reissue - Quad Lopass Gate | 増幅・ミックス | 2 |
+| REF-012-010 | module | TipTop Buchla 245t Sequential Voltage Source | クロック・シーケンス | 4 |
+| REF-012-011 | module | TipTop Buchla 266t Source of Uncertainty | ランダム・論理 | 3 |
+| REF-012-012 | module | TipTop Buchla 281t Quad Function Generator | エンベロープ | 2 |
+| REF-012-013 | signal_standard | Buchla 200e 信号規約 | 入出力・ユーティリティ | 5 |
+| REF-012-014 | signal_standard | TipTop Buchla 200t 信号規約 | 入出力・ユーティリティ | 3 |
+| REF-012-015 | patch_storage | Buchla 200e Remote Enable/プリセット管理 | 入出力・ユーティリティ | 3 |
+| REF-012-016 | patch_storage | TipTop Buchla 248t プリセット | 入出力・ユーティリティ | 1 |
+| REF-012-017 | control_interface | Buchla 225e MIDI Decoder | 入出力・ユーティリティ | 2 |
+
+### T-013 ARP 系(ARP 2500、ARP 2600、Behringer 2500)
+
+選定理由: マトリクス式パッチ(2500)とセミモジュラー(2600)の歴史的代表。再発売との関係を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-013-001 | system | ARP 2600(原機) | system | 3 |
+| REF-013-002 | system | ARP 2600 FS | system | 6 |
+| REF-013-003 | system | ARP 2600 M | system | 5 |
+| REF-013-004 | system | ARP 2500(原機) | system | 1 |
+| REF-013-005 | system | Behringer 2500 series (Eurorackモジュール群) | system | 4 |
+| REF-013-006 | signal_standard | ARP 2600 FS 信号・電圧規約 | 入出力・ユーティリティ | 6 |
+| REF-013-007 | module | ARP 2600 FS VCO-1/2/3 | 発振 | 4 |
+| REF-013-008 | module | ARP 2600 FS VCF | フィルタ | 2 |
+| REF-013-009 | module | ARP 2600 FS ADSR/AR EG | エンベロープ | 3 |
+| REF-013-010 | module | ARP 2600 FS Sample & Hold / Clock / Electronic Switch | ランダム・論理 | 2 |
+| REF-013-011 | module | ARP 2600 FS VCA / Mixer | 増幅・ミックス | 2 |
+| REF-013-012 | module | ARP 2600 スプリングリバーブ | 時間系 | 2 |
+| REF-013-013 | patch_storage | ARP 2600 FS 状態保存(3620アルペジオ/ボイスアサイン) | system | 2 |
+| REF-013-014 | control_interface | ARP 2600 FS MIDI/USB | 入出力・ユーティリティ | 2 |
+| REF-013-015 | control_interface | ARP 2600 M MIDI/USB | 入出力・ユーティリティ | 3 |
+| REF-013-016 | module | Behringer 1004 OSCILLATOR MODULE | 発振 | 2 |
+| REF-013-017 | module | Behringer 1003 DUAL ENVELOPE GENERATOR MODULE | エンベロープ | 2 |
+| REF-013-018 | module | Behringer 1006 FILTAMP MODULE | フィルタ | 2 |
+| REF-013-019 | module | Behringer 1005 MODAMP MODULE | 増幅・ミックス | 2 |
+| REF-013-020 | module | Behringer 1047 MULTIMODE FILTER / RESONATOR MODULE | フィルタ | 2 |
+
+### T-014 Roland System 系(System-100m、System-700、System-500、Behringer System 100)
+
+選定理由: 国産モジュラーの歴史的系譜と現行のEurorack展開(System-500)・再発売の比較。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-014-001 | system | Roland SYSTEM-100M(原機) | system | 2 |
+| REF-014-002 | system | Roland SYSTEM-700(原機) | system | 2 |
+| REF-014-003 | system | Roland SYSTEM-500 | system | 7 |
+| REF-014-004 | signal_standard | Roland SYSTEM-500 信号・電圧規約 | 入出力・ユーティリティ | 5 |
+| REF-014-005 | module | Roland SYSTEM-500 512 Dual VCO | 発振 | 4 |
+| REF-014-006 | module | Roland SYSTEM-500 521 Dual VCF | フィルタ | 3 |
+| REF-014-007 | module | Roland SYSTEM-500 530 Dual VCA | 増幅・ミックス | 3 |
+| REF-014-008 | module | Roland SYSTEM-500 540 Dual Envelope + LFO | エンベロープ | 4 |
+| REF-014-009 | module | Roland SYSTEM-500 572 Phase Shifter/Delay/LFO | 時間系 | 4 |
+| REF-014-010 | system | Behringer System 100 | system | 3 |
+| REF-014-011 | module | Behringer System 100 110 VCO/VCF/VCA | 発振 | 3 |
+| REF-014-012 | module | Behringer System 100 112 Dual VCO | 発振 | 2 |
+| REF-014-013 | module | Behringer System 100 140 Dual Envelope/LFO | エンベロープ | 2 |
+| REF-014-014 | module | Behringer System 100 182 Sequencer | クロック・シーケンス | 4 |
+| REF-014-015 | patch_storage | Roland SYSTEM-500 パッチ記録(Patch Memo) | system | 1 |
+| REF-014-016 | control_interface | Behringer 182 Sequencer 外部同期/制御 | クロック・シーケンス | 1 |
+
+### T-015 EMS 系(VCS3、Synthi 100)
+
+選定理由: ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-015-001 | system | VCS3 (EMS original instrument) | system | 4 |
+| REF-015-002 | system | EMS Synthi A / VCS3 (current production by EMS) | system | 5 |
+| REF-015-003 | system | Synthi 100 | system | 3 |
+| REF-015-004 | system | Synthi A / Synthi AKS | system | 1 |
+| REF-015-005 | signal_standard | EMS pin-matrix patching convention | ルーティング | 2 |
+| REF-015-006 | module | VCS3 voltage controlled oscillator | 発振 | 1 |
+| REF-015-007 | module | VCS3 voltage controlled low-pass filter | フィルタ | 1 |
+| REF-015-008 | module | VCS3 trapezoid envelope generator | エンベロープ | 1 |
+| REF-015-009 | module | VCS3 voltage controlled reverberation | 時間系 | 1 |
+| REF-015-010 | module | Synthi Sequencer 256 | クロック・シーケンス | 2 |
+| REF-015-011 | patch_storage | EMS patch state (pin positions) and sequence memory | other | 1 |
+| REF-015-012 | control_interface | EMS external control add-ons | 入出力・ユーティリティ | 1 |
+
+### T-016 Serge 系(Serge Modular、Random*Source Serge)
+
+選定理由: Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-016-001 | system | Serge Modular (original, 1970s) | system | 2 |
+| REF-016-002 | system | Random*Source Serge (current) | system | 5 |
+| REF-016-003 | signal_standard | Serge signal conventions (jack-colour system) | 入出力・ユーティリティ | 4 |
+| REF-016-004 | module | Smooth & Stepped Generator (SSG) | その他変調 | 3 |
+| REF-016-005 | module | New Timbral Oscillator (NTO) | 発振 | 2 |
+| REF-016-006 | module | Dual Universal Slope Generator (DSG mk2) | エンベロープ | 2 |
+| REF-016-007 | module | Triple Waveshaper | 波形整形 | 1 |
+| REF-016-008 | module | 1973 Filter (VCF) with Balanced Output | フィルタ | 1 |
+| REF-016-009 | module | Paperface VCO / VCO+ | 発振 | 1 |
+| REF-016-010 | patch_storage | Serge patching and patch retention | ルーティング | 2 |
+| REF-016-011 | control_interface | Serge external control and format interop | 入出力・ユーティリティ | 3 |
+
+### T-017 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX)
+
+選定理由: 歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-017-001 | system | AJH MiniMod (Eurorack module series) | system | 3 |
+| REF-017-002 | module | MiniMod VCO | 発振 | 8 |
+| REF-017-003 | module | MiniMod VCF (Transistor Ladder Filter) | フィルタ | 8 |
+| REF-017-004 | module | MiniMod Dual Contour | エンベロープ | 6 |
+| REF-017-005 | module | MiniMod Glide + Noise | ノイズ | 5 |
+| REF-017-006 | module | Ring SM | その他変調 | 4 |
+| REF-017-007 | module | MiniMod Discrete Cascaded VCA | 増幅・ミックス | 3 |
+| REF-017-008 | signal_standard | AJH MiniMod signal conventions | 入出力・ユーティリティ | 2 |
+| REF-017-009 | patch_storage | MiniMod patch recording (paper chart) | other | 1 |
+| REF-017-010 | module | Morgasmatron | フィルタ | 8 |
+| REF-017-011 | module | Korgasmatron II | フィルタ | 4 |
+| REF-017-012 | module | SPACE FX | 時間系 | 10 |
+
+### T-018 Make Noise 0-COAST
+
+選定理由: main既存調査の版・対象境界を保持して統合。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-018-001 | system | 0-COAST | system | 3 |
+
+### T-019 Buchla Music Easel Modern（未確認候補）
+
+選定理由: main既存調査の版・対象境界を保持して統合。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-019-001 | system | Music Easel Modern（候補） | system | 0 |
+
+### T-020 Buchla Music Easel（2017 Aux Card guide対象）
+
+選定理由: main既存調査の版・対象境界を保持して統合。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-020-001 | system | Music Easel（2017 Aux Card guideの対象） | system | 1 |
+| REF-020-002 | module | Music Easel Auxiliary Card | 入出力・ユーティリティ | 2 |
+
+## 出典台帳
+
+| 出典ID | 資料名 | 種別 | 版 | 確認日 | リンク状態 |
+|---|---|---|---|---|---|
+| SRC-001-01 | A-100 English Main Page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-02 | A-100 Technical Details | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-03 | A-100 Construction Details | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-04 | A-110-1 Standard VCO | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-05 | A-120 24dB Low Pass (Transistor Ladder) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-06 | A-140-1 ADSR Envelope Generator | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-07 | A-145-1 Low Frequency Oscillator | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-08 | A-138s Mini Stereo Mixer | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-09 | A-160-1 Clock/Trigger Divider | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-10 | A-190-3 USB/MIDI-to-CV/Gate Interface | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-001-11 | A-100 Modules Overview | manufacturer_manual | 版表記なし | 2026-11-12 | ok |
+| SRC-001-12 | A-130-1/131 Voltage Controlled Amplifiers | manufacturer_manual | A-130-1、3世代の区別を記述 | 2026-11-12 | ok |
+| SRC-001-13 | A-155 Analog/Trigger Sequencer | manufacturer_manual | A-155、ページ改訂日なし | 2026-11-12 | ok |
+| SRC-002-01 | makenoise.com トップページ(別組織のサイト) | other | unknown | 2026-11-12 | ok |
+| SRC-002-02 | MATHS product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-03 | Wogglebug product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-04 | Mimeophon product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-05 | MATHS/Wogglebug/Mimeophon Manual (HTML版) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-06 | MATHS Manual (PDF) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-07 | Wogglebug Manual (PDF) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-002-08 | Mimeophon Manual (PDF) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-003-01 | Mother-32 | Moog Music (product page, Specs and Overview) | spec | unknown | 2026-11-12 | ok |
+| SRC-003-02 | Mother-32 User Manual / Quickstart (Moog downloads listing) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-004-01 | MS-20 mini/MS-20 Original Owner's Manual (reprint of 1978 manual) | manufacturer_manual | 2015.07.07 posting (original text) | 2026-11-12 | ok |
+| SRC-004-02 | MS-20 mini Owner's Manual | manufacturer_manual | 2015.06.01 | 2026-11-12 | ok |
+| SRC-004-03 | MS-20 mini MIDI Implementation | spec | Revision 1.0 (2012.10.25) | 2026-11-12 | ok |
+| SRC-004-04 | MS-20 mini/MS-20 Patch Book | manufacturer_manual | 2015.07.07 posting | 2026-11-12 | ok |
+| SRC-005-01 | VCV Rack Manual(Voltage Standards, Polyphony, Core, Menu Bar, Installing, Version, Rack Pro, Plugin Licensing) | manufacturer_manual | Rack 2 manual (unknown date) | 2026-11-12 | ok |
+| SRC-005-02 | VCV Free Modules(Fundamental)モジュールマニュアル | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-005-03 | VCV Rack LICENSE.md / README.md (v2 branch) | source_code | v2 branch | 2026-11-12 | ok |
+| SRC-005-04 | VCV Rack src/patch.cpp, include/engine/Port.hpp (v2) | source_code | v2 branch | 2026-11-12 | ok |
+| SRC-005-05 | VCV Rack include/engine/Module.hpp (v2) | api_doc | v2 branch | 2026-11-12 | ok |
+| SRC-005-06 | Voltage Standards | manufacturer_manual | Rack 2オンライン手引き、改訂日なし | 2026-11-12 | ok |
+| SRC-005-07 | Menu Bar | manufacturer_manual | Rack 2オンライン手引き、改訂日なし | 2026-11-12 | ok |
+| SRC-005-08 | Plugin API Guide | manufacturer_manual | Rack 2オンライン手引き、改訂日なし | 2026-11-12 | ok |
+| SRC-005-09 | Plugin Licensing | manufacturer_manual | オンライン案内、改訂日なし | 2026-11-12 | ok |
+| SRC-005-10 | Core Modules | manufacturer_manual | Rack 2オンライン手引き、改訂日なし | 2026-11-12 | ok |
+| SRC-006-01 | DISTRHO Cardinal README.md | source_code | main branch | 2026-11-12 | ok |
+| SRC-006-02 | Cardinal docs/LICENSES.md, LICENSE, docs/FAQ.md | source_code | main branch | 2026-11-12 | ok |
+| SRC-006-03 | Cardinal docs/DIFFERENCES.md | source_code | main branch | 2026-11-12 | ok |
+| SRC-006-04 | GitHub API releases/latest (DISTRHO/Cardinal) | other | unknown | 2026-11-12 | unreachable |
+| SRC-007-01 | BespokeSynth README.md (main) | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-02 | BespokeSynth LICENSE | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-03 | BespokeSynth Source/ModuleFactory.cpp | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-04 | BespokeSynth Source/Transport.cpp, Transport.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-05 | BespokeSynth Source/SynthGlobals.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-06 | BespokeSynth Source/INoteReceiver.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-07 | BespokeSynth Source/IPulseReceiver.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-08 | BespokeSynth Source/IModulator.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-09 | BespokeSynth Source/SingleOscillator.cpp/.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-10 | BespokeSynth Source/EnvelopeModulator.cpp/.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-11 | BespokeSynth Source/NoteStepSequencer.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-12 | BespokeSynth Source/OSCOutput.h, OSCOutput.cpp | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-13 | BespokeSynth Source/ScriptModule.cpp | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-14 | BespokeSynth Source/ScriptModule.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-15 | BespokeSynth Source/ModularSynth.cpp | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-16 | BespokeSynth Source/OscController.h | source_code | main branch | 2026-11-12 | ok |
+| SRC-007-17 | BespokeSynth 公式ドキュメント | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-008-01 | Pd Manual - Chapter 2: Theory of operation | manufacturer_manual | master (取得日時点) | 2026-11-12 | ok |
+| SRC-008-02 | Pd Manual - Chapter 3: Installing and configuring | manufacturer_manual | master (取得日時点) | 2026-11-12 | ok |
+| SRC-008-03 | Pd 付属ヘルプパッチ(osc~, lop~, line~, metro, random) | manufacturer_manual | help各ファイルの更新表記: osc~ 0.55, lop~ 0.54, line~ 0.33, metro 0.48, random 0.56 | 2026-11-12 | ok |
+| SRC-008-04 | Pd ソースコード(u_pdsend.c, x_net.c, x_misc.c, m_pd.h) | source_code | master: PD_MAJOR/MINOR/BUGFIX = 0.57.0 | 2026-11-12 | ok |
+| SRC-008-05 | Pd Documentation(msp.ucsd.edu) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-008-06 | Pure Data コミュニティサイト(puredata.info) | other | unknown | 2026-11-12 | ok |
+| SRC-008-07 | Pure Data LICENSE.txt | other | master (取得日時点) | 2026-11-12 | ok |
+| SRC-009-01 | Client vs Server | manufacturer_manual | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-02 | Server Command Reference | api_doc | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-03 | Server Architecture | manufacturer_manual | SuperCollider 3.14.0 Help(注記: 一部古い記述あり) | 2026-11-12 | ok |
+| SRC-009-04 | Order of execution | manufacturer_manual | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-05 | UGenクラスヘルプ(SinOsc, LPF, EnvGen, Impulse, Dust, Out) | api_doc | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-06 | Bus / Group クラスヘルプ | api_doc | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-07 | Synth Definition File Format | spec | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-08 | OSC Communication | manufacturer_manual | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-09 | Scheduling and Server timing | manufacturer_manual | SuperCollider 3.14.0 Help | 2026-11-12 | ok |
+| SRC-009-10 | SuperCollider 公式サイト | other | 公式サイト(現行版 3.14.1 と記載) | 2026-11-12 | ok |
+| SRC-009-11 | SuperCollider COPYING | other | develop | 2026-11-12 | ok |
+| SRC-010-01 | Messages(Max User Guide) | manufacturer_manual | docs.cycling74.com 現行(Max 9系の注記あり) | 2026-11-12 | ok |
+| SRC-010-02 | Message Types(Max User Guide) | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-03 | Patch Cords(Max User Guide) | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-04 | Scheduler and Priority | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-05 | Sample Accurate Messages | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-06 | File Types | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-07 | Saving State with pattr | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-08 | OpenSoundControl | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-09 | Gen overview / RNBO | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-10 | Object Reference: cycle~, lores~, line~, metro, random, noise~, gen~, udpreceive, udpsend, adsr~ | api_doc | 同上(udpreceive等に >=9.2.0 の記述あり) | 2026-11-12 | ok |
+| SRC-010-11 | Patcher Lifecycle | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-12 | Multi-Channel Audio I/O | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-14 | MC(Multi-channel)Overview | manufacturer_manual | 同上 | 2026-11-12 | ok |
+| SRC-010-13 | Legal / 利用条件ページ | other | unknown | 2026-11-12 | unreachable |
+| SRC-011-01 | SYSTEM 55 製品ページ(0720-ACU) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-02 | SYSTEM 35 製品ページ(0720-ACT) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-03 | SYSTEM 15 製品ページ(0720-ACS) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-04 | 921B OSCILLATOR 製品ページ(0720-AAW) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-05 | 904A VOLTAGE CONTROLLED LOW PASS FILTER 製品ページ(0720-AAO) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-06 | 911 ENVELOPE GENERATOR 製品ページ(0720-AAU) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-07 | 960 SEQUENTIAL CONTROLLER 製品ページ(0720-ABH) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-08 | 961 INTERFACE 製品ページ(0720-ABB) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-09 | 903A RANDOM SIGNAL GENERATOR 製品ページ(0720-ABG) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-011-10 | SYSTEM 55 クイックスタートガイド(WW版PDF) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-011-11 | Moog Music 公式サイト(サイトマップ・製品一覧・ダウンロード) | other | unknown | 2026-11-12 | ok |
+| SRC-011-12 | Moog Music Forum(再発売品マニュアル等のスレッド) | third_party | unknown | 2026-11-12 | unreachable |
+| SRC-012-01 | The History of Buchla | other | unknown | 2026-11-12 | ok |
+| SRC-012-02 | Buchla 200 Series Classic Reissue | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-03 | 266 Classic Reissue - Source of Uncertainty | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-04 | 258 Classic Reissue - Dual Oscillator | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-05 | 281 Classic Reissue - Quad Function Generator | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-06 | 292 Classic Reissue - Quad Lopass Gate | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-07 | Buchla 200e User's Guide | manufacturer_manual | V2.2 (2023-01-18) | 2026-11-12 | ok |
+| SRC-012-08 | Systems Design - 200e & 200h Product Line Overview | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-09 | Buchla & Tiptop Audio 200 series (Eurorack) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-10 | 258t Dual Oscillator manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-11 | 281t Quad Function Generator manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-12 | 266t Source of Uncertainty manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-13 | 245t Sequential Voltage Source manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-14 | 248t MARF manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-012-15 | Buchla 248 Manual 1977(原機マニュアルのスキャン) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-01 | ARP 2600 FS - Semi-modular synthesizer (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-02 | ARP 2600 FS Specifications | spec | unknown | 2026-11-12 | ok |
+| SRC-013-03 | ARP 2600 FS Owner's Manual | manufacturer_manual | EFGSJ 3 (2025.11.11) | 2026-11-12 | ok |
+| SRC-013-04 | ARP 2600 M (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-05 | ARP 2600 M Specifications | spec | unknown | 2026-11-12 | ok |
+| SRC-013-06 | ARP 2600 M Owner's Manual | manufacturer_manual | 2021.08.27 | 2026-11-12 | ok |
+| SRC-013-07 | ARP 2600 M MIDI Implementation Chart | spec | v1.0 (2020.10.23) | 2026-11-12 | ok |
+| SRC-013-08 | OSCILLATOR MODULE 1004 (product page 0720-ABS) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-09 | DUAL ENVELOPE GENERATOR MODULE 1003 (0720-ABR) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-10 | FILTAMP MODULE 1006 (0720-ABU) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-11 | MODAMP MODULE 1005 (0720-ABT) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-12 | MULTIMODE FILTER / RESONATOR MODULE 1047 (0720-ABZ) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-13 | Quick Start Guide FILTAMP MODULE 1006 (PDF) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-013-14 | ARP 2600 Original Manual (Korg配布の復刻PDF) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-013-15 | DUAL ENVELOPE GENERATOR MODULE 1033 (0720-ABX) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-01 | SYSTEM-500 Complete Set (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-02 | SYSTEM-500 512 (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-03 | SYSTEM-500 521 (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-04 | SYSTEM-500 530 (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-05 | SYSTEM-500 540 (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-06 | SYSTEM-500 572 (product page) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-07 | SYSTEM-500 Owner's Manual (English) | manufacturer_manual | e01 (c) 2015 | 2026-11-12 | ok |
+| SRC-014-08 | SYSTEM-500 512 Parameter Guide | manufacturer_manual | e01 | 2026-11-12 | ok |
+| SRC-014-09 | SYSTEM-500 521 Parameter Guide | manufacturer_manual | e01 | 2026-11-12 | ok |
+| SRC-014-10 | SYSTEM-500 530 Parameter Guide | manufacturer_manual | e01 | 2026-11-12 | ok |
+| SRC-014-11 | SYSTEM-500 540 Parameter Guide | manufacturer_manual | e01 | 2026-11-12 | ok |
+| SRC-014-12 | SYSTEM-500 572 Parameter Guide | manufacturer_manual | e01 | 2026-11-12 | ok |
+| SRC-014-13 | Roland Support Archive: Owner's Manuals (N-S) | other | unknown | 2026-11-12 | ok |
+| SRC-014-14 | SYSTEM700 Owner's Manual (archive PDF) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-014-15 | 110 VCO/VCF/VCA (product page 0720-AAC) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-16 | 112 DUAL VCO (0720-AAF) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-17 | 140 DUAL ENVELOPE/LFO (0720-AAD) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-18 | 182 SEQUENCER (0720-AAE) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-014-19 | Quick Start Guide 182 SEQUENCER (PDF) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-014-20 | Roland Support: SYSTEM-500 512 Owner's Manuals | other | unknown | 2026-11-12 | ok |
+| SRC-014-21 | SYSTEM-500 | manufacturer_manual | 2015導入・2018追加を記述する製品紹介 | 2026-11-12 | ok |
+| SRC-015-01 | EMS VCS3 / Synthi 100 official site (candidate host) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-015-02 | EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com) | manufacturer_manual | unknown | 2026-11-12 | unreachable |
+| SRC-015-03 | Electronic Music Studios home page | other | Last updated 5th May 2020 | 2026-11-12 | ok |
+| SRC-015-04 | EMS Synthi Range 1969-1979: A Guide to the EMS Product Range (Graham Hinton) | third_party | Last updated 17 June 2001 | 2026-11-12 | ok |
+| SRC-015-05 | EMS: The Inside Story (Graham Hinton) | third_party | Last updated 27th December 2002 | 2026-11-12 | ok |
+| SRC-016-01 | Random*Source Serge (randomsource.net) | other | unknown | 2026-11-12 | ok |
+| SRC-016-02 | Serge Modular home page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-016-03 | Serge Modular FAQ | other | unknown | 2026-11-12 | ok |
+| SRC-016-04 | About Random*Source | other | unknown | 2026-11-12 | ok |
+| SRC-016-05 | Serge Paperface 50th Anniversary page | other | unknown | 2026-11-12 | ok |
+| SRC-016-06 | Serge Paperface 50th Anniversary Edition user guide (PDF, 24 pages) | manufacturer_manual | V 0.1 | 2026-11-12 | ok |
+| SRC-016-07 | Serge Panels (4U full panels) | other | unknown | 2026-11-12 | ok |
+| SRC-016-08 | Serge for Eurorack (module list) | other | unknown | 2026-11-12 | ok |
+| SRC-016-09 | Serge SSG product page (Eurorack) | other | unknown | 2026-11-12 | ok |
+| SRC-016-10 | Serge DSG mk2 product page (Eurorack) | other | unknown | 2026-11-12 | ok |
+| SRC-016-11 | Serge NTO product page (Eurorack) | other | unknown | 2026-11-12 | ok |
+| SRC-017-01 | MiniMod VCO User Guide | manufacturer_manual | Copyright 2016 (no version number) | 2026-11-12 | ok |
+| SRC-017-02 | MiniMod VCF User Guide | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-03 | MiniMod Dual Contour User Guide | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-04 | MiniMod Glide + Noise User Guide | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-05 | Ring SM Module page and User Manual | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-06 | MiniMod Discrete Cascaded VCA product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-07 | AJH Synth site: MiniMod system page, Keyboard page, FAQ, Downloads | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-08 | Morgasmatron Manual (English) | manufacturer_manual | Revision 2021.08.03 | 2026-11-12 | ok |
+| SRC-017-09 | Morgasmatron product page and Support page (manual index) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-10 | Korgasmatron II Illustrated supplement (by Demonam), hosted by Intellijel | third_party | unknown | 2026-11-12 | ok |
+| SRC-017-11 | Intellijel Legacy Modules page (Korgasmatron listings) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-12 | SPACE FX product page (model 0720-ABQ) | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-017-13 | SPACE FX Quick Start Guide (WW) | manufacturer_manual | V 2.0 | 2026-11-12 | ok |
+| SRC-017-14 | MiniMod VCF product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-018-01 | 0-COAST | manufacturer_manual | 製品ページ、firmware 1.6.8の案内あり | 2026-11-12 | ok |
+| SRC-018-02 | 0-COAST Manual | manufacturer_manual | 未確認 | 2026-11-12 | unreachable |
+| SRC-019-01 | Music Easel Modern / Manual | manufacturer_manual | 未確認 | 2026-11-12 | unreachable |
+| SRC-020-01 | Music Easel Aux Card User’s Guide | manufacturer_manual | v1.0, 2017-01-15 | 2026-11-12 | ok |
+| SRC-020-02 | Easel Module / Music Easel | manufacturer_manual | 版不明（copyright 2023） | 2026-11-12 | ok |
+| SRC-020-03 | Buchla 208MIDI | manufacturer_manual | 208C対象、改訂日不明 | 2026-11-12 | ok |
+
+URLと確認範囲・利用条件は各 `sources/<対象ID>.json` を参照。

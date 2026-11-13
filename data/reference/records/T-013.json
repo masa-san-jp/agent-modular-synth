@@ -1,0 +1,2031 @@
+{
+ "target_id": "T-013",
+ "entities": [
+  {
+   "id": "REF-013-001",
+   "kind": "system",
+   "name": "ARP 2600(原機)",
+   "maker": "ARP Instruments",
+   "version": "original (1971-1981 manufactured)",
+   "function_category": "system",
+   "purpose": "ノーマライズ(内部結線)済みのセミモジュラー・アナログシンセ。パッチコードで内部結線を上書きできる。",
+   "synthesis_method": "アナログ減算+電圧制御モジュラー的パッチ",
+   "features": [
+    {
+     "text": "1971-1981年製造、本体とキーボード部が分離したスーツケース型",
+     "fact_ids": [
+      "F-013-001"
+     ]
+    },
+    {
+     "text": "内部事前結線によりパッチなしで発音、パッチで拡張",
+     "fact_ids": [
+      "F-013-002"
+     ]
+    },
+    {
+     "text": "内蔵スピーカーとスプリングリバーブ",
+     "fact_ids": [
+      "F-013-003"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "モジュール間は内部で事前結線。パッチコード接続で内部結線を上書きして別の信号経路を作る。",
+     "fact_ids": [
+      "F-013-002"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-002",
+   "kind": "system",
+   "name": "ARP 2600 FS",
+   "maker": "Korg",
+   "version": "FS (limited one-time production run)",
+   "function_category": "system",
+   "purpose": "ARP 2600の再発売品。ARP 3620キーボード(アルペジエータ追加)付き、MIDI/USB装備。",
+   "synthesis_method": "アナログ減算(3VCO+4極24dB/oct VCF)+セミモジュラーパッチ",
+   "features": [
+    {
+     "text": "限定生産の再発売。MIDI/USB、XLR出力、アルペジエータ付き3620キーボード付属",
+     "fact_ids": [
+      "F-013-004"
+     ]
+    },
+    {
+     "text": "原機の回路レベルでの再現を謳う(広告上の主張)",
+     "fact_ids": [
+      "F-013-005"
+     ]
+    },
+    {
+     "text": "初期型/後期型の2種類のVCFをスイッチ選択",
+     "fact_ids": [
+      "F-013-006"
+     ]
+    },
+    {
+     "text": "本体19.3kg+キーボード11.3kgの可搬型",
+     "fact_ids": [
+      "F-013-007"
+     ]
+    },
+    {
+     "text": "XLRバランス出力(サイドパネル)と3.5mm L/R出力、プリアンプ入力",
+     "fact_ids": [
+      "F-013-008"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "選択可能な出力は固定の内部結線に依存する(パッチ点を使わない場合は内部結線のまま)",
+     "fact_ids": [
+      "F-013-009"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "内部ノーマライズ接続。ジャックにパッチコードを挿入すると内部接続が上書きされる。3.5mmジャック。",
+     "fact_ids": [
+      "F-013-009"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-013-001",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-003",
+   "kind": "system",
+   "name": "ARP 2600 M",
+   "maker": "Korg",
+   "version": "M (standard / LTD editions)",
+   "function_category": "system",
+   "purpose": "ARP 2600 FSのアナログ回路を約60%サイズにしたコンパクト版。キーボード部なしでUSB/DIN MIDIコントローラーを使用。",
+   "synthesis_method": "アナログ減算(3VCO+4極24dB/oct VCF)+セミモジュラーパッチ",
+   "features": [
+    {
+     "text": "FSのアナログ回路を小型化(広告上の主張)",
+     "fact_ids": [
+      "F-013-010"
+     ]
+    },
+    {
+     "text": "6.0kg、USB A/BとDIN MIDI IN",
+     "fact_ids": [
+      "F-013-011"
+     ]
+    },
+    {
+     "text": "S/H GATEトリガしきい値5V(ユーロラック等と併用しやすい)",
+     "fact_ids": [
+      "F-013-012"
+     ]
+    },
+    {
+     "text": "ヘッドホン使用時のスピーカー自動オフ",
+     "fact_ids": [
+      "F-013-012"
+     ]
+    },
+    {
+     "text": "サイド出力は6.3mmモノ(FSのXLRとは異なる)",
+     "fact_ids": [
+      "F-013-013"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "物理キーボードは本体になく、MIDIコントローラーから演奏する",
+     "fact_ids": [
+      "F-013-012"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "FSと同様の内部ノーマライズ+パッチコードによる上書き(Korg記載の特徴に準ずる)。",
+     "fact_ids": [
+      "F-013-012"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-013-002",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-004",
+   "kind": "system",
+   "name": "ARP 2500(原機)",
+   "maker": "ARP Instruments",
+   "version": "original (1970)",
+   "function_category": "system",
+   "purpose": "ARPの初期モジュラーシンセ。コードレスのマトリクススイッチによるパッチ方式が特徴。",
+   "synthesis_method": "モジュラー(マトリクススイッチ・パッチ)",
+   "features": [
+    {
+     "text": "1970年発表(ARP財団紹介文による)",
+     "fact_ids": [
+      "F-013-015"
+     ]
+    },
+    {
+     "text": "スイッチのマトリクスによるコードレスパッチング",
+     "fact_ids": [
+      "F-013-015"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "パッチコードを使わず、スイッチのマトリクスで接続する方式(Korgサイト掲載の財団紹介文の記述。詳細仕様は未確認)。",
+     "fact_ids": [
+      "F-013-015"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-005",
+   "kind": "system",
+   "name": "Behringer 2500 series (Eurorackモジュール群)",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "system",
+   "purpose": "ARP 2500系回路の再現をうたうEurorack形式のモジュール群(1003/1004/1005/1006/1033/1047)。",
+   "synthesis_method": "アナログ(ディスクリート・トランジスタ回路をうたう)モジュラー",
+   "features": [
+    {
+     "text": "原機回路の再現をうたう(広告上の主張)",
+     "fact_ids": [
+      "F-013-016"
+     ]
+    },
+    {
+     "text": "確認できたラインナップは1003/1004/1005/1006/1033/1047",
+     "fact_ids": [
+      "F-013-017"
+     ]
+    },
+    {
+     "text": "いずれも16HP",
+     "fact_ids": [
+      "F-013-018"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "原機2500の構成の説明はメーカー販促ページの記述であり裏付け資料は未確認",
+     "fact_ids": [
+      "F-013-019"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": "REF-013-004",
+    "supersedes": null,
+    "part_of": null
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-006",
+   "kind": "signal_standard",
+   "name": "ARP 2600 FS 信号・電圧規約",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "ARP 2600 FS(および一部2600 M)のピッチCV・ゲート/トリガ・LFO出力の電圧規約。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "ピッチCV 1V/oct",
+     "fact_ids": [
+      "F-013-020"
+     ]
+    },
+    {
+     "text": "ゲート0V/+10V、トリガ+10V 0.5ms",
+     "fact_ids": [
+      "F-013-021"
+     ]
+    },
+    {
+     "text": "LFO出力電圧: 三角±5V・矩形+10V・サイン±3V",
+     "fact_ids": [
+      "F-013-022"
+     ]
+    },
+    {
+     "text": "VCA CV1は線形、CV2は指数応答",
+     "fact_ids": [
+      "F-013-023"
+     ]
+    },
+    {
+     "text": "ジャック挿入で内部結線を上書き(ノーマライズ)",
+     "fact_ids": [
+      "F-013-024"
+     ]
+    },
+    {
+     "text": "3.5mmジャック",
+     "fact_ids": [
+      "F-013-025"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "ノーマライズ接続+パッチコードによる上書き。",
+     "fact_ids": [
+      "F-013-024"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-007",
+   "kind": "module",
+   "name": "ARP 2600 FS VCO-1/2/3",
+   "maker": "Korg",
+   "version": "FS",
+   "function_category": "oscillator",
+   "purpose": "3基のVCO。各々LFOまたはオーディオ用に切替可能。",
+   "synthesis_method": "アナログVCO(鋸歯/矩形/三角/サイン/パルス)",
+   "features": [
+    {
+     "text": "VCO-2は4波形、VCO-1は2波形、VCO-3は2波形",
+     "fact_ids": [
+      "F-013-026"
+     ]
+    },
+    {
+     "text": "各VCOをオーディオ/LFOに切替可能",
+     "fact_ids": [
+      "F-013-028"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "VCO-1にはPWMなし、VCO-2/3はパルス幅10〜90%(VCO-3のPWM入力は本調査では未確認)",
+     "fact_ids": [
+      "F-013-026",
+      "F-013-027"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "SAWTOOTH OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-026"
+     ]
+    },
+    {
+     "name": "SQUARE OUT(VCO-1)",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-026"
+     ]
+    },
+    {
+     "name": "CV IN 1-4(VCO-1)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-028"
+     ]
+    },
+    {
+     "name": "PWM IN(VCO-2)",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-029"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "INITIAL OSCILLATOR FREQUENCY",
+     "unit": "Hz",
+     "range": {
+      "min": 0.03,
+      "max": 10000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-027"
+     ]
+    },
+    {
+     "name": "PULSE WIDTH(VCO-2/3)",
+     "unit": "%",
+     "range": {
+      "min": 10,
+      "max": 90,
+      "unit": "%"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-027"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-008",
+   "kind": "module",
+   "name": "ARP 2600 FS VCF",
+   "maker": "Korg",
+   "version": "FS",
+   "function_category": "filter",
+   "purpose": "4極ローパスVCF。初期型/後期型の応答を切替。",
+   "synthesis_method": "24dB/octローパス+レゾナンス(自己発振可)",
+   "features": [
+    {
+     "text": "24dB/octローパス、初期型/後期型切替、自己発振",
+     "fact_ids": [
+      "F-013-030"
+     ]
+    },
+    {
+     "text": "5系統のオーディオ入力ミキサー+3系統のCV入力",
+     "fact_ids": [
+      "F-013-031"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "AUDIO IN 1-5",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-031"
+     ]
+    },
+    {
+     "name": "CV IN 1-3",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-031"
+     ]
+    },
+    {
+     "name": "OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-031"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "INITIAL FILTER FREQUENCY",
+     "unit": "Hz",
+     "range": {
+      "min": 10,
+      "max": 10000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-030"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-009",
+   "kind": "module",
+   "name": "ARP 2600 FS ADSR/AR EG",
+   "maker": "Korg",
+   "version": "FS",
+   "function_category": "envelope",
+   "purpose": "ADSRとARの2系統のエンベロープ。ゲート/トリガ出力も持つ。",
+   "synthesis_method": "アナログADSR/AR",
+   "features": [
+    {
+     "text": "ADSR+ARの2系統、手動スタート、ゲート/トリガ出力",
+     "fact_ids": [
+      "F-013-032"
+     ]
+    },
+    {
+     "text": "ゲート元をS/H GATEとキーボードから選択",
+     "fact_ids": [
+      "F-013-033"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "TRIGGER MODEはADSRのみ有効でARは対象外",
+     "fact_ids": [
+      "F-013-034"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "ADSR OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-032"
+     ]
+    },
+    {
+     "name": "AR OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-032"
+     ]
+    },
+    {
+     "name": "GATE IN",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-033"
+     ]
+    },
+    {
+     "name": "GATE OUT",
+     "direction": "out",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-032"
+     ]
+    },
+    {
+     "name": "TRIG OUT",
+     "direction": "out",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-032"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-010",
+   "kind": "module",
+   "name": "ARP 2600 FS Sample & Hold / Clock / Electronic Switch",
+   "maker": "Korg",
+   "version": "FS",
+   "function_category": "random_logic",
+   "purpose": "サンプル&ホールド、内部クロック、クロック同期のアナログスイッチ。",
+   "synthesis_method": "S/H+クロック",
+   "features": [
+    {
+     "text": "内部クロック0.2〜24Hz、外部クロック同期",
+     "fact_ids": [
+      "F-013-035"
+     ]
+    },
+    {
+     "text": "クロックに同期して2系統を交互に切替えるスイッチ",
+     "fact_ids": [
+      "F-013-036"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "EXT CLOCK IN",
+     "direction": "in",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-035"
+     ]
+    },
+    {
+     "name": "INT CLOCK OUT",
+     "direction": "out",
+     "signal_type": "clock",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-035"
+     ]
+    },
+    {
+     "name": "S/H OUT",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-035"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "CLOCK RATE",
+     "unit": "Hz",
+     "range": {
+      "min": 0.2,
+      "max": 24,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-035"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-011",
+   "kind": "module",
+   "name": "ARP 2600 FS VCA / Mixer",
+   "maker": "Korg",
+   "version": "FS",
+   "function_category": "amplifier_mixer",
+   "purpose": "VCAとミキサー/パン。VCAの出力をミキサーからリバーブ・出力へ。",
+   "synthesis_method": "アナログVCA",
+   "features": [
+    {
+     "text": "線形/指数CV入力、INITIAL GAIN",
+     "fact_ids": [
+      "F-013-037"
+     ]
+    },
+    {
+     "text": "ミキサー→スプリングリバーブ→出力へ",
+     "fact_ids": [
+      "F-013-038"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "AUDIO IN 1/2",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-037"
+     ]
+    },
+    {
+     "name": "CV IN 1/2",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-037"
+     ]
+    },
+    {
+     "name": "OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-037"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-012",
+   "kind": "module",
+   "name": "ARP 2600 スプリングリバーブ",
+   "maker": "Korg",
+   "version": "FS/M",
+   "function_category": "time_effect",
+   "purpose": "ミキサー出力に掛けるスプリングリバーブ。",
+   "synthesis_method": "スプリングリバーブ(アナログ)",
+   "features": [
+    {
+     "text": "REVERB OUTにケーブル挿入で内部結線上書き",
+     "fact_ids": [
+      "F-013-039"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "2600 Mのリバーブは新サイズ用に再設計されFSと同一ではない",
+     "fact_ids": [
+      "F-013-040"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-013-013",
+   "kind": "patch_storage",
+   "name": "ARP 2600 FS 状態保存(3620アルペジオ/ボイスアサイン)",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "system",
+   "purpose": "電源断後に保持される設定と保持されないシーケンスの扱い。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "アルペジオパターンは電源オフで消去(揮発)",
+     "fact_ids": [
+      "F-013-041"
+     ]
+    },
+    {
+     "text": "ボイスアサイン設定は不揮発",
+     "fact_ids": [
+      "F-013-042"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "パッチはケーブル接続でありデジタル保存はない記載は未確認。アルペジオパターンは揮発、ボイスアサイン設定のみ不揮発。",
+     "fact_ids": [
+      "F-013-041",
+      "F-013-042"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-014",
+   "kind": "control_interface",
+   "name": "ARP 2600 FS MIDI/USB",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "外部MIDI機器やPCからのノート制御。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "MIDI IN/OUT/THRU+USB-B、ノートで外部演奏",
+     "fact_ids": [
+      "F-013-043"
+     ]
+    },
+    {
+     "text": "チャンネルはDIPスイッチで設定",
+     "fact_ids": [
+      "F-013-044"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "受信するMIDIメッセージの種類がノート中心に限られる",
+     "fact_ids": [
+      "F-013-043"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDIノートをKBD CV/ゲートに変換して制御。",
+     "fact_ids": [
+      "F-013-043"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-002"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-015",
+   "kind": "control_interface",
+   "name": "ARP 2600 M MIDI/USB",
+   "maker": "Korg",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "外部MIDIコントローラーによるノート/ピッチベンド/モジュレーション/ポルタメント制御。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "USBとDIN MIDIでコントローラー演奏",
+     "fact_ids": [
+      "F-013-045"
+     ]
+    },
+    {
+     "text": "CC#01→MOD CV(約0〜+7V)",
+     "fact_ids": [
+      "F-013-046"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "実装表(CC1が無い)と取扱説明書の記述に差があり、CC#01の扱いは要確認",
+     "fact_ids": [
+      "F-013-047",
+      "F-013-046"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "MOD CV",
+     "unit": "V",
+     "range": {
+      "min": 0,
+      "max": 7,
+      "unit": "V"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-046"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MIDIチャンネルは背面MODE SWITCH 1-4で設定。ノート/ピッチベンド/モジュレーション/ポルタメントを受信してCV化。",
+     "fact_ids": [
+      "F-013-045"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-003"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-016",
+   "kind": "module",
+   "name": "Behringer 1004 OSCILLATOR MODULE",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "oscillator",
+   "purpose": "2500系デュアルコアVCOのEurorack版。",
+   "synthesis_method": "アナログVCO(ディスクリート回路をうたう)",
+   "features": [
+    {
+     "text": "波形ごとに反転/オフ/非反転を選びミックス",
+     "fact_ids": [
+      "F-013-048"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "KEY IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-049"
+     ]
+    },
+    {
+     "name": "PWM IN",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-049"
+     ]
+    },
+    {
+     "name": "OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-049"
+     ]
+    }
+   ],
+   "params": [
+    {
+     "name": "frequency range",
+     "unit": "Hz",
+     "range": {
+      "min": 0.03,
+      "max": 16000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-048"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-005"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-017",
+   "kind": "module",
+   "name": "Behringer 1003 DUAL ENVELOPE GENERATOR MODULE",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "envelope",
+   "purpose": "2系統のADSR(初期ディケイ+最終ディケイ)。",
+   "synthesis_method": "アナログEG",
+   "features": [
+    {
+     "text": "シングルはゲートのみ、マルチはトリガで再トリガ",
+     "fact_ids": [
+      "F-013-050"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "GATE IN",
+     "direction": "in",
+     "signal_type": "gate",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-050"
+     ]
+    },
+    {
+     "name": "TRIG IN",
+     "direction": "in",
+     "signal_type": "trigger",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-050"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-005"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-018",
+   "kind": "module",
+   "name": "Behringer 1006 FILTAMP MODULE",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "24dB/octトランジスタ・ラダーLPFとVCAの一体モジュール。",
+   "synthesis_method": "ラダーVCF+VCA",
+   "features": [
+    {
+     "text": "24dBラダーLPF+VCA一体",
+     "fact_ids": [
+      "F-013-052"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "KEYBOARD CV",
+     "direction": "in",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-052"
+     ]
+    },
+    {
+     "name": "VCA OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-052"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-005"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-019",
+   "kind": "module",
+   "name": "Behringer 1005 MODAMP MODULE",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "amplifier_mixer",
+   "purpose": "バランスドモジュレータ(リングモジュレータ)+VCAのモジュール。",
+   "synthesis_method": "リング変調+VCA",
+   "features": [
+    {
+     "text": "入力A×Bのリング変調。MOD/UNMOD切替をゲート/トリガで遠隔制御可能",
+     "fact_ids": [
+      "F-013-054"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [
+    {
+     "name": "IN A",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-054"
+     ]
+    },
+    {
+     "name": "IN B",
+     "direction": "in",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-054"
+     ]
+    },
+    {
+     "name": "VCA OUT",
+     "direction": "out",
+     "signal_type": "audio",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-054"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-005"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-020",
+   "kind": "module",
+   "name": "Behringer 1047 MULTIMODE FILTER / RESONATOR MODULE",
+   "maker": "Behringer",
+   "version": null,
+   "function_category": "filter",
+   "purpose": "12dB/octステートバリアブルフィルタ(LP/HP/BP/ノッチ同時出力)。",
+   "synthesis_method": "ステートバリアブルVCF",
+   "features": [
+    {
+     "text": "4出力同時、カットオフ16Hz〜16kHz",
+     "fact_ids": [
+      "F-013-056"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [
+    {
+     "name": "cutoff",
+     "unit": "Hz",
+     "range": {
+      "min": 16,
+      "max": 16000,
+      "unit": "Hz"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-056"
+     ]
+    }
+   ],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-005"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-013-001",
+   "entity_id": "REF-013-001",
+   "topic": "production",
+   "statement": "原機は1971年から1981年まで製造・販売された。初期の金属筐体を除き、本体とキーボードが分離するスーツケース型構成。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.4 About the ARP 2600 synthesizer",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-002",
+   "entity_id": "REF-013-001",
+   "topic": "architecture",
+   "statement": "主要モジュールは内部で事前結線されており、パッチなしで発音できる。パッチングでさらに複雑な音作りが可能なセミモジュラー。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.4 About the ARP 2600 synthesizer",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-003",
+   "entity_id": "REF-013-001",
+   "topic": "features",
+   "statement": "内蔵スピーカーとスプリングリバーブが特徴として挙げられている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.4 About the ARP 2600 synthesizer",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-004",
+   "entity_id": "REF-013-002",
+   "topic": "release",
+   "statement": "Korgによる一回限りの生産ロットの限定再発売とされ、日本製ハンドクラフト。USB/DINのMIDI、XLR出力、アルペジエータ付き改良版3620キーボードを含む。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 冒頭説明",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-005",
+   "entity_id": "REF-013-002",
+   "topic": "claim",
+   "statement": "Korgはデヴィッド・フレンド監修のもと、回路レベルで原機のサウンドを再現したと述べている。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'The Total Package'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-006",
+   "entity_id": "REF-013-002",
+   "topic": "filter types",
+   "statement": "VCFは原機の初期型(TYPE I)と後期型(TYPE II)をスイッチで選択できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.4 Main Features / p.10 VCF section",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-007",
+   "entity_id": "REF-013-002",
+   "topic": "dimensions",
+   "statement": "本体は836×232×509mm・19.3kg、3620キーボード部は914×274×158mm・11.3kg。消費電力30W。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: General / Dimensions",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-008",
+   "entity_id": "REF-013-002",
+   "topic": "audio io",
+   "statement": "フロント出力L/Rは3.5mmモノ(最大+9dBu)、サイド出力はXLRバランス(+4dBu)、ヘッドホンは6.3mmステレオ。外部オーディオ(プリアンプ)入力は3.5mmで最大-10dBu。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: AUDIO OUTPUT JACKS / EXTERNAL AUDIO INPUT",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-009",
+   "entity_id": "REF-013-002",
+   "topic": "patching",
+   "statement": "パッチ点は3.5mm(1/8インチ)ジャック。主なパッチ点はコントロール群の下に一列に並ぶ。パッチコードを挿すと該当するハードワイヤ接続が上書きされる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'Normalled Pathways' / 'Patch Bay Precision'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-010",
+   "entity_id": "REF-013-003",
+   "topic": "size",
+   "statement": "原機比およそ60%のサイズとされ、FSと同じアナログ回路・部品を用いると記載。標準版とLTD版(microKEY2-37付属)は本体が同一。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-013-04",
+   "locator": "Product page 'A legend, reborn' / 'One Instrument, two flavors'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-011",
+   "entity_id": "REF-013-003",
+   "topic": "dimensions",
+   "statement": "寸法520×129×311mm、質量6.0kg、消費電力13W。MIDIはDIN IN、USBはType A/Type B。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-05",
+   "locator": "Specifications: General / Dimensions / MIDI connector / USB port",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-012",
+   "entity_id": "REF-013-003",
+   "topic": "added features",
+   "statement": "FS比の追加・変更点として、S/H GATEジャックでADSRを起動するトリガしきい値が5V、AR/ADSRの時間比の改善、ヘッドホン接続時のスピーカー自動オフ、L/RステレオをXLRでなくジャック出力、などが挙げられている。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-04",
+   "locator": "Product page 'Added features and functionality'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-013",
+   "entity_id": "REF-013-003",
+   "topic": "audio io",
+   "statement": "フロントL/Rは3.5mmモノ(最大+9dBu)、サイドは6.3mmモノ(最大+4dBu)、ヘッドホンは6.3mmステレオ。外部プリアンプ入力は3.5mm(RANGE x10・GAIN最大時の最大入力+2dBu)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-05",
+   "locator": "Specifications: AUDIO OUTPUT JACKS / EXTERNAL AUDIO INPUT",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-014",
+   "entity_id": "REF-013-003",
+   "topic": "third-party comment",
+   "statement": "初代共同創業者デヴィッド・フレンド氏はコメントとして、2600 Mは原機と同じ音で家庭スタジオに適すると述べている(Korg掲載の推薦文)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-04",
+   "locator": "Product page 'David Friend' quote",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-015",
+   "entity_id": "REF-013-004",
+   "topic": "history",
+   "statement": "ARP創業者パールマンが1970年にARP 2500を作り、スイッチのマトリクスによるコードレス・パッチング技法を開発したと、Korgサイト掲載のARP財団紹介文に記載。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-04",
+   "locator": "Product page 'About the Alan R. Pearlman Foundation'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-016",
+   "entity_id": "REF-013-005",
+   "topic": "positioning",
+   "statement": "Behringerは各モジュールを、1970年代の原機『System 2500』回路の忠実な再現として標準Eurorackケースに収まる形で提供すると述べる。",
+   "basis": "advertising",
+   "confidence": "medium",
+   "source_id": "SRC-013-08",
+   "locator": "Product page 0720-ABS 概要欄",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-017",
+   "entity_id": "REF-013-005",
+   "topic": "lineup",
+   "statement": "同シリーズとして製品ページを確認できたのは、1003(デュアルEG)、1004(VCO)、1005(ModAmp)、1006(FiltAmp)、1033(EG)、1047(マルチモードフィルタ)。1033は見出しのみ確認。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-013-15",
+   "locator": "Product page 0720-ABX 見出し・説明文 / 検索結果",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-018",
+   "entity_id": "REF-013-005",
+   "topic": "hp width",
+   "statement": "確認した各製品ページの仕様は、いずれも16HP幅のEurorackモジュール。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-08",
+   "locator": "Product page 'Eurorack specs'(1003/1004/1005/1006/1047)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-019",
+   "entity_id": "REF-013-005",
+   "topic": "original history claim",
+   "statement": "原機2500シリーズは70年代に非常に高価で、主にディスクリートトランジスタ回路にオペアンプを併用したと、Behringerのページに説明がある。",
+   "basis": "advertising",
+   "confidence": "low",
+   "source_id": "SRC-013-08",
+   "locator": "Product page 'Modular Synthesis'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-020",
+   "entity_id": "REF-013-006",
+   "topic": "pitch cv",
+   "statement": "VCOのピッチ制御は1V/oct。3620キーボードのCV出力はUPPER VOICE −3〜+10V、LOWER VOICE −3〜+7V(いずれも1V/oct)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: VCO voltage controlled response / ARP 3620 CV output voltage",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-021",
+   "entity_id": "REF-013-006",
+   "topic": "gate trigger",
+   "statement": "ゲートはキー押下で+10V(離鍵で0V)、トリガは+10V・0.5msのパルス。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: GATE / TRIGGER output voltage",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-022",
+   "entity_id": "REF-013-006",
+   "topic": "lfo levels",
+   "statement": "3620のLFO出力は三角波±5V(10Vp-p)、矩形波+10V(10Vp-p)、ディレイ付きサイン±3V(6Vp-p)。外部ビブラート入力は最大±10V。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: LFO output voltage / EXTERNAL VIBRATO input voltage",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-023",
+   "entity_id": "REF-013-006",
+   "topic": "vca law",
+   "statement": "VCAのCV入力1(AR EGが結線)はゲインがCV電圧に比例し、CV入力2(ADSRが結線)は指数関係。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.12 VCA section d/e",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-024",
+   "entity_id": "REF-013-006",
+   "topic": "normalling",
+   "statement": "各スライダー/スイッチは特定の制御源に事前結線され、対応ジャックにパッチコードを挿すとその内部接続が上書きされる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'Normalled Pathways'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-025",
+   "entity_id": "REF-013-006",
+   "topic": "jack type",
+   "statement": "パッチ点は3.5mm(1/8インチ)ジャック。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'Patch Bay Precision'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-026",
+   "entity_id": "REF-013-007",
+   "topic": "waveforms",
+   "statement": "VCO-1は鋸歯・矩形、VCO-2は鋸歯・パルス(PWM)・三角・サイン、VCO-3は鋸歯・パルス(PWM)を出力。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: VCO-1/2/3 Waveforms",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-027",
+   "entity_id": "REF-013-007",
+   "topic": "range",
+   "statement": "各VCOの周波数範囲は概ね、LFOモード0.03〜30Hz、オーディオモード10Hz〜10kHz。パルス幅は10〜90%(VCO-2/3)。1V/oct。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: VCO-1/2/3 Frequency range / Pulse width",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-028",
+   "entity_id": "REF-013-007",
+   "topic": "cv inputs",
+   "statement": "VCO-1のピッチCV入力は4つで、KBD CV・S/H出力・ADSR・VCO-2サインが事前結線されている。AUDIO/LFスイッチをKBD OFFにするとLFOとして使用でき、キーボードCVは入らない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.7 VCO-1 section c-g",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-029",
+   "entity_id": "REF-013-007",
+   "topic": "pwm",
+   "statement": "VCO-2のPWM入力にはノイズ発生器が事前結線されている。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-013-03",
+   "locator": "p.8 VCO-2 section h",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-030",
+   "entity_id": "REF-013-008",
+   "topic": "response",
+   "statement": "ローパス型24dB/octで、TYPE I(初期型)とTYPE II(後期型)を選択。カットオフ範囲は概ね10Hz〜10kHz、レゾナンスは自己発振可能。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-02",
+   "locator": "Specifications: VCF Type / Frequency range / Resonance",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-031",
+   "entity_id": "REF-013-008",
+   "topic": "inputs",
+   "statement": "オーディオ入力は5系統(リングモジュレータ、VCO-1矩形、VCO-2パルス、VCO-3鋸歯、ノイズが事前結線)で個別レベル調整あり。CV入力は3系統(ADSR、KBD CV、VCO-2サイン)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.10 VCF section e-s",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-032",
+   "entity_id": "REF-013-009",
+   "topic": "two types",
+   "statement": "エンベロープは4ステージのADSRと、可変アタック/リリースのみのARの2種類。MANUAL STARTでキーなしにトリガ可能。ゲート/トリガ出力あり。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'The Envelopes' / 'Normalled Pathways'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-033",
+   "entity_id": "REF-013-009",
+   "topic": "gate source",
+   "statement": "AR EGはGATE/TRIGソースをS/H GATEかキーボードGATE/TRIGから選択可能。GATE入力にはS/H GATEが事前結線。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.11 ADSR EG/AR EG section h,i",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-034",
+   "entity_id": "REF-013-009",
+   "topic": "trigger mode",
+   "statement": "3620キーボードのTRIGGER MODEはSINGLE(前のリリース終了までは再トリガしない=レガート)とMULTIPLE(ノートごとにトリガ)があり、ARには適用されない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.18 ARP3620 d. TRIGGER MODE",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-035",
+   "entity_id": "REF-013-010",
+   "topic": "s&h",
+   "statement": "S/H入力にはノイズ発生器が事前結線。内部クロックのレートは0.2〜24Hz、EXT CLOCK INで外部クロックに同期可能。INT CLOCK OUTでクロックを出力できる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.15 SAMPLE & HOLD section a-f",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-036",
+   "entity_id": "REF-013-010",
+   "topic": "electronic switch",
+   "statement": "ELECTRONIC SWITCH A/B/Cは、クロック同期でA-C間とB-C間を交互に接続するアナログスイッチ(オートパンなどに使用可)。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.15 g-i and Tip",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-037",
+   "entity_id": "REF-013-011",
+   "topic": "vca",
+   "statement": "VCAは線形(CV1)と指数(CV2)の制御入力をもち、INITIAL GAINを最大にすると音が連続出力される。オーディオ入力はVCFとリングモジュレータが事前結線。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.12 VCA section a-j",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-038",
+   "entity_id": "REF-013-011",
+   "topic": "signal flow",
+   "statement": "VCA後段はステレオミキサー、内部スプリングリバーブ、メイン出力・ヘッドホン・左右内蔵スピーカーへ送られる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-01",
+   "locator": "Product page 'Over and Out'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-039",
+   "entity_id": "REF-013-012",
+   "topic": "reverb patching",
+   "statement": "リバーブ入力にはミキサー出力が事前結線。REVERB OUTPUTにパッチコードを挿すとリバーブ音は左右出力に出なくなる。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.13 MIXER, REVERB section m,p",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-040",
+   "entity_id": "REF-013-012",
+   "topic": "m reverb",
+   "statement": "2600 Mではスプリングリバーブを新筐体に合わせて再設計したと記載。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-013-04",
+   "locator": "Product page 'Proudly Designed and Made in Japan'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-041",
+   "entity_id": "REF-013-013",
+   "topic": "seq rec",
+   "statement": "3620のSEQ RECで録音したアルペジオパターンは電源投入中のみ記憶され、電源を切ると消える。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.23 Arpeggiator settings / Recording an arpeggio pattern",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-042",
+   "entity_id": "REF-013-013",
+   "topic": "voice assign",
+   "statement": "ボイスアサイン(Normal/Original)設定は電源を切っても記憶される。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.23 Voice assign mode settings",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-043",
+   "entity_id": "REF-013-014",
+   "topic": "midi in",
+   "statement": "MIDI IN/OUT/THRUとUSB-B端子を装備。MIDI INで受信するのはノートのみ(ベロシティ無視、ノート12〜127)。USBではノートに加えピッチベンドも受信。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.17 Side panel L / p.24 About MIDI",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-044",
+   "entity_id": "REF-013-014",
+   "topic": "midi channel",
+   "statement": "MIDIチャンネルは背面のMODE SWITCH 1〜4の組合せで1〜16を設定、工場出荷時はチャンネル1。スライダーやスイッチ操作はMIDI送信されない。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-03",
+   "locator": "p.24 MIDI channel",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-045",
+   "entity_id": "REF-013-015",
+   "topic": "midi in",
+   "statement": "USB A/B(クラスコンプライアント)とDIN MIDI INを装備。MIDI INで受けるのはノート、ピッチベンド、モジュレーション、ポルタメント。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-06",
+   "locator": "About MIDI / Connecting MIDI devices",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-046",
+   "entity_id": "REF-013-015",
+   "topic": "mod cv",
+   "statement": "受信したモジュレーション(CC#01)に対応するMOD CVジャックが約0V〜+7Vを出力する。KBD CV-1/2はノートオンのピッチCV(低い方/高い方)を出力。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-06",
+   "locator": "Front panel (SPEAKER section L) a-c",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-047",
+   "entity_id": "REF-013-015",
+   "topic": "cc table",
+   "statement": "MIDI実装表は受信としてCC5(ポルタメントタイム)、CC65(ポルタメント)、CC69(Hold2=インターバルラッチ)、CC120、CC121、ピッチベンド、ノート12〜127に対応を示す。CC#01は表に記載がなく、取扱説明書側に記載がある。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-013-07",
+   "locator": "MIDI Implementation Chart v1.0 (2020.10.23)",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-048",
+   "entity_id": "REF-013-016",
+   "topic": "spec",
+   "statement": "5波形(サイン/三角/矩形/鋸歯/パルス)を3ポジションスイッチで反転/オフ/非反転に設定しミックス。周波数範囲は0.03Hz〜16kHzを2レンジ。粗調整は10オクターブ、微調整は±1オクターブ。FM入力2系統は1V/oct。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-08",
+   "locator": "Product page features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-049",
+   "entity_id": "REF-013-016",
+   "topic": "io",
+   "statement": "1V/octのキーボード入力、VCO変調入力2、PWM入力、並列オーディオ出力2を持つ。電源は+12V 60mA / -12V 50mA、16HP。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-08",
+   "locator": "Product page 'Ins and Outs' / Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-050",
+   "entity_id": "REF-013-017",
+   "topic": "spec",
+   "statement": "同一のエンベロープを2系統。アタック、初期ディケイ、サステイン(0〜10V)、最終ディケイの4パラメータ。ゲートとトリガの両入力、シングル/マルチ2モード、手動ゲートボタン付き。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-09",
+   "locator": "Product page features / 'Start Sculpting'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-051",
+   "entity_id": "REF-013-017",
+   "topic": "power",
+   "statement": "16HP、+12V 40mA / -12V 20mA。出力は4本。",
+   "basis": "manufacturer_doc",
+   "confidence": "medium",
+   "source_id": "SRC-013-09",
+   "locator": "Product page Eurorack specs / 'Ins and Outs'",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-052",
+   "entity_id": "REF-013-018",
+   "topic": "spec",
+   "statement": "24dB/octのマッチドトランジスタラダー型LPF+VCA。レゾナンスは自己発振可。VCF用CV入力3系統(1V/oct)にそれぞれアッテネータ、VCA用CV2系統、VCAは指数/線形選択。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-10",
+   "locator": "Product page features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-053",
+   "entity_id": "REF-013-018",
+   "topic": "power",
+   "statement": "16HP、+12V 22mA / -12V 20mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-10",
+   "locator": "Product page Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-054",
+   "entity_id": "REF-013-019",
+   "topic": "spec",
+   "statement": "ディスクリートのバランスドモジュレータとVCA。入力A/Bは直流〜20kHzで、出力は両者の乗算。MOD/UNMODボタン(ゲート/トリガでも切替可)、VCAは指数/線形選択、VCO周波数用の精密電圧出力2系統。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-11",
+   "locator": "Product page features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-055",
+   "entity_id": "REF-013-019",
+   "topic": "power",
+   "statement": "16HP、+12V 60mA / -12V 45mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-11",
+   "locator": "Product page Eurorack specs",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-056",
+   "entity_id": "REF-013-020",
+   "topic": "spec",
+   "statement": "LP/HPは12dB/oct、BPは6dB/octで、LP/HP/BP/ノッチの4出力を同時に使える。カットオフ16Hz〜16kHz、Qは0.5〜256超、共振リミットスイッチ、FCV入力2系統とQ CV入力にアッテネータ。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-12",
+   "locator": "Product page features",
+   "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-057",
+   "entity_id": "REF-013-020",
+   "topic": "power",
+   "statement": "16HP、+12V 55mA / -12V 45mA。",
+   "basis": "manufacturer_doc",
+   "confidence": "high",
+   "source_id": "SRC-013-12",
+   "locator": "Product page Eurorack specs",
+   "verified_on": "2026-11-12"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-013-001",
+   "item": "原機ARP 2600の電圧規約・各モジュール仕様(原機取扱説明書はPDFを取得したが画像スキャンでテキスト層がなく、内容未読)",
+   "tried_sources": [
+    "SRC-013-14",
+    "SRC-013-03"
+   ],
+   "impact_on_spec": "原機固有の仕様・電圧は再発売品(FS/M)の資料の範囲に限って記録。原機そのものを仕様の根拠にはできない"
+  },
+  {
+   "entity_id": "REF-013-004",
+   "item": "ARP 2500原機のモジュール構成、マトリクススイッチの仕様(行列数・接続方式)、電圧規約",
+   "tried_sources": [
+    "SRC-013-04",
+    "SRC-013-08"
+   ],
+   "impact_on_spec": "マトリクス式パッチの具体仕様を定義できない。Korgの財団紹介文とBehringer販促ページの断片的記述のみ"
+  },
+  {
+   "entity_id": "REF-013-005",
+   "item": "Behringer 2500系のQuick Start Guide(PDF)",
+   "tried_sources": [
+    "SRC-013-13"
+   ],
+   "impact_on_spec": "ポート単位の電圧範囲・ゲート閾値・信号レベルなどの詳細仕様が取得不能(cdn-media.empowertribe.com が403で接続拒否)。製品ページの記述のみで記録"
+  },
+  {
+   "entity_id": "REF-013-005",
+   "item": "Behringer 2500系にマトリクス式パッチを再現する製品があるか",
+   "tried_sources": [
+    "SRC-013-08",
+    "SRC-013-09"
+   ],
+   "impact_on_spec": "製品ページに記載なし。確認できたのはケーブル/Eurorack方式のモジュールのみ"
+  },
+  {
+   "entity_id": "REF-013-005",
+   "item": "1033 Dual Envelope Generator Moduleの詳細仕様",
+   "tried_sources": [
+    "SRC-013-15"
+   ],
+   "impact_on_spec": "見出しの説明文のみ確認し機能詳細は未読のため、エンティティ化していない"
+  },
+  {
+   "entity_id": "REF-013-002",
+   "item": "2600 FS/Mのパッチ保存機能の有無",
+   "tried_sources": [
+    "SRC-013-03",
+    "SRC-013-06"
+   ],
+   "impact_on_spec": "取扱説明書にデジタルなパッチ保存機能の記載は確認していないが、無いことの明記も確認していない"
+  },
+  {
+   "entity_id": "REF-013-003",
+   "item": "2600 Mの取扱説明書本文による各モジュール詳細(FSと差異のある点)",
+   "tried_sources": [
+    "SRC-013-06",
+    "SRC-013-05"
+   ],
+   "impact_on_spec": "MIDI節とスピーカー節以外はFS資料との差を精査していない。VCO等の仕様はスペック表上FSと同一"
+  },
+  {
+   "entity_id": "REF-013-015",
+   "item": "MIDI CC#01の受信がMIDI実装表に載っていない理由、MIDIチャンネルのデフォルト",
+   "tried_sources": [
+    "SRC-013-06",
+    "SRC-013-07"
+   ],
+   "impact_on_spec": "CC受信の仕様を断定できない"
+  }
+ ]
+}
