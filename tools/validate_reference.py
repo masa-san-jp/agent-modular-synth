@@ -3,7 +3,7 @@
 import json, re, sys, glob, os
 from collections import Counter
 
-ROOT = os.path.join(os.path.dirname(__file__), "..", "data", "reference")
+ROOT = os.path.join(os.path.dirname(__file__), "..", "references", "db", "data")
 ERR = []
 def err(m): ERR.append(m)
 

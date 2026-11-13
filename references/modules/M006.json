@@ -1,0 +1,40 @@
+{
+  "id": "M006",
+  "name": "A-155 Analog/Trigger Sequencer",
+  "maker": "Doepfer",
+  "kind": "hardware_module",
+  "version": "A-155（A-154拡張は対象外）",
+  "parent_id": "I001",
+  "categories": [
+    "sequencer",
+    "clock",
+    "gate",
+    "sample_hold",
+    "slew"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "段と電圧",
+      "value": "2 analog rows、各8 steps。上段出力は0–1/2/4 V切替、下段はscale可変で最大約6.5 V。下段external入力は−5–12 V範囲とされ接続時knobはattenuatorになる。",
+      "evidence": {
+        "source_id": "S015",
+        "section": "Features of analog rows"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "時間・イベント",
+      "value": "3 trigger tracksの幅はclock/step入力の幅に対応。1 gate trackは選択step全体でhigh。Stepで進み、Resetで全rowをstep1へ、Start/Stopは現在位置から開始/停止。Glide/S&H前後に出力を持つ。",
+      "evidence": {
+        "source_id": "S015",
+        "section": "Features of trigger rows; Control inputs"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "clock/reset同時入力の優先順、閾値、最大clock、停止中出力、初期step、保存、glide時間式・境界条件は未確認。"
+  ],
+  "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "I006",
+  "name": "Music Easel（2017 Aux Card guideの対象）",
+  "maker": "Buchla",
+  "kind": "hardware_patchable",
+  "version": "2017 guide対象。Modern版I005とは仕様を共通化しない",
+  "parent_id": null,
+  "categories": [
+    "history",
+    "program_card",
+    "expansion"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "歴史・拡張",
+      "value": "2017年の公式guideは1973年のProgram Card接続をpresetと機能拡張に使う経緯を説明し、208とAux Cardの連携を記述する。歴史的原機の全仕様を読めたことにはしない。",
+      "evidence": {
+        "source_id": "S016",
+        "section": "PDF p.1 Introducing the Music Easel Auxiliary Card"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "旧Music Easel全体の再現仕様・Modernとの互換性・program cardデータ形式は未確認。"
+  ],
+  "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。"
+}

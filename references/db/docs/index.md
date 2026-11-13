@@ -1,33 +1,33 @@
 # リファレンスDB 索引
 
-自動生成(`tools/build_reference_docs.py`)。事実の正本は `data/reference/`。本書はDBへの入口で、事実本文を複製しない。
+自動生成(`tools/build_reference_docs.py`)。事実の正本は `references/db/data/`。本書はDBへの入口で、事実本文を複製しない。
 
 ## 対象一覧
 
 | 対象ID | 名称 | 種別 | 時代 | 状態 | エンティティ | 事実 | 出典 | 未確認 | DB |
 |---|---|---|---|---|---|---|---|---|---|
-| T-001 | Doepfer A-100(Eurorack規格と代表モジュール) | ハード モジュラー | 現行 | 確認済み | 14 | 56 | 15 | 10 | [records](../../data/reference/records/T-001.json) / [sources](../../data/reference/sources/T-001.json) |
-| T-002 | Make Noise(Maths等の代表モジュール) | ハード モジュラー | 現行 | 確認済み | 6 | 32 | 8 | 7 | [records](../../data/reference/records/T-002.json) / [sources](../../data/reference/sources/T-002.json) |
-| T-003 | Moog Mother-32 | セミモジュラー | 現行 | 資料不足 | 12 | 48 | 6 | 9 | [records](../../data/reference/records/T-003.json) / [sources](../../data/reference/sources/T-003.json) |
-| T-004 | Korg MS-20 系(MS-20 mini) | セミモジュラー | 歴史的 | 確認済み | 11 | 51 | 4 | 7 | [records](../../data/reference/records/T-004.json) / [sources](../../data/reference/sources/T-004.json) |
-| T-005 | VCV Rack | ソフト モジュラー | 現行 | 確認済み | 11 | 48 | 8 | 7 | [records](../../data/reference/records/T-005.json) / [sources](../../data/reference/sources/T-005.json) |
-| T-006 | Cardinal | ソフト モジュラー | 現行 | 確認済み | 8 | 19 | 4 | 4 | [records](../../data/reference/records/T-006.json) / [sources](../../data/reference/sources/T-006.json) |
-| T-007 | BespokeSynth | ソフト モジュラー | 現行 | 確認済み | 10 | 26 | 17 | 9 | [records](../../data/reference/records/T-007.json) / [sources](../../data/reference/sources/T-007.json) |
-| T-008 | Pure Data(Pd) | ソフト 環境 | 歴史的 | 確認済み | 9 | 40 | 7 | 10 | [records](../../data/reference/records/T-008.json) / [sources](../../data/reference/sources/T-008.json) |
-| T-009 | SuperCollider | ソフト 環境 | 現行 | 確認済み | 13 | 47 | 11 | 10 | [records](../../data/reference/records/T-009.json) / [sources](../../data/reference/sources/T-009.json) |
-| T-010 | Max / MSP | ソフト 環境 | 現行 | 確認済み | 11 | 36 | 14 | 11 | [records](../../data/reference/records/T-010.json) / [sources](../../data/reference/sources/T-010.json) |
-| T-011 | Moog 大型モジュラー系(System 15/35/55、Behringer System 55) | ハード モジュラー | 歴史的 | 確認済み | 24 | 64 | 16 | 13 | [records](../../data/reference/records/T-011.json) / [sources](../../data/reference/sources/T-011.json) |
-| T-012 | Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue) | ハード モジュラー | 歴史的 | 確認済み | 31 | 70 | 21 | 14 | [records](../../data/reference/records/T-012.json) / [sources](../../data/reference/sources/T-012.json) |
-| T-013 | ARP 系(ARP 2500、ARP 2600、Behringer 2500) | セミモジュラー | 歴史的 | 確認済み | 31 | 109 | 24 | 14 | [records](../../data/reference/records/T-013.json) / [sources](../../data/reference/sources/T-013.json) |
-| T-014 | Roland System 系(System-100m、System-700、System-500、Behringer System 100) | ハード モジュラー | 歴史的 | 確認済み | 30 | 90 | 30 | 14 | [records](../../data/reference/records/T-014.json) / [sources](../../data/reference/sources/T-014.json) |
-| T-015 | EMS 系(VCS3、Synthi 100) | セミモジュラー | 歴史的 | 確認済み | 16 | 55 | 11 | 12 | [records](../../data/reference/records/T-015.json) / [sources](../../data/reference/sources/T-015.json) |
-| T-016 | Serge 系(Serge Modular、Random*Source Serge) | ハード モジュラー | 歴史的 | 確認済み | 16 | 43 | 13 | 13 | [records](../../data/reference/records/T-016.json) / [sources](../../data/reference/sources/T-016.json) |
-| T-017 | 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | ハード モジュラー | 現行 | 確認済み | 12 | 62 | 14 | 13 | [records](../../data/reference/records/T-017.json) / [sources](../../data/reference/sources/T-017.json) |
-| T-018 | ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js) | ソフト モジュラー | 現行 | 確認済み | 29 | 74 | 12 | 14 | [records](../../data/reference/records/T-018.json) / [sources](../../data/reference/sources/T-018.json) |
-| T-019 | エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge) | ソフト 環境 | 現行 | 確認済み | 16 | 55 | 15 | 12 | [records](../../data/reference/records/T-019.json) / [sources](../../data/reference/sources/T-019.json) |
-| T-020 | Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等) | ハード モジュラー | 歴史的 | 確認済み | 8 | 26 | 10 | 11 | [records](../../data/reference/records/T-020.json) / [sources](../../data/reference/sources/T-020.json) |
-| T-021 | Web Audio API(AudioContext/AudioWorklet、自動再生制限) | ソフト 環境 | 現行 | 確認済み | 5 | 22 | 4 | 6 | [records](../../data/reference/records/T-021.json) / [sources](../../data/reference/sources/T-021.json) |
-| T-022 | 外部制御規格(MIDI 1.0/2.0、OSC) | ソフト 環境 | 現行 | 確認済み | 16 | 34 | 8 | 7 | [records](../../data/reference/records/T-022.json) / [sources](../../data/reference/sources/T-022.json) |
+| T-001 | Doepfer A-100(Eurorack規格と代表モジュール) | ハード モジュラー | 現行 | 確認済み | 14 | 56 | 15 | 10 | [records](../data/records/T-001.json) / [sources](../data/sources/T-001.json) |
+| T-002 | Make Noise(Maths等の代表モジュール) | ハード モジュラー | 現行 | 確認済み | 6 | 32 | 8 | 7 | [records](../data/records/T-002.json) / [sources](../data/sources/T-002.json) |
+| T-003 | Moog Mother-32 | セミモジュラー | 現行 | 資料不足 | 12 | 48 | 6 | 9 | [records](../data/records/T-003.json) / [sources](../data/sources/T-003.json) |
+| T-004 | Korg MS-20 系(MS-20 mini) | セミモジュラー | 歴史的 | 確認済み | 11 | 51 | 4 | 7 | [records](../data/records/T-004.json) / [sources](../data/sources/T-004.json) |
+| T-005 | VCV Rack | ソフト モジュラー | 現行 | 確認済み | 11 | 48 | 8 | 7 | [records](../data/records/T-005.json) / [sources](../data/sources/T-005.json) |
+| T-006 | Cardinal | ソフト モジュラー | 現行 | 確認済み | 8 | 19 | 4 | 4 | [records](../data/records/T-006.json) / [sources](../data/sources/T-006.json) |
+| T-007 | BespokeSynth | ソフト モジュラー | 現行 | 確認済み | 10 | 26 | 17 | 9 | [records](../data/records/T-007.json) / [sources](../data/sources/T-007.json) |
+| T-008 | Pure Data(Pd) | ソフト 環境 | 歴史的 | 確認済み | 9 | 40 | 7 | 10 | [records](../data/records/T-008.json) / [sources](../data/sources/T-008.json) |
+| T-009 | SuperCollider | ソフト 環境 | 現行 | 確認済み | 13 | 47 | 11 | 10 | [records](../data/records/T-009.json) / [sources](../data/sources/T-009.json) |
+| T-010 | Max / MSP | ソフト 環境 | 現行 | 確認済み | 11 | 36 | 14 | 11 | [records](../data/records/T-010.json) / [sources](../data/sources/T-010.json) |
+| T-011 | Moog 大型モジュラー系(System 15/35/55、Behringer System 55) | ハード モジュラー | 歴史的 | 確認済み | 24 | 64 | 16 | 13 | [records](../data/records/T-011.json) / [sources](../data/sources/T-011.json) |
+| T-012 | Buchla 系(Buchla 100/200、TipTop Buchla 200t、Buchla 266 Classic Reissue) | ハード モジュラー | 歴史的 | 確認済み | 31 | 70 | 21 | 14 | [records](../data/records/T-012.json) / [sources](../data/sources/T-012.json) |
+| T-013 | ARP 系(ARP 2500、ARP 2600、Behringer 2500) | セミモジュラー | 歴史的 | 確認済み | 31 | 109 | 24 | 14 | [records](../data/records/T-013.json) / [sources](../data/sources/T-013.json) |
+| T-014 | Roland System 系(System-100m、System-700、System-500、Behringer System 100) | ハード モジュラー | 歴史的 | 確認済み | 30 | 90 | 30 | 14 | [records](../data/records/T-014.json) / [sources](../data/sources/T-014.json) |
+| T-015 | EMS 系(VCS3、Synthi 100) | セミモジュラー | 歴史的 | 確認済み | 16 | 55 | 11 | 12 | [records](../data/records/T-015.json) / [sources](../data/sources/T-015.json) |
+| T-016 | Serge 系(Serge Modular、Random*Source Serge) | ハード モジュラー | 歴史的 | 確認済み | 16 | 43 | 13 | 13 | [records](../data/records/T-016.json) / [sources](../data/sources/T-016.json) |
+| T-017 | 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | ハード モジュラー | 現行 | 確認済み | 12 | 62 | 14 | 13 | [records](../data/records/T-017.json) / [sources](../data/sources/T-017.json) |
+| T-018 | ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js) | ソフト モジュラー | 現行 | 確認済み | 29 | 74 | 12 | 14 | [records](../data/records/T-018.json) / [sources](../data/sources/T-018.json) |
+| T-019 | エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge) | ソフト 環境 | 現行 | 確認済み | 16 | 55 | 15 | 12 | [records](../data/records/T-019.json) / [sources](../data/sources/T-019.json) |
+| T-020 | Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等) | ハード モジュラー | 歴史的 | 確認済み | 8 | 26 | 10 | 11 | [records](../data/records/T-020.json) / [sources](../data/sources/T-020.json) |
+| T-021 | Web Audio API(AudioContext/AudioWorklet、自動再生制限) | ソフト 環境 | 現行 | 確認済み | 5 | 22 | 4 | 6 | [records](../data/records/T-021.json) / [sources](../data/sources/T-021.json) |
+| T-022 | 外部制御規格(MIDI 1.0/2.0、OSC) | ソフト 環境 | 現行 | 確認済み | 16 | 34 | 8 | 7 | [records](../data/records/T-022.json) / [sources](../data/sources/T-022.json) |
 
 ## エンティティ索引
 

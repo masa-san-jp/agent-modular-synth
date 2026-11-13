@@ -2,8 +2,8 @@
 """DBから人が読める索引・比較表・不足一覧を生成する(事実本文は複製せず、ID参照とDB由来の要約文のみ)。"""
 import json, os, glob
 R = os.path.join(os.path.dirname(__file__), "..")
-D = os.path.join(R, "data", "reference")
-OUT = os.path.join(R, "docs", "reference")
+D = os.path.join(R, "references", "db", "data")
+OUT = os.path.join(R, "references", "db", "docs")
 def load(p): return json.load(open(p, encoding="utf-8"))
 targets = load(os.path.join(D, "targets.json"))
 T = targets["targets"]
@@ -15,11 +15,11 @@ FCJ = {"oscillator":"発振","noise":"ノイズ","filter":"フィルタ","wavesh
 def w(name, text): open(os.path.join(OUT, name), "w", encoding="utf-8").write(text)
 
 # --- 索引
-L = ["# リファレンスDB 索引", "", "自動生成(`tools/build_reference_docs.py`)。事実の正本は `data/reference/`。本書はDBへの入口で、事実本文を複製しない。", "",
+L = ["# リファレンスDB 索引", "", "自動生成(`tools/build_reference_docs.py`)。事実の正本は `references/db/data/`。本書はDBへの入口で、事実本文を複製しない。", "",
      "## 対象一覧", "", "| 対象ID | 名称 | 種別 | 時代 | 状態 | エンティティ | 事実 | 出典 | 未確認 | DB |", "|---|---|---|---|---|---|---|---|---|---|"]
 for t in T:
     r = rec.get(t["id"], {}); i = t["id"]
-    L.append(f"| {i} | {t['name']} | {CATJ[t['category']]} | {'歴史的' if t['era']=='historical' else '現行'} | {STJ[t['status']]} | {len(r.get('entities',[]))} | {len(r.get('facts',[]))} | {len(src.get(i,[]))} | {len(r.get('unconfirmed',[]))} | [records](../../data/reference/records/{i}.json) / [sources](../../data/reference/sources/{i}.json) |")
+    L.append(f"| {i} | {t['name']} | {CATJ[t['category']]} | {'歴史的' if t['era']=='historical' else '現行'} | {STJ[t['status']]} | {len(r.get('entities',[]))} | {len(r.get('facts',[]))} | {len(src.get(i,[]))} | {len(r.get('unconfirmed',[]))} | [records](../data/records/{i}.json) / [sources](../data/sources/{i}.json) |")
 L += ["", "## エンティティ索引", ""]
 for t in T:
     r = rec.get(t["id"]);

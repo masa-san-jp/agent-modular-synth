@@ -1,0 +1,38 @@
+{
+  "id": "M005",
+  "name": "A-130-1 Linear VCA",
+  "maker": "Doepfer",
+  "kind": "hardware_module",
+  "version": "version 3（2013年3月以降の説明）",
+  "parent_id": "I001",
+  "categories": [
+    "amplifier",
+    "mixer",
+    "cv_processing"
+  ],
+  "status": "documented_partial",
+  "facts": [
+    {
+      "topic": "制御",
+      "value": "linear VCA。CV1/CV2とmanual Gainの合計が利得を決め、外部CVなしでもGainで開ける。CV範囲約0–5 Vで利得0–1を得ると説明。",
+      "evidence": {
+        "source_id": "S014",
+        "section": "English description"
+      },
+      "certainty": "documented_not_measured"
+    },
+    {
+      "topic": "接続・版差",
+      "value": "2信号入力を各attenuator経由で合計し増幅。CV2と出力にもattenuator。version 3はDC coupledで低速CVも処理可能。旧version 1はAC coupledで同条件ではない。A-131 exponential型とは別製品。",
+      "evidence": {
+        "source_id": "S014",
+        "section": "English description; Version 1–3"
+      },
+      "certainty": "documented_not_measured"
+    }
+  ],
+  "unknowns": [
+    "最大利得・入力上下限・飽和・応答速度・既定ノブ値・CV合計超過時の挙動は未確認。"
+  ],
+  "rights": "独自要約のみ。製品固有の外観・コード・音源の複製や再利用は許諾確認なしに行わない。"
+}

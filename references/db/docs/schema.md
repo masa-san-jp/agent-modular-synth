@@ -1,13 +1,13 @@
 # リファレンスDB スキーマ・ID規則(v0.1)
 
-調査事実の正本は `data/reference/` 配下のJSON。本書は構造と規則の定義であり、事実本文は含まない。検査は `tools/validate_reference.py` が行う。
+調査事実の正本は `references/db/data/` 配下のJSON。本書は構造と規則の定義であり、事実本文は含まない。検査は `tools/validate_reference.py` が行う。
 
 ## ファイル構成
 | パス | 内容 |
 |---|---|
-| `data/reference/targets.json` | 初期版の調査対象一覧(固定)。選定理由・調査状態 |
-| `data/reference/records/<TARGET_ID>.json` | 対象ごとのレコード(エンティティと事実) |
-| `data/reference/sources/<TARGET_ID>.json` | 対象ごとの出典台帳 |
+| `references/db/data/targets.json` | 初期版の調査対象一覧(固定)。選定理由・調査状態 |
+| `references/db/data/records/<TARGET_ID>.json` | 対象ごとのレコード(エンティティと事実) |
+| `references/db/data/sources/<TARGET_ID>.json` | 対象ごとの出典台帳 |
 
 ## ID規則
 | 種別 | 形式 | 例 |

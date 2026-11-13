@@ -1,6 +1,6 @@
 # 調査対象範囲・選定理由・調査方法
 
-固定日: 2026-11-12。対象の正本は [`data/reference/targets.json`](../../data/reference/targets.json)。
+固定日: 2026-11-12。対象の正本は [`references/db/data/targets.json`](../data/targets.json)。
 
 ## 選定方針
 - ハードのモジュラー、セミモジュラー、ソフトのモジュラー/環境を区別し、歴史的代表例と現行例の両方を含める。
