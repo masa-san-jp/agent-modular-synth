@@ -23,6 +23,11 @@
 | T-015 | EMS 系(VCS3、Synthi 100) | セミモジュラー | 歴史的 | 確認済み | 16 | 55 | 11 | 12 | [records](../../data/reference/records/T-015.json) / [sources](../../data/reference/sources/T-015.json) |
 | T-016 | Serge 系(Serge Modular、Random*Source Serge) | ハード モジュラー | 歴史的 | 確認済み | 16 | 43 | 13 | 13 | [records](../../data/reference/records/T-016.json) / [sources](../../data/reference/sources/T-016.json) |
 | T-017 | 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | ハード モジュラー | 現行 | 確認済み | 12 | 62 | 14 | 13 | [records](../../data/reference/records/T-017.json) / [sources](../../data/reference/sources/T-017.json) |
+| T-018 | ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js) | ソフト モジュラー | 現行 | 確認済み | 29 | 74 | 12 | 14 | [records](../../data/reference/records/T-018.json) / [sources](../../data/reference/sources/T-018.json) |
+| T-019 | エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge) | ソフト 環境 | 現行 | 確認済み | 16 | 55 | 15 | 12 | [records](../../data/reference/records/T-019.json) / [sources](../../data/reference/sources/T-019.json) |
+| T-020 | Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等) | ハード モジュラー | 歴史的 | 確認済み | 8 | 26 | 10 | 11 | [records](../../data/reference/records/T-020.json) / [sources](../../data/reference/sources/T-020.json) |
+| T-021 | Web Audio API(AudioContext/AudioWorklet、自動再生制限) | ソフト 環境 | 現行 | 確認済み | 5 | 22 | 4 | 6 | [records](../../data/reference/records/T-021.json) / [sources](../../data/reference/sources/T-021.json) |
+| T-022 | 外部制御規格(MIDI 1.0/2.0、OSC) | ソフト 環境 | 現行 | 確認済み | 16 | 34 | 8 | 7 | [records](../../data/reference/records/T-022.json) / [sources](../../data/reference/sources/T-022.json) |
 
 ## エンティティ索引
 
@@ -410,6 +415,115 @@
 | REF-017-011 | module | Korgasmatron II | フィルタ | 4 |
 | REF-017-012 | module | SPACE FX | 時間系 | 10 |
 
+### T-018 ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js)
+
+選定理由: 本製品と同じ『ブラウザ上で動くモジュラー』の先行例。パッチグラフ、状態保存、音声エンジン(Web Audio/AudioWorklet)の設計差を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-018-001 | system | DreamRack | system | 12 |
+| REF-018-002 | signal_standard | DreamRack 信号ドメインと色分け | system | 2 |
+| REF-018-003 | patch_storage | DreamRack パッチ保存 | 入出力・ユーティリティ | 1 |
+| REF-018-004 | module | Voice In | ルーティング | 1 |
+| REF-018-005 | module | Strudel | クロック・シーケンス | 1 |
+| REF-018-006 | module | Quad Low Pass Gate | フィルタ | 1 |
+| REF-018-007 | system | Mod Synth 0 | system | 7 |
+| REF-018-008 | signal_standard | Mod Synth 0 接続規則 | system | 2 |
+| REF-018-009 | patch_storage | Mod Synth 0 パッチ保存 | 入出力・ユーティリティ | 1 |
+| REF-018-010 | module | vco (Mod Synth 0) | 発振 | 1 |
+| REF-018-011 | module | euclid (Mod Synth 0) | クロック・シーケンス | 1 |
+| REF-018-012 | module | vcf (Mod Synth 0) | フィルタ | 1 |
+| REF-018-013 | system | Plinth | system | 4 |
+| REF-018-014 | control_interface | Plinth Block API(草案) | 入出力・ユーティリティ | 2 |
+| REF-018-015 | patch_storage | Plinth ブロック設定保存 | 入出力・ユーティリティ | 1 |
+| REF-018-016 | system | Patchcab | system | 3 |
+| REF-018-017 | system | Modulator | system | 4 |
+| REF-018-018 | control_interface | Modulator SynthLib | 入出力・ユーティリティ | 2 |
+| REF-018-019 | patch_storage | Modulator パッチ(JSON) | 入出力・ユーティリティ | 1 |
+| REF-018-020 | system | web-synth | system | 7 |
+| REF-018-021 | patch_storage | web-synth 状態保存 | 入出力・ユーティリティ | 1 |
+| REF-018-022 | system | eurorack-js | system | 8 |
+| REF-018-023 | signal_standard | eurorack-js 電圧規約 | system | 2 |
+| REF-018-024 | patch_storage | eurorack-js パッチ形式 v3 | 入出力・ユーティリティ | 1 |
+| REF-018-025 | control_interface | eurorack-js Patch Workbench(JSパッチ記述) | 入出力・ユーティリティ | 3 |
+| REF-018-026 | module | VCO (eurorack-js) | 発振 | 1 |
+| REF-018-027 | module | ADSR (eurorack-js) | エンベロープ | 1 |
+| REF-018-028 | module | PROB SEQ (eurorack-js) | クロック・シーケンス | 1 |
+| REF-018-029 | module | FUNC (eurorack-js) | エンベロープ | 1 |
+
+### T-019 エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge)
+
+選定理由: エージェント操作の先行例。コマンド体系、状態取得、認証・安全性、OSC/MIDIブリッジの設計を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-019-001 | system | MCP Synth Controller | system | 6 |
+| REF-019-002 | control_interface | MCP Synth Controller tools (setParameter/getParameter/listParameters) | system | 4 |
+| REF-019-003 | system | SuperCollider MCP | system | 7 |
+| REF-019-004 | control_interface | SuperCollider MCP tools (13 tools) | system | 6 |
+| REF-019-005 | module | SuperCollider MCP create_drum_pattern / create_generative_rhythm | クロック・シーケンス | 1 |
+| REF-019-006 | module | SuperCollider MCP create_lfo_modulation | LFO | 1 |
+| REF-019-007 | system | vcv-rack-mcp | system | 5 |
+| REF-019-008 | control_interface | vcv-rack-mcp tools (vcv_patch, vcv_catalog, vcv_live, vcv_agentic_workflow, …) | system | 3 |
+| REF-019-009 | patch_storage | vcv-rack-mcp depot (.vcv patches) | other | 0 |
+| REF-019-010 | system | synthlab-mcp-server | system | 7 |
+| REF-019-011 | control_interface | synthlab-mcp-server tools (10 tools + song_analysis prompt) | system | 4 |
+| REF-019-012 | module | synthlab Pd templates: sequencer / clock / turing-machine | クロック・シーケンス | 1 |
+| REF-019-013 | system | osc-bridge | system | 5 |
+| REF-019-014 | control_interface | osc-bridge MCP tools (9 local tools + SynthHub tools) | system | 4 |
+| REF-019-015 | patch_storage | osc-bridge preset backup (.syx) and shared presets | other | 1 |
+| REF-019-016 | signal_standard | Agent-synth parameter value conventions (comparison) | 入出力・ユーティリティ | 0 |
+
+### T-020 Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等)
+
+選定理由: 公開ソース・マニュアルが豊富で、現代的なデジタルモジュールのアルゴリズム・I/O規約の参考になる。ライセンス条件は個別に記録。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-020-001 | system | Mutable Instruments オープンソース Eurorack コード群(pichenettes/eurorack) | system | 4 |
+| REF-020-002 | signal_standard | Mutable Eurorack I/O規約(ソースから読める範囲) | 入出力・ユーティリティ | 4 |
+| REF-020-003 | module | Plaits | 発振 | 6 |
+| REF-020-004 | module | Braids | 発振 | 3 |
+| REF-020-005 | module | Rings | other | 2 |
+| REF-020-006 | module | Clouds | 時間系 | 3 |
+| REF-020-007 | module | Tides | LFO | 2 |
+| REF-020-008 | module | Marbles | ランダム・論理 | 2 |
+
+### T-021 Web Audio API(AudioContext/AudioWorklet、自動再生制限)
+
+選定理由: ブラウザでの音声処理の制約(開始条件、レイテンシ、スレッド)の根拠資料。技術スタックの採用決定ではなく制約調査(#3で判断)。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-021-001 | system | Web Audio API | system | 6 |
+| REF-021-002 | module | AudioContext | 入出力・ユーティリティ | 6 |
+| REF-021-003 | module | AudioWorklet / AudioWorkletProcessor | other | 5 |
+| REF-021-004 | control_interface | 自動再生ポリシー(Autoplay policy)とresume要件 | 入出力・ユーティリティ | 4 |
+| REF-021-005 | module | OfflineAudioContext | 入出力・ユーティリティ | 1 |
+
+### T-022 外部制御規格(MIDI 1.0/2.0、OSC)
+
+選定理由: MIDI/外部接続・エージェント接続の共通基盤の仕様。ノート/CC/クロックの扱いとOSCのアドレス/型体系を比較できる。
+
+| ID | 種別 | 名称 | 機能カテゴリ | 事実数 |
+|---|---|---|---|---|
+| REF-022-001 | system | MIDI 1.0 | system | 3 |
+| REF-022-002 | signal_standard | MIDI 1.0 serial/electrical interface | 入出力・ユーティリティ | 2 |
+| REF-022-003 | control_interface | MIDI 1.0 Channel Voice messages (Note/CC/Program Change) | 入出力・ユーティリティ | 3 |
+| REF-022-004 | module | MIDI beat clock | クロック・シーケンス | 3 |
+| REF-022-005 | module | MIDI timecode (MTC) | クロック・シーケンス | 2 |
+| REF-022-006 | control_interface | MIDI System Exclusive (SysEx) and Universal SysEx | 入出力・ユーティリティ | 1 |
+| REF-022-007 | patch_storage | Standard MIDI File (.mid/.smf) | other | 1 |
+| REF-022-008 | module | MIDI timestamping (extension) | 時間系 | 1 |
+| REF-022-009 | system | MIDI 2.0 | system | 3 |
+| REF-022-010 | signal_standard | Universal MIDI Packet (UMP) | ルーティング | 2 |
+| REF-022-011 | system | Open Sound Control (OSC) 1.0 | system | 3 |
+| REF-022-012 | signal_standard | OSC atomic data types and type tags | 入出力・ユーティリティ | 2 |
+| REF-022-013 | control_interface | OSC address space and pattern matching | ルーティング | 2 |
+| REF-022-014 | module | OSC bundle and time tag | クロック・シーケンス | 2 |
+| REF-022-015 | system | Open Sound Control 1.1 | system | 2 |
+| REF-022-016 | module | OSC over UDP/TCP/Ethernet (practice) | 入出力・ユーティリティ | 2 |
+
 ## 出典台帳
 
 | 出典ID | 資料名 | 種別 | 版 | 確認日 | リンク状態 |
@@ -637,5 +751,54 @@
 | SRC-017-12 | SPACE FX product page (model 0720-ABQ) | manufacturer_manual | unknown | 2026-11-12 | ok |
 | SRC-017-13 | SPACE FX Quick Start Guide (WW) | manufacturer_manual | V 2.0 | 2026-11-12 | ok |
 | SRC-017-14 | MiniMod VCF product page | manufacturer_manual | unknown | 2026-11-12 | ok |
+| SRC-018-01 | DreamRack README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-02 | DreamRack MODULE-AUTHORING.md | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-03 | Mod Synth 0 README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-04 | Plinth README (Block API草案を含む) | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-05 | Patchcab README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-06 | Modulator README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-07 | Modulator SynthLib ドキュメント | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-08 | web-synth README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-09 | web-synth LICENSE | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-10 | eurorack-js README | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-11 | eurorack-js Patch Workbench リファレンス | source_code | unknown | 2026-11-13 | ok |
+| SRC-018-12 | GitHub Search API リポジトリメタデータ(7リポジトリ) | api_doc | unknown | 2026-11-13 | ok |
+| SRC-019-01 | MCPSynthController README | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-02 | MCPSynthController src/server/*.py | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-03 | MCP Synth Controller (Glama listing) | third_party | unknown | 2026-11-13 | ok |
+| SRC-019-04 | SuperColliderMCP README | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-05 | SuperColliderMCP LICENSE | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-06 | vcv-rack-mcp README | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-07 | vcv-rack-mcp src/vcv_rack_mcp/server.py | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-08 | vcv-rack-mcp LICENSE | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-09 | synthlab-mcp(-server) README | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-10 | synthlab-mcp-server LICENSE | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-11 | osc-bridge README | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-12 | osc-bridge docs/MCP.md | source_code | unknown | 2026-11-13 | ok |
+| SRC-019-13 | osc-bridge (Glama listing) | third_party | unknown | 2026-11-13 | ok |
+| SRC-019-14 | WebSearch結果要約(osc-bridge, synthlab-mcp, MCP Synth Controller の所在確認) | other | unknown | 2026-11-13 | ok |
+| SRC-019-15 | GitHub commits atom feeds(5リポジトリ) | other | unknown | 2026-11-13 | unreachable |
+| SRC-020-01 | pichenettes/eurorack README | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-02 | plaits/plaits.cc, plaits/dsp/voice.h (ソース) | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-03 | plaits/dsp/dsp.h, plaits/settings.h | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-04 | braids/settings.h, braids/braids.cc | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-05 | rings/dsp/part.h | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-06 | clouds/dsp/granular_processor.h, clouds/settings.h | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-07 | tides/generator.h | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-08 | marbles/cv_reader.h | source_code | unknown | 2026-11-13 | ok |
+| SRC-020-09 | Mutable Instruments 公式モジュールページ/マニュアル(mutable-instruments.net) | manufacturer_manual | unknown | 2026-11-13 | unreachable |
+| SRC-020-10 | GitHub REST API (pichenettes/eurorack メタ情報) | other | unknown | 2026-11-13 | unreachable |
+| SRC-021-01 | Web Audio API 1.1 (W3C Working Draft, 22 September 2026) | spec | Working Draft 2026-09-22 | 2026-11-13 | ok |
+| SRC-021-02 | AudioContext - MDN | third_party | unknown | 2026-11-13 | ok |
+| SRC-021-03 | AudioWorklet - MDN | third_party | unknown | 2026-11-13 | ok |
+| SRC-021-04 | Web Audio API best practices - MDN | third_party | unknown | 2026-11-13 | ok |
+| SRC-022-01 | The Open Sound Control 1.0 Specification | spec | 1.0 (2002-03-26) | 2026-11-13 | ok |
+| SRC-022-02 | OpenSoundControl 1.1 page | spec | unknown | 2026-11-13 | ok |
+| SRC-022-03 | OpenSoundControl.org top page | other | unknown | 2026-11-13 | ok |
+| SRC-022-04 | Open Sound Control - Wikipedia | third_party | unknown | 2026-11-13 | ok |
+| SRC-022-05 | MIDI - Wikipedia | third_party | unknown | 2026-11-13 | ok |
+| SRC-022-06 | MIDI beat clock - Wikipedia | third_party | unknown | 2026-11-13 | ok |
+| SRC-022-07 | MIDI timecode - Wikipedia | third_party | unknown | 2026-11-13 | ok |
+| SRC-022-08 | MIDI Association specification pages (midi.org) | spec | unknown | 2026-11-13 | unreachable |
 
 URLと確認範囲・利用条件は各 `sources/<対象ID>.json` を参照。

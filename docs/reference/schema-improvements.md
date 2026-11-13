@@ -20,3 +20,6 @@
 | factが1エンティティにしか紐づかない | features/constraints の `fact_ids` で他エンティティから参照 | `entity_ids[]` 化 |
 | 信号規約を「業界慣習」として記録する際のmakerがない(T-001) | maker に「業界慣習」と記載 | `maker: null` を許可 |
 | 対象全体の status が粗く、原機だけ資料なしが見えない | gaps.md に別記 | targets に `scope_status`(原機/再発売/現行)を追加 |
+| ツール数・最終更新日・ライセンス等のメタ情報の欄がない(T-018, T-019) | third_party の事実として記録 | entity に `meta{license,last_push,tool_count}` を追加 |
+| 公式仕様ドラフトとMDN解説の区別(T-021) | basis を api_doc / third_party に分けた | `doc_type: spec_draft` |
+| signal_standard にシステム横断の電圧範囲欄がない(T-020) | features に文章 | `signal_standard.levels[]` を追加 |

@@ -8,7 +8,7 @@
 - 件数の水増しはしない。途中の追加・除外は `status_note` に理由を残す。
 - 技術スタックや製品の採用機能は先に固定しない(#3で決定)。
 
-## 初期版の対象(17件)
+## 初期版の対象(22件)
 | ID | 名称 | 種別 | 時代 | 選定理由 | 最終状態 |
 |---|---|---|---|---|---|
 | T-001 | Doepfer A-100(Eurorack規格と代表モジュール) | hardware_modular | current | Eurorack形式の事実上の基準。電圧規約・ゲート/トリガー仕様・基本機能モジュールの公式資料が公開されている。 | confirmed |
@@ -28,14 +28,19 @@
 | T-015 | EMS 系(VCS3、Synthi 100) | semi_modular | historical | ピンマトリクス式パッチの歴史的代表。他のパッチ方式との比較材料。 | confirmed |
 | T-016 | Serge 系(Serge Modular、Random*Source Serge) | hardware_modular | historical | Serge独自の信号規約・モジュール思想の歴史的代表と現行供給。 | confirmed |
 | T-017 | 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | hardware_modular | current | 歴史的機種のモジュール単位再現・派生と現行エフェクトの設計例。 | confirmed |
+| T-018 | ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js) | software_modular | current | 本製品と同じ『ブラウザ上で動くモジュラー』の先行例。パッチグラフ、状態保存、音声エンジン(Web Audio/AudioWorklet)の設計差を比較できる。 | confirmed |
+| T-019 | エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge) | software_environment | current | エージェント操作の先行例。コマンド体系、状態取得、認証・安全性、OSC/MIDIブリッジの設計を比較できる。 | confirmed |
+| T-020 | Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等) | hardware_modular | historical | 公開ソース・マニュアルが豊富で、現代的なデジタルモジュールのアルゴリズム・I/O規約の参考になる。ライセンス条件は個別に記録。 | confirmed |
+| T-021 | Web Audio API(AudioContext/AudioWorklet、自動再生制限) | software_environment | current | ブラウザでの音声処理の制約(開始条件、レイテンシ、スレッド)の根拠資料。技術スタックの採用決定ではなく制約調査(#3で判断)。 | confirmed |
+| T-022 | 外部制御規格(MIDI 1.0/2.0、OSC) | software_environment | current | MIDI/外部接続・エージェント接続の共通基盤の仕様。ノート/CC/クロックの扱いとOSCのアドレス/型体系を比較できる。 | confirmed |
 
 状態の詳細・根拠は `targets.json` の `status_note`、未確認は [不足一覧](gaps.md)。
 
 ## 除外範囲
-- **Web Audio API / AudioWorklet等の技術基盤**: #3で技術スタック選定の際に調べる。#1は技術スタックを先に固定しない方針。
 - **商用ソフトモジュラー(Softube Modular, Voltage Modular等)**: 公式資料の公開範囲が限られ、VCV Rack等で代表可能。後続追加候補。
+- **商用ソフトモジュラー(Arturia Modular V、NI Reaktor Blocks 等)・ModularGrid等の目録サイト**: 後続追加候補。初期版ではVCV Rack・Cardinal・BespokeSynth・Pd・SC・Maxで代表。
 
-(T-011〜T-017は2026-11-12にオーナー指示で追加。原機の一次資料が乏しい系譜は、再発売品・現行権利者の資料を根拠にし、原機自体の仕様は未確認として扱う。)
+(T-011〜T-017は2026-11-12、T-018〜T-022は2026-11-13にオーナー指示で追加。原機の一次資料が乏しい系譜は、再発売品・現行権利者の資料を根拠にし、原機自体の仕様は未確認として扱う。)
 
 ## 調査方法
 1. 公式マニュアル・仕様書・公開API・ライセンス付きソースを優先して取得し、実際に読んだ範囲を出典台帳 `checked_scope` に記録。

@@ -1,0 +1,100 @@
+{
+ "sources": [
+  {
+   "id": "SRC-022-01",
+   "title": "The Open Sound Control 1.0 Specification",
+   "publisher": "CNMAT / Matt Wright (opensoundcontrol.stanford.edu)",
+   "url": "https://opensoundcontrol.stanford.edu/spec-1_0.html",
+   "doc_version": "1.0 (2002-03-26)",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "全文を読了(構文・型タグ・アドレス・パターン照合・タイムタグ・バンドル)。",
+   "link_status": "ok",
+   "license_note": "サイトはCC BY(ページ末尾に記載)。要約のみ記録、原文転載なし。"
+  },
+  {
+   "id": "SRC-022-02",
+   "title": "OpenSoundControl 1.1 page",
+   "publisher": "opensoundcontrol.stanford.edu",
+   "url": "https://opensoundcontrol.stanford.edu/spec-1_1.html",
+   "doc_version": "unknown",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "全文(短い)。1.1の正式仕様書は未公開でNIME 2009論文が根拠と記載。",
+   "link_status": "ok",
+   "license_note": "CC BY。"
+  },
+  {
+   "id": "SRC-022-03",
+   "title": "OpenSoundControl.org top page",
+   "publisher": "opensoundcontrol.stanford.edu",
+   "url": "https://opensoundcontrol.stanford.edu/",
+   "doc_version": "unknown",
+   "doc_type": "other",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "トップページ全体を確認。",
+   "link_status": "ok",
+   "license_note": "CC BY。"
+  },
+  {
+   "id": "SRC-022-04",
+   "title": "Open Sound Control - Wikipedia",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Open_Sound_Control",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文を確認(動機・MIDIとの比較・参考文献)。",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ。"
+  },
+  {
+   "id": "SRC-022-05",
+   "title": "MIDI - Wikipedia",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/MIDI",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事全体(技術仕様・メッセージ・電気仕様・拡張・MIDI 2.0節)を確認。",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ。"
+  },
+  {
+   "id": "SRC-022-06",
+   "title": "MIDI beat clock - Wikipedia",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/MIDI_beat_clock",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文全体。",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ。"
+  },
+  {
+   "id": "SRC-022-07",
+   "title": "MIDI timecode - Wikipedia",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/MIDI_timecode",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事冒頭と形式節を確認。",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ。"
+  },
+  {
+   "id": "SRC-022-08",
+   "title": "MIDI Association specification pages (midi.org)",
+   "publisher": "The MIDI Association",
+   "url": "https://midi.org/specifications",
+   "doc_version": "unknown",
+   "doc_type": "spec",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "midi.org / www.midi.org の複数URL(specifications, midi-2-0, midi-ci等)を試行、全てCONNECT 403で取得不能。",
+   "link_status": "unreachable",
+   "license_note": "取得不能。MIDI仕様書は会員/DL条件があるため、取得できても転載しない。"
+  }
+ ]
+}

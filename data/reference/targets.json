@@ -191,7 +191,7 @@
       "era": "current",
       "selection_reason": "エージェント操作の先行例。コマンド体系、状態取得、認証・安全性、OSC/MIDIブリッジの設計を比較できる。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-13 オーナー指示『追加調査』により追加)"
+      "status_note": "確認済み(二次資料含む)。5プロジェクト(MCP Synth Controller/SuperCollider MCP/vcv-rack-mcp/synthlab-mcp-server/osc-bridge)のREADME・一部ソース・LICENSEを取得。ツール一覧・認証/安全性の有無を記録。github.com本体(コミット履歴)は403のため最終更新日は未確認。osc-bridgeはWebSearch要約(GPL・5ツール)と本文(AGPL・9ツール)が食い違い、本文を採用し併記。(2026-11-13 オーナー指示『追加調査』により追加)"
     },
     {
       "id": "T-020",
@@ -221,7 +221,7 @@
       "era": "current",
       "selection_reason": "MIDI/外部接続・エージェント接続の共通基盤の仕様。ノート/CC/クロックの扱いとOSCのアドレス/型体系を比較できる。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-13 オーナー指示『追加調査』により追加)"
+      "status_note": "確認済み(二次資料中心)。OSC 1.0仕様書(opensoundcontrol.stanford.edu)は一次で読了、MIDI 1.0/2.0はmidi.orgが403のためWikipedia(CC BY-SA)による二次確認のみで、ステータスバイト値・MIDI 2.0分解能などはunconfirmed。(2026-11-13 オーナー指示『追加調査』により追加)"
     }
   ],
   "out_of_scope": [

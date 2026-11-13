@@ -1,0 +1,1726 @@
+{
+ "target_id": "T-019",
+ "entities": [
+  {
+   "id": "REF-019-001",
+   "kind": "system",
+   "name": "MCP Synth Controller",
+   "maker": "TYLERSFOSTER",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Python製MCPサーバー。LLMのツール呼び出しをOSCメッセージに変換し、別リポジトリのJUCEシンセのパラメータをリアルタイム操作する。",
+   "synthesis_method": "外部のJUCEシンセ(OSC受信)をパラメータ名+値で遠隔操作",
+   "features": [
+    {
+     "text": "ツールは3つ(setParameter/getParameter/listParameters)と最小構成",
+     "fact_ids": [
+      "F-019-003"
+     ]
+    },
+    {
+     "text": "OSCは python-osc、既定宛先 127.0.0.1:9001",
+     "fact_ids": [
+      "F-019-004"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "音源側(JUCE)は別リポジトリで、このリポジトリはPython側のみ",
+     "fact_ids": [
+      "F-019-001"
+     ]
+    },
+    {
+     "text": "getParameterはダミー値、listParametersは静的リストで実機状態は取得不能",
+     "fact_ids": [
+      "F-019-005"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "MCPサーバーがstdio JSONで受け、OSC/UDPでシンセへ送る",
+     "fact_ids": [
+      "F-019-002"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-002",
+   "kind": "control_interface",
+   "name": "MCP Synth Controller tools (setParameter/getParameter/listParameters)",
+   "maker": "TYLERSFOSTER",
+   "version": null,
+   "function_category": "system",
+   "purpose": "LLMが呼ぶ3ツールと、OSCアドレス/setParameterへの対応。",
+   "synthesis_method": "JSON Schemaで引数を宣言する単純なRPC",
+   "features": [
+    {
+     "text": "setParameterは name(文字列)+value(数値、説明上は0.0〜1.0)をOSC /setParameter <name> <float> で送る",
+     "fact_ids": [
+      "F-019-007"
+     ]
+    },
+    {
+     "text": "成功時は {ok:true,message} を返す。未知ツールはerror文字列、例外はスタックを標準エラーに出す",
+     "fact_ids": [
+      "F-019-008"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "値の範囲検証・音量制限・認証は読んだコードに存在しない",
+     "fact_ids": [
+      "F-019-009"
+     ]
+    },
+    {
+     "text": "MCP初期化応答が標準的なJSON-RPCではなく独自の type:initialized/toolCall 形式で書かれている(標準MCPクライアントとの互換は未確認)",
+     "fact_ids": [
+      "F-019-010"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "value",
+     "unit": "normalized",
+     "range": {
+      "min": 0.0,
+      "max": 1.0,
+      "unit": "normalized"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-019-007"
+     ]
+    },
+    {
+     "name": "param",
+     "unit": "name string",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": []
+    }
+   ],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "stdio上のMCPツール呼び出し→OSC/UDP送信(受信確認なし、fire-and-forget)",
+     "fact_ids": [
+      "F-019-007",
+      "F-019-009"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-001"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-003",
+   "kind": "system",
+   "name": "SuperCollider MCP",
+   "maker": "Tok",
+   "version": null,
+   "function_category": "system",
+   "purpose": "SuperCollider(scsynth)をAIアシスタントから鳴らすMCPサーバー。自前SynthDef群とエフェクト・リミッタを同梱し、OSC bundleで時刻付き送信する。",
+   "synthesis_method": "scsynthへのOSC/UDP制御。SynthDef: sine,saw,square,noise,fm,pad,pluck,kick,snare,hats,grains",
+   "features": [
+    {
+     "text": "同梱SynthDefとエフェクト連鎖(歪み・LPF・ディレイ・リバーブ)と安全リミッタ",
+     "fact_ids": [
+      "F-019-012"
+     ]
+    },
+    {
+     "text": "フレーズは約0.5秒先読みでNTPタイムタグ付きOSC bundleとして送られ、ツールは即座に返る",
+     "fact_ids": [
+      "F-019-013"
+     ]
+    },
+    {
+     "text": "seed指定で生成系の再現が可能",
+     "fact_ids": [
+      "F-019-016"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "リモートscsynth利用時は壁時計タイムタグのため両機のNTP同期が必要",
+     "fact_ids": [
+      "F-019-014"
+     ]
+    },
+    {
+     "text": "scsynth(3.10以上)が別途起動済みであること。sclang不要",
+     "fact_ids": [
+      "F-019-011"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "OSC bundle+NTPタイムタグで時刻指定、サンプル精度を主張(広告的記述)",
+     "fact_ids": [
+      "F-019-013"
+     ]
+    },
+    "state_save": null,
+    "external_control": {
+     "summary": "MCP stdio→OSC/UDP→scsynth(既定127.0.0.1:57110、--host/--port/SC_HOST/SC_PORT)",
+     "fact_ids": [
+      "F-019-015"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-004",
+   "kind": "control_interface",
+   "name": "SuperCollider MCP tools (13 tools)",
+   "maker": "Tok",
+   "version": null,
+   "function_category": "system",
+   "purpose": "音楽理論を理解する高レベルツール群。ノート名・コード記号・ステップ文字列などの文字列DSLで曲を指定する。",
+   "synthesis_method": "high-level music tools → timed synth events",
+   "features": [
+    {
+     "text": "ほぼ全ツールが volume(0〜1) と effects(reverb,delay,delay_time,distortion,filter)オブジェクトを受ける。量は0〜1で0がオフ",
+     "fact_ids": [
+      "F-019-018"
+     ]
+    },
+    {
+     "text": "音名(C4,F#3,Bb2)または周波数('440','440hz')、14スケール、Am7/Bbmaj9/G/B等のコード記号を解釈",
+     "fact_ids": [
+      "F-019-019"
+     ]
+    },
+    {
+     "text": "server_statusでscsynthのバージョン・CPU・再生数・直近のサーバーエラーを確認できる(状態取得)",
+     "fact_ids": [
+      "F-019-020"
+     ]
+    },
+    {
+     "text": "stop_allはこのサーバーが起動した音を全て止めスケジュール済みノートも取り消すパニックボタン",
+     "fact_ids": [
+      "F-019-021"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "認証機構の記述はなく、stdioのローカルMCPとして動作する前提(読んだREADMEの範囲)",
+     "fact_ids": [
+      "F-019-022"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "volume",
+     "unit": "normalized",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-019-018"
+     ]
+    },
+    {
+     "name": "effects.*",
+     "unit": "normalized",
+     "range": {
+      "min": 0,
+      "max": 1,
+      "unit": "normalized"
+     },
+     "default": null,
+     "range_status": "confirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": [
+      "F-019-018"
+     ]
+    },
+    {
+     "name": "delay_time",
+     "unit": "s",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": []
+    }
+   ],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "先読みbundle",
+     "fact_ids": [
+      "F-019-013"
+     ]
+    },
+    "state_save": null,
+    "external_control": {
+     "summary": "MCPツール→OSC。/d_recvでSynthDef送信、独自ノードグループ(音声/エフェクト/リミッタ)を高位ノードIDで作成",
+     "fact_ids": [
+      "F-019-023"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-003"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-005",
+   "kind": "module",
+   "name": "SuperCollider MCP create_drum_pattern / create_generative_rhythm",
+   "maker": "Tok",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "ステップ文字列やジャンル指定でドラムを生成・変異させ続けるシーケンサ系ツール。",
+   "synthesis_method": "パターン文字列→時刻付きOSC",
+   "features": [
+    {
+     "text": "four_on_floor/breakbeat/shuffle/half_time/two_step/random/カスタムのパターン",
+     "fact_ids": [
+      "F-019-024"
+     ]
+    },
+    {
+     "text": "minimal/techno/glitch/jazz/ambientの生成リズムが変異し続ける",
+     "fact_ids": [
+      "F-019-024"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "16分音符グリッド、swing・tempo指定、複数コール重ね可",
+     "fact_ids": [
+      "F-019-024"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-003"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-006",
+   "kind": "module",
+   "name": "SuperCollider MCP create_lfo_modulation",
+   "maker": "Tok",
+   "version": null,
+   "function_category": "lfo",
+   "purpose": "保持ノートにサーバー側LFOを掛け、ピッチ・音量・フィルタ・パンを変調するツール。",
+   "synthesis_method": "scsynth内LFO",
+   "features": [
+    {
+     "text": "変調先は pitch/volume/filter/pan の4種",
+     "fact_ids": [
+      "F-019-025"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-003"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-007",
+   "kind": "system",
+   "name": "vcv-rack-mcp",
+   "maker": "sandraschi",
+   "version": null,
+   "function_category": "system",
+   "purpose": "VCV Rack 2の.vcvパッチ(プレーンJSON)をLLMが構造化データとして生成・検証・管理するMCPサーバー。GUI自動操作はしない設計。",
+   "synthesis_method": "パッチ生成(ファイル)+OSCアドレスマップ提示。リアルタイム音源制御は別サーバーosc-mcpへ委譲",
+   "features": [
+    {
+     "text": "Webアプリ付き(バックエンド10916、フロント10917)、stdioまたはHTTP /mcp",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    },
+    {
+     "text": "カタログ50モジュール(Stoermelder TRANSIT含む)、パッチ生成は決定的、検証4種",
+     "fact_ids": [
+      "F-019-027"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "READMEはv0.1.0と明記し、Rack往復(P2)とOSC E2E(P3)は人手での確認待ち",
+     "fact_ids": [
+      "F-019-027"
+     ]
+    },
+    {
+     "text": "OSCによるライブ制御は osc-mcp(10767番)への委譲で、本体は住所マップを出すのみ",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": {
+     "summary": "VCV Rackのパッチは.vcv JSONとして生成。モジュールカタログから選択",
+     "fact_ids": [
+      "F-019-026"
+     ]
+    },
+    "timing": null,
+    "state_save": {
+     "summary": "depotディレクトリに.vcv+SQLiteメタデータ+サイドカー.mdで保存",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    },
+    "external_control": {
+     "summary": "MCPツール+HTTP API(/api/shutdown等)",
+     "fact_ids": [
+      "F-019-029"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-008",
+   "kind": "control_interface",
+   "name": "vcv-rack-mcp tools (vcv_patch, vcv_catalog, vcv_live, vcv_agentic_workflow, …)",
+   "maker": "sandraschi",
+   "version": null,
+   "function_category": "system",
+   "purpose": "operation引数で複数操作を束ねる『ポートマントー』型ツール群。",
+   "synthesis_method": "operation文字列で分岐する統合ツール",
+   "features": [
+    {
+     "text": "vcv_patchは create/edit/validate/list/get/open_in_rack/rack_cycle/import/set_module_data を束ねる",
+     "fact_ids": [
+      "F-019-031"
+     ]
+    },
+    {
+     "text": "vcv_catalogは検索・詳細・インストール確認・ライブラリリンク・サイドロード・ラック提案",
+     "fact_ids": [
+      "F-019-031"
+     ]
+    },
+    {
+     "text": "vcv_liveはaddress_mapとperformance_sheetのみで、readOnlyHint=True",
+     "fact_ids": [
+      "F-019-032"
+     ]
+    },
+    {
+     "text": "vcv_agentic_workflowはbrief→生成→検証→再試行(最大3回)のループ",
+     "fact_ids": [
+      "F-019-031"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "vcv_shutdownは destructiveHint=True で、サーバー自身を終了する",
+     "fact_ids": [
+      "F-019-033"
+     ]
+    },
+    {
+     "text": "エラー返却は{success:bool, operation, ...}形式(docstring記載)。個別のエラーコード体系は未確認",
+     "fact_ids": [
+      "F-019-032"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "OSCアドレスマップを提示し、実際のOSC送信はosc-mcp側",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-007"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-009",
+   "kind": "patch_storage",
+   "name": "vcv-rack-mcp depot (.vcv patches)",
+   "maker": "sandraschi",
+   "version": null,
+   "function_category": "other",
+   "purpose": "生成した.vcvパッチをメタデータ付きで保管する場所。",
+   "synthesis_method": "ファイル保管",
+   "features": [
+    {
+     "text": "パッチ+SQLiteメタデータ+サイドカー.md",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "depot/にファイル保存",
+     "fact_ids": [
+      "F-019-028"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-007"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-010",
+   "kind": "system",
+   "name": "synthlab-mcp-server",
+   "maker": "j0KZ",
+   "version": null,
+   "function_category": "system",
+   "purpose": "Pure Dataパッチ(.pd)とVCV Rackパッチ(.vcv)の生成・解析・MIDIコントローラ割当・OSC/FUDI送信を行うTypeScript製MCPサーバー。",
+   "synthesis_method": "テンプレートからPdパッチ生成、ジャンル指定の自動ラック構築、.vcv生成",
+   "features": [
+    {
+     "text": "10ツール+1プロンプト、MCP SDKとZodのみに依存(OSC/FUDIはNode標準のdgram/net)",
+     "fact_ids": [
+      "F-019-034"
+     ]
+    },
+    {
+     "text": "Pdテンプレート11種、ジャンル9種・ムード7種・楽器ロール8種・スケール10種の作曲機能",
+     "fact_ids": [
+      "F-019-035"
+     ]
+    },
+    {
+     "text": "VCV Rack 19プラグイン(約600モジュール)のレジストリをC++ソースから自動収集",
+     "fact_ids": [
+      "F-019-036"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "READMEのテスト数・ツール数などは自己申告で、実機での動作確認は未検証",
+     "fact_ids": [
+      "F-019-034"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": {
+     "summary": "Pd: オブジェクト/接続のJSON仕様→.pd、ラック間はthrow~/catch~(音声)とsend/receive(制御)",
+     "fact_ids": [
+      "F-019-037"
+     ]
+    },
+    "timing": null,
+    "state_save": {
+     "summary": "outputPath/outputDirへ.pd・.vcv・設定JSONを書き出し",
+     "fact_ids": [
+      "F-019-039"
+     ]
+    },
+    "external_control": {
+     "summary": "OSC(UDP 9000既定)/FUDI(TCP 3000既定)で実行中のPdに送信",
+     "fact_ids": [
+      "F-019-038"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-011",
+   "kind": "control_interface",
+   "name": "synthlab-mcp-server tools (10 tools + song_analysis prompt)",
+   "maker": "j0KZ",
+   "version": null,
+   "function_category": "system",
+   "purpose": "パッチ解析/生成/ライブ送信の各ツール。Zodスキーマで入力検証。",
+   "synthesis_method": "Zod検証付きMCPツール",
+   "features": [
+    {
+     "text": "send_message(protocol,host,port,address,args)で実行中Pdを操作",
+     "fact_ids": [
+      "F-019-038"
+     ]
+    },
+    {
+     "text": "validate_patchは9種の構造不整合(壊れた接続・重複・不明オブジェクト・孤立・空サブパッチ・DSPシンク欠如等)を検出",
+     "fact_ids": [
+      "F-019-041"
+     ]
+    },
+    {
+     "text": "list_vcv_modulesで事前にモジュール/ポート名を探索してからgenerate_vcvに渡す",
+     "fact_ids": [
+      "F-019-042"
+     ]
+    },
+    {
+     "text": "MIDI機器プロファイル: Korg nanoKONTROL2(34)、Arturia MicroFreak(21、出力のみ)、Roland TR-8S(51、双方向)",
+     "fact_ids": [
+      "F-019-043"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "sendの宛先はhost引数で任意指定でき、音量制限・認証・送信先許可リストの記述はREADMEに無い",
+     "fact_ids": [
+      "F-019-044"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": {
+     "summary": "OSC/FUDI送信、MIDIコントローラのCC割当(絶対/相対/トリガー)",
+     "fact_ids": [
+      "F-019-043",
+      "F-019-038"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-010"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-012",
+   "kind": "module",
+   "name": "synthlab Pd templates: sequencer / clock / turing-machine",
+   "maker": "j0KZ",
+   "version": null,
+   "function_category": "clock_sequencer",
+   "purpose": "Pdテンプレートのうちクロック系・シーケンサ・チューリングマシン(確率シフトレジスタ)。",
+   "synthesis_method": "Pdオブジェクトの組み合わせ",
+   "features": [
+    {
+     "text": "sequencer: steps,bpm,notes,midiChannel,velocity",
+     "fact_ids": [
+      "F-019-045"
+     ]
+    },
+    {
+     "text": "clock: bpm,divisions([1,2,4,8]等)",
+     "fact_ids": [
+      "F-019-045"
+     ]
+    },
+    {
+     "text": "turing-machine: length,probability,range,offset",
+     "fact_ids": [
+      "F-019-045"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-010"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-013",
+   "kind": "system",
+   "name": "osc-bridge",
+   "maker": "roomi-fields",
+   "version": null,
+   "function_category": "system",
+   "purpose": "宣言的なOSCブリッジ兼MCPサーバー。ハードシンセ(MIDI/SysEx)とDAW・ライブコーディング環境をJSONドライバで名前付きOSC面に見せる。",
+   "synthesis_method": "JSONドライバでMIDI CC/NRPN/SysEx⇔OSCを双方向変換",
+   "features": [
+    {
+     "text": "ドライバのカタログはSynthHub(別サーバー)が1つずつ配布し、ローカルにキャッシュ",
+     "fact_ids": [
+      "F-019-048"
+     ]
+    },
+    {
+     "text": "MCPサーバーはstdio JSON-RPC、npx -y @roomi-fields/osc-bridge mcp で起動。ホスト型(HTTP)もある",
+     "fact_ids": [
+      "F-019-047"
+     ]
+    },
+    {
+     "text": "ハード(Prophet、DX系、Hydrasynth等)とソフト(Ableton、Bitwig、Reaper、Sonic Pi、SuperCollider、Pd、TouchDesigner、VCV Rack)を対象",
+     "fact_ids": [
+      "F-019-046"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "既定でSynthHub側へ匿名アカウントで接続し、設定でoffline化やdevice別private指定が必要",
+     "fact_ids": [
+      "F-019-048"
+     ]
+    },
+    {
+     "text": "ライセンスはAGPL-3.0-or-later(ネットワークサービス化時のソース提供義務)",
+     "fact_ids": [
+      "F-019-049"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "backup_presets/restore_presetsでSysExダンプを.syxファイルに保存・復元",
+     "fact_ids": [
+      "F-019-051"
+     ]
+    },
+    "external_control": {
+     "summary": "OSC(既定ブリッジ127.0.0.1:7777)とMIDI/SysEx",
+     "fact_ids": [
+      "F-019-051"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-014",
+   "kind": "control_interface",
+   "name": "osc-bridge MCP tools (9 local tools + SynthHub tools)",
+   "maker": "roomi-fields",
+   "version": null,
+   "function_category": "system",
+   "purpose": "ローカル9ツール(デバイス探索・OSC面取得・送信・状態・ハード検出・プリセット退避/復元)と、SynthHub側の報告・共有系ツール。",
+   "synthesis_method": "MCP stdio / JSON-RPC 2.0",
+   "features": [
+    {
+     "text": "list_devices, get_device_docs, list_routes, export_device(oscquery/midnam), send, get_status, detect_hardware, backup_presets, restore_presets",
+     "fact_ids": [
+      "F-019-051"
+     ]
+    },
+    {
+     "text": "sendは型付き引数(int,float,string,bool)でOSC1通を送る。値はデバイス固有の整数(CC 0-127等)で0-1正規化ではない",
+     "fact_ids": [
+      "F-019-052"
+     ]
+    },
+    {
+     "text": "get_statusは/bridge/statusをラウンドトリップして応答を返す(状態取得)",
+     "fact_ids": [
+      "F-019-051"
+     ]
+    },
+    {
+     "text": "restore_presetsは confirm_overwrite:true が無いと拒否する安全装置",
+     "fact_ids": [
+      "F-019-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "ツール数の食い違い: README/Glama本文は9、WebSearch要約は5。本文を採用",
+     "fact_ids": [
+      "F-019-054"
+     ]
+    },
+    {
+     "text": "認証はローカルstdioでは不要の記述。SynthHub側は匿名アカウント方式",
+     "fact_ids": [
+      "F-019-048"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [
+    {
+     "name": "send.args",
+     "unit": "device-native",
+     "range": null,
+     "default": null,
+     "range_status": "unconfirmed",
+     "default_status": "unconfirmed",
+     "fact_ids": []
+    }
+   ],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "SysExバックアップ(.syx)",
+     "fact_ids": [
+      "F-019-053"
+     ]
+    },
+    "external_control": {
+     "summary": "send/get_statusは既定127.0.0.1:7777の実行中osc-bridgeへ",
+     "fact_ids": [
+      "F-019-052"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-013"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-015",
+   "kind": "patch_storage",
+   "name": "osc-bridge preset backup (.syx) and shared presets",
+   "maker": "roomi-fields",
+   "version": null,
+   "function_category": "other",
+   "purpose": "機器内プリセットをSysExダンプ(.syx)で退避し、SynthHub共有プリセットをCC BY-SA 4.0で検索・読込・共有する仕組み。",
+   "synthesis_method": "SysExダンプ+クラウド共有",
+   "features": [
+    {
+     "text": "find_presets/get_preset/load_preset/share_preset等のSynthHubツール",
+     "fact_ids": [
+      "F-019-055"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": ".syxファイル保存、共有プリセット",
+     "fact_ids": [
+      "F-019-053",
+      "F-019-055"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-019-013"
+   },
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-019-016",
+   "kind": "signal_standard",
+   "name": "Agent-synth parameter value conventions (comparison)",
+   "maker": "複数(コミュニティ)",
+   "version": null,
+   "function_category": "io_utility",
+   "purpose": "5プロジェクトのパラメータ値の取り方の比較(正規化値かデバイス固有値か)。",
+   "synthesis_method": "n/a",
+   "features": [
+    {
+     "text": "MCP Synth Controller: 0.0-1.0の正規化値をOSC floatで送る",
+     "fact_ids": [
+      "F-019-007"
+     ]
+    },
+    {
+     "text": "SuperCollider MCP: volumeとエフェクト量は0-1、時間は秒",
+     "fact_ids": [
+      "F-019-018"
+     ]
+    },
+    {
+     "text": "osc-bridge: デバイス固有整数(例CC 0-127)",
+     "fact_ids": [
+      "F-019-052"
+     ]
+    },
+    {
+     "text": "synthlab: Pd側はOSC1.0バイナリを自前エンコードして送信、パラメータ値は数値/文字列",
+     "fact_ids": [
+      "F-019-038"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "電圧規約(V/oct等)を持つのはVCV Rack側のみで、vcv-rack-mcpのREADMEには電圧規約の記述が無い",
+     "fact_ids": [
+      "F-019-026"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "status": "active",
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": null
+   },
+   "version_status": "unconfirmed"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-019-001",
+   "entity_id": "REF-019-001",
+   "topic": "scope",
+   "statement": "本リポジトリはPython側のみで、対応するJUCEシンセは別リポジトリ(MIDIControl001)で開発中と記載。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-01",
+   "locator": "README冒頭, Required JUCE Implementation",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-002",
+   "entity_id": "REF-019-001",
+   "topic": "architecture",
+   "statement": "データ流は 音声/テキスト→LLM→MCPツール呼び出し→Python関数→OSC送信→JUCEシンセ。MCPはstdin/stdoutのJSONで通信。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-01",
+   "locator": "Project Overview / MCP Server",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-003",
+   "entity_id": "REF-019-001",
+   "topic": "tools",
+   "statement": "実装済みツールは setParameter(param:string,value:number)、getParameter(param)、listParameters()の3つ。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-02",
+   "locator": "src/server/schemas.py, tools.py(TOOL_FUNCTIONS)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-004",
+   "entity_id": "REF-019-001",
+   "topic": "config",
+   "statement": "宛先ホスト/ポートは config.py の定数(127.0.0.1 / 9001)で、環境変数や引数での上書きは読んだ範囲に見当たらない。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-02",
+   "locator": "src/server/config.py",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-005",
+   "entity_id": "REF-019-001",
+   "topic": "limits",
+   "statement": "getParameterは常に0.0を返すプレースホルダ。listParametersは固定の8語(cutoff,resonance,attack,release,mix,gain,osc1Detune,osc2Detune)。双方向通信は未実装(Future Work)。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-02",
+   "locator": "juce_bridge.py get_parameter/list_parameters; README Tools, Future Work",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-006",
+   "entity_id": "REF-019-001",
+   "topic": "license",
+   "statement": "READMEにMIT Licenseと記載。Glama一覧も同じ表示。LICENSEファイルはmainブランチで見つからない(404)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-019-03",
+   "locator": "一覧ページのlicense表示; README末尾",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-007",
+   "entity_id": "REF-019-002",
+   "topic": "osc_mapping",
+   "statement": "setParameterは /setParameter にパラメータ名文字列とfloat値を載せて送信。スキーマの値説明は0.0〜1.0。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-02",
+   "locator": "juce_bridge.py set_parameter; schemas.py setParameter",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-008",
+   "entity_id": "REF-019-002",
+   "topic": "error_handling",
+   "statement": "未知のツール名は error 文字列付きtoolResultを返し、例外はスタックトレースを出力してクライアントに可視化する構造。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-02",
+   "locator": "mcp_server.py handle_tool_call(冒頭120行まで)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-009",
+   "entity_id": "REF-019-002",
+   "topic": "safety_auth",
+   "statement": "認証・認可・値のクランプ・音量上限の処理は、読んだPythonコード(tools.py, juce_bridge.py)に見当たらない。ramp_parameterユーティリティは10msステップで値を送る。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-02",
+   "locator": "tools.py, juce_bridge.py(全読) ",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-010",
+   "entity_id": "REF-019-002",
+   "topic": "protocol",
+   "statement": "mcp_server.pyは自前でstdinのJSON行を読み、type:'initialized'/'toolCall'/'toolResult'という独自メッセージで応答する。公式MCP SDK利用の記述は読んだ範囲に無い。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-02",
+   "locator": "mcp_server.py _read_message/handle_initialize",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-011",
+   "entity_id": "REF-019-003",
+   "topic": "requirements",
+   "statement": "SuperCollider 3.10以上(3.13で検証)で、必要なのは音声サーバーscsynthのみ。uvまたはPython 3.10+が必要。PyPI名 supercollider-mcp、MCP Registryにも登録。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Requirements / バッジ",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-012",
+   "entity_id": "REF-019-003",
+   "topic": "synthdefs",
+   "statement": "独自SynthDef(sine,saw,square,noise,fm,pad,Karplus-Strong pluck,kick,snare,hats,grains)とエフェクト連鎖(distortion,LPF,delay,reverb)と安全リミッタを同梱。sclang標準のdefault synthやsc3-pluginsに依存しない。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "冒頭 Real synths and drums",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-013",
+   "entity_id": "REF-019-003",
+   "topic": "timing",
+   "statement": "各ツール呼び出しは時刻順のイベント列(phrase)になり、背景タスクが約0.5秒先にNTPタイムタグ付きOSC bundleで送る。scsynthが指定時刻に発音し、各synthはエンベロープ終了で自己解放。サンプル精度という主張はREADMEの自己申告。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-04",
+   "locator": "How it works / Sample-accurate timing",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-014",
+   "entity_id": "REF-019-003",
+   "topic": "timing",
+   "statement": "タイムタグは壁時計時刻を使うので、リモートscsynthではPC間のNTP同期が必要とTroubleshootingに記載。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Troubleshooting: Remote scsynth",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-015",
+   "entity_id": "REF-019-003",
+   "topic": "config",
+   "statement": "設定は --host/SC_HOST(既定127.0.0.1)、--port/SC_PORT(既定57110)、--log-level(既定WARNING)。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Configuration表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-016",
+   "entity_id": "REF-019-003",
+   "topic": "tools",
+   "statement": "ツール13個: server_status, stop_all, play_example_osc, play_synth, create_layered_synth, create_lfo_modulation, create_granular_texture, play_melody, create_sequence, create_chord_progression, create_drum_pattern, create_generative_rhythm, create_ambient_soundscape。生成系はseed引数で再現可能。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Tools表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-017",
+   "entity_id": "REF-019-003",
+   "topic": "license",
+   "statement": "MIT License(LICENSE先頭、Copyright 2025 tok)。READMEにもMIT記載。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-05",
+   "locator": "LICENSE 1行目",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-018",
+   "entity_id": "REF-019-004",
+   "topic": "parameters",
+   "statement": "多くのツールでvolume(0〜1)とeffects{reverb,delay,delay_time,distortion,filter}を指定。量は0〜1で0はオフ、filterはLPFで暗くする、delay_timeは秒で既定は3/4拍。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Tools節下の説明",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-019",
+   "entity_id": "REF-019-004",
+   "topic": "dsl",
+   "statement": "音名やHz指定、シーケンス文字列(_で半分、+で倍、:1.5で拍長、.は休符)、ドラムは16分1文字(X,x,o,.)でレーンごとに独立ループ。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Notes/Sequences/Drum patterns",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-020",
+   "entity_id": "REF-019-004",
+   "topic": "state_query",
+   "statement": "server_statusは接続確認としてscsynthのバージョン、CPU、再生中の数、直近のサーバーエラーを返す。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Tools表 server_status",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-021",
+   "entity_id": "REF-019-004",
+   "topic": "safety",
+   "statement": "stop_allは自分が起動した音を全て無音化しスケジュール済みノートを取り消す。リミッタは常時同梱。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Tools表 stop_all; 冒頭",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-022",
+   "entity_id": "REF-019-004",
+   "topic": "auth",
+   "statement": "READMEに認証・アクセス制御・レート制限の記述は無い。接続はローカルstdio→UDP。",
+   "basis": "licensed_source",
+   "confidence": "low",
+   "source_id": "SRC-019-04",
+   "locator": "README全体(記述の不在の確認)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-023",
+   "entity_id": "REF-019-004",
+   "topic": "setup",
+   "statement": "初回使用でscsynthの応答を確認し、SynthDefを/d_recvで送り、高位ノードIDの独自グループ(voice/effects/limiter)を作る。scsynth再起動後は次回呼び出しで再セットアップ。応答なし時は明示エラー文言。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "How it works / Troubleshooting",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-024",
+   "entity_id": "REF-019-005",
+   "topic": "features",
+   "statement": "create_drum_patternは名前付きパターンかレーン別カスタム文字列(kick,snare,hat,open_hat,perc)とtempo/swingを受け、create_generative_rhythmは5種のジャンルで変異し続ける。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-04",
+   "locator": "Tools表, Drum patterns",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-025",
+   "entity_id": "REF-019-006",
+   "topic": "features",
+   "statement": "LFOはサーバー側で動作し、ピッチ・音量・フィルタ・パンのいずれかを変調する。LFO波形・レート範囲はREADMEに記載なし。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-04",
+   "locator": "Tools表 create_lfo_modulation",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-026",
+   "entity_id": "REF-019-007",
+   "topic": "patch_format",
+   "statement": "READMEの前提: .vcvパッチはプレーンJSONなのでLLMが構造化データを出すだけで作曲でき、GUI自動操作は不要。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-06",
+   "locator": "冒頭",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-027",
+   "entity_id": "REF-019-007",
+   "topic": "status",
+   "statement": "README自己申告: v0.1.0、カタログ50モジュール、検証4種(モジュールデータ含む)、Webアプリ+Playwright E2E済み。Rackでの往復(P2)とOSC E2E(P3)は人手確認が未了。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-06",
+   "locator": "Status, What's Real vs What Needs Human",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-028",
+   "entity_id": "REF-019-007",
+   "topic": "architecture",
+   "statement": "構成: vcv-rack-mcp(ポート10916、stdio/HTTP /mcp)→ catalog/modules.yaml、depot/(.vcv+SQLite+.md)、osc-mcp(10767)にアドレスマップを渡す。フロントはVite React 10917。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-06",
+   "locator": "Architecture, Ports",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-029",
+   "entity_id": "REF-019-007",
+   "topic": "http",
+   "statement": "server.pyはHTTP時にStarletteアプリを構築し、POST /api/shutdownで0.5秒後にプロセスをos._exit(0)する。CORS許可はhttp://127.0.0.1:10917等。認証関連語(auth,token,api_key)はserver.pyのgrepで検出されず。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-07",
+   "locator": "server.py build_app(約L744-L921) と grep",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-030",
+   "entity_id": "REF-019-007",
+   "topic": "license",
+   "statement": "MIT License(LICENSE先頭、Copyright 2026 Sandra Schipal)。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-08",
+   "locator": "LICENSE 1行目",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-031",
+   "entity_id": "REF-019-008",
+   "topic": "tools",
+   "statement": "READMEのツール表: vcv_patch, vcv_catalog, vcv_live, vcv_agentic_workflow(ctx.sampleループ最大3回), show_patch_card/show_catalog_card(Prefab UI), hub_status, vcv_shutdown。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-06",
+   "locator": "Tools表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-032",
+   "entity_id": "REF-019-008",
+   "topic": "annotations",
+   "statement": "vcv_liveは operation(address_map|performance_sheet)+patch_id を受け、readOnlyHint=True、戻り値は{success,operation,...}。vcv_patch/vcv_catalogは readOnlyHint=False。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-07",
+   "locator": "server.py @mcp.tool宣言 L62,L348,L468",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-033",
+   "entity_id": "REF-019-008",
+   "topic": "safety",
+   "statement": "vcv_shutdownはdestructiveHint=Trueのツールで、POST /api/shutdownと同じ契約でサーバーを終了する。呼び出し側の認証は読んだ範囲に無い。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-07",
+   "locator": "server.py L705-L717, L885-L889",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-034",
+   "entity_id": "REF-019-010",
+   "topic": "architecture",
+   "statement": "stdio MCP。10ツール+1プロンプト(song_analysis)、テスト741件、実行時依存はMCP SDKとZodのみ、READMEの自己申告。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-09",
+   "locator": "What is this? / Architecture / Tech Stack",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-035",
+   "entity_id": "REF-019-010",
+   "topic": "composer",
+   "statement": "compose_patchはgenre(9種)・tempo(ジャンル範囲にクランプ)・mood・key・instruments(8ロール)・effects・controllerを受け、clock→sequencer→synth→mixer→fxを自動配線。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "Song Composer, MCP Tools compose_patch",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-036",
+   "entity_id": "REF-019-010",
+   "topic": "vcv_registry",
+   "statement": "VCVは19プラグイン約600モジュールのポート/パラメータIDをC++から収集し、曖昧一致やエイリアス(vcv,mi,bg等)で解決。.vcv生成は module+cable仕様から。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "VCV Rack Generator",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-037",
+   "entity_id": "REF-019-010",
+   "topic": "wiring",
+   "statement": "ラック構築: モジュール別.pd+結合_rack.pd。モジュール間は音声がthrow~/catch~、制御がsend/receiveのバス。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "Rack Builder",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-038",
+   "entity_id": "REF-019-010",
+   "topic": "live_control",
+   "statement": "send_messageはOSC(UDP既定9000、OSC1.0バイナリを自前エンコード)またはFUDI(TCP既定3000)を127.0.0.1等に送る。引数は数値か文字列。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "Live Control, send_message",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-039",
+   "entity_id": "REF-019-010",
+   "topic": "tools",
+   "statement": "ツール: parse_patch, generate_patch, validate_patch, analyze_patch, create_from_template, create_rack, compose_patch, send_message, list_vcv_modules, generate_vcv。多くが outputPath/outputDir でファイルを書き出す。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "MCP Tools",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-040",
+   "entity_id": "REF-019-010",
+   "topic": "license",
+   "statement": "MIT(README・LICENSE先頭、Copyright 2025 j0KZ)。Glama検索要約も同旨(要約のみ)。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-10",
+   "locator": "LICENSE 1行目; README badge",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-041",
+   "entity_id": "REF-019-011",
+   "topic": "validation",
+   "statement": "パッチ検証は9カテゴリの問題を検出し、解析は信号フローグラフ・DSPチェーン・複雑度0-100を返す。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-09",
+   "locator": "Patch Validator / Patch Analyzer",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-042",
+   "entity_id": "REF-019-011",
+   "topic": "tool_args",
+   "statement": "list_vcv_modules(plugin, module?)で一覧と詳細、generate_vcv(modules[{plugin,model,params?}], cables?, outputPath?)でファイル出力。ファイルパスはサニタイズされると記載。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "MCP Tools / VCV Rack Generator",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-043",
+   "entity_id": "REF-019-011",
+   "topic": "midi",
+   "statement": "3機種のプロファイルと4段階自動マッピング(カスタム→振幅→周波数→残り→トランスポート)。_controller.pdと_k2_config.json(LED)を生成。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "MIDI Controller System",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-044",
+   "entity_id": "REF-019-011",
+   "topic": "safety_auth",
+   "statement": "READMEには認証・レート制限・音量制限・送信先制限の記述が無い。唯一の安全面の記述はパスのサニタイズと入力のZod検証・パラメータ強制変換(Claude Desktop癖の吸収)。",
+   "basis": "licensed_source",
+   "confidence": "low",
+   "source_id": "SRC-019-09",
+   "locator": "README全体(記述不在の確認); Project Structure validate-vcv-params",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-045",
+   "entity_id": "REF-019-012",
+   "topic": "templates",
+   "statement": "テンプレート表のパラメータ名: sequencer(steps,bpm,notes,midiChannel,velocity)、clock(bpm,divisions)、turing-machine(length,probability,range,offset)。範囲値はREADMEに記載なし。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-09",
+   "locator": "Template Engine表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-046",
+   "entity_id": "REF-019-013",
+   "topic": "scope",
+   "statement": "README冒頭: ハードシンセはMIDI/SysEx、DAW・ライブコーディング環境はOSCで、全デバイスが1つのJSONドライバによる名前付きOSC面を持つ。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-11",
+   "locator": "冒頭",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-047",
+   "entity_id": "REF-019-013",
+   "topic": "install",
+   "statement": "npx -y @roomi-fields/osc-bridge mcp で起動(ビルド済みネイティブバイナリをGitHub releaseから取得: Linux x64/Windows x64/macOS arm64・x64)。ホスト型はhttps://mcp.synthhub.roomi-fields.com/mcp。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-12",
+   "locator": "On your machine / Hosted",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-048",
+   "entity_id": "REF-019-013",
+   "topic": "privacy",
+   "statement": "SynthHub連携は既定で有効。匿名アカウントでドライバ取得・報告を行い、MIDIポート名等は『機器の通信はマシン外に出ない』とする一方、共有は既定ON。settings.tomlのoffline=trueやprivate=[...]で制限。--offline / OSC_BRIDGE_OFFLINE=1もある。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-12",
+   "locator": "Linked to the SynthHub server",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-049",
+   "entity_id": "REF-019-013",
+   "topic": "license",
+   "statement": "AGPL-3.0-or-later(README badge・LICENSE全文=AGPL v3)。ネットワークサービスとして改変版を動かす場合ソース提供義務。共有プリセットはCC BY-SA 4.0、ドライバは各々のライセンス記載。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-11",
+   "locator": "License節, badge; LICENSE",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-050",
+   "entity_id": "REF-019-013",
+   "topic": "license_discrepancy",
+   "statement": "Glama一覧のテキストもAGPL-3.0-or-laterだが、WebSearch要約はGPL-3.0-or-laterと要約していた。本文2資料(README/Glama)がAGPLで一致するためAGPLを採用し、要約側の記述は誤りの疑いとして併記。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-019-13",
+   "locator": "ライセンス節(Glama一覧); WebSearch要約との比較",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-051",
+   "entity_id": "REF-019-014",
+   "topic": "tools",
+   "statement": "docs/MCP.mdのツール表(9件): list_devices, get_device_docs, list_routes, export_device, send, get_status, detect_hardware, backup_presets, restore_presets。export_deviceはoscqueryまたはmidnam形式。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-12",
+   "locator": "The nine tools",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-052",
+   "entity_id": "REF-019-014",
+   "topic": "send",
+   "statement": "sendは実行中osc-bridgeへ型付きOSC1通を送る。例: send('/minilogue/filter/cutoff',[90]) はCC43、範囲0-127でデバイス固有の整数(0-1ではない)。--default-targetの既定は127.0.0.1:7777。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-12",
+   "locator": "Typical workflow, Optional flags",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-053",
+   "entity_id": "REF-019-014",
+   "topic": "safety",
+   "statement": "restore_presetsは機器のメモリを上書きするため、confirm_overwrite:trueが無い限り拒否。クライアントはユーザーに確認すべきと記載。detect_hardwareは機器の状態を変えないIdentity Request等のみ送る。",
+   "basis": "licensed_source",
+   "confidence": "high",
+   "source_id": "SRC-019-12",
+   "locator": "The nine tools 表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-054",
+   "entity_id": "REF-019-014",
+   "topic": "discrepancy",
+   "statement": "WebSearchの要約は『5つのツール』と述べていたが、README・docs/MCP.md・Glama一覧は9つのローカルツールと記載。要約のみで本文未読のため低信頼。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-019-14",
+   "locator": "検索結果要約(osc-bridge)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-019-055",
+   "entity_id": "REF-019-015",
+   "topic": "shared_presets",
+   "statement": "SynthHub連携ツールにfind_presets,get_preset,load_preset,report_preset,take_sound,share_preset,update_preset,withdraw_preset等がある。共有プリセットはCC BY-SA 4.0。load_presetは接続機器にデータを送るため同意が前提。",
+   "basis": "licensed_source",
+   "confidence": "medium",
+   "source_id": "SRC-019-12",
+   "locator": "Linked to the SynthHub server (Shared presets)",
+   "verified_on": "2026-11-13"
+  }
+ ],
+ "unconfirmed": [
+  {
+   "entity_id": "REF-019-002",
+   "item": "標準MCP(JSON-RPC 2.0)クライアントとの実際の互換性、mcp_server.py後半と tests/ の内容",
+   "tried_sources": [
+    "SRC-019-02",
+    "SRC-019-01"
+   ],
+   "impact_on_spec": "独自プロトコルならClaude Desktop等から直接使えない可能性。仕様化時は標準SDKでの再実装前提で扱う。"
+  },
+  {
+   "entity_id": "REF-019-001",
+   "item": "最終コミット日・スター数・実機JUCE側の対応状況",
+   "tried_sources": [
+    "SRC-019-15",
+    "SRC-019-03"
+   ],
+   "impact_on_spec": "保守状況が不明で、先行例としての成熟度評価ができない。"
+  },
+  {
+   "entity_id": "REF-019-006",
+   "item": "LFOのレート・波形・深さの範囲、ツール個別の引数範囲(tempo, bars等)",
+   "tried_sources": [
+    "SRC-019-04"
+   ],
+   "impact_on_spec": "パラメータ仕様化にはserver.pyの入力検証コード確認が必要。"
+  },
+  {
+   "entity_id": "REF-019-003",
+   "item": "最終コミット日・スター数・リリース履歴(CHANGELOG)",
+   "tried_sources": [
+    "SRC-019-15",
+    "SRC-019-04"
+   ],
+   "impact_on_spec": "保守状況が不明。"
+  },
+  {
+   "entity_id": "REF-019-008",
+   "item": "各operationの引数・戻り値の詳細、tools/配下の実装、HTTPバインド既定ホスト(settings.HOST)",
+   "tried_sources": [
+    "SRC-019-06",
+    "SRC-019-07"
+   ],
+   "impact_on_spec": "認証・安全性の完全評価には実装全読が必要。"
+  },
+  {
+   "entity_id": "REF-019-007",
+   "item": "最終コミット日・スター数・Rackでの実動作確認結果",
+   "tried_sources": [
+    "SRC-019-15",
+    "SRC-019-06"
+   ],
+   "impact_on_spec": "README自身がRack往復を未確認としているため、生成パッチの実機適合は保証されない。"
+  },
+  {
+   "entity_id": "REF-019-012",
+   "item": "テンプレート各パラメータの許容範囲・既定値(Zodスキーマ値)",
+   "tried_sources": [
+    "SRC-019-09"
+   ],
+   "impact_on_spec": "パラメータ範囲の仕様化にはsrc/templates/validate-params.tsの確認が必要。"
+  },
+  {
+   "entity_id": "REF-019-010",
+   "item": "最終コミット日・npm公開版数・実際のPd/Rackでの動作確認",
+   "tried_sources": [
+    "SRC-019-15",
+    "SRC-019-09",
+    "SRC-019-14"
+   ],
+   "impact_on_spec": "READMEは自己申告で、保守状況・実機動作が未確認。"
+  },
+  {
+   "entity_id": "REF-019-014",
+   "item": "SynthHub側(リモート)ツールの全引数・認証詳細、サーバー側の記録内容(API for agentsページ)",
+   "tried_sources": [
+    "SRC-019-12"
+   ],
+   "impact_on_spec": "外部サービス依存部分の安全性評価には https://synthhub.roomi-fields.com/api/ の読込が必要(ホスト許可外)。"
+  },
+  {
+   "entity_id": "REF-019-013",
+   "item": "最終コミット日・リリース版数",
+   "tried_sources": [
+    "SRC-019-15",
+    "SRC-019-13"
+   ],
+   "impact_on_spec": "保守状況が不明。"
+  },
+  {
+   "entity_id": "REF-019-016",
+   "item": "vcv-rack-mcpが出力する.vcvのパラメータ値の単位・範囲、モジュールデータJSONの仕様",
+   "tried_sources": [
+    "SRC-019-06",
+    "SRC-019-07"
+   ],
+   "impact_on_spec": "VCV側パラメータの範囲はVCV Rackとプラグイン定義に依存し、本調査では未確認。"
+  },
+  {
+   "item": "各プロジェクトの最終更新日・スター数・コミット履歴(5件すべて)",
+   "tried_sources": [
+    "SRC-019-15"
+   ],
+   "impact_on_spec": "github.com本体が許可外のため。許可が必要なホスト: github.com(コミット履歴/atomフィード)、api.github.com。"
+  }
+ ]
+}

@@ -8,7 +8,7 @@
 |---|---|---|
 | T-001 Doepfer A-100(Eurorack規格と代表モジュール) | 確認済み | doepfer.de のA-100概要・Technical Details・Construction Details と代表8件(A-110-1,A-120,A-140-1,A-145-1,A-138s,A-160-1,A-190-3)の公式説明ページを確認。各モジュールのPDFマニュアルは未取得で、パラメータ範囲の一部は未確認。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org Eurorack/CV/gate/Doepfer/Modular synthesizer/Moog synthesizer)で電圧規約の一般論、V/oct対Hz/V、トリガ/ゲート種別、1V/oct歴史、Doepfer沿革を新規エンティティREF-001-011〜014として追記(third_party、low〜medium)。既存事実は変更なし。Doepfer公式値と整合を確認、発売年・沿革年・モジュール数に資料間の食い違いあり。 |
 | T-002 Make Noise(Maths等の代表モジュール) | 確認済み | makenoisemusic.com の製品ページと makenoise-manuals.com のPDFマニュアル(Maths、Wogglebug、Mimeophon)を確認。ポート電圧と主要仕様は確認済み。つまみの数値範囲・MIDI系モジュール・メーカー全体の規約は未確認。指定のmakenoise.comは別組織のサイトで不採用。 |
-| T-003 Moog Mother-32 | 資料不足 | 公式ユーザーマニュアルPDFを取得できず(ダウンロード一覧はクライアント描画、PDFホストはプロキシで拒否)。moogmusic.com製品ページのSpecs表(パッチベイ32点、正規化、32ステップ/64シーケンス、MIDI/アサイナブル出力)のみ確認。電圧・ゲート規約、パッチ点名、サウンド保存の有無は未確認。(2026-11-13 追記) SOS 2016レビュー(全文)とWikipediaでパッチ点名・+5V/±5V CV・アサイナブル出力16機能・MIDI機能・シーケンス64メモリを補完(basis=third_party)。ゲート閾値・音声電圧・パッチ(音色)保存の有無は依然未確認。公式マニュアルPDFはcdn.shopify.com等が403で未取得、statusはinsufficient_sourcesのまま。フィルタ種別・LFO下限・ベロシティ対応は資料間で食い違い(unconfirmed記録)。 |
+| T-003 Moog Mother-32 | 資料不足 | 公式ユーザーマニュアルPDFを取得できず(ダウンロード一覧はクライアント描画、PDFホストはプロキシで拒否)。moogmusic.com製品ページのSpecs表(パッチベイ32点、正規化、32ステップ/64シーケンス、MIDI/アサイナブル出力)のみ確認。電圧・ゲート規約、パッチ点名、サウンド保存の有無は未確認。(2026-11-13 追記) SOS 2016レビュー(全文)とWikipediaでパッチ点名・+5V/±5V CV・アサイナブル出力16機能・MIDI機能・シーケンス64メモリを補完(basis=third_party)。ゲート閾値・音声電圧・パッチ(音色)保存の有無は依然未確認。公式マニュアルPDFはcdn.shopify.com等が403で未取得、statusはinsufficient_sourcesのまま。フィルタ種別・LFO下限・ベロシティ対応は資料間で食い違い(unconfirmed記録)。 (2026-11-13 オーナー判断: 二次資料の範囲で良しとし、公式マニュアルの追加取得は行わない) |
 | T-004 Korg MS-20 系(MS-20 mini) | 確認済み | korg.comの公式マニュアル(原機オーナーズマニュアル復刻、MS-20 miniオーナーズマニュアル、MIDI Implementation、Patch Book)を確認。原機1978年との関係はminiマニュアルの記述の範囲のみ。miniのパッチパネルのジャック数・電圧表の再掲、音色メモリの明示的有無は未確認。 |
 | T-005 VCV Rack | 確認済み | 確認済み。公式マニュアル(電圧規約・ポリフォニー・Core・メニュー)とGitHub v2のソースを読んだ。OSC等の外部制御は本体に確認できず未確認項目に記録。 [2026-11-13 第3陣] メーカー外資料(en.wikipedia.org VCV_Rack/Eurorack/CV_gate)で、公式マニュアルの電圧規約を実機Eurorack慣習と照合する新規エンティティREF-005-011を追記(third_party、low〜medium)。既存事実は変更なし。 |
 | T-006 Cardinal | 確認済み | 確認済み(一部)。README/LICENSES/FAQ/DIFFERENCESを読んだ。GitHub APIは接続拒否のためバージョン未確認。パッチ保存形式とOSCは未確認。 |
@@ -23,6 +23,11 @@
 | T-015 EMS 系(VCS3、Synthi 100) | 確認済み | emssynthesisers.co.uk(EMS公式)のトップ・製品ガイド・沿革(Graham Hinton執筆)を確認し、VCS3/Synthi 100/Synthi Aのモジュール構成、ピンマトリクス(Synthi 100は60x60二枚)、シーケンサ、権利者の変遷を記録。公式の操作・保守マニュアルは見つからず、信号電圧規約・VCS3マトリクス寸法・個別モジュール仕様は未確認。製品ガイドは個人執筆の史料としてthird_party扱い。2026-11-13追記(第3陣): Sound On Sound(Gordon Reid、All About EMS Part 1/2)とWikipedia(VCS3/Synthi 100/AKS)を読了し、VCS3の16x16ピンマトリクス、抵抗入りピン(白2.7kΩ等)、電圧規約(0.32/0.26/0.20 V/oct、外部CVはその約2倍、信号レベル3〜6V)、VCO/VCF/シェイパーの個別仕様、Prestopatch、Synthi 100の60x60二枚、Computer Synthi等を追加。電圧値は単一の第三者資料(SOS)で、EMS一次資料は未確認。フィルタのスロープ(12/18dB対24dB)ほか数点は資料間で不一致のため併記。 |
 | T-016 Serge 系(Serge Modular、Random*Source Serge) | 確認済み | serge-modular.com(Random*Source)の公式ページ(FAQ・About・Paperface・パネル・Euro製品ページ)とPaperface 50ユーザーガイドPDFを確認し、ジャック色による信号規約(白=DC CV、赤=トリガ、黒=バイポーラ/音声、最大±12V)、SSG/DSG/NTO等を記録。1970年代原機の一次資料と各パネルPDFマニュアルは未読、serge_4x4ページは接続リセットで未取得。 [2026-11-13 第3陣] 二次資料(en.wikipedia.org Serge synthesizer、vintagesynth.com Serge Modular)で原機の歴史(1972-83の4世代モジュール構成)、設計思想、旧ジャック色(青/黒/赤)、STS継続、Wave Multiplier・TKBを追記(basis third_party、confidence low〜medium)。年代や段数は資料間で食い違い、unconfirmedに記録。1970年代原機の一次資料は依然未入手。 |
 | T-017 現行個別モジュール(AJH MiniMod、Intellijel Morgasmatron / Korgasmatron、Behringer SPACE FX) | 確認済み | AJH Synth(ajhsynth.com)のMiniMod系マニュアルPDF/製品ページ、Intellijel Morgasmatronの公式マニュアルと製品ページ、Korgasmatron IIはIntellijel掲載の第三者補足資料と旧製品一覧、Behringer SPACE FXは製品ページを確認。SPACE FXはクイックスタートガイド(V 2.0)を取得し、パラメータ範囲・入出力仕様を記録(電圧範囲・保存・外部制御は記載なしで未確認、消費電流は製品ページと不一致)。Korgasmatron IIの公式マニュアルは未取得。 |
+| T-018 ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js) | 確認済み | 2026-11-13 READMEと一部docsを読了(DreamRack/Mod Synth 0/Plinth/Patchcab/Modulator/web-synth/eurorack-js。system・パッチ保存・制御IF等のエンティティを記録)。GitHub通常APIは403のため最終更新は検索APIのpushed_at。ソース本体・web-synth docs(synth.ameo.dev)・patch.cabは未取得で、個別モジュール仕様・信号数値規約は一部unconfirmed。ライセンスはAGPL/MIT/GPL/ISC(無記載含む)で再利用しない。(2026-11-13 オーナー指示『追加調査』により追加) |
+| T-019 エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge) | 確認済み | 確認済み(二次資料含む)。5プロジェクト(MCP Synth Controller/SuperCollider MCP/vcv-rack-mcp/synthlab-mcp-server/osc-bridge)のREADME・一部ソース・LICENSEを取得。ツール一覧・認証/安全性の有無を記録。github.com本体(コミット履歴)は403のため最終更新日は未確認。osc-bridgeはWebSearch要約(GPL・5ツール)と本文(AGPL・9ツール)が食い違い、本文を採用し併記。(2026-11-13 オーナー指示『追加調査』により追加) |
+| T-020 Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等) | 確認済み | [2026-11-13 第4陣] github.com/pichenettes/eurorack のREADME(ライセンス: STM32F=MIT, AVR=GPL3.0, HW=cc-by-sa-3.0, 商標指針)と Plaits/Braids/Rings/Clouds/Tides/Marblesのソースヘッダ(MIT表記確認)から、エンジン数・サンプルレート・ブロックサイズ・設定保存を記録。mutable-instruments.net の公式マニュアルとGitHub APIは403で未取得のため、入出力電圧範囲・ジャック仕様・最終更新日は未確認(unconfirmed)。 |
+| T-021 Web Audio API(AudioContext/AudioWorklet、自動再生制限) | 確認済み | [2026-11-13 第4陣] www.w3.org/TR/webaudio/ (Web Audio API 1.1 Working Draft 2026-09-22) と MDN(AudioContext/AudioWorklet/Best practices)を確認。サンプルレート範囲・レンダ量子128・スレッドモデル・latencyHint・自動再生/resume要件を記録。ブラウザ別の実測レイテンシ・既定レート・自動再生の具体条件は未確認。 |
+| T-022 外部制御規格(MIDI 1.0/2.0、OSC) | 確認済み | 確認済み(二次資料中心)。OSC 1.0仕様書(opensoundcontrol.stanford.edu)は一次で読了、MIDI 1.0/2.0はmidi.orgが403のためWikipedia(CC BY-SA)による二次確認のみで、ステータスバイト値・MIDI 2.0分解能などはunconfirmed。(2026-11-13 オーナー指示『追加調査』により追加) |
 
 ## 未確認項目
 
@@ -288,6 +293,81 @@
 | (対象全体) | Intellijel Morgasmatron/Korgasmatron and AJH MiniMod voltage references for modules not read (Gemini 2412, Sonic XV, V-Shape etc.) | SRC-017-07 | Only a subset of the MiniMod range was read; other modules are not covered. |
 | REF-017-012 | Port voltage ranges, parameter defaults, whether settings persist after power-off, and external control beyond the front panel | SRC-017-12, SRC-017-13 | The Quick Start Guide gives parameter ranges and impedances but no voltage levels, defaults or storage statement; persistence is unknown. |
 
+### T-018 ブラウザ型モジュラー(DreamRack、Mod Synth 0、Plinth、Patchcab、Modulator、web-synth、Eurorack-js)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-018-001 | JSON状態のスキーマ・フォルダ位置・読み戻し手順・安全性(音量制限など) | SRC-018-01, SRC-018-02 | DreamRackの状態JSON/AI連携の仕様化(入出力形式、検証の有無)に影響。READMEは機能の存在のみ記述 |
+| REF-018-002 | 電圧の物理値規約(1V/oct以外の電圧範囲、ゲート電圧、音声レベル) | SRC-018-01, SRC-018-02 | DreamRackのデジタル信号値域の仕様比較ができない。精読範囲では電圧値の記載なし |
+| REF-018-003 | パッチJSONの具体的フィールド構成 | SRC-018-01, SRC-018-02 | パッチ形式の比較に影響。ファイル構造は未取得 |
+| REF-018-006 | ポート/パラメータ詳細(LPG 292系とのヒントのみ) | SRC-018-01, SRC-018-02 | 個別モジュール仕様は取得できず、機能カテゴリ比較に限る |
+| REF-018-008 | 信号の数値規約(基準電圧、1V/oct換算、ゲート電圧) | SRC-018-03 | ソース未取得のため数値規約を比較できない |
+| REF-018-009 | JSONスキーマ、バージョニング、互換性方針 | SRC-018-03 | パッチ形式の比較に影響 |
+| REF-018-007 | 外部制御(MIDI/OSC)の有無 | SRC-018-03 | README記載なし。外部制御比較で空欄になる |
+| REF-018-013 | デモラックのパッチファイル形式(rack.htmlの保存フォーマット) | SRC-018-04 | READMEに記載なし。ホスト側の保存形式は未確認 |
+| REF-018-016 | パッチ保存形式・信号規約・外部制御 | SRC-018-05 | READMEが短く本体ソース未取得。パッチ形式/信号規約の比較不可 |
+| REF-018-019 | JSONスキーマ詳細・ブラウザ内自動保存の有無 | SRC-018-06, SRC-018-07 | パッチ形式比較に影響 |
+| REF-018-020 | 個別モジュール仕様・信号規約(docsサイト synth.ameo.dev/docs は未取得) | SRC-018-08 | 個別モジュール/信号規約の比較不可。docsホスト synth.ameo.dev が必要 |
+| REF-018-025 | OSC/外部プロセスAPI・認証・音量制限 | SRC-018-10, SRC-018-11 | 外部エージェント連携の可否(ローカルUI外からの制御)は仕様化に影響。記載なし |
+| None | 各プロジェクトの実ソースでのオーディオエンジン詳細(AudioWorklet利用割合、ブロックサイズ、サンプル単位CV)を未検証。DreamRack/Patchcab/Plinthはソース未取得 | SRC-018-01, SRC-018-03, SRC-018-04, SRC-018-05 | 音声エンジン設計差の比較は、READMEが述べる範囲(自己申告)に限る |
+| None | Patchcab・Plinth・ModulatorのREADME以外の仕様/動作確認(実機で動かして検証していない) | SRC-018-04, SRC-018-05, SRC-018-06 | third_party扱いのメタデータ(stars・最終更新)のみで動作状況は不明。2017/2023年の古さに注意 |
+
+### T-019 エージェント/MCP連携シンセ(MCP Synth Controller、SuperCollider OSC MCP、VCV Rack MCP、synthlab-mcp、osc-bridge)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-019-002 | 標準MCP(JSON-RPC 2.0)クライアントとの実際の互換性、mcp_server.py後半と tests/ の内容 | SRC-019-02, SRC-019-01 | 独自プロトコルならClaude Desktop等から直接使えない可能性。仕様化時は標準SDKでの再実装前提で扱う。 |
+| REF-019-001 | 最終コミット日・スター数・実機JUCE側の対応状況 | SRC-019-15, SRC-019-03 | 保守状況が不明で、先行例としての成熟度評価ができない。 |
+| REF-019-006 | LFOのレート・波形・深さの範囲、ツール個別の引数範囲(tempo, bars等) | SRC-019-04 | パラメータ仕様化にはserver.pyの入力検証コード確認が必要。 |
+| REF-019-003 | 最終コミット日・スター数・リリース履歴(CHANGELOG) | SRC-019-15, SRC-019-04 | 保守状況が不明。 |
+| REF-019-008 | 各operationの引数・戻り値の詳細、tools/配下の実装、HTTPバインド既定ホスト(settings.HOST) | SRC-019-06, SRC-019-07 | 認証・安全性の完全評価には実装全読が必要。 |
+| REF-019-007 | 最終コミット日・スター数・Rackでの実動作確認結果 | SRC-019-15, SRC-019-06 | README自身がRack往復を未確認としているため、生成パッチの実機適合は保証されない。 |
+| REF-019-012 | テンプレート各パラメータの許容範囲・既定値(Zodスキーマ値) | SRC-019-09 | パラメータ範囲の仕様化にはsrc/templates/validate-params.tsの確認が必要。 |
+| REF-019-010 | 最終コミット日・npm公開版数・実際のPd/Rackでの動作確認 | SRC-019-15, SRC-019-09, SRC-019-14 | READMEは自己申告で、保守状況・実機動作が未確認。 |
+| REF-019-014 | SynthHub側(リモート)ツールの全引数・認証詳細、サーバー側の記録内容(API for agentsページ) | SRC-019-12 | 外部サービス依存部分の安全性評価には https://synthhub.roomi-fields.com/api/ の読込が必要(ホスト許可外)。 |
+| REF-019-013 | 最終コミット日・リリース版数 | SRC-019-15, SRC-019-13 | 保守状況が不明。 |
+| REF-019-016 | vcv-rack-mcpが出力する.vcvのパラメータ値の単位・範囲、モジュールデータJSONの仕様 | SRC-019-06, SRC-019-07 | VCV側パラメータの範囲はVCV Rackとプラグイン定義に依存し、本調査では未確認。 |
+| (対象全体) | 各プロジェクトの最終更新日・スター数・コミット履歴(5件すべて) | SRC-019-15 | github.com本体が許可外のため。許可が必要なホスト: github.com(コミット履歴/atomフィード)、api.github.com。 |
+
+### T-020 Mutable Instruments(オープンソースEurorack: Plaits/Braids/Rings/Clouds/Tides/Marbles等)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-020-001 | 公式マニュアル(mutable-instruments.net)のI/O電圧範囲・ジャック一覧・電源規格・販売終了状況 | SRC-020-09 | 各モジュールのポート範囲(信号規約)を一次資料で確定できない。ソース中の定数・校正処理から間接的にのみ読める |
+| REF-020-001 | リポジトリの最終更新日・アーカイブ状態(GitHub API) | SRC-020-10 | 保守状況・更新頻度を仕様根拠に使えない |
+| REF-020-001 | READMEが言及するのみのLICENSEファイル(LICENSEは404)・個別モジュールの追加サードパーティ条項 | SRC-020-01 | 再利用判断は各ファイルのヘッダ確認が必要 |
+| REF-020-002 | 各モジュールの入出力電圧範囲・ジャック種別(V/oct基準電圧、ゲート閾値) | SRC-020-09, SRC-020-08 | 電圧規約はEurorack一般論(別対象T-001)に頼るしかなく、Mutable固有値を断定できない |
+| REF-020-003 | パネル上のポート一覧・各パラメータの電圧範囲 | SRC-020-09 | ポート表を確定できない(Modulations構造体のみ) |
+| REF-020-004 | 設定値の保存方式(Braidsのメニュー設定がフラッシュに保存されるか) | SRC-020-04 | Braidsのパッチ保存仕様は未確認 |
+| REF-020-005 | 入出力ジャック仕様・サンプルレート | SRC-020-05, SRC-020-09 | ポート表を確定できない |
+| REF-020-006 | バッファ長(秒)・入出力電圧範囲 | SRC-020-06, SRC-020-09 | 最大録音時間・ポート範囲を確定できない |
+| REF-020-007 | 出力電圧範囲・パネルパラメータ名 | SRC-020-07, SRC-020-09 | 信号範囲を仕様化できない |
+| REF-020-008 | 乱数アルゴリズム詳細・出力範囲 | SRC-020-08 | 確率モデルの仕様化ができない |
+| None | Mutable Instruments全体のパッチ保存形式(セッション/プリセット) | SRC-020-01 | モジュールは単体で内部フラッシュに状態を保存する設計で、システム全体のパッチ概念はないと考えられるが未確認 |
+
+### T-021 Web Audio API(AudioContext/AudioWorklet、自動再生制限)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-021-001 | 各ブラウザ(Chrome/Firefox/Safari)での実際の既定サンプルレート・レンダ量子・baseLatency実測値 | SRC-021-01, SRC-021-02 | 仕様値と実機挙動を区別する必要がある。レイテンシは数値で仕様化できない |
+| REF-021-001 | Web Audio APIにプリセット/パッチ保存機構があるか(APIとしては保存概念は未確認) | SRC-021-01, SRC-021-02, SRC-021-03, SRC-021-04 | パッチ保存は別途アプリ側(JSON等)で設計が必要 |
+| REF-021-002 | sampleRateの既定値の具体値(デバイス依存) | SRC-021-01 | 44.1/48kHzの別が仕様上は固定されず、DSP係数の設計でレート非依存にする必要 |
+| REF-021-003 | process()の入出力配列形・parameters(a-rate/k-rate)の詳細、ブラウザ別のスレッド優先度/GC挙動 | SRC-021-01, SRC-021-03 | オーディオスレッドでの割当・ブロッキング回避といった実装制約を具体化できていない |
+| REF-021-004 | ブラウザ別の自動再生判定基準(Chrome/Safari/Firefoxの具体的条件・MEI等) | SRC-021-02, SRC-021-04 | ブラウザごとの開始条件は実機/各社資料で別途確認が必要。UIは常に明示的な開始操作を要する前提にすべき |
+| REF-021-005 | 最大長・メモリ上限 | SRC-021-01 | 書き出し機能の上限を仕様化できない |
+
+### T-022 外部制御規格(MIDI 1.0/2.0、OSC)
+
+| 対象エンティティ | 不足項目 | 試した資料 | 仕様化への影響 |
+|---|---|---|---|
+| REF-022-003 | CC数値範囲(0-127)の明記、ステータスバイト値(0x8n/0x9n/0xBn)、ピッチベンド14ビット、RPN/NRPN、ベロシティ0=ノートオフ慣習 | SRC-022-05, SRC-022-08 | データバイトが7ビットであることはWikipediaで確認済みだが、各メッセージのバイト配置は仕様書(midi.org)未取得のため確定できない。 |
+| REF-022-004 | MIDI仕様書上のクロック精度・ジッタ許容、Active Sensing等の記述、DIN同期との比較(実測は未実施) | SRC-022-06, SRC-022-08 | タイミング品質の定量値は一次資料と実測が必要。 |
+| REF-022-010 | UMPのメッセージタイプ番号とフィールド幅、MIDI 2.0ノートの分解能(ビット数)、グループ割当の詳細 | SRC-022-05, SRC-022-08 | 電圧/数値範囲に類する仕様化は一次仕様書(M2-104-UM)が必要。 |
+| REF-022-009 | MIDI 2.0仕様書本文(midi.org)の確認、普及状況の実測 | SRC-022-08, SRC-022-05 | MIDI 2.0対応状況の主張の裏付けは二次資料止まり。必要ホスト: midi.org, www.midi.org。 |
+| REF-022-015 | 1.1で追加された必須型の完全リスト、NIME 2009論文(zenodo)の内容 | SRC-022-02, SRC-022-04 | 1.1の型一覧を仕様化する際は論文本文の確認が必要(zenodoは許可ホスト外の可能性)。 |
+| REF-022-011 | OSC 1.0のサーバー側の推奨実装(UDPバッファ、順序、欠落)、OSCQuery(アドレス空間発見)の仕様 | SRC-022-01, SRC-022-04 | エージェント連携でのアドレス発見はOSCQueryなど拡張仕様が必要になるが本調査では未読。 |
+| (対象全体) | MIDI 1.0/2.0 の一次仕様書(midi.org)の全項目、IEC 63035本文 | SRC-022-08 | 必要ホスト: midi.org, www.midi.org(いずれもプロキシ403)。 |
+
 ## アクセス不能だった資料
 
 | 出典ID | 資料 | URL |
@@ -314,3 +394,7 @@
 | SRC-015-01 | EMS VCS3 / Synthi 100 official site (candidate host) | https://www.ems-synthi.demon.co.uk/ |
 | SRC-015-02 | EMS / Synthi / VCS3 candidate hosts (ems-synthi.com, synthi.com, vcs3.com) | https://www.vcs3.com/ |
 | SRC-015-11 | EMS VCS3 specification pages (bigbluewave.co.uk, Vintage Synth Explorer forum) | http://www.bigbluewave.co.uk/ems_synthi_vcs3.htm |
+| SRC-019-15 | GitHub commits atom feeds(5リポジトリ) | https://github.com/Tok/SuperColliderMCP/commits/main.atom |
+| SRC-020-09 | Mutable Instruments 公式モジュールページ/マニュアル(mutable-instruments.net) | https://mutable-instruments.net/modules/plaits/manual/ |
+| SRC-020-10 | GitHub REST API (pichenettes/eurorack メタ情報) | https://api.github.com/repos/pichenettes/eurorack |
+| SRC-022-08 | MIDI Association specification pages (midi.org) | https://midi.org/specifications |
