@@ -179,6 +179,78 @@
    "checked_scope": "取得したがスキャン画像でテキスト抽出不可。内容は未確認",
    "link_status": "ok",
    "license_note": "Buchla & Tiptop Audio公開Webページ/マニュアル(著作権はBuchla & Tiptop Audio)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-012-16",
+   "title": "Buchla 200e (Part 1) review + Making Connections box (Gordon Reid)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/reviews/buchla-200e-part-1",
+   "doc_version": "Published December 2005",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事全文(Making Connections枠、200e電気仕様の段落、Music Easel節、100/200モジュール表を含む)",
+   "link_status": "ok",
+   "license_note": "出版元の公開Webページ(著作権は出版元)。事実のみ自分の言葉で要約し、本文・図・表・画像は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-012-17",
+   "title": "Buchla 100 Series (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/buchla/100-series",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ページ全体(概説とモジュール表。出典欄はPeter Forrest著 The A-Z of Analogue Synthesizers 1994)",
+   "link_status": "ok",
+   "license_note": "出版元の公開Webページ(著作権は出版元)。事実のみ自分の言葉で要約し、本文・図・表・画像は転載・再利用しない。 二次ページのさらに二次資料。"
+  },
+  {
+   "id": "SRC-012-18",
+   "title": "Buchla 200 Series (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/buchla/200-series",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ページ全体(概説、System 101/Music Easel節、モジュール表)",
+   "link_status": "ok",
+   "license_note": "出版元の公開Webページ(著作権は出版元)。事実のみ自分の言葉で要約し、本文・図・表・画像は転載・再利用しない。 モジュール表は同様にForrest 1994が出典と推定されるが同ページでは未確認。"
+  },
+  {
+   "id": "SRC-012-19",
+   "title": "Buchla Electronic Musical Instruments (Wikipedia)",
+   "publisher": "Wikipedia / Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Buchla_Electronic_Musical_Instruments",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事全文(Company origin, Products節)",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。事実のみ要約。"
+  },
+  {
+   "id": "SRC-012-20",
+   "title": "From the Archives (Buchla archives blog)",
+   "publisher": "buchlaarchives.com",
+   "url": "https://www.buchlaarchives.com/blog/from-the-archives-1",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "検索結果要約のみ(2026-11-13)。本文は未読(ホストがプロキシで403)。",
+   "link_status": "unreachable",
+   "license_note": "取得せず。要約のみを低信頼で参照。"
+  },
+  {
+   "id": "SRC-012-21",
+   "title": "Sequencers using 1.2V/oct Buchla format (blog)",
+   "publisher": "djjondent.blogspot.com",
+   "url": "https://djjondent.blogspot.com/2023/11/sequencers-using-12voct-buchla-format.html",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "検索結果要約のみ(2026-11-13)。本文は未読(ホストがプロキシで403)。",
+   "link_status": "unreachable",
+   "license_note": "取得せず。要約のみを低信頼で参照。"
   }
  ]
 }

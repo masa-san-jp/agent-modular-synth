@@ -174,12 +174,62 @@
      "fact_ids": [
       "F-011-015"
      ]
+    },
+    {
+     "text": "1965-1981年のMoogモジュラー系列(Wikipedia)",
+     "fact_ids": [
+      "F-011-045"
+     ]
+    },
+    {
+     "text": "921系を活かす15/35/55シリーズ",
+     "fact_ids": [
+      "F-011-046"
+     ]
+    },
+    {
+     "text": "System 55構成リスト(SOS)",
+     "fact_ids": [
+      "F-011-047"
+     ]
+    },
+    {
+     "text": "Behringerクローンとの関係",
+     "fact_ids": [
+      "F-011-050"
+     ]
     }
    ],
-   "constraints": [],
+   "constraints": [
+    {
+     "text": "製造年は資料間で食い違い",
+     "fact_ids": [
+      "F-011-049"
+     ]
+    }
+   ],
    "ports": [],
    "params": [],
-   "mechanisms": null,
+   "mechanisms": {
+    "patching": {
+     "summary": "パッチコードによるモジュール間接続",
+     "fact_ids": [
+      "F-011-048"
+     ]
+    },
+    "state_save": {
+     "summary": "内蔵の保存手段の記述なし",
+     "fact_ids": [
+      "F-011-063"
+     ]
+    },
+    "external_control": {
+     "summary": "鍵盤(951)・リボン・シーケンサ",
+     "fact_ids": [
+      "F-011-064"
+     ]
+    }
+   },
    "relations": {
     "variant_of": null,
     "supersedes": null,
@@ -203,9 +253,22 @@
      "fact_ids": [
       "F-011-016"
      ]
+    },
+    {
+     "text": "15/35/55シリーズの一員",
+     "fact_ids": [
+      "F-011-051"
+     ]
     }
    ],
-   "constraints": [],
+   "constraints": [
+    {
+     "text": "個別構成は未確認",
+     "fact_ids": [
+      "F-011-051"
+     ]
+    }
+   ],
    "ports": [],
    "params": [],
    "mechanisms": null,
@@ -232,9 +295,22 @@
      "fact_ids": [
       "F-011-017"
      ]
+    },
+    {
+     "text": "15/35/55シリーズの一員",
+     "fact_ids": [
+      "F-011-052"
+     ]
     }
    ],
-   "constraints": [],
+   "constraints": [
+    {
+     "text": "個別構成は未確認",
+     "fact_ids": [
+      "F-011-052"
+     ]
+    }
+   ],
    "ports": [],
    "params": [],
    "mechanisms": null,
@@ -337,7 +413,7 @@
    "params": [],
    "mechanisms": null,
    "relations": {
-    "variant_of": null,
+    "variant_of": "REF-011-016",
     "supersedes": null,
     "part_of": "REF-011-001"
    },
@@ -453,7 +529,7 @@
    ],
    "mechanisms": null,
    "relations": {
-    "variant_of": null,
+    "variant_of": "REF-011-017",
     "supersedes": null,
     "part_of": "REF-011-001"
    },
@@ -566,7 +642,7 @@
    ],
    "mechanisms": null,
    "relations": {
-    "variant_of": null,
+    "variant_of": "REF-011-018",
     "supersedes": null,
     "part_of": "REF-011-001"
    },
@@ -623,7 +699,7 @@
     "external_control": null
    },
    "relations": {
-    "variant_of": null,
+    "variant_of": "REF-011-020",
     "supersedes": null,
     "part_of": "REF-011-001"
    },
@@ -664,7 +740,7 @@
    "params": [],
    "mechanisms": null,
    "relations": {
-    "variant_of": null,
+    "variant_of": "REF-011-021",
     "supersedes": null,
     "part_of": "REF-011-001"
    },
@@ -828,6 +904,301 @@
     "variant_of": null,
     "supersedes": null,
     "part_of": "REF-011-001"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-016",
+   "kind": "module",
+   "name": "Moog 921B Oscillator (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "oscillator",
+   "purpose": "原機の電圧制御オシレータ(921系、921Aドライバと921Bの組)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "安定・同期機能・100kHz超(SOS)",
+     "fact_ids": [
+      "F-011-053"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "周波数範囲は資料で食い違い",
+     "fact_ids": [
+      "F-011-054"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-017",
+   "kind": "module",
+   "name": "Moog 904A Voltage Controlled Low Pass Filter (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "filter",
+   "purpose": "原機の24dB/octラダー型ローパスフィルタ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "24dBラダー、1969年特許",
+     "fact_ids": [
+      "F-011-055"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-018",
+   "kind": "module",
+   "name": "Moog 911 Envelope Generator (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "envelope",
+   "purpose": "原機のADSRエンベロープ(911)と911A二重トリガ・ディレイ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "911×5と911A",
+     "fact_ids": [
+      "F-011-056"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-019",
+   "kind": "module",
+   "name": "Moog 902 Voltage Controlled Amplifier (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "amplifier_mixer",
+   "purpose": "原機の電圧制御アンプ(VCA)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "902×5",
+     "fact_ids": [
+      "F-011-057"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-020",
+   "kind": "module",
+   "name": "Moog 960 Sequential Controller (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "clock_sequencer",
+   "purpose": "原機のアナログ・シーケンサ(960)と962シーケンシャルスイッチ。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "3バンク構成、962で16ステップ",
+     "fact_ids": [
+      "F-011-058"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "timing": {
+     "summary": "内蔵パルスと962によるステップ切替",
+     "fact_ids": [
+      "F-011-058"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-021",
+   "kind": "module",
+   "name": "Moog 961 Interface (original)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "電圧トリガとMoog独自S-triggerの相互変換、オーディオトリガ機能を持つインターフェース。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "V-trig⇔S-trig変換",
+     "fact_ids": [
+      "F-011-059"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "external_control": {
+     "summary": "V-trig/S-trig/オーディオの変換",
+     "fact_ids": [
+      "F-011-059"
+     ]
+    }
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-022",
+   "kind": "signal_standard",
+   "name": "Moog 原機 信号規約(1V/oct・S-trig)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機モジュラーのピッチ規約とトリガ方式。電圧値は未確認。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "1V/octave基準",
+     "fact_ids": [
+      "F-011-060"
+     ]
+    },
+    {
+     "text": "S-trigger(ショート)方式",
+     "fact_ids": [
+      "F-011-061"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "S-trigの電圧値は未確認",
+     "fact_ids": [
+      "F-011-062"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-023",
+   "kind": "patch_storage",
+   "name": "Moog 原機 パッチ保存",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "system",
+   "purpose": "原機の設定保存手段(記録メカニズムの有無)。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "保存手段なし(記述上)",
+     "fact_ids": [
+      "F-011-063"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
+   },
+   "status": "active"
+  },
+  {
+   "id": "REF-011-024",
+   "kind": "control_interface",
+   "name": "Moog 原機 コントローラ(951鍵盤・リボン等)",
+   "maker": "Moog Music (R. A. Moog Co.)",
+   "version": null,
+   "version_status": "unconfirmed",
+   "function_category": "io_utility",
+   "purpose": "原機の演奏/制御入力。",
+   "synthesis_method": null,
+   "features": [
+    {
+     "text": "鍵盤・リボン・シーケンサ",
+     "fact_ids": [
+      "F-011-064"
+     ]
+    }
+   ],
+   "constraints": [],
+   "ports": [],
+   "params": [],
+   "mechanisms": null,
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-011-004"
    },
    "status": "active"
   }
@@ -1316,6 +1687,226 @@
    "source_id": "SRC-011-01",
    "locator": "Overview",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-011-045",
+   "entity_id": "REF-011-004",
+   "topic": "製造期間",
+   "statement": "WikipediaのインフォボックスはR. A. Moog Co.のモジュラー製造を1965-1981年、2014年以降の再開とする。System 15/35/55単独の年は同記事にない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Infobox: Dates; 本文冒頭",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-046",
+   "entity_id": "REF-011-004",
+   "topic": "系列の位置づけ",
+   "statement": "SOSは、1960年代末までにMoog製品群が出揃い、921系を活かすために新シリーズとして15/35/55を出したと述べる。55は傾斜した2筐体のケースで、基本から実験的音色まで一式を含む代表機と評される(評価・意見)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 本文中盤(921B waveform oscillator直後の段落)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-047",
+   "entity_id": "REF-011-004",
+   "topic": "モジュール構成",
+   "statement": "SOS記載のSystem 55構成: 921×1、921A×2、921B×6、903A、904A、904B、902×5、911×5、911A、960、961、962、951。(個体により3段化などの拡張あり)",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Moog Module Cookbook節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-048",
+   "entity_id": "REF-011-004",
+   "topic": "パッチ方式",
+   "statement": "Moogの原機はパッチコードでモジュール間を接続し、モジュール同士が互いを制御でき、組み合わせが成立するまで発音しない(Wikipedia)。SOSは購入時にパッチコード最低20本程度を推奨。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Components節; SOS Leon Moog Today節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-049",
+   "entity_id": "REF-011-004",
+   "topic": "製造年の食い違い",
+   "statement": "検索結果要約には15/35/55を1972-1981年製とする記述がある(原典未読)。Behringer販売ページは1973年発売の再現と説明し、Behringer公式は1970年代初期とする(F-011-014)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-011-16",
+   "locator": "WebSearch結果要約 2026-11-13",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-050",
+   "entity_id": "REF-011-004",
+   "topic": "再現品との関係",
+   "statement": "Wikipediaは、2020年からBehringerがMoogモジュールのEurorackクローンを製造し、原機系の構成でも販売していると述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Clones and emulations節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-051",
+   "entity_id": "REF-011-005",
+   "topic": "系列の位置づけ",
+   "statement": "SOSは15/35/55が921を活かす新シリーズとして出たと述べるが、System 35の個別構成は同記事にない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 921B直後の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-052",
+   "entity_id": "REF-011-006",
+   "topic": "系列の位置づけ",
+   "statement": "同上。System 15の個別構成は同記事になく、1974年の広告に言及があるのみ。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Moog Today節(広告写真キャプション)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-053",
+   "entity_id": "REF-011-016",
+   "topic": "安定性と周波数",
+   "statement": "SOSは921系を、音程が安定する最初のMoogオシレータとし、同期機能を備え、有効周波数は100kHz超に達すると述べる。921A(ドライバ)で複数の921Bを駆動する構成。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 921A/921B段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-054",
+   "entity_id": "REF-011-016",
+   "topic": "周波数範囲の食い違い",
+   "statement": "検索結果要約には921の周波数範囲を0.01Hz-40kHzとする記述がある。SOSの「100kHz超」と食い違う(いずれも原典の電圧スケーリングは未確認)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-011-16",
+   "locator": "WebSearch結果要約",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-055",
+   "entity_id": "REF-011-017",
+   "topic": "ラダーフィルタ",
+   "statement": "Wikipediaは、Moogの24dBローパスがトランジスタ対とコンデンサのラダー構造で、1969年10月28日にこのラダーのみ特許取得したと述べる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development / Components節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-056",
+   "entity_id": "REF-011-018",
+   "topic": "エンベロープ",
+   "statement": "SOSによればSystem 55には911が5基、911A(二重トリガ・ディレイ)が1基含まれ、911Aは固定遅延後に第2エンベロープを起動できる(System 3の説明箇所)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 Cookbook節とSystem 3説明",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-057",
+   "entity_id": "REF-011-019",
+   "topic": "VCA",
+   "statement": "System 55に902×5(SOS)。Moogは電圧制御アンプ(VCA)で音量を電圧制御した(Wikipedia)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; SOS Cookbook節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-058",
+   "entity_id": "REF-011-020",
+   "topic": "シーケンサ",
+   "statement": "SOS: 960は複数バンクのCVを持ち、下段バンクはステップ長の制御にも使える。系列長とエンベロープ用ゲート生成のオプションがある。962で2バンクを切替えて16ステップ系列にできる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 960/961/962段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-059",
+   "entity_id": "REF-011-021",
+   "topic": "トリガ変換",
+   "statement": "SOS: 961は電圧トリガをMoog独自のS-trigger方式へ、またその逆へ変換し、オーディオトリガ機能も含む。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-13",
+   "locator": "Leon記事 960/961/962段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-060",
+   "entity_id": "REF-011-022",
+   "topic": "ピッチ規約",
+   "statement": "Wikipediaは、Moogが1V/octaveを基準に設計し、電圧でVCAも制御したと述べる。個別モジュール(921等)の入力スケーリング値は資料内に記載なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; CV/gate CV節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-061",
+   "entity_id": "REF-011-022",
+   "topic": "トリガ方式",
+   "statement": "CV/gate記事: S-trigger(ショート・トリガ)は常時ハイでグランドへ短絡するとノートオンになる方式で、初期Moogモジュラーで使われた。V-triggerの電圧は機種ごとに2〜10Vと幅がある。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-15",
+   "locator": "Wikipedia CV/gate, Trigger節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-062",
+   "entity_id": "REF-011-022",
+   "topic": "S-trig電圧値",
+   "statement": "Moog S-trigの具体的な電圧・電流値は読んだ資料に記載なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-15",
+   "locator": "CV/gate, Trigger節(値記載なしを確認)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-063",
+   "entity_id": "REF-011-023",
+   "topic": "設定保存",
+   "statement": "Wikipediaは、初期ユーザは設定を保存・共有する手段がなく、口頭やセミナーで習得したと述べる。SOSは設定記録用にカメラの利用を勧める。内蔵パッチメモリは記述なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Development節; SOS Leon Moog Today節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-011-064",
+   "entity_id": "REF-011-024",
+   "topic": "コントローラ",
+   "statement": "Wikipedia: 鍵盤、ジョイスティック、ペダル、リボン、シーケンサで演奏。SOS: System 55に951鍵盤コントローラを含み、リボンコントローラは指位置から電圧を作る。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-011-14",
+   "locator": "Wikipedia Components節; SOS Cookbook節",
+   "verified_on": "2026-11-13"
   }
  ],
  "unconfirmed": [
@@ -1397,6 +1988,43 @@
     "SRC-011-10"
    ],
    "impact_on_spec": "CV出力範囲を記録できない"
+  },
+  {
+   "item": "原機の個別モジュールのピッチ入力スケーリング(1V/octの厳密度)・CV範囲・S-trigの電圧/電流値",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-14",
+    "SRC-011-15",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "原機の信号規約を数値化できず、Behringer版との電気的互換の比較ができない",
+   "entity_id": "REF-011-022"
+  },
+  {
+   "item": "原機System 35/15の個別モジュール構成と発売年(55のみSOSに構成表あり)",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "35/15を構成表レベルで比較できない",
+   "entity_id": "REF-011-005"
+  },
+  {
+   "item": "原機921の周波数範囲(SOS:100kHz超、検索要約:0.01Hz-40kHz)と原機のジャック形状(パッチケーブル規格)",
+   "tried_sources": [
+    "SRC-011-13",
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "オシレータ範囲とコネクタ互換が確定しない",
+   "entity_id": "REF-011-016"
+  },
+  {
+   "item": "Moog原機のマニュアル/サービスマニュアル(moogarchives.com等は名前解決・許可外)",
+   "tried_sources": [
+    "SRC-011-16"
+   ],
+   "impact_on_spec": "一次資料が無く、第三者資料のみの記録になる",
+   "entity_id": "REF-011-004"
   }
  ]
 }

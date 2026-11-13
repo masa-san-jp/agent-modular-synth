@@ -239,6 +239,126 @@
    "checked_scope": "ダウンロード一覧(Patch Memo等の項目名)",
    "link_status": "ok",
    "license_note": "Roland公開Webページ/PDF(著作権はRoland Corporation)。事実のみ自分の言葉で要約し、本文・図・画像・回路情報は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-014-21",
+   "title": "Roland System 100m (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/roland/system-100m",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "本文、モジュール表、仕様欄を全文読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-014-22",
+   "title": "Roland System 700 (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/roland/system-700",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "本文(ブロック構成)、仕様欄のモジュール型番一覧を全文読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-014-23",
+   "title": "Roland System 100 (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/roland/system-100",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "本文、仕様欄(CV/Gate欄は見出しのみ)を読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-014-24",
+   "title": "Roland System 700 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Roland_System_700",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文(モジュール一覧、ブロック構成)を読了",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-014-25",
+   "title": "Roland System-100M (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Roland_System-100M",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文(部品表、再発売)を読了",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-014-26",
+   "title": "Roland System 100 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Roland_System_100",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文を読了",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-014-27",
+   "title": "CV/gate (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Volts per octave とトリガ方式の節を読了",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-014-28",
+   "title": "Roland SYSTEM 100M Service Manual (ManualMachine)",
+   "publisher": "ManualMachine.com",
+   "url": "https://manualmachine.com/roland/system100m/7760628-service-manual/",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ホスト(manualmachine.com)未許可で取得不能。WebSearchの結果要約のみ(制御感度1V/oct、ゲート入力最小3V、入力インピーダンス50kΩ等)。本文は未読",
+   "link_status": "unreachable",
+   "license_note": "本文は取得できておらず、検索要約のみ。再利用しない。"
+  },
+  {
+   "id": "SRC-014-29",
+   "title": "System 700 owner's manual (Internet Archive 全文テキスト)",
+   "publisher": "Internet Archive",
+   "url": "https://archive.org/stream/synthmanual_System_700_owners_manual/System_700_owners_manual_djvu.txt",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ホスト(archive.org)未許可で取得不能。WebSearch要約のみ(仕様欄に鍵盤電圧1V/oct)。本文は未読",
+   "link_status": "unreachable",
+   "license_note": "本文は取得できておらず、検索要約のみ。再利用しない。"
+  },
+  {
+   "id": "SRC-014-30",
+   "title": "Roland system 100 gate voltage (MOD WIGGLER)",
+   "publisher": "MOD WIGGLER",
+   "url": "https://www.modwiggler.com/forum/viewtopic.php?t=33017",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ホスト(modwiggler.com)未許可で取得不能。WebSearch要約のみ",
+   "link_status": "unreachable",
+   "license_note": "本文は取得できておらず、検索要約のみ。再利用しない。"
   }
  ]
 }

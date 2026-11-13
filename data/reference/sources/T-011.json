@@ -143,6 +143,54 @@
    "checked_scope": "取得不能(プロキシ403、forum.moogmusic.com)",
    "link_status": "unreachable",
    "license_note": "ユーザー投稿の掲示板。第三者情報であり公式仕様ではない。"
+  },
+  {
+   "id": "SRC-011-13",
+   "title": "Dr Robert & His Modular Moogs (Richard Leon)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/people/dr-robert-his-modular-moogs",
+   "doc_version": "Published October 2003",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事全文(モジュール構成リスト、921系、960/961、購入ガイド節を含む)",
+   "link_status": "ok",
+   "license_note": "出版元の公開Webページ(著作権は出版元)。事実のみ自分の言葉で要約し、本文・図・表・画像は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-011-14",
+   "title": "Moog synthesizer (Wikipedia)",
+   "publisher": "Wikipedia / Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/Moog_synthesizer",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事全文(Development, Components, Clones節)",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。事実のみ要約し本文は転載しない。百科事典の二次記述。"
+  },
+  {
+   "id": "SRC-011-15",
+   "title": "CV/gate (Wikipedia)",
+   "publisher": "Wikipedia / Wikimedia Foundation",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "CV節(V/oct, Hz/V)、Trigger節(V-trig, S-trig)を読んだ",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。事実のみ要約。"
+  },
+  {
+   "id": "SRC-011-16",
+   "title": "Moog System 15/35/55 関連の検索結果要約(WebSearch)",
+   "publisher": "各種(Behringer販売店、zoeblade notebook、gearnews、Scribd等)",
+   "url": "https://notebook.zoeblade.com/900_Series_Moog.html",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "検索結果要約のみ(2026-11-13)。本文は読んでいない(notebook.zoeblade.com等はプロキシで403)。",
+   "link_status": "unreachable",
+   "license_note": "取得せず。要約のみを低信頼で参照。"
   }
  ]
 }

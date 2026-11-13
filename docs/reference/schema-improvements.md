@@ -16,3 +16,7 @@
 | 「典型値」と「システム上限」を同時に表せない(T-016) | unit 文字列で代用 | `range` を `typical` / `absolute` に分離 |
 | `params.range` で列挙値(フィルタモード等)を表せない(T-017) | features に文章 | `enum[]` 追加 |
 | 失敗した対象でも records/sources ファイルが必要 | 空ファイルに unconfirmed のみ | 空の対象はファイル省略を許可 |
+| 資料間で食い違う値を構造化して持てない(T-003, T-012, T-016) | 別factに両説を書き unconfirmed に記録 | `range_status` に `conflicting` を追加、fact に `conflicts_with[]` |
+| factが1エンティティにしか紐づかない | features/constraints の `fact_ids` で他エンティティから参照 | `entity_ids[]` 化 |
+| 信号規約を「業界慣習」として記録する際のmakerがない(T-001) | maker に「業界慣習」と記載 | `maker: null` を許可 |
+| 対象全体の status が粗く、原機だけ資料なしが見えない | gaps.md に別記 | targets に `scope_status`(原機/再発売/現行)を追加 |

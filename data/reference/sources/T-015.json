@@ -59,6 +59,78 @@
    "checked_scope": "Read intro, non-products list and 'The Inbetween Years'; studio and people sections skimmed only",
    "link_status": "ok",
    "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright and trademarks belong to the rights holder. Author-written history, treated as third_party."
+  },
+  {
+   "id": "SRC-015-06",
+   "title": "All About EMS: Part 1 (Gordon Reid, Sound On Sound)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/music-business/all-about-ems-part-1",
+   "doc_version": "Published November 2000",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Read the full article text incl. VCS3 description, patch matrix, pins, DK1 and voltage sections",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright belongs to the rights holders."
+  },
+  {
+   "id": "SRC-015-07",
+   "title": "All About EMS: Part 2 (Gordon Reid, Sound On Sound)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/music-business/all-about-ems-part-2",
+   "doc_version": "Published December 2000",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Read the article text on Synthi 100, Prestopatch, Matrix products, Datanomics and the 1995 rebirth",
+   "link_status": "ok",
+   "license_note": "Facts summarised in own words; no text, images or manuals reproduced and nothing reused. Copyright belongs to the rights holders."
+  },
+  {
+   "id": "SRC-015-08",
+   "title": "EMS VCS 3 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/EMS_VCS_3",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Read article text: description, keyboards, related models, Synthi A pins",
+   "link_status": "ok",
+   "license_note": "CC BY-SA. Summarised only; text not reproduced."
+  },
+  {
+   "id": "SRC-015-09",
+   "title": "EMS Synthi 100 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/EMS_Synthi_100",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Read article text: specification paragraph, Computer Synthi, Vocoder 5000",
+   "link_status": "ok",
+   "license_note": "CC BY-SA. Summarised only; text not reproduced."
+  },
+  {
+   "id": "SRC-015-10",
+   "title": "EMS Synthi AKS (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/EMS_Synthi_AKS",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Read article text (short)",
+   "link_status": "ok",
+   "license_note": "CC BY-SA. Summarised only; text not reproduced."
+  },
+  {
+   "id": "SRC-015-11",
+   "title": "EMS VCS3 specification pages (bigbluewave.co.uk, Vintage Synth Explorer forum)",
+   "publisher": "bigbluewave.co.uk / forum.vintagesynth.com",
+   "url": "http://www.bigbluewave.co.uk/ems_synthi_vcs3.htm",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Unreachable (host not allowed). Only WebSearch result summary seen: oscillator ranges and a filter slope figure that disagree between pages; page text not read",
+   "link_status": "unreachable",
+   "license_note": "Not retrieved; search summary only; nothing reused."
   }
  ]
 }

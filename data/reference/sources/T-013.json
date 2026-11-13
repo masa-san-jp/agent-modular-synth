@@ -179,6 +179,114 @@
    "checked_scope": "タイトル・説明文のみ(機能詳細は未読)",
    "link_status": "ok",
    "license_note": "Behringer公開Webページ(著作権はMusic Tribe Commercial NV Ltd.系)。事実のみ自分の言葉で要約し、本文・画像・回路情報は転載・再利用しない。"
+  },
+  {
+   "id": "SRC-013-16",
+   "title": "ARP 2600 (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/arp/2600",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ページ本文(概要、モデル改版の解説と一覧表)を全文読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-013-17",
+   "title": "ARP 2500 (Vintage Synth Explorer)",
+   "publisher": "Vintage Synth Explorer",
+   "url": "https://www.vintagesynth.com/arp/2500",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ページ本文(概要、マトリクス説明、モジュール一覧)を全文読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-013-18",
+   "title": "ARP 2600 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/ARP_2600",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文(歴史、構成、モデル、再発売)を読了。出典不足の注記あり",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-013-19",
+   "title": "ARP 2500 (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/ARP_2500",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文(特徴、モジュール一覧、キーボード)を読了。出典不足の注記あり",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ記録し本文は転載しない。"
+  },
+  {
+   "id": "SRC-013-20",
+   "title": "ARP 2500 (Sound On Sound, 1996年8月)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/reviews/arp-2500",
+   "doc_version": "Published August 1996",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "記事本文とMatrix Switching囲み記事を全文読了",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-013-21",
+   "title": "ARP 2600 FS review (Sound On Sound, 2020年3月)",
+   "publisher": "Sound On Sound",
+   "url": "https://www.soundonsound.com/reviews/arp-2600-fs",
+   "doc_version": "Published March 2020",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "レビュー本文を読了(原機との比較記述を使用)",
+   "link_status": "ok",
+   "license_note": "要約のみ自分の言葉で記録。本文・画像は転載せず、ソースやアセットは再利用しない。権利は各サイト運営者に帰属。"
+  },
+  {
+   "id": "SRC-013-22",
+   "title": "ARP-2600 documentation (CMU STUDIO for Creative Inquiry, GitHub README)",
+   "publisher": "Frank-Ratchye STUDIO for Creative Inquiry (CMU)",
+   "url": "https://github.com/CreativeInquiry/ARP-2600/blob/master/README.md",
+   "doc_version": "unknown (2016-、2024更新)",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "README(raw)を読了。同スタジオ所蔵の原機2600の操作解説。電圧規約の記述箇所を使用",
+   "link_status": "ok",
+   "license_note": "リポジトリのライセンス表記は未確認のため、要約のみ記録し本文・画像は転載しない。"
+  },
+  {
+   "id": "SRC-013-23",
+   "title": "CV/gate (Wikipedia)",
+   "publisher": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/CV/gate",
+   "doc_version": "unknown",
+   "doc_type": "third_party",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "Volts per octave / Hz per volt / トリガ方式の節を読了",
+   "link_status": "ok",
+   "license_note": "CC BY-SA。要約のみ。"
+  },
+  {
+   "id": "SRC-013-24",
+   "title": "ARP 2600-2606 Service Notes (Internet Archive、全文テキスト)",
+   "publisher": "Internet Archive",
+   "url": "https://archive.org/stream/synthmanual-arp-2600-2606-service-notes/arp2600-2606servicenotes_djvu.txt",
+   "doc_version": "unknown",
+   "doc_type": "manufacturer_manual",
+   "accessed_on": "2026-11-13",
+   "checked_scope": "ホスト(archive.org)未許可で取得不能。WebSearchの検索結果要約(1V/oct調整トリマ、高音C=1600Hz)のみ参照、本文は未読",
+   "link_status": "unreachable",
+   "license_note": "本文は取得できていない。検索要約のみ。再利用しない。"
   }
  ]
 }

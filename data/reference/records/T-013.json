@@ -28,21 +28,56 @@
      "fact_ids": [
       "F-013-003"
      ]
+    },
+    {
+     "text": "セミモジュラー構成の歴史的代表。3VCO・24dB/octフィルタ・ADSR・VCA・リングモジュレータ・S&H・リバーブを一体化",
+     "fact_ids": [
+      "F-013-064",
+      "F-013-065",
+      "F-013-066"
+     ]
+    },
+    {
+     "text": "改版が多い(2600、2600C、2600P v1-4、2601 v1-3)。フィルタは4012から4072へ、キーボードは3601/3604から3620へ変遷",
+     "fact_ids": [
+      "F-013-058",
+      "F-013-059",
+      "F-013-060",
+      "F-013-063"
+     ]
     }
    ],
-   "constraints": [],
+   "constraints": [
+    {
+     "text": "製造終了年(1980年/1981年)と総生産数は資料間で一致せず、確定していない",
+     "fact_ids": [
+      "F-013-061"
+     ]
+    }
+   ],
    "ports": [],
    "params": [],
    "mechanisms": {
     "patching": {
-     "summary": "モジュール間は内部で事前結線。パッチコード接続で内部結線を上書きして別の信号経路を作る。",
+     "summary": "事前結線+ジャック接続で上書きするセミモジュラー",
      "fact_ids": [
-      "F-013-002"
+      "F-013-066",
+      "F-013-067"
      ]
     },
     "timing": null,
-    "state_save": null,
-    "external_control": null
+    "state_save": {
+     "summary": "パッチ保存機能なし(Wikipedia仕様欄)",
+     "fact_ids": [
+      "F-013-068"
+     ]
+    },
+    "external_control": {
+     "summary": "CV/Gate(Wikipedia仕様欄)。キーボード3620から2系統のピッチCV",
+     "fact_ids": [
+      "F-013-069"
+     ]
+    }
    },
    "relations": {
     "variant_of": null,
@@ -210,20 +245,61 @@
      "fact_ids": [
       "F-013-015"
      ]
+    },
+    {
+     "text": "マトリクススイッチ接続のモジュラー。メイン筐体15、ウィング各8モジュール",
+     "fact_ids": [
+      "F-013-085",
+      "F-013-086",
+      "F-013-092"
+     ]
+    },
+    {
+     "text": "約100台のみ製造の受注生産。モジュールは1000シリーズから選択",
+     "fact_ids": [
+      "F-013-084",
+      "F-013-087"
+     ]
     }
    ],
-   "constraints": [],
+   "constraints": [
+    {
+     "text": "マトリクスの寸法はVSE(10x10)とSOS(10x20)で食い違い、確定していない",
+     "fact_ids": [
+      "F-013-093",
+      "F-013-094"
+     ]
+    },
+    {
+     "text": "電圧規約(ピッチ・ゲート・信号レベル)の一次資料は未取得",
+     "fact_ids": [
+      "F-013-083"
+     ]
+    }
+   ],
    "ports": [],
    "params": [],
    "mechanisms": {
     "patching": {
-     "summary": "パッチコードを使わず、スイッチのマトリクスで接続する方式(Korgサイト掲載の財団紹介文の記述。詳細仕様は未確認)。",
+     "summary": "スライド式マトリクススイッチ(色分けピン/スライダー)で結線",
      "fact_ids": [
-      "F-013-015"
+      "F-013-092",
+      "F-013-093",
+      "F-013-094"
      ]
     },
-    "timing": null,
-    "state_save": null,
+    "timing": {
+     "summary": "1027シーケンサは内部クロック20〜400/分、外部クロックはトリガ/ゲート",
+     "fact_ids": [
+      "F-013-096"
+     ]
+    },
+    "state_save": {
+     "summary": "パッチ保存機能なし(Wikipedia仕様表)",
+     "fact_ids": [
+      "F-013-090"
+     ]
+    },
     "external_control": null
    },
    "relations": {
@@ -1325,6 +1401,510 @@
    },
    "status": "active",
    "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-021",
+   "kind": "signal_standard",
+   "name": "ARP 2600 原機 信号・電圧規約",
+   "maker": "ARP Instruments",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "原機ARP 2600のピッチ/ゲート電圧の慣習。再発売のFS(REF-013-006)とは別に、原機側について二次資料から記録。",
+   "synthesis_method": "CV/Gate",
+   "features": [
+    {
+     "text": "ピッチは1V/octとされる(複数の二次資料が一致、一次資料は未取得)",
+     "fact_ids": [
+      "F-013-070",
+      "F-013-071",
+      "F-013-072"
+     ]
+    },
+    {
+     "text": "ゲートは0V/+10V系とされる(単一の二次資料)",
+     "fact_ids": [
+      "F-013-073"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "原機の一次資料(取扱説明書・サービスノート)の本文は未読。電圧値は二次資料に基づき、実測もしていない",
+     "fact_ids": [
+      "F-013-071",
+      "F-013-073"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "ジャック接続で既定の内部結線を上書き",
+     "fact_ids": [
+      "F-013-073"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-022",
+   "kind": "module",
+   "name": "ARP 2600 原機 VCO(4011/4017/4027系)",
+   "maker": "ARP Instruments",
+   "version": "original",
+   "function_category": "oscillator",
+   "purpose": "原機2600の3基のVCO。製造時期でサブモジュール(VCOチップ)が改版された。",
+   "synthesis_method": "アナログVCO",
+   "features": [
+    {
+     "text": "3基(VCO1〜3)。AUDIO/LFスイッチで低周波源にもなる",
+     "fact_ids": [
+      "F-013-076"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "周波数範囲・波形の公称値は未取得。VCOチップの改版で音が異なるという記述は主観的評価",
+     "fact_ids": [
+      "F-013-075"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-001"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-023",
+   "kind": "module",
+   "name": "ARP 2600 原機 VCF(4012 / 4072)",
+   "maker": "ARP Instruments",
+   "version": "original",
+   "function_category": "filter",
+   "purpose": "原機2600の4極ローパスフィルタ。前期4012(モーグ型ラダーの模倣)と後期4072の2種。",
+   "synthesis_method": "4極ローパス(24dB/oct)",
+   "features": [
+    {
+     "text": "24dB/octのローパス。4012と4072の2世代",
+     "fact_ids": [
+      "F-013-077",
+      "F-013-078",
+      "F-013-079"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "カットオフ範囲・レゾナンス量の公称値は未取得",
+     "fact_ids": [
+      "F-013-079"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-001"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-024",
+   "kind": "module",
+   "name": "ARP 3620 キーボード(原機)",
+   "maker": "ARP Instruments",
+   "version": "3620",
+   "function_category": "io_utility",
+   "purpose": "原機2600用の二音(デュオフォニック)キーボード。1974年以降の標準で、LFO、ポルタメント、単/複トリガ切替を備える。",
+   "synthesis_method": "キーボードCV/Gate出力",
+   "features": [
+    {
+     "text": "デュオフォニック(2音)で2系統のピッチCVを出力。LFOとポルタメントを備える",
+     "fact_ids": [
+      "F-013-080",
+      "F-013-081",
+      "F-013-082"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "原機は速度・圧力非対応。CV出力電圧範囲は一次資料未取得(FSのKorg仕様は別エンティティREF-013-006)",
+     "fact_ids": [
+      "F-013-081"
+     ]
+    }
+   ],
+   "ports": [
+    {
+     "name": "Pitch CV (Upper)",
+     "direction": "out",
+     "signal_type": "cv",
+     "range": null,
+     "range_status": "unconfirmed",
+     "fact_ids": [
+      "F-013-081"
+     ]
+    }
+   ],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-001"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-025",
+   "kind": "module",
+   "name": "ARP 2500 1004 VCO(1004p/r/t)",
+   "maker": "ARP Instruments",
+   "version": "1004p/r/t",
+   "function_category": "oscillator",
+   "purpose": "2500の標準精密VCO。波形5種同時出力、FM、PWM、波形ミキサー内蔵。tはミキサースイッチ式で反転波形が出る",
+   "synthesis_method": "アナログVCO",
+   "features": [
+    {
+     "text": "5波形同時、FM/PWM、内蔵波形ミキサー",
+     "fact_ids": [
+      "F-013-098",
+      "F-013-099"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "周波数範囲はマニュアル値0.03Hz〜16kHz(SOS引用)で、著者は誇張気味とする",
+     "fact_ids": [
+      "F-013-095"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-026",
+   "kind": "module",
+   "name": "ARP 2500 1006 Filtamp",
+   "maker": "ARP Instruments",
+   "version": "1006",
+   "function_category": "filter",
+   "purpose": "ミキサー+電圧制御ローパスフィルタ+VCAを小型にまとめたモジュール",
+   "synthesis_method": "電圧制御ローパス+VCA",
+   "features": [
+    {
+     "text": "ミキサー・VCF・VCA一体",
+     "fact_ids": [
+      "F-013-100",
+      "F-013-101"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "カットオフ範囲・スロープの公称値は未取得",
+     "fact_ids": [
+      "F-013-100"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-027",
+   "kind": "module",
+   "name": "ARP 2500 1003 / 1033 Dual Envelope Generator",
+   "maker": "ARP Instruments",
+   "version": "1003 / 1033",
+   "function_category": "envelope",
+   "purpose": "2系統の指数エンベロープジェネレータ。1033は各系統にトリガ遅延を追加",
+   "synthesis_method": "指数カーブのエンベロープ",
+   "features": [
+    {
+     "text": "2系統の指数エンベロープ。1033は遅延付き",
+     "fact_ids": [
+      "F-013-102"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "時間レンジの公称値は未取得",
+     "fact_ids": [
+      "F-013-102"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-028",
+   "kind": "module",
+   "name": "ARP 2500 1027 Ten-Step Sequencer",
+   "maker": "ARP Instruments",
+   "version": "1027",
+   "function_category": "clock_sequencer",
+   "purpose": "10ステップ×3入力→3出力のシーケンサ(最大30個の電圧)",
+   "synthesis_method": "クロック駆動のステップ電圧シーケンサ",
+   "features": [
+    {
+     "text": "10ステップ、3列の電圧、内部クロックは毎分20〜400、外部クロックはトリガ/ゲート",
+     "fact_ids": [
+      "F-013-103",
+      "F-013-096"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "出力電圧範囲は未取得",
+     "fact_ids": [
+      "F-013-103"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": {
+     "summary": "内部クロックまたはトリガ/ゲートの外部クロック。リセットで短縮ループ",
+     "fact_ids": [
+      "F-013-096"
+     ]
+    },
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-029",
+   "kind": "module",
+   "name": "ARP 2500 1016 Dual Noise / Random Voltage Source",
+   "maker": "ARP Instruments",
+   "version": "1016",
+   "function_category": "noise",
+   "purpose": "2系統の独立ノイズ源。ピンクノイズと連続的な低速ランダム電圧も得られる",
+   "synthesis_method": "ノイズ源+フィルタ",
+   "features": [
+    {
+     "text": "2系統ノイズ、ピンクノイズ、低速ランダム電圧",
+     "fact_ids": [
+      "F-013-104"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "出力レベルは未取得",
+     "fact_ids": [
+      "F-013-104"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "confirmed"
+  },
+  {
+   "id": "REF-013-030",
+   "kind": "signal_standard",
+   "name": "ARP 2500 マトリクス接続規約(原機)",
+   "maker": "ARP Instruments",
+   "version": null,
+   "function_category": "routing",
+   "purpose": "2500のモジュール間接続のマトリクス方式。縦=モジュール入出力、横=バス。",
+   "synthesis_method": "スライド式マトリクススイッチ",
+   "features": [
+    {
+     "text": "ケーブルレスのマトリクス接続(複数バスを共有)",
+     "fact_ids": [
+      "F-013-105",
+      "F-013-106"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "寸法は10x20(SOS)と10x10(VSE)で食い違う。電圧規約は一次資料未取得",
+     "fact_ids": [
+      "F-013-105",
+      "F-013-106"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": {
+     "summary": "マトリクススイッチでバスに接続",
+     "fact_ids": [
+      "F-013-105",
+      "F-013-106",
+      "F-013-107"
+     ]
+    },
+    "timing": null,
+    "state_save": null,
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-004"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
+  },
+  {
+   "id": "REF-013-031",
+   "kind": "patch_storage",
+   "name": "ARP 2600 / 2500 原機 パッチ保存",
+   "maker": "ARP Instruments",
+   "version": null,
+   "function_category": "system",
+   "purpose": "原機にはデジタルのパッチ保存はない。パッチは物理的なコード/マトリクス位置とノブ位置で決まる。",
+   "synthesis_method": "なし(物理状態)",
+   "features": [
+    {
+     "text": "パッチ記憶なし。再現は手書きの記録に依存する(推定ではなく、記憶容量なしの記載のみが根拠)",
+     "fact_ids": [
+      "F-013-108",
+      "F-013-109"
+     ]
+    }
+   ],
+   "constraints": [
+    {
+     "text": "パッチ記録用の紙の書式(パッチシート)の有無は未確認",
+     "fact_ids": [
+      "F-013-108"
+     ]
+    }
+   ],
+   "ports": [],
+   "params": [],
+   "mechanisms": {
+    "patching": null,
+    "timing": null,
+    "state_save": {
+     "summary": "なし(Wikipedia仕様表)",
+     "fact_ids": [
+      "F-013-108",
+      "F-013-109"
+     ]
+    },
+    "external_control": null
+   },
+   "relations": {
+    "variant_of": null,
+    "supersedes": null,
+    "part_of": "REF-013-001"
+   },
+   "status": "active",
+   "version_status": "unconfirmed"
   }
  ],
  "facts": [
@@ -1954,6 +2534,578 @@
    "source_id": "SRC-013-12",
    "locator": "Product page Eurorack specs",
    "verified_on": "2026-11-12"
+  },
+  {
+   "id": "F-013-058",
+   "entity_id": "REF-013-001",
+   "topic": "history",
+   "statement": "1971年初頭に初期型(通称Blue Marvin/Blue Meanie、約25台)、同年中期に灰色パネルの2600C(約35台)、同年後半にスーツケース型2600Pが出た。2600Pは1974年まで改版(v1〜v4)され、その後2601系(v1〜v3)へ続いた。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-16",
+   "locator": "本文 Model 2600 / 2600C / 2600P / 2601 の各節、およびCharting the History表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-059",
+   "entity_id": "REF-013-001",
+   "topic": "history",
+   "statement": "Wikipediaも同じ区分(2600、2600C、2600P v1〜v4、2601 v1〜v3)を記載し、2600Cは35台とする。2600P v3のVCOは2037-1(VSEは4027-1)と書いており、サブモジュール型番の表記が資料間で異なる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "Models節(Model 2600P)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-060",
+   "entity_id": "REF-013-001",
+   "topic": "filter",
+   "statement": "1976年まで全モデルのフィルタは4012(モーグ型ラダーの模倣)で、特許紛争後に独自設計の4072へ置換された。4072は周波数応答が約12kHzまでで音が丸いとVSEは評するが、これは主観評価。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-16",
+   "locator": "本文 Model 2601 前段、Charting表の Filter 列",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-061",
+   "entity_id": "REF-013-001",
+   "topic": "production",
+   "statement": "総生産数はVSEが「最大でも約3000台」と推計。製造期間はVSEが1971〜1980年、Wikipediaは1971〜1981年と書き、終了年が異なる。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-16",
+   "locator": "本文末尾の生産数の記述",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-062",
+   "entity_id": "REF-013-001",
+   "topic": "production",
+   "statement": "Wikipediaの製造期間は1971〜81年(概要冒頭)。VSEは1971〜1980年と記載(別事実として併記)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-18",
+   "locator": "冒頭段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-063",
+   "entity_id": "REF-013-001",
+   "topic": "keyboard",
+   "statement": "原機のキーボードは3601(ポルタメント/チューニングのみ)、3604(スケーリング追加、1974年まで)、1974年からの二音(デュオフォニック)3620(LFO、ラッチ等を追加)の3種。2600Pのv4以降が3620を標準とした。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-16",
+   "locator": "本文 キーボード3種の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-064",
+   "entity_id": "REF-013-001",
+   "topic": "architecture",
+   "statement": "アーキテクチャはVCO3基、24dB/octフィルタ1基、ADSR1基、VCA1基、ミキサー、エンベロープフォロワー、リングモジュレータ、ノイズ、サンプル&ホールド付きLFO、スプリングリバーブ、プリアンプとステレオスピーカー。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-16",
+   "locator": "本文第3段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-065",
+   "entity_id": "REF-013-001",
+   "topic": "architecture",
+   "statement": "Wikipediaの構成記述は3VCO、24dB/octローパス、VCA、リングモジュレータ、S&H、ホワイト/ピンクノイズ、マイクプリアンプ、スプリングリバーブ、2つのエンベロープジェネレータ、4オクターブキーボード。VSEとほぼ一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "Features and architecture節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-066",
+   "entity_id": "REF-013-001",
+   "topic": "patching",
+   "statement": "セミモジュラー。主要モジュールは内部で事前結線され、パッチコード接続で上書きできる。コードを挿さなくても標準信号経路で発音する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-16",
+   "locator": "本文第2段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-067",
+   "entity_id": "REF-013-001",
+   "topic": "patching",
+   "statement": "CMUスタジオの解説では、スライダーはコード未接続時は既定の内部ソース、コード接続時はそのジャックのソースを取り込む。多入力・単一出力(出力ジャックは通常1つ)の構造。パッチ点はSwitchcraftのTini-Jax(径約0.141インチ)で、通常の1/8インチジャックより大きい。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-22",
+   "locator": "Introduction / Multiple source / single destination / ジャック仕様の注記",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-068",
+   "entity_id": "REF-013-001",
+   "topic": "storage",
+   "statement": "Wikipediaの仕様欄は記憶容量(Storage memory)なしとする。パッチは物理的なコードとスライダー位置で決まり、本体にパッチ保存機能はない(仕様欄の記載に基づく)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "概要の仕様表(Storage memory: None)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-069",
+   "entity_id": "REF-013-001",
+   "topic": "external_control",
+   "statement": "外部制御はCV/Gate(Wikipediaの仕様表)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-18",
+   "locator": "概要の仕様表(External control)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-070",
+   "entity_id": "REF-013-021",
+   "topic": "pitch_cv",
+   "statement": "CMUスタジオの解説は、原機のピッチCVを1V/oct(範囲0〜5V)と記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-22",
+   "locator": "Control Voltage / Gate の用語解説",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-071",
+   "entity_id": "REF-013-021",
+   "topic": "pitch_cv",
+   "statement": "WebSearch結果要約によれば、サービスノート(Internet Archive)にはVCO「1V/OCT」トリマの調整手順があり、高音Cで1600Hzに合わせる。本文は未読。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-24",
+   "locator": "検索結果要約(archive.org本文は取得不能)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-072",
+   "entity_id": "REF-013-021",
+   "topic": "pitch_cv",
+   "statement": "Wikipediaは一般論として、ARPを含む複数社が1V/oct方式を採用したと記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-23",
+   "locator": "Volts per octave の節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-073",
+   "entity_id": "REF-013-021",
+   "topic": "gate",
+   "statement": "CMUスタジオの解説は、ゲートの「高」を10V、「低」を0Vとし、ゲート範囲は0〜10Vと書く。5Vゲートしか出ないMoog Werkstattでは2600のエンベロープが動かなかったという実機確認の記述がある。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-22",
+   "locator": "Control Voltage / Gate の用語解説(注記)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-074",
+   "entity_id": "REF-013-021",
+   "topic": "compare",
+   "statement": "再発売2600 FSのKorg仕様はキーボードCVを1V/oct、ゲートを+10Vとしており(SRC-013-02、REF-013-006)、原機に関する上記二次資料と整合するが、原機の一次仕様ではない。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-22",
+   "locator": "REF-013-006との照合(推論ではなく比較の注記)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-075",
+   "entity_id": "REF-013-022",
+   "topic": "revision",
+   "statement": "VSEによれば、初期は4011/4017、2600P v2.0で4027、v3.0以降は4027-1のVCOに変わり、4027-1は雑音が多く初期型より音質が劣るが安定するとされる。評価は主観。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-16",
+   "locator": "Model 2600P v2.0 / v3.0の説明とCharting表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-076",
+   "entity_id": "REF-013-022",
+   "topic": "architecture",
+   "statement": "VCOは3基でそれぞれ機能が少し違う。CMU解説ではVCO1〜3とも低周波(LFO)としても使え、AUDIO/LFスイッチとKBD ON/OFFでキーボードCV追従を切り替える。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-22",
+   "locator": "2〜4節 Voltage Controlled Oscillator(VCO 1〜3)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-077",
+   "entity_id": "REF-013-023",
+   "topic": "revision",
+   "statement": "Wikipediaは、1976年までの全モデルが4012(モーグのトランジスタ・ラダーの模倣)を使い、特許紛争が示談となった後に独自設計の4072へ置き換えられたと記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "Features and architecture節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-078",
+   "entity_id": "REF-013-023",
+   "topic": "revision",
+   "statement": "VSEは、4072は4極ローパスで、周波数応答が約12kHzまでになる設計上の誤りがあると見なされ、4012のほうが好まれる傾向にあると記す(主観的評価)。2601 v2.0(1977〜)から4072。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-16",
+   "locator": "本文 Model 2601 前段、Charting表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-079",
+   "entity_id": "REF-013-023",
+   "topic": "slope",
+   "statement": "構成は24dB/oct(4極)ローパス。CMU解説は共鳴(resonance)を備えると記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "概要の仕様表(Filter: 24 dB/octave low-pass)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-080",
+   "entity_id": "REF-013-024",
+   "topic": "overview",
+   "statement": "Wikipediaによれば、1973年にTom Oberheimがデュオフォニック化キットを作り、翌年ARPが3620を採用。3620はビブラート用LFOと単/複トリガ機能を持つ。3604と同じ基板をデュオフォニックにしたもの。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "Features and architecture節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-081",
+   "entity_id": "REF-013-024",
+   "topic": "pitch_cv",
+   "statement": "SOSのFSレビューによれば、原機の3620は2系統のピッチCVを作るが、キーボード本体から取り出せるのは上側(Upper)のCVのみ。再発売FSの3620は両CVを本体のKBD CV-1/CV-2から取り出せ、アフタータッチも追加。原機は速度にも圧力にも非対応。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-21",
+   "locator": "3620キーボードの節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-082",
+   "entity_id": "REF-013-024",
+   "topic": "comparison",
+   "statement": "SOSの記述では、3620にはLFO、ポルタメント、±2オクターブ切替、ピッチベンド、フットペダル入力2つがある(FSと共通の部分を含む)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-21",
+   "locator": "3620キーボードの節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-083",
+   "entity_id": "REF-013-004",
+   "topic": "overview",
+   "statement": "2500は1970年に出荷が始まり1981年まで製造、総生産は約100台。マトリクススイッチで接続する。WikipediaはSOSの「最も重要な電子楽器の一つ」という評を引用。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "冒頭段落と Features節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-084",
+   "entity_id": "REF-013-004",
+   "topic": "production",
+   "statement": "VSEは販売数を約100台(前後あり)、SOSは世界で100台程度でUKは多くても12台と記す。3資料が約100台で一致。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "導入段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-085",
+   "entity_id": "REF-013-004",
+   "topic": "cabinet",
+   "statement": "筐体はメイン(2515)が15モジュール、サイド(ウィング、2508)が各8モジュール。3筐体構成(2524)では機能モジュール31個と61鍵×2。初期の2000シリーズ筐体は8/15/19モジュール。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Sound: The Final Frontier の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-086",
+   "entity_id": "REF-013-004",
+   "topic": "cabinet",
+   "statement": "Wikipediaも、メイン筐体は15モジュール、ウィングは各8モジュールと記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Features節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-087",
+   "entity_id": "REF-013-004",
+   "topic": "modules",
+   "statement": "モジュール(1000シリーズ)はVCO(1004p/r/t、1023)、エンベロープ(1003、1033、1046)、フィルタ(1006、1047)、ノイズ/ランダム(1016)、サンプル&ホールド(1036)、ステップシーケンサ(1027)、プリセット電圧(1026)、モッドアンプ(1005)、ボイス(1045)、ミキサー/シーケンサ(1050)等。顧客仕様でモジュール構成を選ぶ受注生産。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Modules節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-088",
+   "entity_id": "REF-013-004",
+   "topic": "modules",
+   "statement": "VSEのモジュール一覧(1001〜1046)も同系統で、1004p/1004tの違い(波形反転)や1023(2VCO)を説明する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-089",
+   "entity_id": "REF-013-004",
+   "topic": "price",
+   "statement": "価格はWikipedia記載でUS$7,180〜19,920、最大構成は約2万ドル。SOSは当時の再入手価格を15,000〜20,000ポンドと見積もる(現在価値の目安、定価ではない)。",
+   "basis": "third_party",
+   "confidence": "low",
+   "source_id": "SRC-013-19",
+   "locator": "仕様表(Price)",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-090",
+   "entity_id": "REF-013-004",
+   "topic": "storage",
+   "statement": "Wikipediaの仕様表は記憶容量(Storage memory)なし、エフェクトなし。パッチ保存機能は仕様上ない。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "仕様表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-091",
+   "entity_id": "REF-013-004",
+   "topic": "keyboard",
+   "statement": "キーボードは5オクターブで、単音・二音・分割・デュアルがあり、機種番号3001/3002/3112/3212/3221/3222(SOS)。最大4声を1台のキーボードから制御できる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Keyboard Choice",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-092",
+   "entity_id": "REF-013-004",
+   "topic": "patching",
+   "statement": "マトリクススイッチ(スライド式)がモジュール列の上下にあり、モジュール間とキーボード接続の主手段。各行端の1/8インチジャックで筐体間や入出力を接続する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Features節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-093",
+   "entity_id": "REF-013-004",
+   "topic": "patching",
+   "statement": "VSEによれば、マトリクスは10x10で、モジュール入出力が縦のスイッチ、横のバスがパッチコードに相当し、色分けピンで接続する。デメリットはバス間のクロストークの可能性と、接続が一目で分かりにくいこと。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "本文 マトリクス説明",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-094",
+   "entity_id": "REF-013-004",
+   "topic": "patching",
+   "statement": "SOSの囲み記事では、各筐体のモジュールの上下に10x20のスイッチ点(最初期はモジュール上のみ)があり、スライダー10個の組が20本の水平バスのどこかに合う。3筐体で9,600点。VSEの10x10とは表記が異なる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Matrix Switching",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-095",
+   "entity_id": "REF-013-004",
+   "topic": "oscillator",
+   "statement": "SOSによれば、マニュアルのVCO仕様は出力0.03Hz〜16kHz、電圧制御で10オクターブだが、著者は誇張気味とする。1004系と1023は広い範囲で応答し、5波形(サイン、三角、パルス、ノコギリ、矩形)を出す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Function Junction後の VCO の段落",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-096",
+   "entity_id": "REF-013-004",
+   "topic": "sequencer",
+   "statement": "1027は3入力→3出力の10ステップ。内部クロックは毎分20〜400クロック、外部クロックはトリガ/ゲートの2モード、リセットボタンで短縮可。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Sequencing Steps Ahead",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-097",
+   "entity_id": "REF-013-004",
+   "topic": "relation",
+   "statement": "2600は2500の人気モジュールを1台のセミモジュラーに再設計し、マトリクスを除いて新機能を足したもの(Wikipedia)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Modules節末尾",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-098",
+   "entity_id": "REF-013-025",
+   "topic": "overview",
+   "statement": "1004は5波形(サイン、三角、矩形、ノコギリ、パルス)を同時に出力し、FMとPWMを持つ。p=ポット、r=ロッカースイッチ、t=トグル式のミキサーで、1004tは反転波形も出せる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules 1004p/1004t",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-099",
+   "entity_id": "REF-013-025",
+   "topic": "overview",
+   "statement": "Wikipediaは1004、1004p、1004r、1004tを区別して列挙する(p=ポット、r=ロッカー、t=トグルのミックス操作)。SOSは1004tのトグルで波形反転と記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Modules節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-100",
+   "entity_id": "REF-013-026",
+   "topic": "overview",
+   "statement": "1006 Filtampはミキサー、電圧制御ローパスフィルタ、電圧制御アンプを1枚にまとめる。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules 1006",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-101",
+   "entity_id": "REF-013-026",
+   "topic": "overview",
+   "statement": "Wikipediaも1006をローパスVCFとVCAの組(Filtamp)と記す。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Modules節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-102",
+   "entity_id": "REF-013-027",
+   "topic": "overview",
+   "statement": "1003は高速で柔軟な2系統の指数エンベロープジェネレータ、1033は同等だがトリガの遅延を可変できる。1046は遅延なし2系統+遅延あり2系統の4系統。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules 1003 / 1033 / 1046",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-103",
+   "entity_id": "REF-013-028",
+   "topic": "overview",
+   "statement": "10ステップのシーケンサで、事前設定の30電圧から複雑なスイッチングパターンを作れる(VSE)。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules 1027",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-104",
+   "entity_id": "REF-013-029",
+   "topic": "overview",
+   "statement": "1016は互いに無相関の2つのノイズ源と、ピンクノイズおよび連続ランダム電圧を得るフィルタを含む。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "Function Modules 1016",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-105",
+   "entity_id": "REF-013-030",
+   "topic": "matrix",
+   "statement": "SOS: 各筐体のモジュールの上下に10x20のスイッチ点。3筐体で9,600点。水平20本がバスとなり、10個のスライダーが縦に動いて接続する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-20",
+   "locator": "Matrix Switching",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-106",
+   "entity_id": "REF-013-030",
+   "topic": "matrix",
+   "statement": "VSE: 10x10のマトリクス。色分けピンで横方向に接続し、縦のスイッチがモジュールの入出力、横のバスがパッチコードに相当する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-17",
+   "locator": "本文 マトリクス説明",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-107",
+   "entity_id": "REF-013-030",
+   "topic": "jacks",
+   "statement": "Wikipedia: 各行端に1/8インチジャックがあり、ウィング筐体との接続や入出力に使う。キーボードは既定で左上のミニジャックに接続する。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "Features節",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-108",
+   "entity_id": "REF-013-031",
+   "topic": "storage",
+   "statement": "Wikipedia仕様表は2600・2500ともに記憶容量なし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-18",
+   "locator": "概要の仕様表(2600)。2500は同記事ではなくSRC-013-19の仕様表",
+   "verified_on": "2026-11-13"
+  },
+  {
+   "id": "F-013-109",
+   "entity_id": "REF-013-031",
+   "topic": "storage",
+   "statement": "Wikipediaの2500仕様表も記憶容量なし、エフェクトなし。",
+   "basis": "third_party",
+   "confidence": "medium",
+   "source_id": "SRC-013-19",
+   "locator": "仕様表(Storage memory: none)",
+   "verified_on": "2026-11-13"
   }
  ],
  "unconfirmed": [
@@ -2026,6 +3178,61 @@
     "SRC-013-07"
    ],
    "impact_on_spec": "CC受信の仕様を断定できない"
+  },
+  {
+   "entity_id": "REF-013-001",
+   "item": "原機2600の4012/4072フィルタ・各モジュールの公称仕様、音声信号レベル、CV出力範囲",
+   "tried_sources": [
+    "SRC-013-16",
+    "SRC-013-18",
+    "SRC-013-22",
+    "SRC-013-24"
+   ],
+   "impact_on_spec": "原機の電圧・レンジを仕様化できない。FS(REF-013-006)のKorg仕様と比較するには一次資料が必要。"
+  },
+  {
+   "entity_id": "REF-013-001",
+   "item": "原機2600の製造終了年(VSE=1980年、Wikipedia=1981年)と総生産数(VSE=最大約3000台の推計)",
+   "tried_sources": [
+    "SRC-013-16",
+    "SRC-013-18"
+   ],
+   "impact_on_spec": "年表と台数の正確な比較ができない。両説を別事実として併記した。"
+  },
+  {
+   "entity_id": "REF-013-030",
+   "item": "マトリクス寸法(VSE=10x10、SOS=10x20)の食い違いの解消、および2500の電圧規約(ピッチ・ゲート・信号レベル)",
+   "tried_sources": [
+    "SRC-013-17",
+    "SRC-013-20",
+    "SRC-013-19"
+   ],
+   "impact_on_spec": "マトリクスの比較仕様(行列数)が確定できない。両説を併記。"
+  },
+  {
+   "entity_id": "REF-013-021",
+   "item": "原機の一次資料(Service Notes・取扱説明書)の本文。Internet Archiveはホスト未許可で取得不能。検索結果要約のみ",
+   "tried_sources": [
+    "SRC-013-24"
+   ],
+   "impact_on_spec": "電圧規約・トリマ手順が二次資料のみ。archive.org を許可すれば確認できる。"
+  },
+  {
+   "entity_id": "REF-013-031",
+   "item": "原機のパッチシート等の紙媒体によるパッチ記録の慣習",
+   "tried_sources": [
+    "SRC-013-16",
+    "SRC-013-17"
+   ],
+   "impact_on_spec": "物理パッチの再現手順(記録方法)の仕様化に影響。"
+  },
+  {
+   "entity_id": "REF-013-024",
+   "item": "3620のCV/ゲート出力電圧範囲(原機)",
+   "tried_sources": [
+    "SRC-013-21"
+   ],
+   "impact_on_spec": "FSのKorg仕様は取得済みだが原機の値は確認できない。"
   }
  ]
 }
