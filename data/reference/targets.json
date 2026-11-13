@@ -181,7 +181,7 @@
       "era": "current",
       "selection_reason": "本製品と同じ『ブラウザ上で動くモジュラー』の先行例。パッチグラフ、状態保存、音声エンジン(Web Audio/AudioWorklet)の設計差を比較できる。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-13 オーナー指示『追加調査』により追加)"
+      "status_note": "2026-11-13 READMEと一部docsを読了(DreamRack/Mod Synth 0/Plinth/Patchcab/Modulator/web-synth/eurorack-js。system・パッチ保存・制御IF等のエンティティを記録)。GitHub通常APIは403のため最終更新は検索APIのpushed_at。ソース本体・web-synth docs(synth.ameo.dev)・patch.cabは未取得で、個別モジュール仕様・信号数値規約は一部unconfirmed。ライセンスはAGPL/MIT/GPL/ISC(無記載含む)で再利用しない。(2026-11-13 オーナー指示『追加調査』により追加)"
     },
     {
       "id": "T-019",
@@ -201,7 +201,7 @@
       "era": "historical",
       "selection_reason": "公開ソース・マニュアルが豊富で、現代的なデジタルモジュールのアルゴリズム・I/O規約の参考になる。ライセンス条件は個別に記録。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-13 オーナー指示『追加調査』により追加)"
+      "status_note": "[2026-11-13 第4陣] github.com/pichenettes/eurorack のREADME(ライセンス: STM32F=MIT, AVR=GPL3.0, HW=cc-by-sa-3.0, 商標指針)と Plaits/Braids/Rings/Clouds/Tides/Marblesのソースヘッダ(MIT表記確認)から、エンジン数・サンプルレート・ブロックサイズ・設定保存を記録。mutable-instruments.net の公式マニュアルとGitHub APIは403で未取得のため、入出力電圧範囲・ジャック仕様・最終更新日は未確認(unconfirmed)。"
     },
     {
       "id": "T-021",
@@ -211,7 +211,7 @@
       "era": "current",
       "selection_reason": "ブラウザでの音声処理の制約(開始条件、レイテンシ、スレッド)の根拠資料。技術スタックの採用決定ではなく制約調査(#3で判断)。",
       "status": "confirmed",
-      "status_note": "初期状態。調査後に更新。(2026-11-13 オーナー指示『追加調査』により追加)"
+      "status_note": "[2026-11-13 第4陣] www.w3.org/TR/webaudio/ (Web Audio API 1.1 Working Draft 2026-09-22) と MDN(AudioContext/AudioWorklet/Best practices)を確認。サンプルレート範囲・レンダ量子128・スレッドモデル・latencyHint・自動再生/resume要件を記録。ブラウザ別の実測レイテンシ・既定レート・自動再生の具体条件は未確認。"
     },
     {
       "id": "T-022",

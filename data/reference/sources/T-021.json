@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "id": "SRC-021-01",
+      "title": "Web Audio API 1.1 (W3C Working Draft, 22 September 2026)",
+      "publisher": "W3C",
+      "url": "https://www.w3.org/TR/webaudio/",
+      "doc_version": "Working Draft 2026-09-22",
+      "doc_type": "spec",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "§1.2 AudioContext、§2.2 Control/Rendering Thread、§2.4 Sample Rates、§2.5/2.6 Render Quantum、§5 Audio Signal Values、AudioWorkletProcessor節をテキスト抽出して確認(全文は未精読)",
+      "link_status": "ok",
+      "license_note": "W3C文書(W3C Document License)。要約のみ記録し本文は転載しない。仕様自体はドラフトで変更されうる。"
+    },
+    {
+      "id": "SRC-021-02",
+      "title": "AudioContext - MDN",
+      "publisher": "MDN contributors",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
+      "doc_version": "unknown",
+      "doc_type": "third_party",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "ページ全文(2026-05-16更新)",
+      "link_status": "ok",
+      "license_note": "MDN(CC-BY-SA 2.5)。要約のみ記録し転載しない。"
+    },
+    {
+      "id": "SRC-021-03",
+      "title": "AudioWorklet - MDN",
+      "publisher": "MDN contributors",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet",
+      "doc_version": "unknown",
+      "doc_type": "third_party",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "ページ冒頭〜プロパティ/メソッド",
+      "link_status": "ok",
+      "license_note": "MDN(CC-BY-SA 2.5)。要約のみ記録し転載しない。"
+    },
+    {
+      "id": "SRC-021-04",
+      "title": "Web Audio API best practices - MDN",
+      "publisher": "MDN contributors",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices",
+      "doc_version": "unknown",
+      "doc_type": "third_party",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "Autoplay policy節を中心に全体",
+      "link_status": "ok",
+      "license_note": "MDN(CC-BY-SA 2.5)。要約のみ記録し転載しない。"
+    }
+  ]
+}

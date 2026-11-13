@@ -1,0 +1,124 @@
+{
+  "sources": [
+    {
+      "id": "SRC-020-01",
+      "title": "pichenettes/eurorack README",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/README.md",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "READMEの全文(モジュール一覧、ライセンス節、派生品ガイドライン)",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。 ハードウェアはcc-by-sa-3.0、AVR系コードはGPL3.0とREADMEに記載(再利用はしない)。"
+    },
+    {
+      "id": "SRC-020-02",
+      "title": "plaits/plaits.cc, plaits/dsp/voice.h (ソース)",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/plaits/plaits.cc",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "plaits.cc全体、voice.hの冒頭〜Patch/Modulations構造体。ファイル冒頭のライセンス表記を確認",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-03",
+      "title": "plaits/dsp/dsp.h, plaits/settings.h",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/plaits/dsp/dsp.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "サンプルレート・ブロックサイズ定数、設定(State/校正)構造体",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-04",
+      "title": "braids/settings.h, braids/braids.cc",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/braids/settings.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "MacroOscillatorShape/Resolution/SampleRate列挙、braids.ccのブロックサイズとタイマ設定",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-05",
+      "title": "rings/dsp/part.h",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/rings/dsp/part.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "ResonatorModel列挙、最大ポリフォニー定数",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-06",
+      "title": "clouds/dsp/granular_processor.h, clouds/settings.h",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/clouds/dsp/granular_processor.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "再生モード列挙、PersistentState/Block、サンプルレート式、設定State構造体",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-07",
+      "title": "tides/generator.h",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/tides/generator.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "GeneratorRange/Mode列挙、制御ビット、ブロックサイズ、ピッチ設定",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-08",
+      "title": "marbles/cv_reader.h",
+      "publisher": "GitHub (Emilie Gillet)",
+      "url": "https://raw.githubusercontent.com/pichenettes/eurorack/master/marbles/cv_reader.h",
+      "doc_version": "unknown",
+      "doc_type": "source_code",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "校正メソッド(C1/C3)",
+      "link_status": "ok",
+      "license_note": "MITライセンスのソース(STM32F系)。ライセンス表記はREADME/ファイル冒頭に従う。コード・アセットは本プロジェクトに再利用せず、事実のみ自分の言葉で記録。商標『Mutable Instruments』は派生品に使用不可(READMEの指針)。"
+    },
+    {
+      "id": "SRC-020-09",
+      "title": "Mutable Instruments 公式モジュールページ/マニュアル(mutable-instruments.net)",
+      "publisher": "Mutable Instruments",
+      "url": "https://mutable-instruments.net/modules/plaits/manual/",
+      "doc_version": "unknown",
+      "doc_type": "manufacturer_manual",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "接続試行のみ(プロキシ403)。内容未確認",
+      "link_status": "unreachable",
+      "license_note": "未取得。取得できた場合も本文は転載しない。"
+    },
+    {
+      "id": "SRC-020-10",
+      "title": "GitHub REST API (pichenettes/eurorack メタ情報)",
+      "publisher": "GitHub",
+      "url": "https://api.github.com/repos/pichenettes/eurorack",
+      "doc_version": "unknown",
+      "doc_type": "other",
+      "accessed_on": "2026-11-13",
+      "checked_scope": "接続試行のみ(403/400)。最終更新日・アーカイブ状態は未確認",
+      "link_status": "unreachable",
+      "license_note": "未取得"
+    }
+  ]
+}

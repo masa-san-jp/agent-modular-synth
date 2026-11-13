@@ -1,0 +1,596 @@
+{
+  "target_id": "T-021",
+  "entities": [
+    {
+      "id": "REF-021-001",
+      "kind": "system",
+      "name": "Web Audio API",
+      "maker": "W3C / MDN",
+      "version": "1.1 Working Draft (2026-09-22)",
+      "function_category": "system",
+      "purpose": "ブラウザ上で音声処理グラフ(AudioNode群)を構成・再生するためのW3C仕様のAPI。制約調査の対象で技術採用の決定ではない。",
+      "synthesis_method": "ノードグラフ+ワークレットによるリアルタイム/オフライン音声処理",
+      "features": [
+        {
+          "text": "制御スレッド/描画スレッドの2スレッドモデル",
+          "fact_ids": [
+            "F-021-002"
+          ]
+        },
+        {
+          "text": "32bit float・名目[-1,1]",
+          "fact_ids": [
+            "F-021-003"
+          ]
+        },
+        {
+          "text": "サンプルレート3000〜768000Hz対応必須",
+          "fact_ids": [
+            "F-021-004"
+          ]
+        },
+        {
+          "text": "レンダ量子は既定128",
+          "fact_ids": [
+            "F-021-005"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "仕様はドラフト段階で、実装は仕様の設定可能範囲より狭い場合がある(ブラウザ実装は未確認)",
+          "fact_ids": [
+            "F-021-001"
+          ]
+        },
+        {
+          "text": "描画が間に合わない(負荷>1.0)とアンダーラン",
+          "fact_ids": [
+            "F-021-006"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "128フレーム単位の描画ループがシステムコールバックに同期。",
+          "fact_ids": [
+            "F-021-005",
+            "F-021-006"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": null
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-021-002",
+      "kind": "module",
+      "name": "AudioContext",
+      "maker": "W3C / MDN",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "音声グラフを保持するコンテキスト。サンプルレート・レイテンシ・状態(suspended/running/closed)を管理する。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "1つのコンテキストを使い回す推奨",
+          "fact_ids": [
+            "F-021-007"
+          ]
+        },
+        {
+          "text": "sampleRate指定可、デバイスと異なれば再サンプリング",
+          "fact_ids": [
+            "F-021-008"
+          ]
+        },
+        {
+          "text": "latencyHint 3種+秒数",
+          "fact_ids": [
+            "F-021-009"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "再サンプリングでレイテンシ増加の可能性",
+          "fact_ids": [
+            "F-021-008"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [
+        {
+          "name": "sampleRate",
+          "unit": "Hz",
+          "range": {
+            "min": 3000,
+            "max": 768000,
+            "unit": "Hz"
+          },
+          "default": null,
+          "range_status": "confirmed",
+          "default_status": "unconfirmed",
+          "fact_ids": [
+            "F-021-004",
+            "F-021-008"
+          ]
+        }
+      ],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "latencyHintと描画量子でレイテンシが決まる。",
+          "fact_ids": [
+            "F-021-009",
+            "F-021-010"
+          ]
+        },
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-021-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-021-003",
+      "kind": "module",
+      "name": "AudioWorklet / AudioWorkletProcessor",
+      "maker": "W3C / MDN",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "other",
+      "purpose": "独自の音声処理スクリプトを別スレッド(Web Audioスレッド)で実行するためのインターフェース。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "別スレッドでのカスタム処理",
+          "fact_ids": [
+            "F-021-013"
+          ]
+        },
+        {
+          "text": "MessagePortで制御データ送受信",
+          "fact_ids": [
+            "F-021-015"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "セキュアコンテキスト(HTTPS)必須",
+          "fact_ids": [
+            "F-021-014"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": {
+          "summary": "レンダ量子(既定128)ごとにprocess()が呼ばれる。",
+          "fact_ids": [
+            "F-021-016",
+            "F-021-005"
+          ]
+        },
+        "state_save": null,
+        "external_control": {
+          "summary": "port(MessagePort)とAudioParamでメインスレッドから制御。",
+          "fact_ids": [
+            "F-021-015"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-021-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-021-004",
+      "kind": "control_interface",
+      "name": "自動再生ポリシー(Autoplay policy)とresume要件",
+      "maker": "W3C / MDN",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "ユーザー操作なしでの音声開始を制限するブラウザの方針。AudioContextはsuspendedで始まりresume()が必要になりうる。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "ユーザー操作内でcontext生成かresume()",
+          "fact_ids": [
+            "F-021-018",
+            "F-021-019"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "text": "UAは最初の開始を許さないことができる(sticky activation前提例)",
+          "fact_ids": [
+            "F-021-020"
+          ]
+        },
+        {
+          "text": "closed/非アクティブDocumentではresume()失敗",
+          "fact_ids": [
+            "F-021-021"
+          ]
+        }
+      ],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": {
+          "summary": "ユーザー操作(click等)でresume()/生成。",
+          "fact_ids": [
+            "F-021-019"
+          ]
+        }
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-021-001"
+      },
+      "status": "active"
+    },
+    {
+      "id": "REF-021-005",
+      "kind": "module",
+      "name": "OfflineAudioContext",
+      "maker": "W3C / MDN",
+      "version": null,
+      "version_status": "unconfirmed",
+      "function_category": "io_utility",
+      "purpose": "リアルタイムでなくバッファへ描画するコンテキスト(書き出し/テスト用途)。",
+      "synthesis_method": null,
+      "features": [
+        {
+          "text": "sampleRate/長さ指定の非リアルタイム描画",
+          "fact_ids": [
+            "F-021-022"
+          ]
+        }
+      ],
+      "constraints": [],
+      "ports": [],
+      "params": [],
+      "mechanisms": {
+        "patching": null,
+        "timing": null,
+        "state_save": null,
+        "external_control": null
+      },
+      "relations": {
+        "variant_of": null,
+        "supersedes": null,
+        "part_of": "REF-021-001"
+      },
+      "status": "active"
+    }
+  ],
+  "facts": [
+    {
+      "id": "F-021-001",
+      "entity_id": "REF-021-001",
+      "topic": "仕様の位置付け",
+      "statement": "W3Cのページは『Web Audio API 1.1』W3C Working Draftで、日付は2026年9月22日と表示されていた(勧告ではなくドラフト)。",
+      "basis": "manufacturer_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "文書ヘッダ",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-002",
+      "entity_id": "REF-021-001",
+      "topic": "スレッドモデル",
+      "statement": "制御スレッド(AudioContext生成・グラフ操作)と描画スレッド(実音声計算、実時間のコールバック駆動)の2つで実装しなければならず、制御→描画は制御メッセージ、逆方向は通常のイベントループタスクで通信する。OfflineAudioContextの描画は通常スレッド。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§2.2 Control Thread and Rendering Thread",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-003",
+      "entity_id": "REF-021-001",
+      "topic": "信号値",
+      "statement": "公開される信号値は32bit浮動小数点リニアPCMで、出力先での名目範囲は[-1,1]。範囲外/NaN/無限大の出力は仕様上未定義。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§5.1-5.2 Audio Signal Values",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-004",
+      "entity_id": "REF-021-001",
+      "topic": "サンプルレート範囲",
+      "statement": "実装は3000Hz〜768000Hzのサンプルレートに対応しなければならず、範囲外はNotSupportedError。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§2.4 Supported Sample Rates",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-005",
+      "entity_id": "REF-021-001",
+      "topic": "レンダ量子",
+      "statement": "グラフ描画は固定サイズのブロック(レンダ量子)単位で、既定は128フレーム。コンテキスト生存中は一定。renderSizeHint('default'|'hardware'|整数)で変更でき、範囲は1フレーム〜サンプルレートの6倍。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§2.5, §2.6; AudioContextOptions.renderSizeHint",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-006",
+      "entity_id": "REF-021-001",
+      "topic": "アンダーラン定義",
+      "statement": "システムオーディオコールバックの負荷値(実行時間÷再生時間)が1.0を超えるとバッファアンダーラン。レンダ量子はコールバックバッファの約数とは限らない。",
+      "basis": "api_doc",
+      "confidence": "medium",
+      "source_id": "SRC-021-01",
+      "locator": "§2.6 Rendering an Audio Graph",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-007",
+      "entity_id": "REF-021-002",
+      "topic": "生成と再利用",
+      "statement": "MDNは、何をする前にもAudioContextを作り、毎回新規に作らず1つを使い回すことを推奨し、複数の音源/パイプラインで共有してよいとする。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-02",
+      "locator": "AudioContext 冒頭説明",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-008",
+      "entity_id": "REF-021-002",
+      "topic": "sampleRate",
+      "statement": "生成時にsampleRateを指定でき、未指定なら既定の出力デバイスのレート。出力デバイスと異なる場合は実装が再サンプリングしなければならず、レイテンシが大きく増えることがある。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§1.2 AudioContext constructor手順",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-009",
+      "entity_id": "REF-021-002",
+      "topic": "latencyHint",
+      "statement": "latencyHintは'interactive'(既定、グリッチなしで最低遅延)・'balanced'・'playback'、または秒数(double)。解釈はブラウザの裁量。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§1.2.5 AudioContextOptions",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-010",
+      "entity_id": "REF-021-002",
+      "topic": "baseLatency/outputLatency",
+      "statement": "baseLatencyはAudioDestinationNodeからオーディオサブシステムへ渡すまでの処理遅延(グラフ内遅延は含まない)。仕様の例では二重バッファで2×128/44100≒5.8ms。outputLatencyは機材依存で動的に変化する。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§1.2.2 Attributes baseLatency/outputLatency",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-011",
+      "entity_id": "REF-021-002",
+      "topic": "メソッド/プロパティ",
+      "statement": "MDNにresume()/suspend()/close()/getOutputTimestamp()/setSinkId()(セキュアコンテキスト)等が列挙。Baseline Widely available。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-02",
+      "locator": "AudioContext Instance properties/methods",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-012",
+      "entity_id": "REF-021-002",
+      "topic": "interrupted状態",
+      "statement": "仕様はOSによる中断(interruption)を扱う節を持つ(2.7)。state属性に'interrupted'が現れる記述あり。",
+      "basis": "api_doc",
+      "confidence": "low",
+      "source_id": "SRC-021-01",
+      "locator": "§2.7 Handling an interruption (目次と resume()手順の記述のみ確認)",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-013",
+      "entity_id": "REF-021-003",
+      "topic": "実行モデル",
+      "statement": "MDNによると、AudioWorkletのスクリプトはAudioWorkletGlobalScopeで実行され、ワークレットと他の音声ノードが共有する別のWebAudioスレッド上で動作して低遅延処理を提供する。BaseAudioContext.audioWorkletから取得。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-03",
+      "locator": "AudioWorklet 冒頭",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-014",
+      "entity_id": "REF-021-003",
+      "topic": "セキュアコンテキスト",
+      "statement": "AudioWorkletはHTTPS等のセキュアコンテキスト限定(MDNの注記)。Baseline Widely available。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-03",
+      "locator": "AudioWorklet 冒頭注記",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-015",
+      "entity_id": "REF-021-003",
+      "topic": "通信",
+      "statement": "AudioWorkletのportでメインスレッドとワークレット間のMessagePort通信ができ、仕様上processorOptionsで初期化データを渡せる。AudioWorkletProcessorにもMessagePort(port)がある。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "AudioWorkletNodeOptions.processorOptions; AudioWorkletProcessor.port",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-016",
+      "entity_id": "REF-021-003",
+      "topic": "処理コールバック",
+      "statement": "独自プロセッサはAudioWorkletProcessorを継承しprocess()を実装し、parameterDescriptorsで音声パラメータを定義する。描画ごと(レンダ量子ごと)に呼ばれる。",
+      "basis": "api_doc",
+      "confidence": "medium",
+      "source_id": "SRC-021-01",
+      "locator": "AudioWorkletProcessCallback節の冒頭のみ確認",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-017",
+      "entity_id": "REF-021-003",
+      "topic": "非推奨API",
+      "statement": "ScriptProcessorNodeは非推奨で、bufferSizeは256〜16384(2の冪)。AudioWorkletが後継。",
+      "basis": "api_doc",
+      "confidence": "medium",
+      "source_id": "SRC-021-01",
+      "locator": "ScriptProcessorNode節",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-018",
+      "entity_id": "REF-021-004",
+      "topic": "ポリシー",
+      "statement": "MDNは、ブラウザが自動再生を許さず、AudioContextはユーザー操作で開始させる必要があると説明する。stateはsuspended/running/closed。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-04",
+      "locator": "Best practices - Autoplay policy",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-019",
+      "entity_id": "REF-021-004",
+      "topic": "生成タイミング",
+      "statement": "clickなどユーザー操作の中でAudioContextを作ればstateは自動でrunningになる。それ以外で作った場合はsuspendedとなり、ユーザー操作後にstate==='suspended'ならresume()を呼ぶ(MDNの例)。OfflineAudioContextはstartRendering()。",
+      "basis": "third_party",
+      "confidence": "high",
+      "source_id": "SRC-021-04",
+      "locator": "Best practices - Autoplay policy (サンプルコード)",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-020",
+      "entity_id": "REF-021-004",
+      "topic": "仕様上の扱い",
+      "statement": "仕様は、UAがsuspended→runningの初期遷移を許可しない場合があり、許可するのは(例として)関連グローバルオブジェクトがsticky activationを持つ場合のみと述べる。必須要件ではなくUAの裁量。",
+      "basis": "api_doc",
+      "confidence": "high",
+      "source_id": "SRC-021-01",
+      "locator": "§1.2 AudioContext 'allowed to start'",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-021",
+      "entity_id": "REF-021-004",
+      "topic": "resume()",
+      "statement": "resume()はPromiseを返し、Documentがfully activeでなければInvalidStateErrorでreject、closed状態でもInvalidStateError。",
+      "basis": "api_doc",
+      "confidence": "medium",
+      "source_id": "SRC-021-01",
+      "locator": "AudioContext.resume() 手順",
+      "verified_on": "2026-11-13"
+    },
+    {
+      "id": "F-021-022",
+      "entity_id": "REF-021-005",
+      "topic": "生成引数",
+      "statement": "コンストラクタはチャンネル数・長さ(フレーム)・sampleRateを取り、描画スレッドは通常スレッドで、suspend時刻はレンダ量子の倍数に切り上げられる。startRendering()で開始する(自動再生制限の適用外とするMDN記述は別出典のためここでは断定しない)。",
+      "basis": "api_doc",
+      "confidence": "medium",
+      "source_id": "SRC-021-01",
+      "locator": "OfflineAudioContext constructor; suspend()節",
+      "verified_on": "2026-11-13"
+    }
+  ],
+  "unconfirmed": [
+    {
+      "entity_id": "REF-021-001",
+      "item": "各ブラウザ(Chrome/Firefox/Safari)での実際の既定サンプルレート・レンダ量子・baseLatency実測値",
+      "tried_sources": [
+        "SRC-021-01",
+        "SRC-021-02"
+      ],
+      "impact_on_spec": "仕様値と実機挙動を区別する必要がある。レイテンシは数値で仕様化できない"
+    },
+    {
+      "entity_id": "REF-021-001",
+      "item": "Web Audio APIにプリセット/パッチ保存機構があるか(APIとしては保存概念は未確認)",
+      "tried_sources": [
+        "SRC-021-01",
+        "SRC-021-02",
+        "SRC-021-03",
+        "SRC-021-04"
+      ],
+      "impact_on_spec": "パッチ保存は別途アプリ側(JSON等)で設計が必要"
+    },
+    {
+      "entity_id": "REF-021-002",
+      "item": "sampleRateの既定値の具体値(デバイス依存)",
+      "tried_sources": [
+        "SRC-021-01"
+      ],
+      "impact_on_spec": "44.1/48kHzの別が仕様上は固定されず、DSP係数の設計でレート非依存にする必要"
+    },
+    {
+      "entity_id": "REF-021-003",
+      "item": "process()の入出力配列形・parameters(a-rate/k-rate)の詳細、ブラウザ別のスレッド優先度/GC挙動",
+      "tried_sources": [
+        "SRC-021-01",
+        "SRC-021-03"
+      ],
+      "impact_on_spec": "オーディオスレッドでの割当・ブロッキング回避といった実装制約を具体化できていない"
+    },
+    {
+      "entity_id": "REF-021-004",
+      "item": "ブラウザ別の自動再生判定基準(Chrome/Safari/Firefoxの具体的条件・MEI等)",
+      "tried_sources": [
+        "SRC-021-02",
+        "SRC-021-04"
+      ],
+      "impact_on_spec": "ブラウザごとの開始条件は実機/各社資料で別途確認が必要。UIは常に明示的な開始操作を要する前提にすべき"
+    },
+    {
+      "entity_id": "REF-021-005",
+      "item": "最大長・メモリ上限",
+      "tried_sources": [
+        "SRC-021-01"
+      ],
+      "impact_on_spec": "書き出し機能の上限を仕様化できない"
+    }
+  ]
+}
