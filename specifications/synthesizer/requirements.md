@@ -9,7 +9,7 @@
 | REQ-F-001 | 利用者はモジュールを追加・削除できる | 初期版 | 目的(モジュラー) | product-spec §4, operation-contract `module.add`/`module.remove` | 追加・削除後の状態が契約どおり。VER-F-001 |
 | REQ-F-002 | 出力ポートと入力ポートをケーブルで接続・切断できる。型違い接続は許可する | 初期版 | COM-01(F-005-002) | operation-contract `cable.connect`/`cable.disconnect` | 接続規則の受入例。VER-F-002 |
 | REQ-F-003 | パラメータを変更でき、変更は次の処理ステップから音に反映される | 初期版 | COM-13 | operation-contract `param.set`, product-spec §5 | 変更後の出力が仕様どおり。VER-F-003 |
-| REQ-F-004 | 初期版の採用モジュール(product-spec §6の18種)が、各モジュール仕様の検証例を満たす | 初期版 | #2 | product-spec §6 | 全検証例(227件+ポリ追加分)の合格。VER-F-004 |
+| REQ-F-004 | 初期版の採用モジュール(product-spec §6の18種)が、各モジュール仕様の検証例を満たす | 初期版 | #2 | product-spec §6 | 全検証例(209件+ポリ追加分)の合格。VER-F-004 |
 | REQ-F-005 | ポリフォニー(1ケーブル最大16チャンネル)で発音できる | 初期版 | DEC-003, COM-08 | product-spec §5.4 | ポリ時の検証例(OPEN-004で追加)。VER-F-005 |
 | REQ-F-006 | MIDI入力(ノート、ピッチベンド、CC、クロック)で演奏できる | 初期版 | DEC-003, MOD-IO-002 | product-spec §7.3 | MIDIメッセージ列に対する出力。VER-F-006 |
 | REQ-F-007 | パッチを保存・復元でき、復元後の構成とパラメータが一致する | 初期版 | DEC-106, COM-14 | data-contract | 保存→復元の往復。VER-F-007 |
