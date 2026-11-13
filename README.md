@@ -6,7 +6,7 @@
 | 段階 | Issue | 状態 |
 |---|---|---|
 | 第1段階 リファレンス調査・出典付きDB | [#1](https://github.com/masa-san-jp/agent-modular-synth/issues/1) | 完了(精査済みDB+拡張DB22対象) |
-| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 着手 |
+| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 初版作成済み(18仕様、レビュー待ち) |
 | 第3段階 製品仕様・操作契約・実装計画 | [#3](https://github.com/masa-san-jp/agent-modular-synth/issues/3) | 未着手 |
 
 ## 調査・設計の入口
@@ -19,9 +19,15 @@
   - [不足・未確認一覧(#2への引継ぎ)](references/db/docs/gaps.md) / [検査結果](references/db/docs/validation-report.md) / [スキーマ改善候補](references/db/docs/schema-improvements.md)
 - 両DBの対応表: [references/db/docs/crosswalk.md](references/db/docs/crosswalk.md)
 
+### #2 機能別モジュール仕様(正本は `specifications/modules/`)
+- 入口: [specifications/modules/README.md](specifications/modules/README.md)
+  - [共通規約](specifications/modules/common.md) / [カタログ](specifications/modules/catalog.md) / [追跡表](specifications/modules/traceability.md) / [設計仮定](specifications/modules/assumptions.md) / [未確認・保留](specifications/modules/open-issues.md) / [検査結果](specifications/modules/validation.md)
+
 ## 検査・生成ツール
 ```
 python3 references/validate.py           # 精査済みDBの検査
 python3 tools/validate_reference.py      # 拡張DBの検査(ID重複・必須項目・参照切れ等)
 python3 tools/build_reference_docs.py    # 拡張DBの索引・比較表・不足一覧の再生成
+python3 tools/validate_specs.py          # モジュール仕様の検査
+python3 tools/build_spec_docs.py         # 仕様の追跡表・仮定一覧・保留一覧の再生成
 ```
