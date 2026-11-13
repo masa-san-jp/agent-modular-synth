@@ -2,7 +2,7 @@
 spec_id: MOD-CLK-002
 title: クロック分周
 status: specified
-category: クロック・シーケンス
+category: clock_sequencer
 version: 0.1
 refs: [REF-001-010, F-001-034, F-001-035, F-001-036, F-005-011, F-005-012, F-003-025, F-002-019]
 common: [COM-01, COM-04, COM-05, COM-06, COM-07, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15, COM-16]

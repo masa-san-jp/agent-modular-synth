@@ -2,7 +2,7 @@
 spec_id: MOD-IO-002
 title: MIDI-CV
 status: specified
-category: 入出力・計測
+category: io_utility
 version: 0.1
 refs: [M003, REF-005-008, F-005-032, F-005-033, F-005-013, F-005-011, REF-001-004, F-001-012, F-001-013, F-003-024, F-003-027, REF-004-011, F-004-048, F-007-007]
 common: [COM-01, COM-03, COM-04, COM-05, COM-06, COM-07, COM-08, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15]

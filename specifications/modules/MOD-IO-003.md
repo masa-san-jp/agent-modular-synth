@@ -2,7 +2,7 @@
 spec_id: MOD-IO-003
 title: メーター/スコープ
 status: specified
-category: 入出力・計測
+category: io_utility
 version: 0.1
 refs: [F-005-008, F-005-009, F-005-014, F-005-003, F-001-007, F-002-015, I003]
 common: [COM-01, COM-02, COM-05, COM-06, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15]

@@ -2,7 +2,7 @@
 spec_id: MOD-SEQ-001
 title: ステップシーケンサ
 status: specified
-category: クロック・シーケンス
+category: clock_sequencer
 version: 0.1
 refs: [M006, REF-003-007, F-003-037, F-003-038, F-005-011, F-005-012, F-001-034, REF-007-005]
 common: [COM-01, COM-02, COM-04, COM-05, COM-06, COM-07, COM-08, COM-09, COM-10, COM-11, COM-12, COM-13, COM-14, COM-15]

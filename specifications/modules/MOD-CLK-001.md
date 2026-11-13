@@ -2,7 +2,7 @@
 spec_id: MOD-CLK-001
 title: クロック
 status: specified
-category: クロック・シーケンス
+category: clock_sequencer
 version: 0.1
 refs: [M006, REF-007-005, F-007-014, F-018-025, F-022-009, F-005-011, F-005-012, F-005-013, F-003-018, F-003-025, REF-005-002]
 common: [COM-01, COM-03, COM-04, COM-05, COM-06, COM-07, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15, COM-16]

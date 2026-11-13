@@ -2,7 +2,7 @@
 spec_id: MOD-LGC-001
 title: 論理・比較
 status: specified
-category: ランダム・論理
+category: random_logic
 version: 0.1
 refs: [F-005-011, F-001-006, F-001-009, F-002-003, F-002-016, F-016-029, REF-016-012, F-005-012]
 common: [COM-01, COM-02, COM-04, COM-05, COM-06, COM-07, COM-08, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15, COM-16]

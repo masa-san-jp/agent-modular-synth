@@ -2,7 +2,7 @@
 spec_id: MOD-IO-001
 title: オーディオ出力
 status: specified
-category: 入出力・計測
+category: io_utility
 version: 0.1
 refs: [F-005-004, F-005-009, F-005-010, F-005-014, F-005-045, F-001-007, F-004-003, F-003-006, F-003-044, F-003-030, I003]
 common: [COM-01, COM-02, COM-03, COM-05, COM-06, COM-08, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15]

@@ -2,7 +2,7 @@
 spec_id: MOD-ENV-001
 title: ADSRエンベロープ
 status: specified
-category: 変調
+category: modulation
 version: 0.1
 refs: [REF-001-007, F-001-023, F-001-024, F-001-025, M002, REF-005-006, F-005-029, F-005-011, F-005-012, REF-007-004, F-007-013]
 common: [COM-02, COM-04, COM-05, COM-06, COM-07, COM-08, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15, COM-16]

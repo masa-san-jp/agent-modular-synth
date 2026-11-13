@@ -2,7 +2,7 @@
 spec_id: MOD-RND-001
 title: サンプル&ホールド/ランダム
 status: specified
-category: ランダム・論理
+category: random_logic
 version: 0.1
 refs: [REF-004-009, F-004-043, F-004-044, F-004-022, REF-002-003, F-002-006, F-002-020, F-002-023, REF-005-007, F-005-031, F-005-009, F-005-011]
 common: [COM-01, COM-02, COM-04, COM-05, COM-06, COM-09, COM-10, COM-11, COM-12, COM-13, COM-14, COM-15]
