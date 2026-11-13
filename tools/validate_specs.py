@@ -128,7 +128,7 @@ for tok in set(re.findall(r"REF-\d{3}-\d{3}", cat)):
 # --- Markdown内部リンク
 for f in glob.glob(os.path.join(SPEC_DIR, "*.md")):
     for l in re.findall(r"\]\(([^)#\s]+)\)", open(f, encoding="utf-8").read()):
-        if l.startswith("http"): continue
+        if l.startswith("http") or not re.search(r"\.(md|json)$|/", l): continue  # [A](F-xxx) のようなID付き表記はリンクとみなさない
         if not os.path.exists(os.path.normpath(os.path.join(os.path.dirname(f), l))): err(f"{os.path.basename(f)}: リンク切れ {l}")
 
 n_spec = sum(1 for v in specs.values() if v.get("status") == "specified")
