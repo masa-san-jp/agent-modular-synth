@@ -6,8 +6,8 @@
 | 段階 | Issue | 状態 |
 |---|---|---|
 | 第1段階 リファレンス調査・出典付きDB | [#1](https://github.com/masa-san-jp/agent-modular-synth/issues/1) | 完了(精査済みDB+拡張DB22対象) |
-| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 初版作成済み(18仕様、レビュー待ち) |
-| 第3段階 製品仕様・操作契約・実装計画 | [#3](https://github.com/masa-san-jp/agent-modular-synth/issues/3) | 未着手 |
+| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 完了(共通規約+18仕様) |
+| 第3段階 製品仕様・操作契約・実装計画 | [#3](https://github.com/masa-san-jp/agent-modular-synth/issues/3) | 初版作成済み(レビュー待ち) |
 
 ## 調査・設計の入口
 - [リポジトリ構成案](docs/repository-structure.md)(提案。実装用の構成は設計後に決定)
@@ -23,6 +23,11 @@
 - 入口: [specifications/modules/README.md](specifications/modules/README.md)
   - [共通規約](specifications/modules/common.md) / [カタログ](specifications/modules/catalog.md) / [追跡表](specifications/modules/traceability.md) / [設計仮定](specifications/modules/assumptions.md) / [未確認・保留](specifications/modules/open-issues.md) / [検査結果](specifications/modules/validation.md)
 
+### #3 製品仕様・操作契約・実装計画(正本は `specifications/synthesizer/` と `plans/`)
+- 入口: [specifications/synthesizer/README.md](specifications/synthesizer/README.md)
+  - [要求一覧](specifications/synthesizer/requirements.md) / [製品仕様](specifications/synthesizer/product-spec.md) / [操作契約](specifications/synthesizer/operation-contract.md) / [データ契約](specifications/synthesizer/data-contract.md) / [検証計画](specifications/synthesizer/verification-plan.md) / [検査結果](specifications/synthesizer/validation.md)
+  - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
+
 ## 検査・生成ツール
 ```
 python3 references/validate.py           # 精査済みDBの検査
@@ -30,4 +35,5 @@ python3 tools/validate_reference.py      # 拡張DBの検査(ID重複・必須�
 python3 tools/build_reference_docs.py    # 拡張DBの索引・比較表・不足一覧の再生成
 python3 tools/validate_specs.py          # モジュール仕様の検査
 python3 tools/build_spec_docs.py         # 仕様の追跡表・仮定一覧・保留一覧の再生成
+python3 tools/validate_product_spec.py   # 製品仕様群の検査(ID参照・網羅・リンク)
 ```
