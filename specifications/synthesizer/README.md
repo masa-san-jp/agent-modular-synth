@@ -11,4 +11,5 @@
 | [verification-plan.md](verification-plan.md) | 検証計画(機能・接続・異常系・再現性・性能・安全・環境別) |
 | [../../plans/implementation-plan.md](../../plans/implementation-plan.md) | 実装計画(タスク、依存、参照仕様、検証方法) |
 | [../../plans/decisions.md](../../plans/decisions.md) | 判断記録と未決事項 |
+| [../../plans/handoff-from-modules.md](../../plans/handoff-from-modules.md) | #2から引き継いだ事項の処置表 |
 | [validation.md](validation.md) | 検査結果(リンク・内部参照・相互矛盾の確認) |
