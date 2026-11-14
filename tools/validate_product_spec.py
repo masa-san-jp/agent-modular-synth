@@ -30,7 +30,7 @@ for f, t in text.items():
                 if re.fullmatch(p, tok):
                     if os.path.basename(f) == HOME[k]: defined[k].setdefault(tok, f)
                     break
-FUTURE = {"VER-NF-004b", "VER-NF-005b", "VER-NF-007k"}  # 目標決定後に追加すると明記された将来の小項目
+FUTURE = {"VER-NF-004b", "VER-NF-005b", "VER-NF-007l"}  # 目標決定後に追加すると明記された将来の小項目
 # 外部ID
 ext = set()
 for f in glob.glob(os.path.join(R, "references/db/data/records/*.json")):

@@ -647,7 +647,7 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | AX-15 | 同じ値の設定 | `{"command":"param.set","args":{"module_id":"vcf1","param":"cutoff","value":1.0}}`(P0で既に 1.0) | `ok:true`, `revision:10`, `result.changed:false` | 不変。履歴・通知なし |
 | AX-16 | 読込で音量が上がらない | マスター音量の既定値を D dB(OPEN-010。未決)とする。人が `output.set_level` で D−10 に下げた状態(`level_db = D−10`, `agent_max_level_db = D−10`)で、エージェントが ① `{"command":"patch.new"}` ② `{"command":"history.undo"}` ③ `{"command":"engine.get_status"}` | ① `ok:true`, `revision:11` ② `ok:true`, `revision:12` ③ `result.output.level_db` = D−10、`result.output.agent_max_level_db` = D−10 | 音量も上限も D へ上がらない(§2.4、DEC-111)。①②のそれぞれで出力はフェードインする。EVT-03(`reset_to_default`)は出ない(値が変わらないため) |
 
-受入例と検証IDの対応: AX-01 → VER-F-007、AX-02/03/04 → VER-A-004・VER-F-002・VER-F-003、AX-05/06 → VER-A-005、AX-07 → VER-F-011、AX-08 → VER-F-012、AX-09 → VER-A-008、AX-10 → VER-S-002・VER-S-004・VER-S-005・VER-S-007、AX-11 → VER-F-009・VER-A-006、AX-12 → VER-F-007、AX-13 → VER-F-001(関連: VER-NF-003)、AX-14 → VER-A-004、AX-15 → VER-A-003・VER-F-003、AX-16 → VER-S-003・VER-S-004(verification-plan §6.3 への追加が必要)。
+受入例と検証IDの対応: AX-01 → VER-F-007、AX-02/03/04 → VER-A-004・VER-F-002・VER-F-003、AX-05/06 → VER-A-005、AX-07 → VER-F-011、AX-08 → VER-F-012、AX-09 → VER-A-008、AX-10 → VER-S-002・VER-S-004・VER-S-005・VER-S-007、AX-11 → VER-F-009・VER-A-006、AX-12 → VER-F-007、AX-13 → VER-F-001(関連: VER-NF-003)、AX-14 → VER-A-004、AX-15 → VER-A-003・VER-F-003、AX-16 → VER-S-003・VER-S-004(verification-plan §6.2 への追加が必要)。
 
 ## 19. 未決・確認事項
 | 項目 | 状態 |
