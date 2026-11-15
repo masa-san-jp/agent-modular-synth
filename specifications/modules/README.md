@@ -16,23 +16,23 @@
 | 仕様ID | 名称 | 検証例数 |
 |---|---|---|
 | [MOD-AMP-001](MOD-AMP-001.md) | VCA(電圧制御アンプ) | 10 |
-| [MOD-CLK-001](MOD-CLK-001.md) | クロック | 14 |
-| [MOD-CLK-002](MOD-CLK-002.md) | クロック分周 | 14 |
+| [MOD-CLK-001](MOD-CLK-001.md) | クロック | 13 |
+| [MOD-CLK-002](MOD-CLK-002.md) | クロック分周 | 13 |
 | [MOD-DLY-001](MOD-DLY-001.md) | ディレイ | 13 |
-| [MOD-ENV-001](MOD-ENV-001.md) | ADSRエンベロープ | 18 |
-| [MOD-FLT-001](MOD-FLT-001.md) | ローパスフィルタ(ラダー系) | 11 |
+| [MOD-ENV-001](MOD-ENV-001.md) | ADSRエンベロープ | 19 |
+| [MOD-FLT-001](MOD-FLT-001.md) | ローパスフィルタ(ラダー系) | 10 |
 | [MOD-FNC-001](MOD-FNC-001.md) | スルー/関数発生器 | 11 |
-| [MOD-IO-001](MOD-IO-001.md) | オーディオ出力 | 11 |
+| [MOD-IO-001](MOD-IO-001.md) | オーディオ出力 | 10 |
 | [MOD-IO-002](MOD-IO-002.md) | MIDI-CV | 14 |
 | [MOD-IO-003](MOD-IO-003.md) | メーター/スコープ | 13 |
 | [MOD-LFO-001](MOD-LFO-001.md) | LFO(低周波オシレータ) | 11 |
 | [MOD-LGC-001](MOD-LGC-001.md) | 論理・比較 | 10 |
 | [MOD-MIX-001](MOD-MIX-001.md) | ミキサー | 8 |
 | [MOD-NSE-001](MOD-NSE-001.md) | ノイズ源(白色ノイズ) | 11 |
-| [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | 11 |
+| [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | 10 |
 | [MOD-RND-001](MOD-RND-001.md) | サンプル&ホールド/ランダム | 10 |
 | [MOD-SEQ-001](MOD-SEQ-001.md) | ステップシーケンサ | 14 |
-| [MOD-UTL-001](MOD-UTL-001.md) | アッテヌバータ/オフセット | 10 |
+| [MOD-UTL-001](MOD-UTL-001.md) | アッテヌバータ/オフセット | 9 |
 
 ## ツール
 ```
