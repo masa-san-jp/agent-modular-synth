@@ -1,6 +1,6 @@
 # 操作契約(UIとエージェント共通のコマンド・状態・エラー・同期)
 
-版: 0.3 / 2026-11-15(#2 の改訂(Issue #10: 17仕様 0.2、common.md 0.5)と DEC-006〜013 を反映: `clip_count` の定義、接続できないポート、`meter.read` の測定チャンネル、エージェント音量上限とノート送信の決定。0.2 は独立レビューの反映: DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
+版: 0.3 / 2026-11-15(#2 の改訂(Issue #10: 全18仕様 0.2、common.md 0.5)と DEC-006〜013 を反映: `clip_count` の定義、接続できないポート、`meter.read` の測定チャンネル、エージェント音量上限とノート送信の決定。0.2 は独立レビューの反映: DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
 要求は [requirements.md](requirements.md)(`REQ-…`。検証IDは同じ枝番の `VER-…`)、構成と安全は [product-spec.md](product-spec.md)、判断と未決は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、パッチJSONの形は [data-contract.md](data-contract.md)(`DAT-…`)、モジュールのポート・パラメータは [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)が正本。本書はそれらを複製せずIDで参照する。
 
 本書のID: コマンド `CMD-nn`、エラー `ERR-nnn`、通知 `EVT-nn`、受入例 `AX-nn`。IDは変更しない(廃止時は欠番にする)。
@@ -316,7 +316,7 @@
 | `coalesce_key` | 文字列(1〜64文字) | × | なし | 連続操作を履歴1件にまとめる鍵(§9.4) |
 - 返値: `module_id`, `param`, `value`(設定後の値), `previous`, `changed`。
 - 検証エラー: ERR-102, ERR-121, ERR-122, ERR-123, ERR-003。
-- 副作用: 次の処理ステップから有効(COM-13。実装上は次のブロック先頭: product-spec §5.6)。補間の有無は各モジュール仕様 §4。`seed` の変更は次のステップで再シード(COM-11)。`MOD-IO-002` の `channel`、`MOD-IO-003` の `capture_len` の変更は各仕様が定める状態の初期化を伴う。`MOD-IO-003` の `channel`(測定チャンネル)の変更は測定状態を初期化しない(MOD-IO-003 §5。CMD-20)。
+- 副作用: 次の処理ステップから有効(COM-13。実装上は次のブロック先頭: product-spec §5.6)。補間の有無は各モジュール仕様 §4。`seed` の変更は次のステップで再シード(COM-11)。`MOD-IO-002` の `channel`(保持中のノートを解放)と `voices`(押下ノートと全ての声の状態を初期値へ。演奏中に変えると鳴っている音が止まる: MOD-IO-002 v0.2 §4・§8)、`MOD-IO-003` の `capture_len` の変更は各仕様が定める状態の初期化を伴う。`MOD-IO-003` の `channel`(測定チャンネル)の変更は測定状態を初期化しない(MOD-IO-003 §5。CMD-20)。
 - 取り消し: 前の値へ戻す。
 
 ### CMD-09 `batch`
@@ -551,8 +551,8 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 
 ## 14. 新規モジュールの `seed` 自動割当
 - 対象: `seed` パラメータを持つ種別(MOD-NSE-001, MOD-RND-001)。
-- 規則 [設計判断]: `module.add` で `seed` を**指定しなかった**とき、「仕様の既定seed以上で、パッチ内の `seed` を持つどのモジュールも使っていない最小の整数」を割り当てる。最初の1個は仕様の既定値(1)になり、2個目は 2、以降同様。割り当てた値は返値の `module.params.seed` に入る。
-- `seed` を**指定した**ときはその値を使う。他のモジュールと重なる場合は成功させ、`warnings` に `duplicate_seed` を入れる。`param.set` で重なる値にした場合も同じ。
+- 規則 [設計判断]: `module.add` で `seed` を**指定しなかった**とき、候補を「仕様の既定seed + 16·k(k = 0, 1, 2, …)」とし、**パッチ内の `seed` を持つどのモジュールの値も、候補から候補+15 の範囲に入っていない最小の候補**を割り当てる。最初の1個は仕様の既定値(1)になり、2個目は 17、3個目は 33、以降同様。16ずつ離すのは、ポリフォニー時にエンジン `c` が `seed + c` の乱数列を使うため(COM-08。最大16エンジン)、隣り合う値では別のモジュールと同じ列が出るからである(MOD-RND-001 §11)。割り当てた値は返値の `module.params.seed` に入る。
+- `seed` を**指定した**ときはその値を使う。他のモジュールの値と同じ、または差が16未満の場合は成功させ、`warnings` に `duplicate_seed` を入れる(ポリフォニー時に乱数列が重なりうるため)。`param.set` で重なる値にした場合も同じ。
 - 理由: 既定seedが同じモジュールは同じ乱数列を出す(COM-11 の相関注意)。ノイズ源を2つ置いたときに同一波形になるのを避ける。割当は乱数でなく**パッチの状態だけで決まる**ので再現性(REQ-NF-003)を保つ。1個目は仕様の既定値のままなので、モジュール仕様の検証例(既定seed前提)と食い違わない。
 - 割当は `module.add` の時点だけ。パッチの読込時は書かれている値をそのまま使う(省略時は仕様の既定値。data-contract §4.1)。
 - 退けた案: 何もしない(警告のみ)。知らずに相関したノイズを重ねる誤りが起きやすい。
@@ -644,7 +644,7 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | AX-10e | トークンなし | トークンを付けずに `{"command":"patch.get"}` | `ok:false`, `error.id:"ERR-004"`。パッチの内容を返さない | 不変 |
 | AX-11 | 人とエージェントの取り消し | エージェントが `{"command":"param.set","args":{"module_id":"env1","param":"attack","value":0.5}}`(`revision = 11`)の後、人が `{"command":"history.undo"}` | `ok:true`, `revision:12`, `result.undone.command:"param.set"`, `result.undone.actor.kind:"agent"` | `env1.attack = 0.01`(P0の値)。エージェントは EVT-01(`actor.kind = human`, `command = history.undo`)を受ける |
 | AX-12 | 壊れたパッチの読込 | `{"command":"patch.load","args":{"patch":{"format":"modular-synth-patch","schema_version":1,"modules":[{"id":"out","type":"MOD-IO-001","spec_version":"0.2"},{"id":"x1","type":"MOD-XYZ-999","spec_version":"0.1"}],"cables":[]}}}` | `ok:false`, `error.id:"ERR-204"`, `details.issues[0].rule:"DAT-V06"`, `revision:10` | 不変(P0 のまま) |
-| AX-13 | `seed` の自動割当 | `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n1"}}` の後 `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n2"}}` | 1つ目 `result.module.params.seed:1`、2つ目 `result.module.params.seed:2`。`revision` は 11、12 | `n1` と `n2` は異なる乱数列を出す |
+| AX-13 | `seed` の自動割当 | `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n1"}}` の後 `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n2"}}` | 1つ目 `result.module.params.seed:1`、2つ目 `result.module.params.seed:17`。`revision` は 11、12 | `n1` と `n2` は異なる乱数列を出す |
 | AX-14 | セッションなし | タブを閉じた状態で `{"command":"patch.get"}`、続けて `{"command":"patch.list"}` | 1つ目 `ok:false`, `error.id:"ERR-006"`, `revision:null`。2つ目 `ok:true`, `result.patches` | 不変 |
 | AX-15 | 同じ値の設定 | `{"command":"param.set","args":{"module_id":"vcf1","param":"cutoff","value":1.0}}`(P0で既に 1.0) | `ok:true`, `revision:10`, `result.changed:false` | 不変。履歴・通知なし |
 | AX-16 | 読込で音量が上がらない | マスター音量の既定値を D dB(OPEN-010。未決)とする。人が `output.set_level` で D−10 に下げた状態(`level_db = D−10`, `agent_max_level_db = D−10`)で、エージェントが ① `{"command":"patch.new"}` ② `{"command":"history.undo"}` ③ `{"command":"engine.get_status"}` | ① `ok:true`, `revision:11` ② `ok:true`, `revision:12` ③ `result.output.level_db` = D−10、`result.output.agent_max_level_db` = D−10 | 音量も上限も D へ上がらない(§2.4、DEC-111)。①②のそれぞれで出力はフェードインする。EVT-03(`reset_to_default`)は出ない(値が変わらないため) |
@@ -663,4 +663,4 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | 各上限(§16)、応答待ち時間、履歴件数、冪等キーの保持件数 | 暫定値。性能測定(OPEN-001)の後に見直す |
 | エージェントからのノート送信、画面鍵盤の経路 | **決定済み(DEC-008。旧 OPEN-012)**: ノート送信は初期版に含めない。画面鍵盤は Web MIDI と同じ経路で、コマンド・履歴の対象外(§6.1) |
 | ポリフォニー時の測定チャンネル | **#2 の改訂で確定済み**(MOD-IO-003 v0.2): 測定するチャンネルは MOD-IO-003 のパラメータ `channel`(1〜16、既定1)で選ぶ(`param.set`。CMD-20)。`meter.read` の引数・返値は変えていない。`channel` は `module.list_types` の `params` に現れる。チャンネル別の値を一度に返す読出し(複数チャンネルの同時測定)は MOD-IO-003 §11 で保留(後続)。ケーブル・ポートの現在のチャンネル数を読むコマンドは本書に定めていない(初期版に含めない。必要になれば追加する) |
-| MOD-IO-002 のボイス割当(ポリ) | 方式は決定済み(DEC-013)。#2 の MOD-IO-002 を改訂中(OPEN-004 の残り)。ボイス数などのパラメータが増えても `param.set` と `module.list_types` で扱え、本書のコマンドは変わらない |
+| MOD-IO-002 のボイス割当(ポリ) | **#2 の改訂で確定済み**(MOD-IO-002 v0.2、DEC-013)。同時発音数はパラメータ `voices`(1〜16、既定1)で、`param.set` で設定し、`module.list_types` の `params` に現れる。割当方式を選ぶパラメータはない。本書のコマンドは変わらない |
