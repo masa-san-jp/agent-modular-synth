@@ -10,8 +10,8 @@
 | REQ-F-002 | 出力ポートと入力ポートをケーブルで接続・切断できる。型違い接続は許可する | 初期版 | COM-01(F-005-002) | operation-contract `cable.connect`/`cable.disconnect` | 接続規則の受入例。VER-F-002 |
 | REQ-F-003 | パラメータを変更でき、変更は次の処理ステップから音に反映される | 初期版 | COM-13 | operation-contract `param.set`, product-spec §5 | 変更後の出力が仕様どおり。VER-F-003 |
 | REQ-F-004 | 初期版の採用モジュール(product-spec §6の18種)が、各モジュール仕様の検証例を満たす | 初期版 | #2 | product-spec §6 | 全検証例(209件+ポリ追加分)の合格。VER-F-004 |
-| REQ-F-005 | ポリフォニー(1ケーブル最大16チャンネル)で発音でき、複数の声が出力に届く(出力でのまとめ方はOPEN-011) | 初期版 | DEC-003, COM-08 | product-spec §5.4 | ポリ時の検証例(OPEN-004で追加)。VER-F-005 |
-| REQ-F-006 | MIDI入力(ノート、ピッチベンド、CC、クロック)と画面鍵盤で演奏できる(画面鍵盤の経路はOPEN-012の初期案) | 初期版 | DEC-003, MOD-IO-002 | product-spec §7.3, §2 SC-H2 | MIDIメッセージ列に対する出力。VER-F-006 |
+| REQ-F-005 | ポリフォニー(1ケーブル最大16チャンネル)で発音でき、複数の声が出力に届く(MOD-IO-001 が全チャンネルを加算: DEC-007) | 初期版 | DEC-003, COM-08 | product-spec §5.4 | ポリ時の検証例(OPEN-004で追加)。VER-F-005 |
+| REQ-F-006 | MIDI入力(ノート、ピッチベンド、CC、クロック)と画面鍵盤で演奏できる(画面鍵盤はMIDIと同じ経路: DEC-008) | 初期版 | DEC-003, MOD-IO-002 | product-spec §7.3, §2 SC-H2 | MIDIメッセージ列に対する出力。VER-F-006 |
 | REQ-F-007 | パッチを新規作成・保存・復元・削除でき、名前などのメタ情報を付けられる。復元後の構成とパラメータが一致する | 初期版 | DEC-106, COM-14 | data-contract §2〜§8, operation-contract §6 `patch.new`/`patch.save`/`patch.load`/`patch.delete`/`patch.set_meta` | 保存→復元の往復。VER-F-007 |
 | REQ-F-008 | 作業中のパッチは自動保存され、再読込後に再開できる | 初期版 | 利用シナリオ(再開) | data-contract §7.1 | 再読込後の一致。VER-F-008 |
 | REQ-F-009 | 操作を取り消し・やり直しできる(UI・エージェント共通の履歴) | 初期版 | DEC-105 | operation-contract `history.undo`/`history.redo` | 取り消し後の状態一致。VER-F-009 |
