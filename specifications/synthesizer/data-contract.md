@@ -1,6 +1,6 @@
 # データ契約(パッチ・自動保存・スナップショット、版互換と移行)
 
-版: 0.2 / 2026-11-14(独立レビューを受けて改訂: 読込検証の順序、`meta` の保存時刻、`saved_by` の前提、DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
+版: 0.3 / 2026-11-15(#2 の改訂(Issue #10: 17仕様 0.2、common.md 0.5)を反映: 例の `spec_version`、接続できないポート、仕様版 0.1→0.2 の移行(§9.5)。0.2 は独立レビューの反映)。状態: 設計(シンセ本体は未実装)。
 要求は [requirements.md](requirements.md)(`REQ-…`。検証IDは同じ枝番の `VER-…`)、構成は [product-spec.md](product-spec.md)、判断と未決は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、コマンドとエラーは [operation-contract.md](operation-contract.md)(`CMD-…`/`ERR-…`)、モジュールのポート・パラメータ・内部状態は [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)が正本。本書はそれらを複製せずIDで参照する。
 
 本書のID: 規則 `DAT-nn`、読込時の検証規則 `DAT-Vnn`、無効な例 `DX-nn`。IDは変更しない。
@@ -73,7 +73,7 @@
   "schema_version": 1,
   "meta": {"title": "", "description": ""},
   "modules": [
-    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1", "params": {"level": 1.0, "mute": 0}}
+    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2", "params": {"level": 1.0, "mute": 0}}
   ],
   "cables": []
 }
@@ -92,7 +92,7 @@
 |---|---|---|---|---|
 | `id` | 文字列 `^[a-z][a-z0-9_]{0,31}$` | ○ | — | パッチ内で一意(operation-contract §2.2) |
 | `type` | 文字列 | ○ | — | モジュールの**仕様ID**(例 `MOD-OSC-001`)。product-spec §6 の18種 |
-| `spec_version` | 文字列 `^[0-9]+\.[0-9]+$` | ○ | — | このパラメータを書いた時点のモジュール仕様の版(各仕様のフロントマター `version`。現在はすべて `0.1`) |
+| `spec_version` | 文字列 `^[0-9]+\.[0-9]+$` | ○ | — | このパラメータを書いた時点のモジュール仕様の版(各仕様のフロントマター `version`。現在は MOD-IO-002 が `0.1`(改訂中)、ほかの17種が `0.2`) |
 | `params` | オブジェクト(名前→数値) | × | `{}` | §4.1 |
 | `ui` | オブジェクト | × | なし | §4.2 |
 
@@ -116,7 +116,7 @@
 | `from` | `{"module": 文字列, "port": 文字列}` | ○ | — | 出力ポート。ポート名は各モジュール仕様 §3 のとおり(大文字・小文字を区別) |
 | `to` | `{"module": 文字列, "port": 文字列}` | ○ | — | 入力ポート |
 
-**DAT-12** 接続規則は operation-contract §13 と同じ(出力→入力、1つの入力に1本、自己接続・フィードバック可、`DEV_L`/`DEV_R`/`MIDI` は不可、型違い可)。読込時は型違いの警告を出さない(保存時に既に知らされているため)。
+**DAT-12** 接続規則は operation-contract §13 と同じ(出力→入力、1つの入力に1本、自己接続・フィードバック可、MOD-IO-001 の `PRE_L`/`PRE_R`/`DEV_L`/`DEV_R` と MOD-IO-002 の `MIDI` は不可、型違い可)。読込時は型違いの警告を出さない(保存時に既に知らされているため)。
 ケーブルに色などのUI情報は持たせない(初期版。必要になれば `schema_version` を上げて追加する)。
 
 ## 6. スナップショット(検証用)
@@ -131,7 +131,7 @@
 | `engine.sample_time` | 整数 | 通算サンプル番号 |
 | `engine.modules` | オブジェクト(モジュールID→状態) | 各モジュールの `state`(各仕様 §5 の状態変数名→値。PRNGを持つものは `s0`〜`s3` と `applied_seed` を含む: COM-11) |
 | `engine.ports` | オブジェクト(モジュールID→出力ポート名→値の配列) | 各出力ポートが最後に書いた値(チャンネルごと)。ケーブルの1サンプル遅延(COM-06)の中身 |
-| `engine.output_stage` | オブジェクト | 製品の出力保護(product-spec §8.1)の状態(音量の平滑値、リミッターの状態、非有限値の置換回数(各モジュールの COM-12 置換の集計と出力段の分。DEC-112)、最終クリップの回数(DEC-110)) |
+| `engine.output_stage` | オブジェクト | 製品の出力保護(product-spec §8.1)の状態(音量の平滑値、リミッターの状態、非有限値の置換回数(各モジュールの COM-12 置換の集計と出力段の分。DEC-112)、最終クリップの回数(DEC-110。MOD-IO-001 の `clip_count` とは別の計数))。各モジュールの置換カウンタ `nonfinite_count`(COM-12)は診断値で、`engine.modules` の `state` に含めない(COM-12: 保存の対象外。復元後は 0 から数える)。`engine.output_stage` に置く置換回数・クリップ回数も診断値で、DAT-18 の保証(出力列のビット同一)は計数を対象にしない。MOD-IO-003 の読出し値 `nonfinite_count`(測定チャンネルでの回数)は同名の別の値で、状態として保存する(MOD-IO-003 §9) |
 
 - **DAT-14** `engine.ports` を含める理由: COM-14 はモジュール単位の保存対象を定めるが、複数モジュールをつないだエンジン全体でビット同一に続けるには、ケーブルが運んでいる途中の値(前のステップの出力)も要る。
 - **DAT-15 数値の表現**: 有限値はJSONの数値で、**元の値に戻る最短の10進表記**で書く(float32 の状態は float32 として、倍精度の状態(COM-05)は倍精度として読み戻したときにビットが一致すること)。非有限値(例: MOD-IO-003 §5 の `mn`/`mx` の初期値 ±∞)は文字列 `"Infinity"`、`"-Infinity"`、`"NaN"` で書く。uint32 は整数で書く。
@@ -149,7 +149,7 @@
   "schema_version": 1,
   "revision": 42,
   "saved_at": "2026-11-13T09:30:00Z",
-  "patch": {"format": "modular-synth-patch", "schema_version": 1, "meta": {"title": "", "description": ""}, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.1", "params": {"level": 1.0, "mute": 0}}], "cables": []}
+  "patch": {"format": "modular-synth-patch", "schema_version": 1, "meta": {"title": "", "description": ""}, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.2", "params": {"level": 1.0, "mute": 0}}], "cables": []}
 }
 ```
 - **DAT-21 書く時点**: リビジョンが進むたび。連続する変更は間隔 1 秒以内 [暫定値] でまとめてよい。タブが隠れる・閉じる直前には、まとめ待ちの分を必ず書く。
@@ -243,7 +243,7 @@
 ### 9.2 互換の範囲
 - **DAT-51 下位互換(古いパッチを新しいアプリで読む)**: 公開した**すべての** `schema_version` と `spec_version` のパッチを読める(REQ-NF-006)。移行関数を消さない。
 - **DAT-52 上位互換(新しいパッチを古いアプリで読む)**: 保証しない。拒否する(ERR-205)。
-- **DAT-53** 最初の公開までの開発中は、`schema_version = 1`・`spec_version = 0.1` の内容を変えてよい。公開後は変えず、版を上げる。
+- **DAT-53** 最初の公開までの開発中は、`schema_version = 1` と各モジュール仕様の現行版の内容を変えてよい。公開後は変えず、版を上げる。#2 は公開前の改訂(Issue #10)で仕様版を `0.1` から `0.2` へ上げたので、`0.1` → `0.2` の移行を §9.5 のとおり登録する。
 - **DAT-54 名前の固定**: 公開後、モジュールの種別ID、ポート名、パラメータ名は変えない。変える場合は必ず版を上げて移行関数を書く(名前の変更は保存済みパッチを壊す: F-018-015)。
 
 ### 9.3 移行関数の規則
@@ -253,20 +253,30 @@
 - **DAT-58** 適用の順(§8 の表と同じ。一意): DAT-V01〜V04 → ①パッチ形式の移行 → DAT-V05(最新のパッチ形式で構造を検査)→ DAT-V06・V07 → ②省略パラメータの補完(DAT-59)→ ③モジュールごとの移行 → DAT-V08 以降(最新版の規則で検査)。移行後の検査に通らなければ読込全体を拒否する。
 - **DAT-59** 書かれていないパラメータは、モジュールの移行(③)の**直前**に、元の `spec_version` の既定値で補う(DAT-08。§8 の②)。新しい版で増えたパラメータの値は移行関数が決める(原則は「古い版と同じ音になる値」。各仕様 §9)。
 - **DAT-60** 移行は読込時にメモリ上で行い、**元のファイルは書き換えない**。利用者が保存したときに最新版で書かれる。
-- **DAT-61** 版ごとに見本のパッチと、移行後の期待パッチを試験資料として残す(VER-NF-006)。現時点では版が1つしかないので、移行の仕組み自体は試験専用の仮の旧版で確かめる。
+- **DAT-61** 版ごとに見本のパッチと、移行後の期待パッチを試験資料として残す(VER-NF-006)。パッチ形式(`schema_version`)は版が1つしかないので、パッチ形式の移行の仕組みは試験専用の仮の旧版で確かめる。モジュール仕様は `0.1` → `0.2` の移行が実在する(§9.5)ので、`0.1` の見本と移行後の期待パッチを残す。
 
 ### 9.4 移行の報告
 移行して読み込んだ場合、`patch.load` の返値 `migrated` に内容を入れ、`warnings` に `migrated` を入れる。
 ```json
 {"schema_from": 1, "schema_to": 2, "modules": [{"id": "vcf1", "type": "MOD-FLT-001", "spec_from": "0.1", "spec_to": "0.2"}]}
 ```
-(版の数字は書式を示す例で、`schema_version = 2` や仕様版 `0.2` は現時点で存在しない。)
+(版の数字は書式を示す例で、`schema_version = 2` は現時点で存在しない。仕様版 `0.2` は実在する: §9.5。)
 
-### 9.5 予定されている仕様改訂との関係
+### 9.5 仕様改訂との関係
+**実施済みの改訂(仕様版 0.1 → 0.2。Issue #10)**。移行の正本は各仕様の §9。
+| 改訂 | 保存データへの影響 | 登録する移行(0.1 → 0.2) |
+|---|---|---|
+| MOD-IO-003(測定チャンネルを選ぶパラメータ `channel` の追加) | パラメータが1つ増えた。0.1 のパッチには `channel` がない | `channel = 1` を補う(0.1 の「1チャンネル目のみ測定」と同じ結果。MOD-IO-003 §9) |
+| MOD-CLK-001(`run` 停止時を位置保持に変更: DEC-006) | パラメータ・状態変数の組は同じ。挙動だけが変わる(止めて再開すると、止めた位置から続く) | 何もしない移行(MOD-CLK-001 §9) |
+| MOD-IO-001(`PRE_L`/`PRE_R` の追加、ポリ入力の加算: DEC-110、DEC-007) | パラメータ(`level`、`mute`)は同じ。ポリのケーブルをつないだパッチは全チャンネルの和が出る(音量が上がりうる) | 何もしない移行(MOD-IO-001 §9) |
+| 上記以外の14種(ポリフォニーの規則の明記・対応、置換カウンタ `nonfinite_count`) | パラメータの追加・意味の変更なし。ポリ信号をつないだパッチは、ポリ対応にした仕様(MOD-SEQ-001、MOD-RND-001 等)で出力のチャンネル数が変わりうる | 何もしない移行(各仕様 §9「移行不要」) |
+
+追加されたポート(MOD-IO-001 の `PRE_L`/`PRE_R`)は接続できないので、ケーブルのポート名の移行はない。スナップショット(§6)は版が違えば移行しない(作り直す)。
+
+**予定されている改訂**
 | 改訂 | 保存データへの影響の見込み |
 |---|---|
-| OPEN-003(MOD-CLK-001 の `run` 停止時の挙動) | 振る舞いの変更で、パラメータ名・範囲が変わらなければ「何もしない移行」。公開前なら DAT-53 により版を上げずに改訂できる |
-| OPEN-004(ポリフォニー時の検証例、MOD-IO-002 のボイス割当) | パラメータが増える場合は、既定値がモノ動作(今と同じ音)になるよう移行する |
+| OPEN-004 の残り(MOD-IO-002 のボイス割当: DEC-013。#2 で改訂中) | パラメータが増える場合は、既定値がモノ動作(今と同じ音)になるよう移行する。パラメータが変わらなければ「何もしない移行」。移行は改訂後の MOD-IO-002 §9 に従って登録する |
 | OPEN-009(設計仮定の見直し: 範囲・既定値) | 範囲を狭める改訂は、古い値を新しい範囲へ写す移行が要る。既定値の変更は、全パラメータを書く規則(DAT-07)により保存済みパッチに影響しない |
 
 ## 10. 大きさの上限
@@ -299,22 +309,22 @@ MIDI-CV → VCO → ローパスフィルタ → VCA → 出力。ADSRがVCAを�
     "app_version": "0.1.0"
   },
   "modules": [
-    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1",
+    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2",
      "params": {"level": 1.0, "mute": 0},
      "ui": {"x": 40, "y": 0}},
     {"id": "midi1", "type": "MOD-IO-002", "spec_version": "0.1",
      "params": {"channel": 0, "transpose": 0, "cc_number": 1},
      "ui": {"x": 0, "y": 0}},
-    {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.1",
+    {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2",
      "params": {"range": 0, "tune": 0.0, "fm_amt": 0.0, "pw": 0.5, "pwm_amt": 0.0},
      "ui": {"x": 10, "y": 0}},
-    {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.1",
+    {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.2",
      "params": {"cutoff": 1.0, "res": 0.3, "cv2_level": 1.0, "cv3_level": 1.0},
      "ui": {"x": 20, "y": 0}},
-    {"id": "vca1", "type": "MOD-AMP-001", "spec_version": "0.1",
+    {"id": "vca1", "type": "MOD-AMP-001", "spec_version": "0.2",
      "params": {"gain": 0.0, "in1_level": 1.0, "in2_level": 1.0, "cv2_level": 1.0, "out_level": 1.0, "response": 0},
      "ui": {"x": 30, "y": 0}},
-    {"id": "env1", "type": "MOD-ENV-001", "spec_version": "0.1",
+    {"id": "env1", "type": "MOD-ENV-001", "spec_version": "0.2",
      "params": {"attack": 0.01, "decay": 0.2, "sustain": 0.6, "release": 0.3},
      "ui": {"x": 20, "y": 1}}
   ],
@@ -356,7 +366,7 @@ DX-04:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
    {"id": "x1", "type": "MOD-XYZ-999", "spec_version": "0.1"}],
  "cables": []}
 ```
@@ -364,40 +374,40 @@ DX-05:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
-   {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.1", "params": {"resonance": 0.5}}],
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
+   {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.2", "params": {"resonance": 0.5}}],
  "cables": []}
 ```
 DX-06:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
-   {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.1", "params": {"cutoff": 7.5}}],
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
+   {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.2", "params": {"cutoff": 7.5}}],
  "cables": []}
 ```
 DX-07:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
-   {"id": "env1", "type": "MOD-ENV-001", "spec_version": "0.1", "params": {"attack": "fast", "sustain": null}}],
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
+   {"id": "env1", "type": "MOD-ENV-001", "spec_version": "0.2", "params": {"attack": "fast", "sustain": null}}],
  "cables": []}
 ```
 DX-08:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.1"}],
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}],
  "cables": []}
 ```
 DX-09:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.1"},
-   {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.1"}],
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"},
+   {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.2"}],
  "cables": [
    {"id": "c1", "from": {"module": "vco1", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}},
    {"id": "c2", "from": {"module": "vco2", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}]}
@@ -406,8 +416,8 @@ DX-10:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.1"},
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.1"}],
+   {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}],
  "cables": [
    {"id": "c1", "from": {"module": "vco1", "port": "square"}, "to": {"module": "out", "port": "IN_L"}},
    {"id": "c2", "from": {"module": "out", "port": "IN_L"}, "to": {"module": "vco1", "port": "fm"}}]}
@@ -430,5 +440,5 @@ DX-10:
 | 各上限(§10)、自動保存のまとめ間隔 | 暫定値。性能測定(OPEN-001)と運用で見直す |
 | `ui` の単位・追加項目 | UI設計のタスクで決める(DAT-11 により版を上げずに追加できる) |
 | 専用フォルダの既定の場所、既定の待受ポート | 実装計画で決める(DAT-30、§7.1 の注意) |
-| ポリフォニー関連のパラメータ | OPEN-004 の#2改訂後に §9.5 のとおり移行を定める |
+| ポリフォニー関連のパラメータ | 17仕様の改訂(0.2)は §9.5 に反映済み(増えたパラメータは MOD-IO-003 の `channel` だけ)。MOD-IO-002 のボイス割当(DEC-013)の分は、#2 の MOD-IO-002 の改訂後に §9.5 のとおり移行を登録する(OPEN-004 の残り) |
 | 配布ライセンスとパッチ例の扱い | OPEN-005 |

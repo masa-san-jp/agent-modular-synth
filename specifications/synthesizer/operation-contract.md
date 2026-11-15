@@ -1,6 +1,6 @@
 # 操作契約(UIとエージェント共通のコマンド・状態・エラー・同期)
 
-版: 0.2 / 2026-11-14(独立レビューを受けて改訂: DEC-110〜112、OPEN-010/012/014 を反映)。状態: 設計(シンセ本体は未実装)。
+版: 0.3 / 2026-11-15(#2 の改訂(Issue #10: 17仕様 0.2、common.md 0.5)と DEC-006〜013 を反映: `clip_count` の定義、接続できないポート、`meter.read` の測定チャンネル、エージェント音量上限とノート送信の決定。0.2 は独立レビューの反映: DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
 要求は [requirements.md](requirements.md)(`REQ-…`。検証IDは同じ枝番の `VER-…`)、構成と安全は [product-spec.md](product-spec.md)、判断と未決は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、パッチJSONの形は [data-contract.md](data-contract.md)(`DAT-…`)、モジュールのポート・パラメータは [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)が正本。本書はそれらを複製せずIDで参照する。
 
 本書のID: コマンド `CMD-nn`、エラー `ERR-nnn`、通知 `EVT-nn`、受入例 `AX-nn`。IDは変更しない(廃止時は欠番にする)。
@@ -25,7 +25,7 @@
 | `audio_state` | `stopped` / `running` / `suspended` | 音声状態(product-spec §3.3) | × | × |
 | `panic` | 真偽 | 緊急停止中か(product-spec §8.1) | × | × |
 | `output.level_db` | 数値(dB) | マスター音量(MOD-IO-001 の `level` とは別。product-spec §8.1) | × | × |
-| `output.agent_max_level_db` | 数値(dB) | エージェントが設定できる上限(定義は OPEN-014 の初期案。CMD-25) | × | × |
+| `output.agent_max_level_db` | 数値(dB) | エージェントが設定できる上限(人が最後に設定したマスター音量の値: DEC-010。CMD-25) | × | × |
 | `engine_revision` | 整数 または null | 音声エンジンに反映済みの最新リビジョン(§11) | — | — |
 
 音量・緊急停止・音声状態をリビジョンと履歴に**含めない**理由 [設計判断]: 取り消しで音量が上がる、または緊急停止が解除されると安全設計(DEC-004)に反する。パッチ(音作りの内容)と安全・装置の状態を分ける。
@@ -79,7 +79,7 @@
 規則:
 1. `output.level_db` ← **min(現在値, 既定値)**。現在値が既定値以下ならそのまま(上げない)。既定値は未決(OPEN-010)。
 2. 出力は無音から `level_db` まで**フェードイン**する(フェード時間は OPEN-010)。値が変わらない場合もフェードインは行う。
-3. `output.agent_max_level_db` は**変えない**(DEC-111)。起動時だけは初期値として既定値を置く(人がまだ音量を設定していないため。OPEN-014 の初期案)。
+3. `output.agent_max_level_db` は**変えない**(DEC-111)。起動時だけは初期値として既定値を置く(人がまだ音量を設定していないため。[設計判断] DEC-010 の「人が最後に設定した値」がまだないときの初期値)。
 4. `level_db` が変わったときは EVT-03(`reason: "reset_to_default"`)を出す。変わらなければ出さない。
 5. リビジョン・履歴の対象外(§2.1)。取り消しで音量は戻らない。
 6. 緊急停止中は、値の引き下げだけを行い、消音は続く(フェードインは解除時)。`stopped`/`suspended` の間は値の引き下げだけを行い、フェードインは次の開始・再開時。
@@ -316,7 +316,7 @@
 | `coalesce_key` | 文字列(1〜64文字) | × | なし | 連続操作を履歴1件にまとめる鍵(§9.4) |
 - 返値: `module_id`, `param`, `value`(設定後の値), `previous`, `changed`。
 - 検証エラー: ERR-102, ERR-121, ERR-122, ERR-123, ERR-003。
-- 副作用: 次の処理ステップから有効(COM-13。実装上は次のブロック先頭: product-spec §5.6)。補間の有無は各モジュール仕様 §4。`seed` の変更は次のステップで再シード(COM-11)。`MOD-IO-002` の `channel`、`MOD-IO-003` の `capture_len` の変更は各仕様が定める状態の初期化を伴う。
+- 副作用: 次の処理ステップから有効(COM-13。実装上は次のブロック先頭: product-spec §5.6)。補間の有無は各モジュール仕様 §4。`seed` の変更は次のステップで再シード(COM-11)。`MOD-IO-002` の `channel`、`MOD-IO-003` の `capture_len` の変更は各仕様が定める状態の初期化を伴う。`MOD-IO-003` の `channel`(測定チャンネル)の変更は測定状態を初期化しない(MOD-IO-003 §5。CMD-20)。
 - 取り消し: 前の値へ戻す。
 
 ### CMD-09 `batch`
@@ -392,6 +392,8 @@
 | `module_id` | 文字列 | ○ | — | `MOD-IO-003` のモジュール |
 | `fields` | 文字列の配列 | × | `frame` 以外の全項目 | 読む項目。名前は MOD-IO-003 §3 の読出し値(`level`, `peak`, `rms`, `mean`, `vmin`, `vmax`, `windows`, `peak_hold`, `nonfinite_count`, `frame`, `frame_seq`)。未知の名前は ERR-003 |
 - 返値: `values`(項目名→値。単位と更新時点は MOD-IO-003 §3)、`sample_time`(エンジンの通算サンプル番号)、`fs`、`engine_revision`(§11.3)。
+- **測定チャンネル**: `values` はチャンネル別の配列ではなく**1組**で、MOD-IO-003 のパラメータ `channel`(1〜16、既定1。MOD-IO-003 v0.2 §4)で選んだ1チャンネルの値である。`meter.read` にチャンネルを指定する引数はない。ポリ信号の別の声部を測るときは、`param.set` で `channel` を変え、`windows`(波形は `frame_seq`)が増えてから読む(切替をまたぐ窓・フレームには両方のチャンネルの値が混ざり、`peak_hold` と `nonfinite_count` は切替前の分を含む: MOD-IO-003 §5)。`channel` が入力のチャンネル数を超えるときは 0 V を測定した値が返る(エラーにしない)。複数の声部を同時に測るには MOD-IO-003 を複数置く。
+- `values.nonfinite_count` は**測定チャンネル**に来た NaN/∞ のサンプル数(MOD-IO-003 §3)で、CMD-21 の `output.nonfinite_count`(エンジン全体の集計)とは別の値である。
 - `frame`(最大4096個の数値)は大きいので、`fields` で明示したときだけ返す。
 - 値は「ある処理ブロックが終わった直後」の同一時点の組で返す [設計判断: MOD-IO-003 §11 が#3に委ねた取得タイミング]。
 - 検証エラー: ERR-102, ERR-303, ERR-301, ERR-003。副作用: なし(測定状態を初期化しない)。
@@ -402,9 +404,9 @@
   - `audio_state`、`panic`、`fs`(`stopped` のとき `null`)、`engine_revision`(`stopped` のとき `null`)、`sample_time`
   - `output`: `{"level_db", "agent_max_level_db", "clip_count", "nonfinite_count", "nonfinite_detail"}`
     - `nonfinite_count`: 非有限値(NaN/∞)を置換した回数の累計(DEC-112、product-spec §8.1)。`nonfinite_detail` の2項目の和。
-    - `nonfinite_detail`: `{"modules": 整数, "output_stage": 整数}`。`modules` は各モジュールが COM-12 で置換した回数をエンジンが集計した値、`output_stage` は出力段(product-spec §8.1 の「非有限値の検出と除去」)で置換した回数。モジュール別の内訳は初期版では定めない。
-    - `clip_count`: 出力保護の**最終クリップ**(リミッターの後の ±1.0。product-spec §8.1)が働いたサンプルの累計。DEC-110 により MOD-IO-001 の ±1.0 クリップをこの最終段として扱うので、MOD-IO-001 §5 の `clip_count` と同じ計数になる見込みだが、対応は#2の MOD-IO-001 改訂で確定する(§19)。
-    - [設計判断] 計数は音声の開始からの累計で、緊急停止(全モジュールの `reset()`。MOD-IO-001 §5 の `clip_count` も 0 になる)で 0 に戻る。`stopped` のときは 0。
+    - `nonfinite_detail`: `{"modules": 整数, "output_stage": 整数}`。`modules` は各モジュールが COM-12 で置換した回数(各モジュールの置換カウンタ `nonfinite_count` の合計。数え方は COM-12: 置換した値1つ=1ポート・1チャンネル・1サンプルにつき1。パラメータの NaN/∞ は数えない)をエンジンが集計した値、`output_stage` は出力段(product-spec §8.1 の「非有限値の検出と除去」)で置換した回数。MOD-IO-001 の `PRE_L`/`PRE_R` は常に有限なので、通常の動作では `output_stage` は増えない(入力の非有限値は MOD-IO-001 が置換し、`modules` に数えられる)。モジュール別の内訳は初期版では定めない。
+    - `clip_count`: 出力保護の**最終クリップ**(リミッターの後の ±1.0。product-spec §8.1)が働いたサンプルの累計。出力保護の段が数える。MOD-IO-001 §5 の `clip_count`(`PRE_L` または `PRE_R` が ±1.0 を超えたサンプル数。マスター音量とリミッターの**前**)とは**別の計数**で、一般には一致しない(例: `PRE` = 2.0 が続いても、マスター音量 −20 dB なら最終クリップは働かず `output.clip_count` は増えないが、MOD-IO-001 の `clip_count` は毎サンプル増える。MOD-IO-001 v0.2 §6)。MOD-IO-001 の `clip_count` はモジュールの内部状態で、本コマンドでは返さない(リミッターより前の過大は MOD-IO-001 の `CLIP` 出力を MOD-IO-003 につないで読める)。
+    - [設計判断] 計数は音声の開始からの累計で、緊急停止(全モジュールの `reset()`。各モジュールの `nonfinite_count` と MOD-IO-001 §5 の `clip_count` も 0 になる)で 0 に戻る。`stopped` のときは 0。
   - `midi`: `{"available": 真偽}`(Web MIDI が使えるか。product-spec §7.3)
   - `history`: `{"can_undo", "can_redo"}`
 - 副作用: なし。セッションがない場合は ERR-006。
@@ -433,8 +435,8 @@
   1. ERR-003: `level_db` がない、またはJSONの数値でない(文字列、`null`、真偽値、配列、オブジェクト。`"NaN"` などの文字列を含む)。引数の型違いとして扱う(§3.3 の7)。
   2. ERR-123: 有限の数値だが −60〜0 の範囲外(`details.arg = "level_db"`, `value`, `min`, `max`)。クランプしない。
   3. ERR-302: エージェントが `agent_max_level_db` を超える値を指定(範囲内であることが前提)。
-- 規則(**OPEN-014 の初期案**。オーナー確認前で、確定ではない):
-  - エージェント上限 `agent_max_level_db` は「人が最後に `output.set_level` で設定した値」。**上限を変える手段は、人による `output.set_level` だけ**で、上限だけを独立に設定するコマンド・引数は設けない。独立した上限設定を設けるかは OPEN-014 で決める(設ける場合は本書にコマンドまたは引数を追加する)。
+- 規則(**決定済み: DEC-010**):
+  - エージェント上限 `agent_max_level_db` は「人が最後に `output.set_level` で設定した値」。**上限を変える手段は、人による `output.set_level` だけ**で、上限だけを独立に設定するコマンド・引数は設けない(独立した上限設定は設けない: DEC-010)。
   - 人が設定したとき: `level_db` を設定し、`agent_max_level_db` も同じ値にする(人が音量を下げると上限も下がる)。
   - エージェントが設定したとき: `level_db ≤ agent_max_level_db` のときだけ設定する。`agent_max_level_db` は変わらない。超える要求は**拒否**する(クランプしない。理由は §12.2 と同じ)。
   - 起動時の `agent_max_level_db` は既定値(§2.4 の3)。パッチの読込・新規作成・取り消し・緊急停止の解除・音声の開始/再開では `agent_max_level_db` は**変わらない**(DEC-111)。これらの契機で変わるのは `level_db` だけで、下がる方向に限る(§2.4)。
@@ -443,8 +445,8 @@
 ### 6.1 初期版に含めないコマンド
 | 候補 | 扱い | 理由 |
 |---|---|---|
-| エージェントからのノート送信(MIDIイベントの注入) | **未決(OPEN-012)**。初期案: 初期版に含めない | オーナー確認前の初期案で、確定ではない。含める場合は本書にコマンドを追加する。MOD-IO-002 §11 が時刻の与え方を未決としている。初期案のもとでは、発音の確認はクロック・シーケンサ(MOD-CLK-001, MOD-SEQ-001)と `meter.read` で行う |
-| 画面鍵盤のノート(人の演奏入力) | **未決(OPEN-012)**。初期案: コマンドにしない | 初期案では、画面鍵盤は Web MIDI と同じ経路でエンジンへ渡す演奏入力で、コマンド・履歴・リビジョン・通知(EVT-01)の対象外(product-spec §2 SC-H2、REQ-F-006)。パッチを変えないため |
+| エージェントからのノート送信(MIDIイベントの注入) | 初期版に含めない(**決定済み: DEC-008**) | 後続で含める場合は本書にコマンドを追加する。エージェントによる発音の確認は、クロック・シーケンサ(MOD-CLK-001, MOD-SEQ-001)と `meter.read` で行う |
+| 画面鍵盤のノート(人の演奏入力) | コマンドにしない(**決定済み: DEC-008**) | 画面鍵盤は Web MIDI と同じ経路でエンジンへ渡す演奏入力で、コマンド・履歴・リビジョン・通知(EVT-01)の対象外(product-spec §2 SC-H2、REQ-F-006)。パッチを変えないため |
 | スナップショット(内部状態を含む完全保存)の取得・復元 | 製品のコマンドにしない | 検証用。エンジンのコードを直接呼ぶ(data-contract §6) |
 | 時刻指定つきの変更(何サンプル目に適用) | 後続 | 初期版は到着順に適用(§11) |
 | サーバー停止、任意パスの読み書き、任意ホストへの送信 | 設けない | REQ-S-007 |
@@ -541,7 +543,7 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 3. **1つの出力からは何本でも**つなげる(F-005-002)。上限は全体のケーブル数(§16)。
 4. **同じ接続の重複**(同じ `from` と `to`)は、規則2により ERR-114(`details.same_source = true`)。
 5. **自己接続・フィードバック**(同じモジュールの出力→入力、複数モジュールを回るループ)は**許可**する。ケーブルの1サンプル遅延により常に定義される(COM-06, REQ-F-011)。警告も出さない。
-6. **接続できないポート**(ERR-113): `MOD-IO-001` の `DEV_L`・`DEV_R`(デバイスへ渡す値で、配線用ではない: MOD-IO-001 §3)、`MOD-IO-002` の `MIDI`(ケーブルでなくエンジンが渡すイベント: MOD-IO-002 §3)。`module.list_types` では `connectable: false`。
+6. **接続できないポート**(ERR-113): `MOD-IO-001` の `PRE_L`・`PRE_R`(クリップ前の値。エンジンが製品の出力保護へ渡す)と `DEV_L`・`DEV_R`(`PRE` を ±1.0 でクリップした参照出力)の4つ(いずれも配線用ではない: MOD-IO-001 v0.2 §3)、`MOD-IO-002` の `MIDI`(ケーブルでなくエンジンが渡すイベント: MOD-IO-002 §3)。`module.list_types` では `connectable: false`。
    - [設計判断] パッチ内のすべての `MOD-IO-002` は、タブが受けたMIDI入力の同じ列を受け取る(振り分けは各モジュールの `channel` パラメータ)。MOD-IO-002 §11 が#3に委ねた配線の決定。
 7. **型違いの接続**(COM-01 の型が違う)は許可し、成功応答の `warnings` に `type_mismatch` を入れる(REQ-F-002)。`details` に両端の型を入れる。[設計判断: COM-01 が#3に委ねた警告の有無。接続は止めず、知らせるだけ]
 8. `out`(`MOD-IO-001`)は常設で削除不可(ERR-104)、追加不可(ERR-105)。`out` へのケーブルの接続・切断、`out` のパラメータ変更は通常どおりできる。
@@ -567,7 +569,7 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 |---|---|
 | 音声の開始(`engine.start`) | ERR-005 |
 | 緊急停止の解除(`engine.release_panic`) | ERR-005 |
-| 音量上限を超える設定・上限の変更(`output.set_level`) | ERR-302。上限は人の `output.set_level` でのみ変わり、エージェントの要求では変わらない。上限だけを変えるコマンドはない(OPEN-014 の初期案。CMD-25) |
+| 音量上限を超える設定・上限の変更(`output.set_level`) | ERR-302。上限は人の `output.set_level` でのみ変わり、エージェントの要求では変わらない。上限だけを変えるコマンドはない(DEC-010。CMD-25) |
 | 保存パッチの削除(`patch.delete`) | ERR-005 |
 | 人が保存したファイルの上書き(15.3) | ERR-005 |
 | 専用フォルダ外の読み書き(名前にパス区切り・上位参照など) | ERR-201(パスを受け取る引数自体がない) |
@@ -641,7 +643,7 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | AX-10d | 常設モジュールの削除 | `{"command":"module.remove","args":{"module_id":"out"}}` | `ok:false`, `error.id:"ERR-104"` | 不変 |
 | AX-10e | トークンなし | トークンを付けずに `{"command":"patch.get"}` | `ok:false`, `error.id:"ERR-004"`。パッチの内容を返さない | 不変 |
 | AX-11 | 人とエージェントの取り消し | エージェントが `{"command":"param.set","args":{"module_id":"env1","param":"attack","value":0.5}}`(`revision = 11`)の後、人が `{"command":"history.undo"}` | `ok:true`, `revision:12`, `result.undone.command:"param.set"`, `result.undone.actor.kind:"agent"` | `env1.attack = 0.01`(P0の値)。エージェントは EVT-01(`actor.kind = human`, `command = history.undo`)を受ける |
-| AX-12 | 壊れたパッチの読込 | `{"command":"patch.load","args":{"patch":{"format":"modular-synth-patch","schema_version":1,"modules":[{"id":"out","type":"MOD-IO-001","spec_version":"0.1"},{"id":"x1","type":"MOD-XYZ-999","spec_version":"0.1"}],"cables":[]}}}` | `ok:false`, `error.id:"ERR-204"`, `details.issues[0].rule:"DAT-V06"`, `revision:10` | 不変(P0 のまま) |
+| AX-12 | 壊れたパッチの読込 | `{"command":"patch.load","args":{"patch":{"format":"modular-synth-patch","schema_version":1,"modules":[{"id":"out","type":"MOD-IO-001","spec_version":"0.2"},{"id":"x1","type":"MOD-XYZ-999","spec_version":"0.1"}],"cables":[]}}}` | `ok:false`, `error.id:"ERR-204"`, `details.issues[0].rule:"DAT-V06"`, `revision:10` | 不変(P0 のまま) |
 | AX-13 | `seed` の自動割当 | `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n1"}}` の後 `{"command":"module.add","args":{"type":"MOD-NSE-001","id":"n2"}}` | 1つ目 `result.module.params.seed:1`、2つ目 `result.module.params.seed:2`。`revision` は 11、12 | `n1` と `n2` は異なる乱数列を出す |
 | AX-14 | セッションなし | タブを閉じた状態で `{"command":"patch.get"}`、続けて `{"command":"patch.list"}` | 1つ目 `ok:false`, `error.id:"ERR-006"`, `revision:null`。2つ目 `ok:true`, `result.patches` | 不変 |
 | AX-15 | 同じ値の設定 | `{"command":"param.set","args":{"module_id":"vcf1","param":"cutoff","value":1.0}}`(P0で既に 1.0) | `ok:true`, `revision:10`, `result.changed:false` | 不変。履歴・通知なし |
@@ -655,9 +657,10 @@ MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った�
 | 認証の詳細(トークンの渡し方、タブとサーバーの間の認証) | OPEN-007。本書は「トークンがなければ ERR-004」だけを定める |
 | MCPの輸送方式、通知の転送 | OPEN-008 |
 | マスター音量の既定値・フェード時間、リミッターの定数 | OPEN-010(測定後にオーナーが決める)。本書の −60〜0 dB(設定範囲)は暫定 |
-| エージェント音量上限の定義 | OPEN-014。本書は初期案(上限 = 人が最後に `output.set_level` で設定した値。上限の変更手段はそれだけ)で書いた。独立した上限設定を設ける場合は CMD-25・§15.2・EVT-03 を改訂する |
-| 非有限値の計数と `clip_count` の所在 | DEC-110/112 に伴う#2改訂(MOD-IO-001 のクリップを最終段として扱う。各モジュールの COM-12 置換をエンジンが数える方法)で確定する。本書は読出しの項目名と意味だけを定める(CMD-21、EVT-04) |
+| エージェント音量上限の定義 | **決定済み(DEC-010。旧 OPEN-014)**: 上限 = 人が最後に `output.set_level` で設定した値。上限の変更手段はそれだけで、独立した上限設定は設けない(CMD-25、§15.2)。起動時の初期値(既定値)は §2.4 の3 の設計判断で、既定値そのものは OPEN-010 |
+| 非有限値の計数と `clip_count` の所在 | **#2 の改訂で確定済み**(common.md v0.4/0.5 の COM-12、MOD-IO-001 v0.2)。各モジュールは置換カウンタ `nonfinite_count` を持ち、エンジンがその合計を `nonfinite_detail.modules` として返す。`output.clip_count` は出力保護の最終クリップの回数で、MOD-IO-001 の `clip_count`(`PRE` の ±1.0 超過。リミッターより前)とは別の計数(CMD-21、EVT-04) |
 | `suspended` からの自動復帰が起きる環境 | 環境別受入試験で確認(OPEN-002)。扱いは §2.3 |
 | 各上限(§16)、応答待ち時間、履歴件数、冪等キーの保持件数 | 暫定値。性能測定(OPEN-001)の後に見直す |
-| エージェントからのノート送信、画面鍵盤の経路 | OPEN-012。本書は初期案(ノート送信は含めない。画面鍵盤はコマンドの対象外)で書いた(§6.1)。オーナー確認後に確定する |
-| ポリフォニー時のチャンネル数の読出し・設定 | OPEN-004 の#2改訂後に、`module.list_types` と `meter.read` への追加を検討する |
+| エージェントからのノート送信、画面鍵盤の経路 | **決定済み(DEC-008。旧 OPEN-012)**: ノート送信は初期版に含めない。画面鍵盤は Web MIDI と同じ経路で、コマンド・履歴の対象外(§6.1) |
+| ポリフォニー時の測定チャンネル | **#2 の改訂で確定済み**(MOD-IO-003 v0.2): 測定するチャンネルは MOD-IO-003 のパラメータ `channel`(1〜16、既定1)で選ぶ(`param.set`。CMD-20)。`meter.read` の引数・返値は変えていない。`channel` は `module.list_types` の `params` に現れる。チャンネル別の値を一度に返す読出し(複数チャンネルの同時測定)は MOD-IO-003 §11 で保留(後続)。ケーブル・ポートの現在のチャンネル数を読むコマンドは本書に定めていない(初期版に含めない。必要になれば追加する) |
+| MOD-IO-002 のボイス割当(ポリ) | 方式は決定済み(DEC-013)。#2 の MOD-IO-002 を改訂中(OPEN-004 の残り)。ボイス数などのパラメータが増えても `param.set` と `module.list_types` で扱え、本書のコマンドは変わらない |
