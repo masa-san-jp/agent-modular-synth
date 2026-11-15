@@ -156,7 +156,7 @@ export class EnvModule extends SynthModule {
     }
   }
 
-  getState(): ModuleState {
+  override getState(): ModuleState {
     const n = this.n;
     return {
       x: encArr(this.x.subarray(0, n)),
@@ -166,7 +166,7 @@ export class EnvModule extends SynthModule {
     };
   }
 
-  setState(state: ModuleState): void {
+  override setState(state: ModuleState): void {
     // 0.1 の保存データ(状態1組のスカラー)はエンジン0として読む(§9)。
     const arr = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : v === undefined ? [] : [v as T]);
     const xs = arr<EncNum>(state.x);
