@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agent-modular-synth(開発中)</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+  button { font-size: 1rem; padding: .6rem 1rem; margin: .2rem .3rem .2rem 0; }
+  #panic { background: #b00020; color: #fff; border: 0; }
+  .row { margin: .8rem 0; }
+  .note { background: #fff7e0; border: 1px solid #e0c060; padding: .6rem .8rem; }
+  #error { color: #b00020; }
+  #meter { font-family: ui-monospace, monospace; font-size: .85rem; }
+  label { display: inline-block; min-width: 7rem; }
+</style>
+</head>
+<body>
+<h1>agent-modular-synth(開発中)</h1>
+<p>エンジン核と出力保護の動作確認用の最小画面です。固定のパッチ(VCO → VCA → 出力、ADSR)を鳴らします。パッチの編集、保存、MIDI、エージェント操作は未実装です。</p>
+<p class="note"><strong>注意:</strong> ヘッドホンを使うときは、先に機器側の音量を下げてください。このアプリは低い音量から始まり、出力にはリミッターが入っていますが、機器側の音量は調整できません。</p>
+<div class="row">
+  <button id="start">音声開始</button>
+  <span id="state"></span>
+</div>
+<div class="row">
+  <button id="note" disabled>押している間 鳴らす</button>
+  <button id="panic" disabled>緊急停止</button>
+  <button id="release" disabled>緊急停止を解除</button>
+</div>
+<div class="row"><label for="pitch">ピッチ</label><input id="pitch" type="range" min="-24" max="24" step="1" value="0" disabled> <span id="pitchLabel"></span></div>
+<div class="row"><label for="wave">波形</label><select id="wave" disabled><option value="saw">ノコギリ波</option><option value="pulse">パルス波</option><option value="tri">三角波</option><option value="sine">正弦波</option></select></div>
+<div class="row"><label for="level">マスター音量</label><input id="level" type="range" min="-60" max="0" step="1" value="-20" disabled> <span id="levelLabel"></span></div>
+<div class="row" id="meter"></div>
+<div class="row" id="error"></div>
+<script type="module" src="dist/main.js"></script>
+</body>
+</html>

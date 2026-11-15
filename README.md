@@ -28,17 +28,23 @@
   - [要求一覧](specifications/synthesizer/requirements.md) / [製品仕様](specifications/synthesizer/product-spec.md) / [操作契約](specifications/synthesizer/operation-contract.md) / [データ契約](specifications/synthesizer/data-contract.md) / [検証計画](specifications/synthesizer/verification-plan.md) / [検査結果](specifications/synthesizer/validation.md)
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
-## 実装(作業中: エンジン核)
-シンセ本体は実装の初期段階で、音声デバイスなしで動く**エンジン核**と一部のモジュールだけがある(Issue #11)。ブラウザでの発音、UI、サーバー、MCP は未実装。
+## 実装(作業中)
+シンセ本体は実装の途中で、**固定のデモ用パッチをブラウザで鳴らせる**ところまである(Issue #11、#14)。パッチの編集、保存、MIDI、エージェント操作(共通コマンドAPI、MCP)は未実装。
 
 ```
-npm install     # 開発用の依存を入れる(Node.js 22 以上)
-npm test        # ビルド、単体試験、仕様の検証例の実行と網羅の確認
-npm run check   # 上に加えて、仕様文書の検査
+npm install          # 開発用の依存を入れる(Node.js 22 以上)
+npm run dev          # ビルドして http://127.0.0.1:47800/ で配信する。ブラウザで開き「音声開始」を押す
+npm test             # ビルド、型検査、単体試験、仕様の検証例の実行と網羅の確認
+npm run test:browser # 実際のブラウザ(ヘッドレスの Chromium。Playwright が必要)での確認
+npm run check        # npm test に加えて、仕様文書の検査
 ```
+- 音は「音声開始」を押すまで出ない。低い音量から始まり、出力には常時リミッターが入る。「緊急停止」で即時に無音になる。
+- **出力保護の定数(既定音量 −20 dB、フェード 50 ms、リミッターのしきい値・復帰時間)は仮値**で、測定後に決める(OPEN-010)。待受ポート 47800 も仮の値。
 - `src/engine/`: グラフ実行(1サンプル処理、ケーブルの1サンプル遅延)、ポート(最大16チャンネル)、乱数、共通部品、スナップショット。ブラウザのAPIに依存しない。
-- `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。実装済みの一覧は `src/modules/registry.ts`。
-- `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)。`test/tv-coverage.ts` が、実装済みモジュールの全検証例が登録されているかを確認する。
+- `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。実装済みの一覧は `src/modules/registry.ts`(18種のうち5種)。
+- `src/audio/`: 出力保護(`output-stage.ts`)、エンジンと出力保護をまとめた中核(`core.ts`。オフラインでも動く)、AudioWorklet(`worklet.ts`)。
+- `src/web/`・`web/`: 最小の画面。`src/server/`: 127.0.0.1 だけで待ち受ける静的配信(エージェント用APIと認証は未実装)。
+- `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)。`test/tv-coverage.ts` が、実装済みモジュールの全検証例が登録されているかを確認する。`test/browser/` はブラウザでの確認。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
 ## 検査・生成ツール

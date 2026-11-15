@@ -4,15 +4,21 @@
   "private": true,
   "type": "module",
   "description": "ブラウザとローカル環境で動作し、人間とエージェントが操作できるモジュラーシンセ(実装中: エンジン核)",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test dist/test/*.test.js && node dist/test/tv-coverage.js",
+    "build": "tsc -p tsconfig.json && npm run build:web",
+    "build:web": "esbuild src/audio/worklet.ts src/web/main.ts --bundle --format=esm --target=es2022 --outdir=web/dist --entry-names=[name] --log-level=warning",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.web.json --noEmit",
+    "test": "npm run build && npm run typecheck && node --test dist/test/*.test.js && node dist/test/tv-coverage.js",
+    "test:browser": "npm run build && node test/browser/smoke.cjs",
+    "dev": "npm run build && node dist/src/server/main.js",
     "check": "npm test && python3 tools/validate_specs.py && python3 tools/validate_product_spec.py"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "esbuild": "^0.25.12",
     "typescript": "^5.6.0"
   }
 }
