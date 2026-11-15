@@ -28,6 +28,19 @@
   - [要求一覧](specifications/synthesizer/requirements.md) / [製品仕様](specifications/synthesizer/product-spec.md) / [操作契約](specifications/synthesizer/operation-contract.md) / [データ契約](specifications/synthesizer/data-contract.md) / [検証計画](specifications/synthesizer/verification-plan.md) / [検査結果](specifications/synthesizer/validation.md)
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
+## 実装(作業中: エンジン核)
+シンセ本体は実装の初期段階で、音声デバイスなしで動く**エンジン核**と一部のモジュールだけがある(Issue #11)。ブラウザでの発音、UI、サーバー、MCP は未実装。
+
+```
+npm install     # 開発用の依存を入れる(Node.js 22 以上)
+npm test        # ビルド、単体試験、仕様の検証例の実行と網羅の確認
+npm run check   # 上に加えて、仕様文書の検査
+```
+- `src/engine/`: グラフ実行(1サンプル処理、ケーブルの1サンプル遅延)、ポート(最大16チャンネル)、乱数、共通部品、スナップショット。ブラウザのAPIに依存しない。
+- `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。実装済みの一覧は `src/modules/registry.ts`。
+- `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)。`test/tv-coverage.ts` が、実装済みモジュールの全検証例が登録されているかを確認する。
+- 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
+
 ## 検査・生成ツール
 ```
 python3 references/validate.py           # 精査済みDBの検査
