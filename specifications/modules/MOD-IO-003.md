@@ -3,9 +3,9 @@ spec_id: MOD-IO-003
 title: メーター/スコープ
 status: specified
 category: io_utility
-version: 0.1
+version: 0.2
 refs: [F-005-008, F-005-009, F-005-014, F-005-003, F-001-007, F-002-015, I003]
-common: [COM-01, COM-02, COM-05, COM-06, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15]
+common: [COM-01, COM-02, COM-05, COM-06, COM-08, COM-09, COM-10, COM-12, COM-13, COM-14, COM-15]
 stateful: true
 ---
 # MOD-IO-003 メーター/スコープ
@@ -13,7 +13,7 @@ stateful: true
 ## 1. 目的と範囲
 - 目的: 任意の信号(音声またはCV)を素通しで中継しながら、その値を**読み出せる形**(ピーク、RMS、平均、最小・最大、直近の波形フレーム)で記録する。エージェント(外部制御)や#3のUIが「今この信号は何ボルトか」「波形はどうか」を確認するための計測モジュールで、信号処理には影響しない。1サンプルの処理は「入力を読む → 測定の累積・波形リングバッファ・トリガを更新 → THRUへ素通し」。
 - 含む: 窓単位のピーク/RMS/平均/最小/最大、リセットまでの絶対ピーク、非有限値の計数、トリガ付き(または連続)の波形フレーム取得。
-- 含まない: 描画(波形やメーターの表示。catalogの方針)、周波数解析(FFT)、ラウドネス(LUFS等)、外部トリガ入力、複数チャンネルの同時表示、読出しの伝送方法(#3のデータ契約)。
+- 含まない: 描画(波形やメーターの表示。catalogの方針)、周波数解析(FFT)、ラウドネス(LUFS等)、外部トリガ入力、複数チャンネルの同時測定(ポリ信号は `channel` で選んだ1チャンネルだけを測定する。§7)、読出しの伝送方法(#3のデータ契約)。
 
 ## 2. 由来と抽象化
 | ID | 種別 | 記述 | 根拠 |
@@ -33,11 +33,11 @@ stateful: true
 ## 3. ポート
 | 名前 | 方向 | 型 | ch | 単位 | 範囲 | 更新周期 | 未接続時 |
 |---|---|---|---|---|---|---|---|
-| IN | in | audio | 1 | V | 任意の有限値(NaN/±∞は0 V扱い。回数は`nonfinite_count`) | サンプル毎 | 0 V |
-| THRU | out | audio | 1 | V | IN(整形後)と同じ。NaN/±∞は0 | サンプル毎 | 出力は未接続でも通常どおり計算 |
+| IN | in | audio | 1〜16(主入力) | V | 任意の有限値(NaN/±∞は0 V扱い。測定チャンネルでの回数は読出し値 `nonfinite_count`) | サンプル毎 | 0 V |
+| THRU | out | audio | N | V | IN(整形後)と同じ。全チャンネルを素通し。NaN/±∞は0 | サンプル毎 | 出力は未接続でも通常どおり計算 |
 
 - 型は`audio`だがCV・ゲートも通せる(COM-01、型は意味のタグ)。
-- ポートはモノ(1ch)。ポリ入力は1ch目のみ測定する。[A] (COM-08の初期方針)
+- ポリフォニー(COM-08): **主入力は IN**。THRU は IN と同じ `N` チャンネルで、全チャンネルを素通しする。**測定(読出し値)は、パラメータ `channel` で選んだ1チャンネルだけ**が対象で、読出し値はチャンネル別の配列ではなく1組である(§7)。既定の `channel=1` は 0.1 の「1ch目のみ測定」と同じ。[A]
 - 読出し値(ポートではなく、外部インターフェースから取得する。伝送形式は#3):
 
   - `level`(float, V, 直近のサンプル値、サンプル毎に更新、IN未接続時0)
@@ -47,7 +47,7 @@ stateful: true
   - `vmin`, `vmax`(float, V, 窓が閉じたときに更新、IN未接続時0, 0)
   - `windows`(uint32, 閉じた窓の個数, 窓が閉じたときに更新、未接続でも増える)
   - `peak_hold`(float, V, ≥0, サンプル毎に更新、IN未接続時0)
-  - `nonfinite_count`(uint32, NaN/∞のサンプル数, サンプル毎に更新、IN未接続時0)
+  - `nonfinite_count`(uint32, **測定チャンネル**に来た NaN/∞ のサンプル数, サンプル毎に更新、IN未接続時0。COM-12 の全モジュール共通の置換カウンタとは別の値。§8)
   - `frame`(float配列、長さ `capture_len`, V, フレーム完了時に更新、初期は全て0)
   - `frame_seq`(uint32, 完了したフレーム数, フレーム完了時に更新、トリガなしなら0のまま)
 
@@ -59,8 +59,9 @@ stateful: true
 | trig_mode | 列挙(0=連続、1=立ち上がり、2=立ち下がり。整数型として扱う) | 0〜2。四捨五入後にクランプ(COM-13)。NaN/∞は既定1 | 1 | なし | 次のステップ | なし |
 | trig_level | V | −12〜+12。有限の範囲外はクランプ。NaN/∞は既定0 | 0 | なし | 次のステップ | なし |
 | pre | サンプル(整数) | 0〜`capture_len−1`。四捨五入後にクランプ(COM-13)。NaN/∞は既定0。トリガ時点の値を使う | 0 | なし | 次のステップ(進行中の取得は開始時の値を使う) | なし |
+| channel | チャンネル番号(整数、1始まり) | 1〜16。四捨五入後にクランプ(COM-13)。NaN/∞は既定1。IN のチャンネル数を超える番号を選ぶと 0 V を測定する | 1 | なし | 次のステップ(測定状態は初期化しない。§5) | なし |
 
-- パラメータのNaN/∞は**既定値**(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0)として扱い、有限の範囲外値はクランプする(COM-12/13)。この置換は `nonfinite_count` に数えない(`nonfinite_count` は入力 IN のNaN/∞の回数)。
+- パラメータのNaN/∞は**既定値**(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0, channel=1)として扱い、有限の範囲外値はクランプする(COM-12/13)。この置換は `nonfinite_count` に数えない(`nonfinite_count` は入力 IN のNaN/∞の回数)。
 - CV入力を持たないため、CV感度(COM-18)はない。
 - 乱数は使わない(`seed` なし)。
 
@@ -73,7 +74,7 @@ stateful: true
 | peak, rms, mean, vmin, vmax | float | 0 | 直前に閉じた窓の結果(保持値) |
 | windows | uint32 | 0 | 閉じた窓の個数 |
 | peak_hold | float | 0 | リセット以降の `abs(x)` の最大 |
-| nonfinite_count | uint32(飽和加算) | 0 | NaN/±∞が来たサンプル数 |
+| nonfinite_count | uint32(飽和加算) | 0 | 測定チャンネルに NaN/±∞ が来たサンプル数(読出し値) |
 | ring[4096] | float | 全て0 | 直近サンプルのリングバッファ(使用長は `capture_len`) |
 | wp | int | 0 | リングの書込み位置 |
 | prev | float | 0 | 直前のサンプル値(トリガの横切り判定) |
@@ -86,14 +87,22 @@ stateful: true
 - `reset()`(COM-10): 上表を全て初期値へ(`frame_seq` と `windows` も0)。パラメータは変えない。
 - `capture_len` が(整形後の値で)変わったとき: `ring`、`wp`、`remain`、`fc`、`frame`(全て0、新しい長さ)を初期化。`frame_seq`、`prev`、窓の統計は保持する。
 - RESET入力ポートはない(該当なし。理由: 測定の初期化は`reset()`で行い、音楽的リセットの概念がない)。
+- **ポリ時の状態(COM-08の例外)**: 上表の測定状態は、エンジン(チャンネル)ごとではなく**モジュールに1組**だけ持つ(測定するのは `channel` で選んだ1チャンネルだけのため)。THRU の素通しは状態を持たない。IN のチャンネル数 `N` が変わっても測定状態は初期化しない(選んだチャンネルがなくなれば、以後 0 V を測定する)。
+- `channel` が(整形後の値で)変わったとき: 次のステップから新しいチャンネルの値を測定する。測定状態(窓の累積、リング、取得中のフレーム、`prev`、`peak_hold`、`nonfinite_count`)は**初期化しない**。切替をまたぐ窓・フレームには両方のチャンネルの値が混ざるため、切替後は `windows`(または `frame_seq`)が増えてから読む。`peak_hold` と `nonfinite_count` は切替前のチャンネルの分を含む(必要なら `reset()`)。
 
 ## 6. 振る舞い
 サンプルレート依存: 窓長 `W = max(1, floor(window_ms · fs / 1000 + 0.5))` サンプル(fs=48000, window_ms=100 → 4800。fs=44100, window_ms=1 → 44)。
 1サンプルの処理(入力を読む → 状態更新 → 出力):
 ```
-// 0. 入力の整形 (COM-12)
-if IN is NaN or ±inf:  nonfinite_count += 1;  x = 0
-else x = IN                                // 未接続は 0 V (COM-09)
+// 0. 入力の整形 (COM-12)。N = IN のチャンネル数(未接続なら N=1 で IN[0]=0 V。COM-09)
+for c in 0..N-1:
+    if IN[c] is NaN or ±inf:  t[c] = 0     // 接続時は、COM-12 の置換カウンタ(§8)を1増やす
+    else                      t[c] = IN[c]
+ch = clamp(round(finite(channel) ? channel : 1), 1, 16)     // 測定チャンネル(1始まり)
+if IN_connected && ch <= N:
+    if IN[ch-1] is NaN or ±inf:  nonfinite_count += 1       // 読出し値。測定チャンネルだけを数える
+    x = t[ch-1]
+else x = 0                                 // 未接続、または選んだチャンネルがない
 level = x
 // 1. 窓の累積
 cnt += 1;  sum += x;  sumsq += x*x
@@ -124,8 +133,8 @@ prev = x
 if done:
     frame[i] = ring[(wp + i) mod L]   for i = 0..L-1       // 最古→最新
     frame_seq += 1
-// 3. 出力
-THRU = x
+// 3. 出力(全チャンネルを素通し。モノでは THRU = x)
+THRU[c] = t[c]   for c = 0..N-1
 ```
 - フレーム内の位置: トリガ点のサンプルは `frame[pre_e]`(連続モードでは先頭から古い順に並ぶだけで、トリガ点の概念はない)。`frame[i]` の時刻は `(n_trig − pre_e + i)/fs` 秒。
 - 完了時、フレームは「その時点までの直近 `L` サンプル」。トリガ前の履歴が足りない場合は、リングの初期値0が入る。
@@ -136,18 +145,20 @@ THRU = x
 - COM-02: 入力は任意の有限値を許容し、統計は値を切り捨てずに累積する(ピークも範囲外を保持)。
 - COM-05/06: 1サンプル=1ステップ、単体の検証は `x[n]→y[n]`(THRU=x[n])。
 - COM-09: IN未接続は0 V(正規化なし)。
+- COM-08: **主入力は IN**。`N` は IN のチャンネル数(未接続なら1)。THRU は `N` チャンネルで、`THRU[c] = IN[c]`(整形後)をチャンネルごとに独立に素通しする。**例外(測定は1チャンネルだけ)**: 読出し値はパラメータ `channel`(1〜16、既定1)で選んだ1チャンネルから作り、チャンネル別の配列にはしない。選んだチャンネルが IN にない(`channel > N`)ときは 0 V を測定する。測定状態はモジュールに1組(§5)。[A] 理由: 操作契約の `meter.read`(CMD-20)の返値 `values` は「項目名→値」の1組で、チャンネル別の値を返す形ではない。契約を変えずにポリ信号の任意の声部を測れるよう、測定チャンネルをパラメータで選ぶ形にした(エージェントは `channel` を変えてから `windows` の増加を待って読む)。複数の声部を同時に測るには本モジュールを複数置く。TV-14。
 - COM-10: `reset()`(§5)。
-- COM-12: NaN/∞は0に置換(THRUと統計)、回数は`nonfinite_count`。累積用の `sum`/`sumsq` は倍精度で、float32の丸め誤差とオーバーフローを避ける。
-- COM-12: 入力のNaN/∞は0に置換して `nonfinite_count` に数える。パラメータのNaN/∞は既定値(数えない)。
-- COM-13: パラメータ範囲外はクランプ、整数型(`capture_len`, `trig_mode`, `pre`)は四捨五入→クランプ。COM-14: §9。
+- COM-12: NaN/∞は0に置換(THRUと統計)。測定チャンネルでの回数は読出し値 `nonfinite_count`、全チャンネルでの回数は COM-12 の置換カウンタ(§8)。累積用の `sum`/`sumsq` は倍精度で、float32の丸め誤差とオーバーフローを避ける。
+- COM-12: パラメータのNaN/∞は既定値(どちらのカウンタにも数えない)。
+- COM-13: パラメータ範囲外はクランプ、整数型(`capture_len`, `trig_mode`, `pre`, `channel`)は四捨五入→クランプ。COM-14: §9。
 - 固有: 読出し値(ポートではない)の伝送形式・取得タイミングは#3(データ契約)。読出しは「あるサンプルの処理が終わった直後の値」を返すものとする。
 
 ## 8. 異常入力・境界・数値安定性
-- NaN/±∞: 0 V扱い。`nonfinite_count` を加算(uint32で飽和)。
+- NaN/±∞: 0 V扱い。測定チャンネルの値なら読出し値 `nonfinite_count` を加算(uint32で飽和)。
+- **2つのカウンタ(COM-12)**: (1) 読出し値 `nonfinite_count`(§3、§5)は、**測定チャンネル**の入力が NaN/±∞ だったサンプル数。内部状態の一部で、スナップショットに保存し、`meter.read` で読める。(2) COM-12 の全モジュール共通の**置換カウンタ**(診断値。エンジンが全モジュール分を集計する。`meter.read` では読めず、保存もしない)は、接続された IN の**全 `N` チャンネル**について、NaN/±∞ を 0 V として扱った値1つ(1チャンネル・1サンプル)につき1増やす。THRU は整形後の値を出すだけなので、出力側で重ねて数えない。どちらも `reset()` で0に戻り、未接続の入力とパラメータの NaN/∞ は数えない。モノでは両者は同じ値になる(TV-08)。ポリでは (2) ≥ (1)(TV-14)。
 - 非常に大きな有限値(例 ±1e30): そのまま累積される。`sumsq` が倍精度で 1e60 程度となりoverflowはしない。`x*x` が倍精度で±∞になる規模(約1e154)を超える入力は、`rms` が +∞ になりうる。その場合は `rms` に 0 を書く(COM-12。実機入力は float32 で最大約3.4e38 のため倍精度の `x*x`≈1.2e77 に収まり、通常は起きない)。
 - 窓が閉じる前: `peak`、`rms`、`mean`、`vmin`、`vmax` は直前の値(初期は0)を保持。`peak_hold` と `level` は逐次更新される。
 - `window_ms` を縮めて `cnt ≥ W` になった場合、次の判定のサンプルで即座に窓が閉じる(累積途中の値で `rms` 等を計算)。
-- パラメータのNaN/∞は既定値(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0。TV-13)。`nonfinite_count` には数えない。
+- パラメータのNaN/∞は既定値(window_ms=100, capture_len=512, trig_mode=1, trig_level=0, pre=0, channel=1。TV-13)。`nonfinite_count` には数えない。`channel` は四捨五入(0.5は切り上げ。2.5→3)後に1〜16にクランプ(TV-14 (e))。
 - `capture_len` は四捨五入(0.5は切り上げ。7.5→8、3.4→4)後に4〜4096にクランプ。`pre ≥ capture_len` は `capture_len−1` にクランプ(その場合トリガ点が最後のサンプル、完了は即時)。
 - 立ち上がりトリガ: 条件は `prev < trig_level ≤ x`(下から上へ、または等しくなる点)。同じ値に留まるときは発火しない。ノイズ混じりの信号では複数回発火しうる(取得中は無視される)。ヒステリシスはない。[A]
 - `trig_level > 0` のとき、最初のサンプル(`prev=0`)が `trig_level` 以上ならそのサンプルで発火する。
@@ -155,9 +166,10 @@ THRU = x
 - 数値: `sqrt` の引数は非負(二乗和)。`mean`の計算で `cnt ≥ 1`(0除算なし)。
 
 ## 9. 保存・復元・版互換
-- 保存対象: ①パラメータ(`window_ms`、`capture_len`、`trig_mode`、`trig_level`、`pre`)、②内部状態(§5の全変数: 窓の累積、保持値、`windows`、`peak_hold`、`nonfinite_count`、リング(`capture_len`サンプル)、`wp`、`prev`、`remain`、`fc`、`frame`、`frame_seq`)、③PRNG状態: なし、④`spec_id=MOD-IO-003`、仕様版 `0.1`。
+- 保存対象: ①パラメータ(`window_ms`、`capture_len`、`trig_mode`、`trig_level`、`pre`、`channel`)、②内部状態(§5の全変数: 窓の累積、保持値、`windows`、`peak_hold`、`nonfinite_count`、リング(`capture_len`サンプル)、`wp`、`prev`、`remain`、`fc`、`frame`、`frame_seq`)、③PRNG状態: なし、④`spec_id=MOD-IO-003`、仕様版 `0.2`。測定状態はポリ時も1組。COM-12 の置換カウンタ(§8 の (2))は保存しない。
 - 復元後は同じ入力列に対し、THRUと全読出し値がビット同一(TV-MOD-IO-003-12)。
 - 版移行: 初版のため該当なし。読出し項目を増やす場合は、旧データでは新しい読出しを初期値で復元する。
+- **0.2 での変更点**: (1) ポリフォニーに対応(主入力 IN、THRU は全チャンネル素通し。0.1 は THRU も1チャンネルだった。COM-08)。(2) 測定チャンネルを選ぶパラメータ `channel`(1〜16、既定1)を**追加**。(3) 読出し値 `nonfinite_count` を「測定チャンネルでの回数」と明確にし、COM-12 の置換カウンタとの関係を明記。モノ(1チャンネル)の振る舞いは 0.1 と同じ。**保存データへの影響**: 0.1 の保存データには `channel` がない。欠けている場合は既定値 **1** を補う(0.1 の「1ch目のみ測定」と同じ結果になる)。ほかのパラメータ・状態の意味は変わらない。
 
 ## 10. 検証例
 共通前提: `fs=48000`(特記を除く)、パラメータは特記以外 §4 の既定値(`window_ms=1` 等の指定は各行)。期待値はスクラッチの検証用Python(§6の参照実装。倍精度で累積)で計算。許容誤差は絶対1e-6(読出しの値は倍精度累積だがTHRU等はfloat32で出る場合を想定)。カウンタ(`windows`、`frame_seq`、`nonfinite_count`)とフレームの配置は完全一致。
@@ -171,12 +183,15 @@ THRU = x
 | TV-MOD-IO-003-05 | 正常 | capture_len=4, trig_mode=0(連続) | x[n]=n+1(n=0..9) | n=3: frame=[1,2,3,4], frame_seq=1。n=7: frame=[5,6,7,8], frame_seq=2。n=9 時点: frame=[5,6,7,8]、frame_seq=2(10サンプルでは2フレーム完了) | 絶対1e-6、frame_seqは完全一致。Lサンプルごとに完了 |
 | TV-MOD-IO-003-06 | 境界 | capture_len=4, trig_mode=1, trig_level=0.5。(a) pre=0。(b) pre=10(→3にクランプ)。(c) pre=1 でx[0]=1(トリガがn=0)。(d) capture_len=6, pre=1 | (a) x=0,0,0,1,2,3,4,5,6。(b) x=0,0,0,1,2,3,4,5。(c) x=1,2,3,4,5。(d) x=0,1,0,1,0,1,0,0,0,0 | (a) トリガ n=3。完了は n=6: frame=[1,2,3,4], frame_seq=1。(b) pre=3 にクランプ。トリガ n=3 で remain=0 のため即完了: frame=[0,0,0,1], frame_seq=1。(c) 最初のサンプルでprev=0<0.5≤1 のため n=0 で発火。完了 n=2: frame=[0,1,2,3] (先頭は履歴の初期値0), frame_seq=1。(d) トリガ n=1。n=3(0→1)は取得中なので無視。完了 n=5: frame=[0,1,0,1,0,1], frame_seq=1(n=5ではトリガを評価しない)。n=6..9 は発火なし | 絶対1e-6、完全一致(配置)。§8(クランプ、取得中の無視、完了サンプルでは評価しない) |
 | TV-MOD-IO-003-07 | 境界 | fs=44100, window_ms=1, capture_len=4 | x=1.0 一定、n=0..49 | W=floor(1·44100/1000+0.5)=44。n=42: windows=0。n=43: windows=1, peak=1.0, rms=1.0 | 完全一致(窓の閉じるサンプル)、値は絶対1e-6。`fs` 依存の窓長 |
-| TV-MOD-IO-003-08 | 無効入力 | window_ms=1, capture_len=4, trig_mode=1, trig_level=0 | x[0..39]=1.0、x[40]=NaN、x[41]=+∞、x[42]=−∞、x[43..47]=1.0 | THRU[40..42]=0(NaN/∞は0)。n=47(窓が閉じる): nonfinite_count=3, peak=1.0, rms=0.9682458366(=√(45/48))、mean=0.9375(=45/48)、vmin=0, vmax=1.0, windows=1。frame=[0,0,0,0], frame_seq=0(trig_level=0で `prev<0` が成立しない) | 絶対1e-6、nonfinite_count完全一致。COM-12 |
+| TV-MOD-IO-003-08 | 無効入力 | window_ms=1, capture_len=4, trig_mode=1, trig_level=0 | x[0..39]=1.0、x[40]=NaN、x[41]=+∞、x[42]=−∞、x[43..47]=1.0 | THRU[40..42]=0(NaN/∞は0)。n=47(窓が閉じる): nonfinite_count=3, peak=1.0, rms=0.9682458366(=√(45/48))、mean=0.9375(=45/48)、vmin=0, vmax=1.0, windows=1。frame=[0,0,0,0], frame_seq=0(trig_level=0で `prev<0` が成立しない)。COM-12 の置換カウンタも3(モノでは読出し値と同じ) | 絶対1e-6、nonfinite_count完全一致。COM-12 |
 | TV-MOD-IO-003-09 | 未接続 | window_ms=1, capture_len=4, trig_mode=1, trig_level=0.5 | INが未接続(0 V)、n=0..95 | THRU=0。n=95: windows=2, peak=rms=mean=vmin=vmax=0, peak_hold=0, nonfinite_count=0, frame=[0,0,0,0], frame_seq=0。trig_level=−0.5 の立ち上がりでも frame_seq=0(`prev=0` が −0.5 未満でない) | 絶対1e-6、カウンタ完全一致。COM-09(未接続は0 V) |
 | TV-MOD-IO-003-10 | リセット | window_ms=1, capture_len=4, trig_mode=0。x=2.0 を n=0..59 | n=59 の直後に `reset()`、その後の1サンプル(x=2.0) | reset前(n=59): windows=1, peak=rms=mean=2.0, frame_seq=15, peak_hold=2.0。reset直後(1サンプル処理後): windows=0, peak=rms=mean=vmin=vmax=0(窓の途中のため未ラッチ), peak_hold=2.0(その1サンプル分のみ), nonfinite_count=0, frame=[0,0,0,0], frame_seq=0。パラメータは不変 | カウンタ完全一致、値は絶対1e-6。COM-10(reset()は全状態を初期値へ。frame_seq=15は 60/4) |
 | TV-MOD-IO-003-11 | 境界 | window_ms=1000(最大), capture_len=4, trig_mode=1 | x=0.5 一定、n=0..47999 | W=48000。n=47999 で windows=1, peak=rms=mean=0.5。n=47998 では windows=0 | 完全一致(窓の位置)、値は絶対1e-6。`window_ms` 上限 |
 | TV-MOD-IO-003-12 | 保存復元 | window_ms=2, capture_len=32, trig_mode=1, trig_level=0.5, pre=5。x[n]=3·sin(2π·997·n/48000)+0.1·cos(n)(n=0..1999)。n=776 の直後に全状態を保存し新インスタンスへ復元 | n=777..1999 を継続 | 復元側のTHRUと全読出し値(各サンプルの peak, rms, mean, vmin, vmax, windows, peak_hold, nonfinite_count, frame, frame_seq)が、保存せずに継続した場合とビット同一。参考値(n=1999 時点): windows=20, frame_seq=41, peak=3.0929368214, rms=2.1233103635, mean=0.0054306410, vmin=−3.0833428140, vmax=3.0929368214, peak_hold=3.0935907455。frame[0..2]=−0.9696320, −0.6672800, −0.3737560 | 完全一致(ビット同一, COM-14)。参考値は絶対1e-6(倍精度累積の値) |
 | TV-MOD-IO-003-13 | 無効入力 | パラメータだけを変えた別実行 (a)〜(e)(特記以外は §4 の既定値) | (a) capture_len=7.5, trig_mode=0: x[n]=n+1(n=0..7)。(b) capture_len=3.4, trig_mode=0: x[n]=n+1(n=0..3)。(c) window_ms=NaN, capture_len=NaN: x=1.0 一定、n=0..4799。(d) trig_mode=NaN, trig_level=0.5, pre=NaN, capture_len=4: x=0,0,0,1,2,3,4,5,6(n=0..8)。(e) pre=1.5, trig_mode=1, trig_level=0.5, capture_len=4: x=0,0,0,1,2,3(n=0..5) | (a) 7.5→8: n=7 で frame=[1,2,3,4,5,6,7,8], frame_seq=1(切り捨てなら7要素)。(b) 3.4→4: n=3 で frame=[1,2,3,4], frame_seq=1。(c) window_ms→既定100(W=4800)、capture_len→既定512: n=4798 で windows=0、n=4799 で windows=1, peak=rms=mean=1.0。frameは長さ512。(d) trig_mode→1(立ち上がり)、pre→0: トリガ n=3、n=6 で完了 frame=[1,2,3,4], frame_seq=1(TV-06 (a) と同じ)。(e) pre→2(1.5→2。0.5は切り上げ): トリガ n=3、remain=1、n=4 で完了 frame=[0,0,1,2]、frame[2]=1(トリガ点)、frame_seq=1。いずれも nonfinite_count=0 | 絶対1e-6、カウンタ・配置は完全一致。COM-12(パラメータNaN/∞→既定値)、COM-13(整数型は四捨五入→クランプ)。スクラッチの参照実装で算出 |
+| TV-MOD-IO-003-14 | 正常 | ポリ N=3。window_ms=1(W=48), capture_len=4, trig_mode=1, trig_level=0.5, pre=0。`channel` を変えた別実行 (a)〜(e)。(f) だけ N=2, trig_mode=0 で、n=24 の直前に channel を1から2へ変更 | (a)〜(e) IN[0][n]=1.0。IN[1][n]=2.0(n=0..47。ただし n=10 は NaN)、−3.0(n=48..95)。IN[2][n]=0.5·((n mod 4)−1.5)(ただし n=20, 21 は +∞)。n=0..95。(a) channel=1 (b) channel=2 (c) channel=3 (d) channel=5 (e) channel=2.5。(f) IN[0]=1.0, IN[1]=2.0(一定)、n=0..95 | 全実行共通: THRU[c][n]=IN[c][n](3チャンネルとも素通し)。ただし THRU[1][10]=0、THRU[2][20]=THRU[2][21]=0。COM-12 の置換カウンタ=3(`channel` によらない)。(a) n=47: peak=rms=mean=vmin=vmax=1.0, windows=1, frame=[1,1,1,1], frame_seq=1, nonfinite_count=0。n=95: 同値, windows=2 (b) n=47: level=2.0, peak=2.0, rms=1.9790570145(=√(47·4/48)), mean=1.9583333333(=94/48), vmin=0, vmax=2.0, windows=1, frame_seq=2, nonfinite_count=1。n=95: level=−3.0, peak=rms=3.0, mean=vmin=vmax=−3.0, windows=2, peak_hold=3.0, frame=[2,2,2,2], frame_seq=2, nonfinite_count=1。IN[1] をモノで与えた結果と全読出し値が一致 (c) n=47: peak=0.75, rms=0.5472468974, mean=0.0208333333(=1/48), vmin=−0.75, vmax=0.75, windows=1, frame_seq=11, nonfinite_count=2。n=95: rms=0.5590169944, mean=0, windows=2, frame=[0.75, −0.75, −0.25, 0.25], frame_seq=23, nonfinite_count=2。IN[2] をモノで与えた結果と一致 (d) 選んだチャンネルがないので 0 V を測定: n=95 で peak=rms=mean=vmin=vmax=0, peak_hold=0, windows=2, frame=[0,0,0,0], frame_seq=0, nonfinite_count=0 (e) 2.5→3(0.5は切り上げ): (c) と同じ (f) n=23: level=1.0, frame=[1,1,1,1], frame_seq=6。n=24: level=2.0。n=27: frame=[2,2,2,2], frame_seq=7。n=47(切替をまたぐ窓): peak=2.0, rms=1.5811388301(=√2.5), mean=1.5, vmin=1.0, vmax=2.0, windows=1。n=95: peak=rms=mean=vmin=vmax=2.0, windows=2, peak_hold=2.0 | 絶対1e-6、カウンタ・配置は完全一致。COM-08: THRU のチャンネル独立、測定は `channel` で選んだ1チャンネル(§7 の例外)。エンジンごとの状態の独立は該当しない(測定状態は1組、THRU は状態を持たない)。副入力はない。COM-12: 読出し値は測定チャンネルだけ、置換カウンタは全チャンネル。スクラッチの参照実装で算出 |
+
+ポリ時の検証例は TV-14。
 
 ### 音質・測定精度に関する要件(機能再現とは別項)
 - 本モジュールは信号を変えない(THRU=x)。音質への影響はない(加算・乗算・フィルタなし)。確認方法: THRUが入力と完全に一致することを、任意の入力列で比較する(NaN/∞を除く)。
@@ -188,5 +203,6 @@ THRU = x
 - [A→#3] トリガの方式(エッジ、ヒステリシスなし)、取得中の再トリガ禁止、トリガ・レベルの既定値(0 V)。ノイズ入力に対する扱い(ホールドオフ等)。
 - [#3] 読出し値の伝送形式・取得タイミング・フレームの更新通知(`frame_seq` の使い方)、エージェントが複数サンプル分を取りこぼさずに取得する方法(リングの長さ、ポーリング頻度)。
 - [#3] MOD-IO-001の `CLIP` 出力・`clip_count` の可視化との連携(クリップ時の表示、保持時間)。
-- 保留: FFT/スペクトル表示、複数チャンネル同時、外部トリガ入力(ゲートに同期した波形取得)、周波数・ピッチ検出、ラウドネス。DBに挙動の根拠が不足。
+- 保留: FFT/スペクトル表示、複数チャンネルの同時測定(チャンネル別の読出し値。操作契約 `meter.read` の返値の変更が要る)、外部トリガ入力(ゲートに同期した波形取得)、周波数・ピッチ検出、ラウドネス。DBに挙動の根拠が不足。
+- [#3] 読出し値 `nonfinite_count` と COM-12 の置換カウンタは名前が同じで意味が異なる(§8)。読出し値の名前を変える場合は、操作契約 CMD-20 の `fields` も合わせて変える必要がある。本版では名前を変えていない。
 - DBに根拠が見つからず[A]にした主要項目: 窓方式、トリガ規則、フレームの配置、`nonfinite_count`、各パラメータの既定値と範囲。

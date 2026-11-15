@@ -4,7 +4,7 @@
 
 | 文書 | 役割 |
 |---|---|
-| [common.md](common.md) | 共通の信号・接続・時間・状態規約(COM-01〜17)。各仕様の前提 |
+| [common.md](common.md) | 共通の信号・接続・時間・状態規約(COM-01〜18)。各仕様の前提 |
 | [catalog.md](catalog.md) | 機能分類・対象一覧・保留/対象外とその理由 |
 | [_template.md](_template.md) | 仕様の節構成(11節) |
 | [traceability.md](traceability.md) | 仕様ID → リファレンスID → 出典・節(自動生成) |
@@ -15,24 +15,24 @@
 ## モジュール仕様
 | 仕様ID | 名称 | 検証例数 |
 |---|---|---|
-| [MOD-AMP-001](MOD-AMP-001.md) | VCA(電圧制御アンプ) | 10 |
-| [MOD-CLK-001](MOD-CLK-001.md) | クロック | 13 |
-| [MOD-CLK-002](MOD-CLK-002.md) | クロック分周 | 13 |
-| [MOD-DLY-001](MOD-DLY-001.md) | ディレイ | 13 |
-| [MOD-ENV-001](MOD-ENV-001.md) | ADSRエンベロープ | 19 |
-| [MOD-FLT-001](MOD-FLT-001.md) | ローパスフィルタ(ラダー系) | 10 |
-| [MOD-FNC-001](MOD-FNC-001.md) | スルー/関数発生器 | 11 |
-| [MOD-IO-001](MOD-IO-001.md) | オーディオ出力 | 10 |
-| [MOD-IO-002](MOD-IO-002.md) | MIDI-CV | 14 |
-| [MOD-IO-003](MOD-IO-003.md) | メーター/スコープ | 13 |
-| [MOD-LFO-001](MOD-LFO-001.md) | LFO(低周波オシレータ) | 11 |
-| [MOD-LGC-001](MOD-LGC-001.md) | 論理・比較 | 10 |
-| [MOD-MIX-001](MOD-MIX-001.md) | ミキサー | 8 |
+| [MOD-AMP-001](MOD-AMP-001.md) | VCA(電圧制御アンプ) | 12 |
+| [MOD-CLK-001](MOD-CLK-001.md) | クロック | 17 |
+| [MOD-CLK-002](MOD-CLK-002.md) | クロック分周 | 14 |
+| [MOD-DLY-001](MOD-DLY-001.md) | ディレイ | 14 |
+| [MOD-ENV-001](MOD-ENV-001.md) | ADSRエンベロープ | 20 |
+| [MOD-FLT-001](MOD-FLT-001.md) | ローパスフィルタ(ラダー系) | 11 |
+| [MOD-FNC-001](MOD-FNC-001.md) | スルー/関数発生器 | 12 |
+| [MOD-IO-001](MOD-IO-001.md) | オーディオ出力 | 18 |
+| [MOD-IO-002](MOD-IO-002.md) | MIDI-CV | 24 |
+| [MOD-IO-003](MOD-IO-003.md) | メーター/スコープ | 14 |
+| [MOD-LFO-001](MOD-LFO-001.md) | LFO(低周波オシレータ) | 15 |
+| [MOD-LGC-001](MOD-LGC-001.md) | 論理・比較 | 11 |
+| [MOD-MIX-001](MOD-MIX-001.md) | ミキサー | 10 |
 | [MOD-NSE-001](MOD-NSE-001.md) | ノイズ源(白色ノイズ) | 11 |
-| [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | 10 |
-| [MOD-RND-001](MOD-RND-001.md) | サンプル&ホールド/ランダム | 10 |
-| [MOD-SEQ-001](MOD-SEQ-001.md) | ステップシーケンサ | 14 |
-| [MOD-UTL-001](MOD-UTL-001.md) | アッテヌバータ/オフセット | 9 |
+| [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | 14 |
+| [MOD-RND-001](MOD-RND-001.md) | サンプル&ホールド/ランダム | 11 |
+| [MOD-SEQ-001](MOD-SEQ-001.md) | ステップシーケンサ | 15 |
+| [MOD-UTL-001](MOD-UTL-001.md) | アッテヌバータ/オフセット | 11 |
 
 ## ツール
 ```

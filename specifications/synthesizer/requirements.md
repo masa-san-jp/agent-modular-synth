@@ -1,6 +1,6 @@
 # 製品要求一覧(REQ)
 
-版: 0.2 / 2026-11-13(独立レビューを受けて設計箇所の節番号・文言を更新)。範囲: **初期版** / 後続 / 対象外。各要求は設計箇所(製品仕様・操作契約・データ契約の節)と検証項目(`VER-…`、[verification-plan.md](verification-plan.md))に結び付く。検証IDは要求IDと同じ枝番(`REQ-F-001` ↔ `VER-F-001`)。
+版: 0.3 / 2026-11-15(#2 の改訂(Issue #10)と DEC-006〜013 を反映: REQ-F-004/005 の受入判定、REQ-S-004 の根拠。0.2 は独立レビューの反映)。範囲: **初期版** / 後続 / 対象外。各要求は設計箇所(製品仕様・操作契約・データ契約の節)と検証項目(`VER-…`、[verification-plan.md](verification-plan.md))に結び付く。検証IDは要求IDと同じ枝番(`REQ-F-001` ↔ `VER-F-001`)。
 判断の根拠は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、モジュール挙動は [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)、調査事実は [references/](../../references/index.md)(`F-…`)。
 
 ## 機能要求(REQ-F)
@@ -9,8 +9,8 @@
 | REQ-F-001 | 利用者はモジュールを追加・削除でき、画面上の配置を変えられる | 初期版 | 目的(モジュラー) | product-spec §4, operation-contract §6 `module.add`/`module.remove`/`module.move` | 追加・削除後の状態が契約どおり。VER-F-001 |
 | REQ-F-002 | 出力ポートと入力ポートをケーブルで接続・切断できる。型違い接続は許可する | 初期版 | COM-01(F-005-002) | operation-contract `cable.connect`/`cable.disconnect` | 接続規則の受入例。VER-F-002 |
 | REQ-F-003 | パラメータを変更でき、変更は次の処理ステップから音に反映される | 初期版 | COM-13 | operation-contract `param.set`, product-spec §5 | 変更後の出力が仕様どおり。VER-F-003 |
-| REQ-F-004 | 初期版の採用モジュール(product-spec §6の18種)が、各モジュール仕様の検証例を満たす | 初期版 | #2 | product-spec §6 | 全検証例(209件+ポリ追加分)の合格。VER-F-004 |
-| REQ-F-005 | ポリフォニー(1ケーブル最大16チャンネル)で発音でき、複数の声が出力に届く(MOD-IO-001 が全チャンネルを加算: DEC-007) | 初期版 | DEC-003, COM-08 | product-spec §5.4 | ポリ時の検証例(OPEN-004で追加)。VER-F-005 |
+| REQ-F-004 | 初期版の採用モジュール(product-spec §6の18種)が、各モジュール仕様の検証例を満たす | 初期版 | #2 | product-spec §6 | 全検証例(254件。全18仕様 0.2。ポリ時の検証例を含む)の合格。VER-F-004 |
+| REQ-F-005 | ポリフォニー(1ケーブル最大16チャンネル)で発音でき、複数の声が出力に届く(MOD-IO-001 が全チャンネルを加算: DEC-007) | 初期版 | DEC-003, DEC-007, DEC-013, COM-08 | product-spec §5.4 | ポリ時の検証例(全18仕様に追加済み。MOD-IO-002 のボイス割当は DEC-013)。VER-F-005 |
 | REQ-F-006 | MIDI入力(ノート、ピッチベンド、CC、クロック)と画面鍵盤で演奏できる(画面鍵盤はMIDIと同じ経路: DEC-008) | 初期版 | DEC-003, MOD-IO-002 | product-spec §7.3, §2 SC-H2 | MIDIメッセージ列に対する出力。VER-F-006 |
 | REQ-F-007 | パッチを新規作成・保存・復元・削除でき、名前などのメタ情報を付けられる。復元後の構成とパラメータが一致する | 初期版 | DEC-106, COM-14 | data-contract §2〜§8, operation-contract §6 `patch.new`/`patch.save`/`patch.load`/`patch.delete`/`patch.set_meta` | 保存→復元の往復。VER-F-007 |
 | REQ-F-008 | 作業中のパッチは自動保存され、再読込後に再開できる | 初期版 | 利用シナリオ(再開) | data-contract §7.1 | 再読込後の一致。VER-F-008 |
@@ -37,7 +37,7 @@
 | REQ-S-001 | 最終出力段に常時リミッターがあり(クリップより前の信号に作用する: DEC-110)、デバイスへの出力は名目範囲[-1,1]を超えない | 初期版 | DEC-004, DEC-110(F-021-003, F-019-021) | product-spec §8.1 | 過大信号を入れても出力が範囲内。VER-S-001 |
 | REQ-S-002 | 緊急停止(全消音)をUI・エージェントの両方から即時に実行できる | 初期版 | DEC-004 | operation-contract `engine.panic` | 実行後の出力が無音。VER-S-002 |
 | REQ-S-003 | 起動時の出力音量は低い既定値から始まる。パッチ読込・緊急停止解除・音声開始などでは音量を自動で上げず(min(現在値, 既定値))、フェードインする | 初期版 | DEC-004, DEC-111 | product-spec §8.1 | 起動直後の出力レベル。VER-S-003 |
-| REQ-S-004 | エージェントが設定できる出力音量には上限があり、上限の変更は人のUI操作に限る | 初期版 | DEC-004 | operation-contract `output.set_level` | 上限超過の要求が拒否される。VER-S-004 |
+| REQ-S-004 | エージェントが設定できる出力音量には上限があり、上限の変更は人のUI操作に限る(上限は人が最後に設定したマスター音量の値: DEC-010) | 初期版 | DEC-004, DEC-010 | operation-contract `output.set_level` | 上限超過の要求が拒否される。VER-S-004 |
 | REQ-S-005 | 外部操作の待受はローカル(127.0.0.1)に限り、接続には起動時に発行されるトークンが要る | 初期版 | DEC-103, OPEN-007 | product-spec §8.2 | 無認証・他ホストの拒否。VER-S-005 |
 | REQ-S-006 | 非有限値(NaN/∞)は出力に出ず、発生(各モジュールでの置換回数を含む)を検出して通知できる | 初期版 | COM-12, DEC-112 | product-spec §8.1 | NaN注入時の出力と通知。VER-S-006 |
 | REQ-S-007 | エージェントの操作は、パッチと音量の範囲に限られ、ファイルシステムの任意パス・任意ホストへの送信・プロセス終了を行えない | 初期版 | 先行例の欠点(F-019-029, F-019-033, F-019-044) | product-spec §8.2 | 範囲外要求の拒否。VER-S-007 |
