@@ -17,6 +17,16 @@ test("COM-04: シュミットトリガ(ON 2.0 V、OFF 0.1 V)", () => {
   assert.equal(s2.state, 0);
 });
 
+test("COM-04: ポート値(float32)の 0.1 V ちょうどで OFF になる", () => {
+  const port = new Float32Array(1);
+  const s = new Schmitt();
+  port[0] = 2.0;
+  assert.equal(s.step(port[0]!), true);
+  port[0] = 0.1;
+  s.step(port[0]!);
+  assert.equal(s.state, 0, "float32 に丸めた 0.1 V は OFF 閾値以下として扱う");
+});
+
 test("COM-04/07: パルス幅は round、無視区間は ceil(fs=44100 で 44 と 45)", () => {
   assert.equal(triggerSamples(48000), 48);
   assert.equal(resetIgnoreSamples(48000), 48);

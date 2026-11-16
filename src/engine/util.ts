@@ -9,7 +9,9 @@ export function clamp(x: number, lo: number, hi: number): number {
 
 /** COM-04: シュミットトリガ(ON 2.0 V、OFF 0.1 V)。 */
 export const GATE_ON = 2.0;
-export const GATE_OFF = 0.1;
+// ポート値は float32 なので、0.1 V の入力は 0.100000001490116… になる。倍精度の 0.1 と比べると
+// 「0.1 V 以下」が偽になるため、閾値も float32 に丸めた値で持つ(0.1 V ちょうどの入力で OFF になる)。
+export const GATE_OFF = Math.fround(0.1);
 
 export class Schmitt {
   state = 0;
