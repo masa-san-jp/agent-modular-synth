@@ -104,7 +104,7 @@ tv("TV-MOD-LFO-001-04", () => {
   // (b) 0.005 Hz へクランプ
   const b = mk({ freq: 0.0 });
   run(b, 1);
-  near(phase0(b), 1.0417e-7, 1e-12, 0, "(b) phase");
+  near(phase0(b), 1.0416666667e-7, 1e-12, 0, "(b) phase");
 });
 
 tv("TV-MOD-LFO-001-05", () => {
