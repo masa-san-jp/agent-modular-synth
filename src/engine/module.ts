@@ -14,7 +14,8 @@ export interface PortDef {
   connectable?: boolean;
 }
 
-export type ParamKind = "float" | "int" | "seed";
+/** bool は真偽(0/1)。外部操作層は 0 と 1 だけを受け付ける。エンジン内では「有限の0以外は1」。 */
+export type ParamKind = "float" | "int" | "bool" | "seed";
 
 export interface ParamDef {
   name: string;
@@ -71,6 +72,7 @@ export class OutPort {
 export function normalizeParam(def: ParamDef, v: number): number {
   if (def.kind === "seed") return v;
   if (!Number.isFinite(v)) return def.default;
+  if (def.kind === "bool") return v !== 0 ? 1 : 0;
   const x = def.kind === "int" ? roundHalfUp(v) : v;
   return clamp(x, def.min, def.max);
 }

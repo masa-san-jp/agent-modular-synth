@@ -26,9 +26,9 @@ for (let i = 1; i <= STEPS; i++) {
 const PARAMS: ParamDef[] = [
   { name: "length", kind: "int", min: 1, max: STEPS, default: 8 },
   ...CV_NAMES.map((name): ParamDef => ({ name, kind: "float", min: -10, max: 10, default: 0, unit: "V" })),
-  ...GATE_NAMES.map((name): ParamDef => ({ name, kind: "float", min: 0, max: 1, default: 1 })),
+  ...GATE_NAMES.map((name): ParamDef => ({ name, kind: "bool", min: 0, max: 1, default: 1 })),
   { name: "glide", kind: "float", min: 0, max: 10, default: 0, unit: "s" },
-  { name: "run", kind: "float", min: 0, max: 1, default: 1 },
+  { name: "run", kind: "bool", min: 0, max: 1, default: 1 },
 ];
 
 const DEF: ModuleDef = {

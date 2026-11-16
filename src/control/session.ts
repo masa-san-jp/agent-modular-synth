@@ -1490,7 +1490,7 @@ export class Session {
       ports: [...t.inputs.map((p) => port(p, "in")), ...t.outputs.map((p) => port(p, "out"))],
       params: t.params.map((p) => ({
         name: p.name,
-        kind: p.kind === "seed" ? "int" : p.kind, // 定義表に enum / bool の区別はない
+        kind: p.kind === "seed" ? "int" : p.kind, // bool は 0/1 だけを受け付ける。enum の区別は定義表にまだない
         unit: p.unit ?? null,
         min: p.min,
         max: p.max,
