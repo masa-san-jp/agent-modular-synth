@@ -28,10 +28,14 @@ const DEF: ModuleDef = {
   stateful: true,
 };
 
+// ポート値は float32(COM-02)。0.1 V を float32 にした値(0.100000001…)は倍精度の 0.1 より大きいので、
+// OFF 閾値も float32 に丸めて比べる(「0.1 V で low」。倍精度の 0.1 と比べると 0.1 V の入力で low にならない)。
+const OFF_F32 = Math.fround(GATE_OFF);
+
 /** COM-04 のシュミット検出。新しい状態を返す。 */
 function schmitt(v: number, state: number): number {
   if (state === 0) return v >= GATE_ON ? 1 : 0;
-  return v <= GATE_OFF ? 0 : 1;
+  return v <= OFF_F32 ? 0 : 1;
 }
 
 export class LgcModule extends SynthModule {
