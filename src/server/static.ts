@@ -1,6 +1,6 @@
 // ローカル配信用の最小サーバー(DEC-103)。127.0.0.1 だけで待ち受け、web/ の静的ファイルを配る。
-// エージェント用API・認証・パッチ保存は後続(この段階では静的配信のみ)。
-import { createServer, Server } from "node:http";
+// エージェント用API・認証・パッチ保存は src/server/app.ts(このファイルは静的配信だけ)。
+import { createServer, IncomingMessage, Server, ServerResponse } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize, resolve, sep } from "node:path";
 
@@ -16,9 +16,22 @@ const TYPES: Record<string, string> = {
   ".map": "application/json; charset=utf-8",
 };
 
+export interface StaticOptions {
+  /** index.html を配るときに本文を書き換える(タブ用トークンの埋め込みに使う)。 */
+  transformIndex?: (html: string) => string;
+}
+
+export type StaticHandler = (req: IncomingMessage, res: ServerResponse) => void;
+
 export function createStaticServer(rootDir: string): Server {
+  return createServer(createStaticHandler(rootDir));
+}
+
+/** 静的配信の処理だけを返す(サーバー本体 app.ts が使う)。 */
+export function createStaticHandler(rootDir: string, options: StaticOptions = {}): StaticHandler {
   const root = resolve(rootDir);
-  return createServer((req, res) => {
+  const indexFile = join(root, "index.html");
+  return (req, res) => {
     void (async () => {
       try {
         if (req.method !== "GET" && req.method !== "HEAD") {
@@ -34,7 +47,10 @@ export function createStaticServer(rootDir: string): Server {
           res.writeHead(403).end();
           return;
         }
-        const body = await readFile(file);
+        let body: Buffer = await readFile(file);
+        if (options.transformIndex && file === indexFile) {
+          body = Buffer.from(options.transformIndex(body.toString("utf8")), "utf8");
+        }
         res.writeHead(200, {
           "Content-Type": TYPES[extname(file)] ?? "application/octet-stream",
           "Cache-Control": "no-store",
@@ -45,7 +61,7 @@ export function createStaticServer(rootDir: string): Server {
         res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" }).end("not found");
       }
     })();
-  });
+  };
 }
 
 export function listen(server: Server, port = DEFAULT_PORT): Promise<number> {

@@ -5,7 +5,8 @@
 //
 // この層の対象外(輸送・サーバーの責務): 認証 ERR-004、セッションなし ERR-006、応答待ち ERR-007、
 // 要求の大きさ ERR-011(JSON として解釈する前のバイト数が要る)、通知の `seq`、EVT-05/06。
-// ファイル保存(patch.save / load / list / read / delete)は未実装で、ERR-207(reason: "not_implemented")を返す。
+// ファイル保存(patch.save / load / list / read / delete)は保存先が非同期なので、Controller(controller.ts)が
+// `precheck` と `handleExternal` を使って処理する。Session.handle に直接渡すと ERR-207(reason: "not_implemented")を返す。
 
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
 import { CommandError } from "./errors.js";
@@ -362,6 +363,8 @@ interface Draft {
   nextM: number;
   nextC: number;
   changes: IChange[];
+  /** パッチ全体の置き換えで、置き換え後のパッチが持つ保存時刻など(DAT-35)。省略時は「なし」。 */
+  stamp?: Stamp;
 }
 
 interface Coalesce {
@@ -395,6 +398,39 @@ interface Ctx {
   requestId: string;
   command: string;
   events: SessionEvent[];
+  /** 保存のコマンドの中身(handleExternal から)。 */
+  external?: ExternalRun;
+}
+
+/** `handleExternal` の中身に渡す、Session の状態を変える口。 */
+export interface ExternalOps {
+  /** 受け口が決めた操作者(§3.1)。 */
+  readonly actor: ActorInfo;
+  /**
+   * パッチ全体を置き換える(patch.load。検証・正規化済みのパッチであること)。履歴1件、リビジョン +1、
+   * EVT-01(patch_replaced)、音声側は applyPatch(§2.4 の引き下げ)。次番号は §2.2 の規則4。
+   * `meta` の保存時刻などは、渡したパッチに書かれていた値になる(DAT-35)。
+   */
+  replacePatch(patch: Patch): void;
+  /**
+   * メモリ上の `meta` の保存時刻・saved_by など(DAT-35)を差し替える(patch.save の成功時)。
+   * リビジョン・履歴・EVT-01 の対象外。
+   */
+  setSaveStamp(stamp: Pick<PatchMeta, "created_at" | "modified_at" | "saved_by" | "app_version">): void;
+}
+
+/** 保存のコマンドの中身。同期で、CommandError を投げれば失敗の応答になる。 */
+export type ExternalRun = (ops: ExternalOps) => { result: Record<string, unknown>; warnings?: Warning[] };
+
+/** `precheck` の結果。 */
+export type PrecheckResult =
+  | { proceed: false; response: CommandResponse }
+  | { proceed: true; command: string; args: Record<string, unknown>; actor: ActorInfo; requestId: string };
+
+interface ProcessExt {
+  precheck?: boolean;
+  run?: ExternalRun;
+  admitted?: { command: string; args: Args; actor: ActorInfo; requestId: string };
 }
 
 interface ExecOutput {
@@ -606,6 +642,11 @@ export class Session {
     return this.exportPatch();
   }
 
+  /** モジュール種別の定義表(読込時の検証に使う)。 */
+  get typeCatalog(): TypeCatalog {
+    return this.catalog;
+  }
+
   get history(): HistoryFlags {
     return { can_undo: this.undoStack.length > 0, can_redo: this.redoStack.length > 0 };
   }
@@ -627,7 +668,38 @@ export class Session {
    */
   handle(request: unknown, actor: ActorKind, deliver?: (response: CommandResponse) => void): CommandResponse {
     const events: SessionEvent[] = [];
-    const response = clone(this.process(request, actor, events));
+    const response = clone(this.process(request, actor, events) as CommandResponse);
+    if (deliver) deliver(response);
+    this.emit(events);
+    return response;
+  }
+
+  /**
+   * §3.3 の 1〜6(封筒、コマンド名と権限、冪等キー、expected_revision)だけを検査する。状態は変えない。
+   * 通らない(または冪等キーで保存済みの応答がある)ときは、返すべき応答を返す。
+   * 保存のコマンドで、非同期の保存先を使う前に呼ぶ(Controller)。
+   */
+  precheck(request: unknown, actor: ActorKind): PrecheckResult {
+    const ext: ProcessExt = { precheck: true };
+    const response = this.process(request, actor, [], ext);
+    if (response) return { proceed: false, response: clone(response) };
+    const a = ext.admitted!;
+    return { proceed: true, command: a.command, args: clone(a.args), actor: clone(a.actor), requestId: a.requestId };
+  }
+
+  /**
+   * `handle` と同じ手順(検査、冪等キーの保存、想定外の失敗でのロールバック、応答の後の通知)で要求を処理するが、
+   * 保存のコマンド(patch.save / load / list / read / delete)の中身(§3.3 の7以降)は `run` が行う。
+   * 保存先の非同期の読み書きを済ませた後に呼ぶ(Controller)。保存のコマンド以外では `run` は使わない。
+   */
+  handleExternal(
+    request: unknown,
+    actor: ActorKind,
+    run: ExternalRun,
+    deliver?: (response: CommandResponse) => void,
+  ): CommandResponse {
+    const events: SessionEvent[] = [];
+    const response = clone(this.process(request, actor, events, { run }) as CommandResponse);
     if (deliver) deliver(response);
     this.emit(events);
     return response;
@@ -681,7 +753,7 @@ export class Session {
   }
 
   /** §3.3 の順に検査して実行する。 */
-  private process(request: unknown, actorKind: ActorKind, events: SessionEvent[]): CommandResponse {
+  private process(request: unknown, actorKind: ActorKind, events: SessionEvent[], ext?: ProcessExt): CommandResponse | null {
     const r: Record<string, unknown> = isObj(request) ? request : {};
     const okLen = (v: unknown): v is string => typeof v === "string" && charLen(v) >= 1 && charLen(v) <= 64;
     const requestId = typeof r.request_id === "string" ? r.request_id : null;
@@ -755,8 +827,15 @@ export class Session {
         });
       }
 
+      if (ext?.precheck) {
+        ext.admitted = { command: cmd, args, actor, requestId: r.request_id };
+        return null;
+      }
+
       // 7〜10. 引数・対象・値の検査と適用
-      const out = this.execute(cmd, args, { actor, requestId: r.request_id, command: cmd, events });
+      const ctx: Ctx = { actor, requestId: r.request_id, command: cmd, events };
+      if (ext?.run) ctx.external = ext.run;
+      const out = this.execute(cmd, args, ctx);
       const response: CommandResponse = { ...base(), ok: true, warnings: out.warnings, result: out.result };
       this.seen = this.backend.status();
       if (useKey) {
@@ -867,7 +946,7 @@ export class Session {
       case "patch.list":
       case "patch.read":
       case "patch.delete":
-        return this.cmdStorageUnsupported(cmd, args);
+        return ctx.external ? this.runExternal(ctx, ctx.external) : this.cmdStorageUnsupported(cmd, args);
       default:
         throw new CommandError("ERR-002", `未定義のコマンド ${cmd}`, { command: cmd });
     }
@@ -964,7 +1043,7 @@ export class Session {
     const after: State = {
       title: d.title,
       description: d.description,
-      stamp: replaced ? {} : before.stamp,
+      stamp: replaced ? (d.stamp ?? {}) : before.stamp,
       modules: d.modules,
       cables: d.cables,
     };
@@ -1609,6 +1688,11 @@ export class Session {
     from.pop();
     // 取り消し・やり直しを挟んだら、連続操作のまとめ(§9.4)は切る
     const { coalesce: _drop, ...plain } = entry;
+    if (entry.replaced) {
+      // DAT-35: 置き換わる(今から離れる)側のパッチは、今の保存時刻など(置き換えの後の patch.save の分を含む)を持つ
+      if (dir === "undo") plain.after = { ...entry.after, stamp: this.state.stamp };
+      else plain.before = { ...entry.before, stamp: this.state.stamp };
+    }
     (dir === "undo" ? this.redoStack : this.undoStack).push(plain);
     // §2.2 の規則4: 次番号は下げない
     this.nextM = Math.max(this.nextM, maxNumbered("m", next.modules.map((m) => m.id)) + 1);
@@ -1730,10 +1814,35 @@ export class Session {
     };
   }
 
-  // ---- ファイル保存(未実装) ----
+  // ---- ファイル保存 ----
+
+  /** 保存のコマンドの中身(Controller が保存先の読み書きを済ませて渡したもの)を実行する。 */
+  private runExternal(ctx: Ctx, run: ExternalRun): ExecOutput {
+    const out = run({
+      actor: clone(ctx.actor),
+      replacePatch: (patch) => {
+        const next = this.importPatch(patch);
+        const d = this.newDraft();
+        d.title = next.title;
+        d.description = next.description;
+        d.modules = [...next.modules];
+        d.cables = [...next.cables];
+        d.stamp = next.stamp;
+        // §2.2 の規則4: 次番号は「現在の次番号」と「置き換え後のパッチ内の最大値+1」の大きい方
+        d.nextM = Math.max(d.nextM, maxNumbered("m", next.modules.map((m) => m.id)) + 1);
+        d.nextC = Math.max(d.nextC, maxNumbered("c", next.cables.map((c) => c.id)) + 1);
+        this.commit(ctx, d, true);
+      },
+      setSaveStamp: (stamp) => {
+        // 履歴の中の状態とは別のオブジェクトにする(履歴・リビジョンの対象外)
+        this.state = { ...this.state, stamp: clone(stamp) };
+      },
+    });
+    return { result: out.result, warnings: out.warnings ?? [] };
+  }
 
   /**
-   * patch.save / load / list / read / delete はファイル保存の実装(次の Issue)まで未対応。
+   * 保存先を持たない Session に patch.save / load / list / read / delete を直接渡したとき(Controller を通さないとき)。
    * 引数の形(ERR-003)と名前の書式(ERR-201)までは検査し、その先は ERR-207(reason: "not_implemented")。
    */
   private cmdStorageUnsupported(cmd: string, args: Args): ExecOutput {
