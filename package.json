@@ -14,7 +14,9 @@
     "test": "npm run build && npm run typecheck && node --test dist/test/*.test.js && node dist/test/tv-coverage.js",
     "test:browser": "npm run build && node test/browser/smoke.cjs",
     "test:ui": "npm run build && node test/browser/ui.cjs",
+    "test:mcp-browser": "npm run build && node test/browser/mcp-e2e.cjs",
     "dev": "npm run build && node dist/src/server/main.js",
+    "mcp": "node dist/src/mcp/main.js",
     "check": "npm test && python3 tools/validate_specs.py && python3 tools/validate_product_spec.py"
   },
   "devDependencies": {
