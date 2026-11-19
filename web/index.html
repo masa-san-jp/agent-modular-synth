@@ -5,39 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="synth-tab-token" content="">
 <title>agent-modular-synth(開発中)</title>
-<style>
-  body { font-family: system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
-  button { font-size: 1rem; padding: .6rem 1rem; margin: .2rem .3rem .2rem 0; }
-  #panic { background: #b00020; color: #fff; border: 0; }
-  #keys button { min-width: 2.6rem; padding: 1.4rem .4rem .5rem; }
-  .row { margin: .8rem 0; }
-  .note { background: #fff7e0; border: 1px solid #e0c060; padding: .6rem .8rem; }
-  #error { color: #b00020; }
-  #meter, #patch, #modules { font-family: ui-monospace, monospace; font-size: .85rem; }
-  label { display: inline-block; min-width: 7rem; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h1>agent-modular-synth(開発中)</h1>
-<p>動作確認用の最小画面です。画面の操作も、ローカルサーバー経由のエージェントの操作も、同じコマンドでこのタブのパッチを編集します。パッチを組み替える編集画面と MIDI 機器の接続は未実装です。</p>
+<p>画面の操作も、ローカルサーバー経由のエージェントの操作も、同じコマンドでこのタブのパッチを編集します。MIDI 機器の接続は未実装です。</p>
 <p class="note"><strong>注意:</strong> ヘッドホンを使うときは、先に機器側の音量を下げてください。このアプリは低い音量から始まり、出力にはリミッターが入っていますが、機器側の音量は調整できません。</p>
-<div class="row">
-  <button id="start">音声開始</button>
-  <span id="state"></span>
+
+<div id="messages" aria-live="polite">
+  <div id="error" role="alert"></div>
+  <div id="notice"></div>
+  <div id="confirm" class="row" hidden>
+    <span id="confirm-text"></span>
+    <button id="confirm-ok" type="button"></button>
+    <button id="confirm-cancel" type="button">やめる</button>
+  </div>
 </div>
-<div class="row">
-  <button id="demo">デモ用パッチを組む</button>
-  <button id="undo">取り消し</button>
-  <button id="redo">やり直し</button>
-  <button id="panic">緊急停止</button>
-  <button id="release">緊急停止を解除</button>
-</div>
-<div class="row" id="keys"></div>
-<div class="row"><label for="level">マスター音量</label><input id="level" type="range" min="-60" max="0" step="1" value="-20"> <span id="levelLabel"></span></div>
-<div class="row" id="patch"></div>
-<div class="row" id="modules"></div>
-<div class="row" id="meter"></div>
-<div class="row" id="error"></div>
+
+<section aria-labelledby="h-audio">
+  <h2 id="h-audio">音声</h2>
+  <div class="row">
+    <button id="start" type="button">音声開始</button>
+    <button id="panic" type="button">緊急停止</button>
+    <button id="release" type="button">緊急停止を解除</button>
+    <span id="state"></span>
+    <span id="clip" hidden>クリップ</span>
+  </div>
+  <div class="row">
+    <label for="level">マスター音量</label>
+    <input id="level" type="range" min="-60" max="0" step="1" value="-20">
+    <span id="levelLabel"></span>
+  </div>
+  <div class="row mono" id="meter"></div>
+  <div class="row" id="keys" aria-label="画面鍵盤(押している間だけ鳴ります。MIDI-CV モジュールが必要です)"></div>
+</section>
+
+<section aria-labelledby="h-patch">
+  <h2 id="h-patch">パッチ</h2>
+  <div class="row mono" id="patch"></div>
+  <div class="row">
+    <button id="undo" type="button">取り消し</button>
+    <button id="redo" type="button">やり直し</button>
+    <button id="new" type="button">新規作成</button>
+    <button id="demo" type="button">デモ用パッチを組む</button>
+  </div>
+  <div class="row">
+    <label for="save-name">保存する名前</label>
+    <input id="save-name" type="text" maxlength="64" placeholder="例: bass-01" autocomplete="off" spellcheck="false">
+    <button id="save" type="button">保存</button>
+  </div>
+  <div class="row">
+    <span id="library-state" class="muted"></span>
+    <button id="library-refresh" type="button" class="small">一覧を更新</button>
+  </div>
+  <ul id="library" class="list"></ul>
+</section>
+
+<section aria-labelledby="h-modules">
+  <h2 id="h-modules">モジュール</h2>
+  <div class="row">
+    <label for="add-type">種別</label>
+    <select id="add-type"></select>
+    <label for="add-id">ID(省略可)</label>
+    <input id="add-id" type="text" maxlength="32" size="10" placeholder="自動" autocomplete="off" spellcheck="false">
+    <button id="add-module" type="button">追加</button>
+  </div>
+  <div id="module-list"></div>
+</section>
+
+<section aria-labelledby="h-cables">
+  <h2 id="h-cables">ケーブル</h2>
+  <div class="row">
+    <label for="cable-from">出力</label>
+    <select id="cable-from"></select>
+    <span aria-hidden="true">→</span>
+    <label for="cable-to">入力</label>
+    <select id="cable-to"></select>
+    <button id="cable-connect" type="button">接続</button>
+  </div>
+  <ul id="cable-list" class="list"></ul>
+</section>
+
+<section aria-labelledby="h-history">
+  <h2 id="h-history">変更の履歴(直近10件)</h2>
+  <p class="muted">新しい順。人の操作とエージェントの操作が同じ1本の履歴に並びます。</p>
+  <ol id="history" class="list"></ol>
+</section>
+
 <script type="module" src="dist/main.js"></script>
 </body>
 </html>
