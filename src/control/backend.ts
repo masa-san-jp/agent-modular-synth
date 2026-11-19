@@ -146,6 +146,29 @@ export class EngineBackend implements AudioBackend {
     return { values, sampleTime: this.sampleTime, fs: this.fs, engineRevision: this.engineRevision };
   }
 
+  /** メーター(MOD-IO-003)を持つモジュールすべての読出し値。モジュールID → 項目名 → 値。 */
+  meters(): Record<string, Record<string, unknown>> {
+    const out: Record<string, Record<string, unknown>> = {};
+    for (const id of this.engine.ids()) {
+      const m = this.engine.get(id) as unknown as { read?: () => Record<string, unknown> };
+      if (typeof m.read === "function") out[id] = m.read();
+    }
+    return out;
+  }
+
+  /** 演奏入力(MIDI のバイト列)を、全ての MIDI-CV モジュールへ渡す。次のステップで到着順に処理される。 */
+  midi(bytes: readonly number[]): void {
+    for (const id of this.engine.ids()) {
+      const m = this.engine.get(id) as unknown as { midi?: (b: readonly number[]) => void };
+      if (typeof m.midi === "function") m.midi(bytes);
+    }
+  }
+
+  /** 出力保護の状態(リミッターの利得など)と、観測区間のピーク(読むと 0 に戻る)。 */
+  takePeak(): number {
+    return this.stage.takePeak();
+  }
+
   /** 1ブロックを処理して左右の出力を書く。ブロック長は任意(結果は1サンプル処理と一致)。 */
   processBlock(left: Float32Array, right: Float32Array): void {
     this.flush();
