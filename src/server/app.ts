@@ -15,7 +15,7 @@ import type { Duplex } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import type { TypeCatalog } from "../control/catalog.js";
 import { ERRORS, ErrorId } from "../control/errors.js";
-import { isValidPatchName } from "../control/patch-doc.js";
+import { MAX_PATCH_BYTES, isValidPatchName, parsePatchText } from "../control/patch-doc.js";
 import { COMMANDS, METER_FIELDS, METER_TYPE, OUT_TYPE } from "../control/session.js";
 import type { StoreResult } from "../control/store.js";
 import { FilePatchStore, MAX_PATCH_FILES } from "./file-store.js";
@@ -361,19 +361,24 @@ export function createApp(options: AppOptions): App {
     if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(m));
   };
 
-  const forward = (request: unknown, info: EnvelopeInfo, clientId: string): Promise<Obj> => {
+  /**
+   * 要求をタブへ送り、応答を `deliver` へ渡す。`deliver` はタブの応答を受けたその場で(同期で)呼ぶ:
+   * タブは応答の直後に通知を送るので、非同期を挟むと通知が応答を追い越す(§10: 通知は応答の後)。
+   */
+  const forward = (request: unknown, info: EnvelopeInfo, clientId: string, deliver: (response: Obj) => void): void => {
     const t = tab;
-    if (!t) return Promise.resolve(failure(info, NO_SESSION, { id: "ERR-006", message: "パッチを持つタブが開かれていない" }));
-    return new Promise((resolve) => {
-      const id = nextReqId++;
-      const timer = setTimeout(() => {
-        pending.delete(id);
-        // 適用されたかは不明(§7.4)
-        resolve(failure(info, known, { id: "ERR-007", message: "タブが時間内に応答しなかった", details: { timeout_ms: limits.tabTimeoutMs } }));
-      }, limits.tabTimeoutMs);
-      pending.set(id, { info, timer, resolve });
-      sendTab(t, { t: "req", id, client_id: clientId, request });
-    });
+    if (!t) {
+      deliver(failure(info, NO_SESSION, { id: "ERR-006", message: "パッチを持つタブが開かれていない" }));
+      return;
+    }
+    const id = nextReqId++;
+    const timer = setTimeout(() => {
+      pending.delete(id);
+      // 適用されたかは不明(§7.4)
+      deliver(failure(info, known, { id: "ERR-007", message: "タブが時間内に応答しなかった", details: { timeout_ms: limits.tabTimeoutMs } }));
+    }, limits.tabTimeoutMs);
+    pending.set(id, { info, timer, resolve: deliver });
+    sendTab(t, { t: "req", id, client_id: clientId, request });
   };
 
   // ---- タブなしでも答えるコマンド(product-spec §4: patch.list、patch.read、module.list_types) ----
@@ -387,11 +392,34 @@ export function createApp(options: AppOptions): App {
     for (const k of Object.keys(args)) if (!allowed.includes(k)) return badArg(k, "unknown_key", `未知の引数 ${k}`);
     return null;
   };
-  const storageFailed = (r: { error: string; message?: string }): ErrorSpec => ({
-    id: "ERR-207",
-    message: "保存先の読み書きに失敗",
-    details: { reason: r.message ?? r.error },
-  });
+  /** 保存先の失敗 → 契約のエラー(src/control/controller.ts の storeError と同じ対応)。 */
+  const storeError = (operation: string, name: string | null, error: string, message?: string): ErrorSpec => {
+    switch (error) {
+      case "not_found":
+        return { id: "ERR-202", message: `保存パッチ ${name} はない`, details: { name } };
+      case "invalid_name":
+        return { id: "ERR-201", message: "パッチ名が規則に合わない", details: { name } };
+      case "too_large":
+        return { id: "ERR-206", message: "パッチの大きさが上限を超える", details: { limit_bytes: MAX_PATCH_BYTES } };
+      default:
+        return { id: "ERR-207", message: message ?? `保存先の ${operation} に失敗`, details: { reason: error, operation } };
+    }
+  };
+  /** ファイルに今書かれている `meta.saved_by.kind`(DAT-36。controller.ts の savedByKindOf と同じ)。 */
+  const savedByKindOf = (text: string): string | null => {
+    let doc: unknown;
+    try {
+      doc = JSON.parse(text);
+    } catch {
+      return null;
+    }
+    if (!isObj(doc) || !isObj(doc.meta)) return null;
+    const sb = doc.meta.saved_by;
+    if (!isObj(sb)) return null;
+    if (Object.keys(sb).some((k) => k !== "kind" && k !== "client_id")) return null;
+    if ("client_id" in sb && typeof sb.client_id !== "string") return null;
+    return sb.kind === "agent" || sb.kind === "human" ? sb.kind : null;
+  };
 
   /**
    * CMD-01。応答の形は Session(src/control/session.ts の cmdListTypes)と同じでなければならない。
@@ -435,31 +463,36 @@ export function createApp(options: AppOptions): App {
     return { types };
   };
 
+  // CMD-14・CMD-15 の応答は、タブ側(src/control/controller.ts の planList / planRead)と同じでなければならない。
+  // 共有できる関数がまだないので、同じ規則をここで作っている(controller.ts 側の変更に合わせること)。
+
   /** CMD-14。壊れた・読めないファイルも `readable: false` で載せる(DAT-34)。 */
   const patchList = async (args: Obj): Promise<Obj | ErrorSpec> => {
     const k = unknownKey(args, []);
     if (k) return k;
     const listed = await store.list();
-    if (!listed.ok) return storageFailed(listed);
+    if (!listed.ok) return storeError("list", null, "failed", listed.message);
     const patches: Obj[] = [];
     for (const info of listed.value) {
+      const r = await store.read(info.name);
+      if (!r.ok && r.error === "not_found") continue; // 一覧の後に消えた
       let title: string | null = null;
       let savedByKind: string | null = null;
       let readable = false;
-      const r = await store.read(info.name);
       if (r.ok) {
-        try {
-          const doc: unknown = JSON.parse(r.value.text);
-          if (isObj(doc)) {
-            readable = true;
-            const m = doc.meta;
-            if (isObj(m)) {
-              if (typeof m.title === "string") title = m.title;
-              if (isObj(m.saved_by) && typeof m.saved_by.kind === "string") savedByKind = m.saved_by.kind;
-            }
+        const parsed = parsePatchText(r.value.text, catalog);
+        readable = parsed.ok;
+        if (parsed.ok) {
+          title = parsed.patch.meta.title;
+          savedByKind = parsed.patch.meta.saved_by?.kind ?? null;
+        } else {
+          savedByKind = savedByKindOf(r.value.text);
+          try {
+            const doc: unknown = JSON.parse(r.value.text);
+            if (isObj(doc) && isObj(doc.meta) && typeof doc.meta.title === "string") title = doc.meta.title;
+          } catch {
+            // JSON として読めない
           }
-        } catch {
-          // JSON として読めない → readable: false
         }
       }
       patches.push({ name: info.name, title, bytes: info.bytes, modified_at: info.modified_at, saved_by_kind: savedByKind, readable });
@@ -476,16 +509,12 @@ export function createApp(options: AppOptions): App {
     if (typeof name !== "string") return badArg("name", "type");
     if (!isValidPatchName(name)) return { id: "ERR-201", message: "パッチ名が規則に合わない", details: { name } };
     const r = await store.read(name);
-    if (!r.ok) {
-      if (r.error === "not_found") return { id: "ERR-202", message: "その名前の保存パッチがない", details: { name } };
-      if (r.error === "invalid_name") return { id: "ERR-201", message: "パッチ名が規則に合わない", details: { name } };
-      return storageFailed(r);
-    }
+    if (!r.ok) return storeError("read", name, r.error, r.message);
     let patch: unknown;
     try {
       patch = JSON.parse(r.value.text);
     } catch (e) {
-      const message = `JSONとして解釈できない: ${e instanceof Error ? e.message : ""}`;
+      const message = `JSONとして解釈できない: ${e instanceof Error ? e.message : String(e)}`;
       return { id: "ERR-204", message, details: { issues: [{ rule: "DAT-V02", path: "", message }] } };
     }
     return { patch, bytes: r.value.info.bytes, modified_at: r.value.info.modified_at };
@@ -522,24 +551,30 @@ export function createApp(options: AppOptions): App {
    * 検査の順は §3.3: 封筒の形(ERR-011 → ERR-001 → ERR-012)→ 認証(ERR-004)→ コマンド名・権限 → セッションの有無。
    * WebSocket は接続時に認証を済ませているので `auth` は常に null。
    */
-  const handleAgent = async (raw: Buffer | null, auth: AuthFailure | null, clientId: string): Promise<Obj> => {
+  const handleAgent = (raw: Buffer | null, auth: AuthFailure | null, clientId: string, deliver: (response: Obj) => void): void => {
     // 認証されていない相手には、セッションの値を返さない
     const shown = (): Known => (auth === null && tab ? known : NO_SESSION);
     if (raw === null || raw.byteLength > limits.maxRequestBytes) {
-      return failure(NO_INFO, shown(), { id: "ERR-011", message: "要求が大きすぎる", details: { limit_bytes: limits.maxRequestBytes } });
+      deliver(failure(NO_INFO, shown(), { id: "ERR-011", message: "要求が大きすぎる", details: { limit_bytes: limits.maxRequestBytes } }));
+      return;
     }
     let request: unknown;
     try {
       request = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(raw));
     } catch {
-      return failure(NO_INFO, shown(), { id: "ERR-001", message: "要求が JSON でない", details: { field: "" } });
+      deliver(failure(NO_INFO, shown(), { id: "ERR-001", message: "要求が JSON でない", details: { field: "" } }));
+      return;
     }
     const info = envelopeInfo(request);
     const broken = checkEnvelope(request);
-    if (broken) return failure(info, shown(), broken);
-    if (auth !== null) return unauthorized(info, auth);
-    if (!tab) return withoutSession(request as Obj, info);
-    return forward(request, info, clientId);
+    if (broken) deliver(failure(info, shown(), broken));
+    else if (auth !== null) deliver(unauthorized(info, auth));
+    else if (tab) forward(request, info, clientId, deliver);
+    else {
+      void withoutSession(request as Obj, info)
+        .catch(() => failure(info, NO_SESSION, { id: "ERR-010", message: "想定外の失敗" }))
+        .then(deliver);
+    }
   };
 
   // ---- HTTP ----
@@ -577,10 +612,11 @@ export function createApp(options: AppOptions): App {
     }
     const auth = agentAuth(req);
     const raw = await readBody(req);
-    const response = await handleAgent(raw, auth, `http-${nextClient++}`);
-    const status = auth === "origin" && httpStatus(response) === 401 ? 403 : httpStatus(response);
-    // 読み切っていない本文が残る場合は、応答の後で接続を閉じる
-    sendJson(res, status, response, raw === null ? { Connection: "close" } : {});
+    handleAgent(raw, auth, `http-${nextClient++}`, (response) => {
+      const status = auth === "origin" && httpStatus(response) === 401 ? 403 : httpStatus(response);
+      // 読み切っていない本文が残る場合は、応答の後で接続を閉じる
+      sendJson(res, status, response, raw === null ? { Connection: "close" } : {});
+    });
   };
 
   const onRequest = (req: IncomingMessage, res: ServerResponse): void => {
@@ -632,7 +668,7 @@ export function createApp(options: AppOptions): App {
     ws.on("error", () => undefined);
     ws.on("close", () => agents.delete(conn));
     ws.on("message", (data) => {
-      void handleAgent(toBuffer(data), null, clientId).then((response) => {
+      handleAgent(toBuffer(data), null, clientId, (response) => {
         if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(response));
       });
     });
@@ -724,7 +760,7 @@ export function createApp(options: AppOptions): App {
     // セッションの識別子とリビジョンを知るために、読出しを1件送る(取り決めにタブからの自己紹介がないため)。
     // 応答を待って EVT-05 を出す。応答がなければ、分かっている範囲(null)で出す。
     const probe = { v: 1, request_id: "server-hello", command: "engine.get_status", client_id: "server" };
-    void forward(probe, envelopeInfo(probe), "server").then(() => {
+    forward(probe, envelopeInfo(probe), "server", () => {
       if (tab === ws) sessionChanged(true, known);
     });
   };

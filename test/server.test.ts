@@ -10,10 +10,12 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { WebSocket } from "ws";
 import { buildCatalog } from "../src/control/catalog.js";
+import { Controller } from "../src/control/controller.js";
 import { RecordingBackend, Session } from "../src/control/session.js";
 import { Patch } from "../src/control/types.js";
 import { REGISTRY } from "../src/modules/registry.js";
 import { App, AppLimits, CLOSE_ANOTHER_TAB, DEFAULT_APP_LIMITS, createApp } from "../src/server/app.js";
+import { FilePatchStore } from "../src/server/file-store.js";
 import { ServerToTab } from "../src/server/protocol.js";
 
 const CATALOG = buildCatalog(REGISTRY);
@@ -195,7 +197,7 @@ async function connectAgent(r: Rig): Promise<Agent> {
     inbox,
     call(request) {
       ws.send(JSON.stringify(request));
-      return inbox.wait((m) => "ok" in m && m.request_id === request.request_id);
+      return inbox.wait((m) => "ok" in m && m.request_id === (request.request_id ?? null));
     },
     events: () => inbox.all.filter((m) => "event" in m),
   };
@@ -225,13 +227,14 @@ async function connectTab(r: Rig, opts: { respond?: boolean; sessionId?: string 
   const inbox = got.inbox;
   const reqs: Obj[] = [];
   session.subscribe((event) => ws.send(JSON.stringify({ t: "evt", event })));
-  ws.on("message", (data) => {
-    const m = JSON.parse(String(data)) as ServerToTab;
+  const onMessage = (m: ServerToTab) => {
     if (m.t !== "req") return;
     reqs.push(m);
     if (opts.respond === false) return;
     session.handle(m.request, "agent", (response) => ws.send(JSON.stringify({ t: "res", id: m.id, response })));
-  });
+  };
+  for (const m of inbox.all) onMessage(m as ServerToTab); // 接続と同時に届いていた分
+  ws.on("message", (data) => onMessage(JSON.parse(String(data)) as ServerToTab));
   const hello = await inbox.wait((m) => m.t === "hello");
   assert.deepEqual(hello, { t: "hello", accepted: true });
   let storeId = 1;
@@ -484,6 +487,7 @@ test("Host の検査: 127.0.0.1 / localhost と待受ポートでない Host は
       const page = await rawHttp(r, { path: "/", headers: { Host: host } });
       assert.equal(page.status, 403, host);
       assert.equal(page.text.includes(TAB_TOKEN), false, host); // リバインディングでタブ用トークンを読めない
+      if (host === "") continue; // 試験に使う WebSocket クライアントは、空の Host を送れない
       const w = await openWs(r, "/api/ws", { ...auth, Host: host });
       assert.equal(w.rejected?.status, 403, host);
       const t = await openWs(r, `/tab?token=${TAB_TOKEN}`, { Host: host, Origin: `http://${host}` });
@@ -869,21 +873,31 @@ test("タブなしの module.list_types: Session と同じ形・同じ内容を�
 test("タブなしの patch.list / patch.read: 専用フォルダを直接読む。壊れたファイルは readable:false、名前の不正は ERR-201", () =>
   withRig({}, async (r) => {
     await mkdir(r.patchDir, { recursive: true });
-    const doc = { format: "modular-synth-patch", schema_version: 1, meta: { title: "低音", description: "", saved_by: { kind: "agent" } }, modules: [], cables: [] };
+    const doc = {
+      format: "modular-synth-patch",
+      schema_version: 1,
+      meta: { title: "低音", description: "", saved_by: { kind: "agent" } },
+      modules: [{ id: "out", type: "MOD-IO-001", spec_version: "0.2", params: { level: 1.0, mute: 0 } }],
+      cables: [],
+    };
     const text = JSON.stringify(doc, null, 2) + "\n";
     await writeFile(join(r.patchDir, "bass-01.patch.json"), text);
     await writeFile(join(r.patchDir, "broken.patch.json"), "{not json");
+    // JSON としては読めるが、パッチとしては検証に通らない(未知の種別)。外で置かれたものは人の保存扱い
+    await writeFile(join(r.patchDir, "invalid.patch.json"), JSON.stringify({ format: "modular-synth-patch", schema_version: 1, meta: { title: "だめ", description: "" }, modules: [{ id: "x1", type: "MOD-XYZ-999", spec_version: "0.1" }], cables: [] }));
     await writeFile(join(r.patchDir, "ignored.txt"), "x");
     await writeFile(join(r.base, "secret.patch.json"), '{"secret":true}');
 
     const list = (await post(r, req("patch.list"))).body;
     assert.equal(list.ok, true);
-    assert.deepEqual(list.result.patches.map((p: Obj) => p.name), ["bass-01", "broken"]);
-    const [bass, broken] = list.result.patches as Obj[];
+    assert.deepEqual(list.result.patches.map((p: Obj) => p.name), ["bass-01", "broken", "invalid"]);
+    const [bass, broken, invalid] = list.result.patches as Obj[];
     assert.deepEqual(Object.keys(bass).sort(), ["bytes", "modified_at", "name", "readable", "saved_by_kind", "title"]);
     assert.deepEqual({ ...bass, modified_at: "" }, { name: "bass-01", title: "低音", bytes: Buffer.byteLength(text), modified_at: "", saved_by_kind: "agent", readable: true });
     assert.match(bass.modified_at, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/);
-    assert.equal(broken.readable, false);
+    assert.deepEqual({ ...broken, modified_at: "" }, { name: "broken", title: null, bytes: 9, modified_at: "", saved_by_kind: null, readable: false });
+    assert.equal(invalid.readable, false);
+    assert.equal(invalid.title, "だめ");
     assert.equal((await post(r, req("patch.list", { extra: 1 }))).body.error.id, "ERR-003");
 
     const read = (await post(r, req("patch.read", { name: "bass-01" }))).body;
@@ -903,10 +917,38 @@ test("タブなしの patch.list / patch.read: 専用フォルダを直接読む
       assert.equal(e.id, "ERR-201", name);
       assert.deepEqual(e.details, { name });
     }
+    // タブ側のコマンド処理(Controller)が同じフォルダに対して返す内容と一致する
+    const controller = new Controller({
+      session: new Session({ catalog: CATALOG, backend: new RecordingBackend(), sessionId: "s-ref" }),
+      store: new FilePatchStore(r.patchDir),
+      now: () => 0,
+    });
+    const same: Obj[] = [
+      req("patch.list"),
+      req("patch.list", { extra: 1 }),
+      req("patch.read", { name: "bass-01" }),
+      req("patch.read", { name: "invalid" }),
+      req("patch.read", { name: "broken" }),
+      req("patch.read", { name: "nothing" }),
+      req("patch.read", { name: "../secret" }),
+      req("patch.read", {}),
+      req("patch.read", { name: 5 }),
+    ];
+    for (const q of same) {
+      const expected = (await controller.handle(q, "agent")) as Obj;
+      const got = (await post(r, q)).body;
+      assert.equal(got.ok, expected.ok, JSON.stringify(q));
+      if (expected.ok) assert.deepEqual(got.result, expected.result, JSON.stringify(q));
+      else {
+        assert.equal(got.error.id, expected.error.id, JSON.stringify(q));
+        assert.equal(got.error.code, expected.error.code);
+        assert.deepEqual(got.error.details, expected.error.details, JSON.stringify(q));
+      }
+    }
     // 書き込みはタブ(コマンド処理)が要る
     assert.equal((await post(r, req("patch.save", { name: "x" }))).body.error.id, "ERR-006");
     assert.equal((await post(r, req("patch.load", { name: "bass-01" }))).body.error.id, "ERR-006");
-    assert.deepEqual((await readdir(r.patchDir)).sort(), ["bass-01.patch.json", "broken.patch.json", "ignored.txt"]);
+    assert.deepEqual((await readdir(r.patchDir)).sort(), ["bass-01.patch.json", "broken.patch.json", "ignored.txt", "invalid.patch.json"]);
   }));
 
 // =====================================================================================
