@@ -29,7 +29,7 @@
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
 ## 実装(作業中)
-シンセ本体は実装の途中で、18種のモジュールがすべて実装済みで、**固定のデモ用パッチをブラウザで鳴らせる**ところまである(Issue #11、#14、#16)。パッチの編集、保存、MIDI、エージェント操作(共通コマンドAPI、MCP)は未実装。
+シンセ本体は実装の途中で、18種のモジュールがすべて実装済みで、**固定のデモ用パッチをブラウザで鳴らせる**ところまである(Issue #11、#14、#16)。パッチを編集する共通コマンド処理は実装済みだが、画面とサーバーにはまだつないでいない(Issue #18)。パッチの編集、保存、MIDI、エージェント操作(共通コマンドAPI、MCP)は未実装。
 
 ```
 npm install          # 開発用の依存を入れる(Node.js 22 以上)
@@ -42,6 +42,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 - **出力保護の定数(既定音量 −20 dB、フェード 50 ms、リミッターのしきい値・復帰時間)は仮値**で、測定後に決める(OPEN-010)。待受ポート 47800 も仮の値。
 - `src/engine/`: グラフ実行(1サンプル処理、ケーブルの1サンプル遅延)、ポート(最大16チャンネル)、乱数、共通部品、スナップショット。ブラウザのAPIに依存しない。
 - `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。18種すべてを実装済み(一覧は `src/modules/registry.ts`)。仕様に記述がなく実装側で補った解釈は [docs/implementation-notes.md](docs/implementation-notes.md)。
+- `src/control/`: 共通コマンド処理(パッチの正本、コマンドの検証と適用、リビジョン、履歴、権限、通知: `session.ts`)、パッチ文書の検証・移行・生成(`patch-doc.ts`)、種別の定義の一覧(`catalog.ts`)、音声とつなぐ実装(`backend.ts`)。ブラウザにもサーバーにも依存しない。契約に記述がなく補った解釈は [docs/contract-notes.md](docs/contract-notes.md)。**画面とサーバーからはまだ使っていない**(次の Issue)。
 - `src/audio/`: 出力保護(`output-stage.ts`)、エンジンと出力保護をまとめた中核(`core.ts`。オフラインでも動く)、AudioWorklet(`worklet.ts`)。
 - `src/web/`・`web/`: 最小の画面。`src/server/`: 127.0.0.1 だけで待ち受ける静的配信(エージェント用APIと認証は未実装)。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)。`test/tv-coverage.ts` が、実装済みモジュールの全検証例が登録されているかを確認する。`test/browser/` はブラウザでの確認。

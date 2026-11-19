@@ -29,7 +29,7 @@ const DEF: ModuleDef = {
   ],
   params: [
     { name: "level", kind: "float", min: 0, max: 2, default: 1 },
-    { name: "mute", kind: "float", min: 0, max: 1, default: 0 },
+    { name: "mute", kind: "bool", min: 0, max: 1, default: 0 },
   ],
   stateful: true,
 };
