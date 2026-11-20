@@ -5,6 +5,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildCatalog } from "../control/catalog.js";
 import { REGISTRY } from "../modules/registry.js";
+import { removeTokenFile, tokenFilePath, writeTokenFile } from "../mcp/token-file.js";
 import { createApp } from "./app.js";
 import { DEFAULT_PORT, HOST } from "./static.js";
 
@@ -15,6 +16,9 @@ const port = Number(process.env.PORT ?? DEFAULT_PORT);
 // 環境変数 SYNTH_PATCH_DIR、なければホームの下の .agent-modular-synth/patches。
 // リポジトリの中ではなく、利用者のデータ用の場所に置く。確定は実装計画で行う。
 const patchDir = resolve(process.env.SYNTH_PATCH_DIR ?? join(homedir(), ".agent-modular-synth", "patches"));
+// エージェント用トークンの受け渡し用ファイル(MCP アダプタが読む。docs/mcp-setup.md)。
+// 場所は環境変数 SYNTH_TOKEN_FILE、なければ ~/.agent-modular-synth/agent-token。所有者だけが読める(0600)。終了時に消す。
+const tokenFile = tokenFilePath(process.env);
 
 const app = createApp({ webRoot, patchDir, catalog: buildCatalog(REGISTRY) });
 app.listen(port).then(
@@ -26,9 +30,22 @@ app.listen(port).then(
     console.log(`  HTTP       POST http://${HOST}:${p}/api/command`);
     console.log(`  トークン   ${app.agentToken}`);
     console.log("  (要求に Authorization: Bearer <トークン> を付ける。トークンは起動のたびに変わる)");
+    try {
+      writeTokenFile(tokenFile, app.agentToken);
+      console.log(`  トークンのファイル ${tokenFile}(MCP アダプタ用。終了時に消す)`);
+    } catch (e) {
+      // 書けなくてもサーバーは使える(トークンは上に表示済み。MCP アダプタには SYNTH_AGENT_TOKEN で渡せる)
+      console.error(`  トークンのファイル ${tokenFile} を書けませんでした: ${e instanceof Error ? e.message : e}`);
+    }
   },
   (e) => {
     console.error(`起動できませんでした: ${e instanceof Error ? e.message : e}`);
     process.exit(1);
   },
 );
+
+// 終了時にトークンのファイルを消す(自分が書いた内容のままのときだけ)。
+process.on("exit", () => removeTokenFile(tokenFile, app.agentToken));
+for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"] as const) {
+  process.on(sig, () => process.exit(0));
+}

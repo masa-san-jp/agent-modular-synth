@@ -29,18 +29,21 @@
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
 ## 実装(作業中)
-18種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザで鳴らしながら、エージェントがローカルサーバー経由で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20)。パッチを組み替える編集画面、MCP アダプタ、MIDI 機器の接続は未実装。
+18種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。MIDI 機器の接続、配線を線で描く表示は未実装。
 
 ```
 npm install          # 依存を入れる(Node.js 22 以上)
 npm run dev          # ビルドして起動する。表示された URL(既定 http://127.0.0.1:47800/)をブラウザで開く
 npm test             # ビルド、型検査、単体試験、仕様の検証例の実行と網羅の確認
 npm run test:browser # 実際のブラウザ(ヘッドレスの Chromium。Playwright が必要)での端から端の確認
+npm run test:ui      # 編集画面の操作の確認(同上)
+npm run test:mcp-browser # MCP クライアント → アダプタ → サーバー → タブ の確認(同上)
+npm run mcp          # MCP アダプタを stdio で起動する(通常は MCP クライアントが起動する)
 npm run check        # npm test に加えて、仕様文書の検査
 ```
 ### 使い方
 1. `npm run dev` を実行すると、URL と**エージェント用トークン**が表示される。
-2. ブラウザで URL を開き、「音声開始」を押す(押すまで音は出ない)。「デモ用パッチを組む」を押し、画面の鍵盤を押すと鳴る。
+2. ブラウザで URL を開き、「音声開始」を押す(押すまで音は出ない)。「デモ用パッチを組む」を押し、画面の鍵盤を押すと鳴る。画面で、モジュールの追加・削除、パラメータの変更、ケーブルの接続・切断、取り消し、保存・読込ができる。
 3. エージェント(または手元の道具)から、同じパッチを操作できる。待受は 127.0.0.1 だけで、トークンが要る。
    ```
    curl -s http://127.0.0.1:47800/api/command \
@@ -48,6 +51,7 @@ npm run check        # npm test に加えて、仕様文書の検査
      -d '{"v":1,"request_id":"1","command":"patch.get"}'
    ```
    コマンドの一覧と引数は [操作契約](specifications/synthesizer/operation-contract.md)。通知を受けるには WebSocket(`ws://127.0.0.1:47800/api/ws`、同じトークン)で接続する。
+4. **MCP 対応のクライアント**から使う場合は、MCP アダプタを登録する。手順は [docs/mcp-setup.md](docs/mcp-setup.md)。サーバーは起動時にエージェント用トークンを利用者のデータ用フォルダのファイル(既定 `~/.agent-modular-synth/agent-token`、本人だけが読める権限、終了時に削除)へ書き、アダプタがそれを読む。
 - 低い音量から始まり、出力には常時リミッターが入る。「緊急停止」で即時に無音になる(エージェントも実行できる。解除は人だけ)。
 - エージェントは、音声の開始、緊急停止の解除、パッチファイルの削除、人が決めた上限を超える音量の設定ができない。
 - 作業中のパッチはブラウザ内に自動保存され、再読込で復元される。名前を付けた保存は、サーバーの専用フォルダ(既定 `~/.agent-modular-synth/patches`、環境変数 `SYNTH_PATCH_DIR` で変更)に入る。
@@ -59,7 +63,8 @@ npm run check        # npm test に加えて、仕様文書の検査
 - `src/control/`: 共通コマンド処理(パッチの正本、コマンドの検証と適用、リビジョン、履歴、権限、通知: `session.ts`)、保存のコマンドを含む非同期の窓口(`controller.ts`)、パッチ文書の検証・移行・生成(`patch-doc.ts`)、種別の定義の一覧(`catalog.ts`)、音声とつなぐ実装(`backend.ts`)。ブラウザにもサーバーにも依存しない。契約に記述がなく補った解釈は [docs/contract-notes.md](docs/contract-notes.md)。
 - `src/audio/`: 出力保護(`output-stage.ts`)、AudioWorklet(`worklet.ts`)、メインスレッド側の窓口(`worklet-backend.ts`)。
 - `src/server/`: ローカルサーバー(`app.ts`: エージェント用API、認証、タブへの中継。`file-store.ts`: 専用フォルダへの保存)。127.0.0.1 だけで待ち受ける。
-- `src/web/`・`web/`: タブ側の本体と最小の画面。パッチの正本(Session)はタブにあり、サーバーは中継する。
+- `src/mcp/`: MCP アダプタ(stdio)。共通コマンドを1対1でツールにする薄い変換層で、ローカルサーバーの `POST /api/command` だけを呼ぶ。
+- `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)、契約の受入例(`AX-…`、`DX-…`)。`test/browser/` は実際のブラウザでの端から端の確認。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
