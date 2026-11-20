@@ -1,6 +1,6 @@
 # 操作契約(UIとエージェント共通のコマンド・状態・エラー・同期)
 
-版: 0.3 / 2026-11-15(#2 の改訂(Issue #10: 全18仕様 0.2、common.md 0.5)と DEC-006〜013 を反映: `clip_count` の定義、接続できないポート、`meter.read` の測定チャンネル、エージェント音量上限とノート送信の決定。0.2 は独立レビューの反映: DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
+版: 0.4 / 2026-11-20(実装で補った解釈を反映(Issue #24。`docs/contract-notes.md`): §3.3 の検査順と各コマンドの検査順、EVT-03 と CMD-25 の通知の関係、封筒の未知のフィールド、IDの書式の検査範囲、次番号と失敗、§3.4(輸送ごとの規則)の新設、`batch`・`module.move`・`patch.new`・保存のコマンドの細則、`details` の値、MCPアダプタの細則。受入例(AX)は変えていない。0.3 は #2 の改訂(Issue #10: 全18仕様 0.2、common.md 0.5)と DEC-006〜013 を反映: `clip_count` の定義、接続できないポート、`meter.read` の測定チャンネル、エージェント音量上限とノート送信の決定。0.2 は独立レビューの反映: DEC-110〜112)。状態: 設計(シンセ本体は未実装)。
 要求は [requirements.md](requirements.md)(`REQ-…`。検証IDは同じ枝番の `VER-…`)、構成と安全は [product-spec.md](product-spec.md)、判断と未決は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、パッチJSONの形は [data-contract.md](data-contract.md)(`DAT-…`)、モジュールのポート・パラメータは [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)が正本。本書はそれらを複製せずIDで参照する。
 
 本書のID: コマンド `CMD-nn`、エラー `ERR-nnn`、通知 `EVT-nn`、受入例 `AX-nn`。IDは変更しない(廃止時は欠番にする)。
@@ -44,6 +44,8 @@
 
 ケーブルはチャンネル(最大16。COM-08)をまとめて運ぶ。チャンネル単位の参照はない。
 
+**IDの書式を検査する範囲**: 書式(ERR-003)を検査するのは、**新しく付けるID**(`module.add`・`cable.connect` の `id`)だけ。既存の対象を指すID(`module_id`、`cable_id`、ポート参照の `module`)は書式を検査せず、存在しなければ ERR-102 / ERR-115 を返す。
+
 **自動採番の規則** [設計判断]: セッションは、モジュール用(`m<N>`)とケーブル用(`c<N>`)の**次番号**を1つずつ持つ。
 1. 起動時の次番号は「復元したパッチ内にある `m<N>`(`c<N>`)形式のIDの N の最大値+1」。該当するIDがなければ 1。
 2. 採番するときは次番号を使い、次番号を 1 進める。そのIDが既に使われていれば(利用者が `id` で `m7` などを指定していた場合)、空きが出るまで進める。
@@ -52,6 +54,7 @@
 5. 利用者が `id` で `m<N>` 形式のIDを指定して追加したときも、次番号を「現在の次番号」と「N+1」の大きい方にする。
 6. 次番号は保存しない。再読込(新しいセッション)では規則1からやり直すので、「再利用しない」が保証されるのは同じセッションの中だけ。
 7. やり直し(`redo`)は記録済みのIDを使い、採番し直さない(§9.6)。
+8. **失敗した要求は次番号を進めない**(`batch` が途中で失敗した場合を含む。その要求が採番に使った番号は、次の採番でまた使う)。
 
 ### 2.3 音声状態
 | 状態 | 意味 | パッチ編集 | エンジンへの反映 | `meter.read` |
@@ -108,6 +111,8 @@
 | `idempotency_key` | 文字列(1〜64文字) | × | なし | 再送の二重適用を防ぐ鍵(§7) |
 | `client_id` | 文字列(1〜64文字) | × | なし | 送信者の表示用の名前(自己申告。権限判定には使わない) |
 
+封筒の**未知のフィールドは ERR-001**(`details.field` にその名前。`actor` を含む)。[設計判断] 打ち間違えた `expected_revision` などを黙って無視しない。文字数(1〜64文字など)は Unicode の符号位置で数える(本書とデータ契約に共通)。
+
 `actor`(操作者)は要求で指定できない。受け口が決める: タブ内のUIからの要求は `human`、ローカルサーバー経由(WebSocket/HTTP/MCP)の要求はすべて `agent`。[設計判断] 自己申告の種別を信用すると、エージェントが人専用の操作(緊急停止の解除など)を行えるため。
 
 ### 3.2 応答
@@ -155,7 +160,7 @@
 
 ### 3.3 処理順(検証の順)
 1件の要求は次の順で検査し、最初に当たった失敗を返す。順序は受入試験で固定する [設計判断]。
-1. 封筒の形(ERR-001, ERR-012, ERR-011)
+1. 封筒の形(ERR-011 → ERR-001 → ERR-012 の順)
 2. 認証(ERR-004)
 3. コマンド名(ERR-002)と権限(ERR-005)
 4. セッションの有無(ERR-006)
@@ -165,6 +170,22 @@
 8. 対象の存在(ERR-102, ERR-111, ERR-115, ERR-121 など)
 9. 値と規則(ERR-122, ERR-123, ERR-114 など)と状態の前提(ERR-301 など)
 10. 適用(失敗しない設計。想定外の失敗は ERR-010 とし、状態を適用前へ戻す)
+
+**7〜9 の中の順**:
+- 引数の形と型(ERR-003)は、各コマンドの「検証エラー」の列挙での位置に関わらず、**最初**に検査する。
+- その後の順をコマンドの節に書いてあるもの(CMD-02、CMD-06、CMD-07、CMD-09、CMD-12、CMD-25)は、**その節の順が 8・9 の区分より優先する**(例: `module.add` は IDの重複 ERR-103 と個数の上限 ERR-106 を、パラメータ名の存在 ERR-121 より先に検査する)。
+- 順を書いていないコマンドは、8(対象の存在)→ 9(値と規則、状態の前提)の順。
+- `patch.load` の検証の順は data-contract §8。
+
+### 3.4 輸送ごとの規則
+本節はローカルサーバーの口(HTTP・WebSocket)に固有の規則。コマンドの意味は変えない。
+1. **HTTP**: §3.3 の 1 → 2 の順で検査する(未認証の要求でも、本文を上限まで読んで封筒を検査してから ERR-004 を返す)。**WebSocket** は接続時に認証する(認証に通らない接続は受け付けない)ので、要求ごとの検査は 1 の次が 3 になる。
+2. `Host` ヘッダの検査(127.0.0.1 / localhost と待受ポート以外は拒否)は、§3.3 の順より前に行う輸送層の検査。エージェント用の口は、`Origin` ヘッダが付いた要求を、自サーバーのオリジンであっても拒否する(ERR-004)。CORS の許可ヘッダは出さない(product-spec §8.2)。
+3. **HTTP の状態コード**: 本文は常に §3.2 の封筒。ERR-001・ERR-012 は 400、ERR-004 は 401(`Origin`・`Host` が原因のときは 403)、ERR-011 は 413、ERR-006 は 503、ERR-007 は 504。それ以外は `ok: false` でも 200。
+4. **サーバーが作る応答**(ERR-001、ERR-004、ERR-006、ERR-007、ERR-011、ERR-012 と、タブなしで答えるコマンド)の `revision`・`session_id`・`audio_state`: タブがあり認証済みのときは、タブの応答・通知から覚えた最後の値。未認証、またはタブがないときは `null`。
+5. **タブがないとき**: ERR-002 → ERR-005 → ERR-006 の順(引数の検査より先に ERR-006)。タブなしで答える3コマンド(`module.list_types`、`patch.list`、`patch.read`)は、`expected_revision` を比べず、冪等キーを無視する。
+6. **応答待ちの間にタブとの接続が切れたとき**: 待ち時間(§7.8)を待たずに ERR-007 を返す(`details.reason: "tab_disconnected"`)。適用されたかは不明(§7.4)。
+7. **WebSocket の1通の大きさ**: 要求の上限(§16)を超える1通にも ERR-011 を返す。上限の2倍を超える1通は、応答せずに接続を閉じる。
 
 ## 4. リビジョン規則
 1. `revision` は整数。**パッチを変える成功したコマンド1件につき 1 増える**。`batch` は全体で 1、`history.undo`/`history.redo` も 1、`patch.load`/`patch.new` も 1 増える。減ること・再利用されることはない。
@@ -183,7 +204,7 @@
 | ERR-004 | `unauthorized` | トークンがない・違う、またはOriginが不正(REQ-S-005) | — |
 | ERR-005 | `forbidden` | この操作者には許されない操作(§15) | `command`, `actor_kind` |
 | ERR-006 | `no_session` | パッチを持つタブが開かれていない(product-spec §4) | — |
-| ERR-007 | `timeout` | タブが時間内に応答しなかった。**適用されたかは不明**(§7.4) | `timeout_ms` |
+| ERR-007 | `timeout` | タブが時間内に応答しなかった。**適用されたかは不明**(§7.4) | `timeout_ms`。応答待ちの間にタブとの接続が切れたときは `reason`(`"tab_disconnected"`。§3.4) |
 | ERR-008 | `revision_conflict` | `expected_revision` が現在値と違う(§8) | `expected_revision`, `current_revision` |
 | ERR-009 | `idempotency_key_reused` | 同じ冪等キーで内容の違う要求が来た | `idempotency_key` |
 | ERR-010 | `internal_error` | 想定外の失敗。状態は適用前へ戻す | — |
@@ -194,7 +215,7 @@
 | ERR-103 | `module_id_conflict` | 指定したモジュールIDが既に使われている | `module_id` |
 | ERR-104 | `module_protected` | 常設モジュール `out` は削除できない | `module_id` |
 | ERR-105 | `singleton_module` | `MOD-IO-001` は追加できない(常に1つ) | `type` |
-| ERR-106 | `limit_exceeded` | 個数の上限を超える(§16。モジュール数、ケーブル数、`batch` の操作数、専用フォルダ内のファイル数) | `limit`, `max` |
+| ERR-106 | `limit_exceeded` | 個数の上限を超える(§16。モジュール数、ケーブル数、`batch` の操作数、専用フォルダ内のファイル数) | `limit`(`modules` / `cables` / `batch_ops` / `patch_files`), `max` |
 | ERR-111 | `port_not_found` | そのモジュールにポート名がない | `module_id`, `port` |
 | ERR-112 | `port_direction` | `from` が出力でない、または `to` が入力でない | `module_id`, `port`, `direction` |
 | ERR-113 | `port_not_connectable` | ケーブルで接続できないポート(§13.6) | `module_id`, `port` |
@@ -214,7 +235,7 @@
 | ERR-204 | `patch_invalid` | パッチJSONが検証に通らない(data-contract §8) | `issues`(`{"rule", "path", "message"}` の配列) |
 | ERR-205 | `patch_version_unsupported` | 未知の `format`、新しすぎる `schema_version` または `spec_version` | `found`, `supported` |
 | ERR-206 | `patch_too_large` | パッチの大きさが上限超過(data-contract §10) | `limit_bytes` |
-| ERR-207 | `storage_failed` | 保存先の読み書きに失敗 | `reason` |
+| ERR-207 | `storage_failed` | 保存先の読み書きに失敗 | `reason`(失敗の種類), `operation`(`read` / `write` / `list` / `remove`) |
 | ERR-301 | `audio_not_running` | 音声が動作中でないため実行できない | `audio_state` |
 | ERR-302 | `level_limit_exceeded` | エージェントの音量上限を超える(REQ-S-004) | `level_db`, `max_db` |
 | ERR-303 | `not_a_meter` | 対象が `MOD-IO-003` でない | `module_id`, `type` |
@@ -269,7 +290,7 @@
 | `params` | オブジェクト(名前→数値) | × | `{}` | 指定しないパラメータは仕様の既定値。値の検証は §12 |
 | `ui` | `{"x": 数値, "y": 数値}` | × | なし | UI上の位置(data-contract §4.2)。省略時はUIが配置を決める |
 - 返値: `module`(data-contract §4 の形。採番されたIDと**全パラメータの値**を含む)。
-- 検証エラー: ERR-101, ERR-105, ERR-103, ERR-106, ERR-121, ERR-122, ERR-123, ERR-003。
+- 検証エラー: ERR-101, ERR-105, ERR-103, ERR-106, ERR-121, ERR-122, ERR-123, ERR-003。検査の順: ERR-003 → ERR-101 → ERR-105 → ERR-103 → ERR-106 → ERR-121(`params` の名前すべて)→ パラメータごとに ERR-122 → ERR-123(§3.3)。
 - 副作用: エンジンにモジュールを追加(初期状態から開始。COM-10)。`seed` パラメータを持つ種別で `seed` を指定しなかった場合は §14 の自動割当。
 - 取り消し: モジュールを削除する。
 
@@ -286,7 +307,7 @@
 - 検証エラー: ERR-102。副作用: なし。
 
 ### CMD-05 `module.move`
-- 引数: `module_id`(必須)、`ui`(`{"x": 数値, "y": 数値}`、必須。有限の数値)。
+- 引数: `module_id`(必須)、`ui`(`{"x": 数値, "y": 数値}`、必須。有限の数値)。`ui` は `x`・`y` の両方が必須。既存の `ui` に上書きで合わせ、`ui` に書かなかった既存のキー(data-contract DAT-11 の未知のキー)は保持する。
 - 返値: `module_id`, `ui`, `changed`。
 - 検証エラー: ERR-102, ERR-003。副作用: 音には影響しない。取り消し: 元の位置へ戻す。
 
@@ -297,14 +318,14 @@
 | `to` | ポート参照 | ○ | — | 入力ポート |
 | `id` | 文字列 | × | 自動(`c<N>`) | §2.2 の書式 |
 - 返値: `cable`(`{"id", "from", "to"}`)。型違いのときは `warnings` に `type_mismatch`。
-- 検証エラー: ERR-102, ERR-111, ERR-112, ERR-113, ERR-114, ERR-116, ERR-106, ERR-003。規則は §13。
+- 検証エラー: ERR-102, ERR-111, ERR-112, ERR-113, ERR-114, ERR-116, ERR-106, ERR-003。規則は §13。検査の順: ERR-003 → 両端(`from`、`to` の順)の ERR-102・ERR-111 → ERR-112 → ERR-113 → ERR-114 → ERR-116 → ERR-106(§3.3)。対象の存在(ERR-102、ERR-111)は両端を見終えてから、向き(ERR-112)以降を検査する。
 - 副作用: 次の処理ブロックから接続先の入力が「接続あり」になる(COM-09 の未接続時の値・正規化が切れる)。ケーブルは1サンプル遅延(COM-06)。
 - 取り消し: そのケーブルを外す。
 
 ### CMD-07 `cable.disconnect`
 - 引数: `cable_id`(文字列)**または** `to`(入力のポート参照)のどちらか一方(両方・どちらもなしは ERR-003)。1つの入力にはケーブルが1本までなので(§13.2)、`to` で一意に決まる。
 - 返値: `removed_cable`(`{"id", "from", "to"}`)。
-- 検証エラー: ERR-115, ERR-102, ERR-111, ERR-003。
+- 検証エラー: ERR-102, ERR-111, ERR-115, ERR-003。検査の順: ERR-003 → (`to` を指定したとき)ERR-102 → ERR-111 → ERR-115。`cable_id` を指定したときは ERR-003 → ERR-115。
 - 副作用: 接続先の入力は未接続時の値へ戻る(COM-09)。取り消し: 同じIDで接続し直す。
 
 ### CMD-08 `param.set`
@@ -320,10 +341,10 @@
 - 取り消し: 前の値へ戻す。
 
 ### CMD-09 `batch`
-- 引数: `ops`(配列、必須、1〜500件 [暫定値])。各要素は `{"command": 文字列, "args": オブジェクト}`。入れられるのは表の batch 列が ○ のコマンド(`module.add`, `module.remove`, `module.move`, `cable.connect`, `cable.disconnect`, `param.set`, `patch.set_meta`)。
+- 引数: `ops`(配列、必須、1〜500件 [暫定値])。各要素は `{"command": 文字列, "args": オブジェクト}`(`args` は省略可で、省略時は `{}`。要素のほかのキーは ERR-003)。`ops` が空なら ERR-003、500件を超えたら ERR-106。入れられるのは表の batch 列が ○ のコマンド(`module.add`, `module.remove`, `module.move`, `cable.connect`, `cable.disconnect`, `param.set`, `patch.set_meta`)。
 - 動作: 現在のパッチの作業用の写しに対し、`ops` を**先頭から順に**検証・適用する。後の操作は前の操作の結果を参照できる(例: 追加したモジュールのIDを接続で使う。IDは `id` で指定する)。全件が成功したときだけ写しを現在のパッチにする。
 - 返値: `results`(各操作の `result` の配列、`ops` と同じ順)、`changed`(1件でもパッチを変えたら `true`)。各操作の `warnings` はまとめて封筒の `warnings` に入れ、`details.index` で操作を示す。
-- 検証エラー: ERR-132(1件でも入れられないコマンドがあれば、何も検証せず拒否)、ERR-131(`details.failed_index` は 0 始まり、`details.cause` はその操作のエラー `{"id", "code", "message", "details"}`)、ERR-106。
+- 検証エラー: ERR-132(1件でも入れられないコマンドがあれば、何も検証せず拒否。§6 にない未定義のコマンド名も ERR-132)、ERR-131(`details.failed_index` は 0 始まり、`details.cause` はその操作のエラー `{"id", "code", "message", "details"}`)、ERR-106。検査の順: ERR-003(`ops` の形)→ ERR-106 → ERR-003(各要素の形)→ ERR-132 → ERR-131。
 - 副作用: 成功時、リビジョンは **1 だけ**進み、履歴は1件、通知(EVT-01)は1件。エンジンへは1つの差分として同じブロック境界で反映する。全操作が無変更(各 `result.changed = false`)のときは `changed: false` で成功し、リビジョン・履歴・通知は変わらない(§4.3)。
 - 部分失敗: 1つでも失敗したら**全体を適用しない**(状態・リビジョン・履歴は不変。通知なし)。REQ-F-012。
 - `expected_revision` と `idempotency_key` は `batch` 全体に対して1回だけ評価する(`ops` の要素には書けない)。
@@ -338,6 +359,7 @@
 ### CMD-11 `patch.new`
 - 引数: なし。
 - 返値: `patch`(空のパッチ: モジュールは既定パラメータの `out` だけ、ケーブルなし。data-contract §3.3)。
+- 既に空のパッチでも、パッチ全体の置き換えとして扱う(リビジョンは 1 進み、履歴に1件積み、§2.4 の契機になる。§4.3 の「値が変わらない変更」に当たらない)。`patch.load` も、読み込む内容が現在と同じでも同じ扱い。
 - 副作用: エンジンの全モジュールを作り直す。マスター音量は §2.4 の規則で引き下げてフェードインする(上げない。`agent_max_level_db` は不変)。音声状態と緊急停止の状態は変えない。自動採番の次番号は戻さない(§2.2)。
 - 取り消し: 置き換え前のパッチへ戻す(履歴1件)。
 
@@ -346,15 +368,15 @@
 |---|---|---|---|---|
 | `name` | 文字列 | ○ | — | §2.2 のパッチ名。保存先は専用フォルダ内の `<name>.patch.json`(data-contract §7.2) |
 | `overwrite` | 真偽 | × | `false` | 同名があるとき上書きするか |
-- 返値: `name`, `bytes`, `saved_at`(RFC 3339、UTC), `overwritten`(真偽)。
-- 検証エラー: ERR-201, ERR-203, ERR-005(エージェントによる、人が保存したファイルの上書き。§15.3), ERR-106(新しい名前での保存により専用フォルダ内のファイル数が上限を超える。§16。既存ファイルの上書きは数を増やさないので対象外), ERR-206, ERR-207。
+- 返値: `name`, `bytes`, `saved_at`(RFC 3339、UTC。秒まで。`meta.modified_at` と同じ値), `overwritten`(真偽)。
+- 検証エラー: ERR-201, ERR-203, ERR-005(エージェントによる、人が保存したファイルの上書き。§15.3), ERR-106(新しい名前での保存により専用フォルダ内のファイル数が上限を超える。§16。既存ファイルの上書きは数を増やさないので対象外), ERR-206, ERR-207。検査の順: ERR-003 → ERR-201 → ERR-203 → ERR-005 → ERR-106 → ERR-206 → 書き込みの ERR-207(§3.3)。保存先の読出しに失敗したときの ERR-207 は、その読出しの時点で返す。
 - 副作用: ファイルを書く(一時ファイルに書いてから置き換える)。通知 EVT-06。
 - メモリ上の `meta` [設計判断]: 保存に成功したら、ファイルに書いた `meta.modified_at`・`meta.saved_by`・`meta.app_version`(と、なかった場合の `meta.created_at`)を、メモリ上のパッチにも同じ値で書く(data-contract DAT-35)。`saved_by.kind` は受け口が決めた操作者(§3.1)で、要求からは指定できない。この更新は**リビジョンを進めず、履歴に積まず、EVT-01 を出さない**(§4.2)。モジュール・ケーブル・パラメータ・`title`・`description` は変えない。失敗時は何も変えない。
 - 取り消し: 不可(ファイルも、メモリ上の保存時刻・`saved_by` も履歴の対象外。`history.undo` で戻らない)。
 - 保存するのは構成とパラメータで、内部状態(遅延バッファ等)は含めない(data-contract §2)。
 
 ### CMD-13 `patch.load`
-- 引数: `name`(保存パッチ名)**または** `patch`(パッチJSONのオブジェクト)のどちらか一方(両方・どちらもなしは ERR-003)。`patch` はUIのファイル取込と、エージェントがJSONを直接渡す場合に使う。
+- 引数: `name`(保存パッチ名)**または** `patch`(パッチJSONのオブジェクト)のどちらか一方(両方・どちらもなしは ERR-003。`patch` がオブジェクトでないときも ERR-003 で、ERR-204 ではない)。`patch` はUIのファイル取込と、エージェントがJSONを直接渡す場合に使う。
 - 返値: `patch`(読込後のパッチ)、`migrated`(移行した場合の内容。data-contract §9.4。移行なしは `null`)。
 - 検証エラー: ERR-201, ERR-202, ERR-204, ERR-205, ERR-206, ERR-207。**検証に通らなければ現在のパッチは不変**(product-spec §2 SC-H3)。検証内容は data-contract §8。
 - 副作用: パッチ全体を置き換える。エンジンの全モジュールを作り直し、初期状態から始める(COM-10)。マスター音量は §2.4 の規則で **min(現在値, 既定値)** に引き下げてフェードインする(上げない。`agent_max_level_db` は不変。DEC-111、REQ-S-003)。音声状態と緊急停止の状態は変えない(緊急停止中は消音のまま)。
@@ -362,12 +384,12 @@
 
 ### CMD-14 `patch.list`
 - 引数: なし。
-- 返値: `patches`(配列。`{"name", "title", "bytes", "modified_at", "saved_by_kind", "readable"}`)。読めない・壊れたファイルは `readable: false`(一覧からは隠さない)。
+- 返値: `patches`(配列。`{"name", "title", "bytes", "modified_at", "saved_by_kind", "readable"}`)。読めない・壊れたファイルは `readable: false`(一覧からは隠さない)。`readable` は「`patch.load` が成功する(data-contract §8 の検証に通る)」とき `true`。未知の版のファイルも `false`。並びは `name` の昇順。`modified_at` はファイルの更新時刻で、`meta.modified_at` ではない。
 - 副作用: なし。**セッションがなくても応答できる**(product-spec §4)。
 
 ### CMD-15 `patch.read`
 - 引数: `name`(必須)。
-- 返値: `patch`(ファイルの内容をJSONとして解釈したもの。**検証・移行はしない**)、`bytes`、`modified_at`。
+- 返値: `patch`(ファイルの内容をJSONとして解釈したもの。**検証・移行はしない**)、`bytes`、`modified_at`(ファイルの更新時刻。`meta.modified_at` ではない)。
 - 検証エラー: ERR-201, ERR-202, ERR-207, ERR-204(JSONとして解釈できない)。
 - 副作用: なし。現在のパッチは変わらない。セッションがなくても応答できる。
 
@@ -484,7 +506,7 @@
 1. 履歴は**1本**で、人とエージェントの変更が適用順に並ぶ(DEC-105, REQ-F-009)。`history.undo` は、誰が行ったかに関係なく**直前の変更**を戻す(product-spec §2 SC-X1)。操作者ごとの履歴は持たない。
 2. 履歴に積むのは、パッチを変えた成功コマンド(§6 の表で取消 ○)。`batch` は1件。読出し・音量・緊急停止・ファイル保存は積まない。
 3. `history.undo`/`history.redo` 自体もパッチを変えるので、リビジョンは 1 進み、通知(EVT-01)が出る。取り消し後に新しい変更を行うと、やり直し側の履歴は消える。
-4. **連続操作のまとめ**: 同じ操作者が、同じ `coalesce_key`・同じ `module_id`・同じ `param` の `param.set` を続けて送り、間に他の変更が入らなければ、履歴上は1件にまとめる(戻り先は最初の変更の前の値)。リビジョンと通知は1回ごとに進む・出る。UIのノブのドラッグ用。
+4. **連続操作のまとめ**: 同じ操作者が、同じ `coalesce_key`・同じ `module_id`・同じ `param` の `param.set` を続けて送り、間に他の変更が入らなければ、履歴上は1件にまとめる(戻り先は最初の変更の前の値)。リビジョンと通知は1回ごとに進む・出る。UIのノブのドラッグ用。「同じ操作者」は、種別(`kind`)と `client_id` の両方が一致すること。`history.undo`/`history.redo` を挟んだら、まとめを切る(その後の同じ鍵の `param.set` は新しい1件になる)。
 5. **戻るのはパッチ(構成とパラメータ)だけ**。エンジンの内部状態は戻らない: 取り消しで復活したモジュールは初期状態から始まり、他のモジュールの状態はそのまま続く。[設計判断] 内部状態はパッチの一部ではない(data-contract §2)。
 6. やり直し(`redo`)は記録済みの結果を再適用する(自動採番したIDや自動割当した `seed` を計算し直さない)。
 7. 履歴の保持件数は 200 件 [暫定値]。超えた古いものから捨てる。再読込で履歴は消える(自動保存に含めない)。
@@ -498,7 +520,7 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 |---|---|---|---|
 | EVT-01 | `patch.changed` | パッチを変えるコマンドが成功したとき(1コマンドに1件) | `revision`, `previous_revision`, `actor`, `command`, `request_id`, `changes` |
 | EVT-02 | `engine.state_changed` | 音声状態、`fs`、MIDIの利用可否が変わったとき | `audio_state`, `fs`, `midi` |
-| EVT-03 | `output.changed` | マスター音量、エージェント上限、または緊急停止の状態が変わったとき | `level_db`, `agent_max_level_db`, `panic`, `actor`, `reason`(`set_level` / `panic` / `release_panic` / `reset_to_default`)。`reset_to_default` は §2.4 の引き下げ(min(現在値, 既定値))を表す名前で、値が上がることはない。アプリ起因(自動復帰、`fs` の変更)のとき `actor` は `null` |
+| EVT-03 | `output.changed` | マスター音量、または緊急停止の状態が変わったとき。エージェント上限**だけ**が変わる場合(人が現在と同じ音量を `output.set_level` で設定したとき。CMD-25)は出さない | `level_db`, `agent_max_level_db`, `panic`, `actor`, `reason`(`set_level` / `panic` / `release_panic` / `reset_to_default`)。`reset_to_default` は §2.4 の引き下げ(min(現在値, 既定値))を表す名前で、値が上がることはない。アプリ起因(自動復帰、`fs` の変更)のとき `actor` は `null` |
 | EVT-04 | `engine.diagnostic` | 非有限値の置換(各モジュールの COM-12 による置換の集計、または出力段での置換。DEC-112)、または最終クリップが新たに起きたとき(REQ-S-006)。多発時は間引き、累計を載せる | `nonfinite_count`, `nonfinite_detail`(`{"modules", "output_stage"}`), `clip_count`(定義は CMD-21 と同じ) |
 | EVT-05 | `session.changed` | パッチを持つタブがつながった・切れたとき(サーバーが出す) | `connected`, `session_id`, `revision` |
 | EVT-06 | `library.changed` | 保存パッチが保存・削除されたとき | `name`, `action`(`saved` / `deleted`), `actor` |
@@ -506,6 +528,7 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 - EVT-01 は**要求した本人にも**届く(`request_id` で自分の操作と分かる)。`actor` により「誰のどの操作でリビジョンが進んだか」が分かる(REQ-A-006)。
 - `changes` は適用された変更の列。各要素の `kind` は `module_added`(`module`)、`module_removed`(`module_id`)、`cable_added`(`cable`)、`cable_removed`(`cable_id`)、`param_changed`(`module_id`, `param`, `value`)、`module_moved`(`module_id`, `ui`)、`meta_changed`(`meta`)、`patch_replaced`(内容は載せない。`patch.get` で取り直す)。`module.remove` では、外れたケーブルの `cable_removed` も並ぶ。`history.undo`/`redo` でも、実際に起きた変更を同じ形で載せる。
 - 通知は応答の**後**に、リビジョンの順で送る。
+- EVT-06 は、冪等キーによる再送(`replayed: true`)では出さない。1つのコマンドが複数の通知を出すときの順は「応答 → EVT-01〜04 → EVT-06」。
 
 ## 11. 時間と同期
 1. **適用の時点**: コマンドは到着順に処理され、パッチグラフに適用された時点で確定する(応答の `revision`)。応答はエンジンへの反映を待たない。
@@ -552,7 +575,7 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 ## 14. 新規モジュールの `seed` 自動割当
 - 対象: `seed` パラメータを持つ種別(MOD-NSE-001, MOD-RND-001)。
 - 規則 [設計判断]: `module.add` で `seed` を**指定しなかった**とき、候補を「仕様の既定seed + 16·k(k = 0, 1, 2, …)」とし、**パッチ内の `seed` を持つどのモジュールの値も、候補から候補+15 の範囲に入っていない最小の候補**を割り当てる。最初の1個は仕様の既定値(1)になり、2個目は 17、3個目は 33、以降同様。16ずつ離すのは、ポリフォニー時にエンジン `c` が `seed + c` の乱数列を使うため(COM-08。最大16エンジン)、隣り合う値では別のモジュールと同じ列が出るからである(MOD-RND-001 §11)。割り当てた値は返値の `module.params.seed` に入る。
-- `seed` を**指定した**ときはその値を使う。他のモジュールの値と同じ、または差が16未満の場合は成功させ、`warnings` に `duplicate_seed` を入れる(ポリフォニー時に乱数列が重なりうるため)。`param.set` で重なる値にした場合も同じ。
+- `seed` を**指定した**ときはその値を使う。他のモジュールの値と同じ、または差が16未満の場合は成功させ、`warnings` に `duplicate_seed` を入れる(ポリフォニー時に乱数列が重なりうるため)。`param.set` で重なる値にした場合も同じ。`duplicate_seed` の `details` は `{"module_id", "param", "value", "conflicts"}`(`conflicts` は重なる相手の `{"module_id", "param", "value"}` の配列)。重なりは、`seed` を持つ全種別(ノイズ源と S&H)を1つの集まりとして数える。
 - 理由: 既定seedが同じモジュールは同じ乱数列を出す(COM-11 の相関注意)。ノイズ源を2つ置いたときに同一波形になるのを避ける。割当は乱数でなく**パッチの状態だけで決まる**ので再現性(REQ-NF-003)を保つ。1個目は仕様の既定値のままなので、モジュール仕様の検証例(既定seed前提)と食い違わない。
 - 割当は `module.add` の時点だけ。パッチの読込時は書かれている値をそのまま使う(省略時は仕様の既定値。data-contract §4.1)。
 - 退けた案: 何もしない(警告のみ)。知らずに相関したノイズを重ねる誤りが起きやすい。
@@ -602,12 +625,17 @@ MCPアダプタは共通コマンドを1対1でツールにする薄い変換層
 |---|---|
 | ツール名 | コマンド名の `.` を `_` に置き換える(`module.add` → `module_add`、`patch.get` → `patch_get`、`batch` → `batch`)。接頭辞は付けない |
 | 公開するツール | §6 の表で権限が「両方」のコマンドすべて(22個)。「人のみ」の `patch.delete`、`engine.start`、`engine.release_panic` は**ツールにしない** |
-| 入力 | そのコマンドの `args` のフィールドに、任意の `expected_revision` と `idempotency_key` を加えたもの。入力スキーマは `module.list_types` と同じ定義表・本書の引数表から作る |
-| 封筒 | アダプタが `v`、`request_id`(自動生成)、`client_id` を補う。操作者は常に `agent` |
-| 出力 | 応答の封筒(§3.2)をそのままJSONで返す。`ok: false` はツールのエラー結果として返し、`error` を保つ(エラーを握りつぶさない) |
+| 入力 | そのコマンドの `args` のフィールドに、任意の `expected_revision` と `idempotency_key` を加えたもの。入力スキーマは `module.list_types` と同じ定義表・本書の引数表から作る。「どちらか一方」「少なくとも一方」の条件(CMD-07、CMD-13、CMD-17)は、スキーマではなく説明文に書く。アダプタは入力を検査せず、コマンド処理が返す本書のエラーをそのまま返す |
+| 封筒 | アダプタが `v`、`request_id`(自動生成)、`client_id` を補う。操作者は常に `agent`。`client_id` は固定の `mcp`(環境変数 `SYNTH_CLIENT_ID` で変えられる) |
+| 出力 | テキスト1つ。応答の封筒(§3.2)をそのままJSONで返す。`ok: false` はツールのエラー結果として返し、`error` を保つ(エラーを握りつぶさない) |
 | 再送 | アダプタは自動再送しない。`idempotency_key` は呼び出し側が指定したときだけ渡す |
 | 通知 | 初期版では転送しない。エージェントは `patch_get` と `expected_revision` で同期する |
 | ツールの説明 | 読出しのみ・取り消し不可などの性質を、§6 の表から機械的に付ける |
+| 存在しないツール名 | 「人のみ」のコマンドの名前を含め、MCP のプロトコルエラーにする。サーバーへは何も送らない |
+| アダプタ自身の失敗 | サーバーに届かない、トークンがない、応答が封筒の形でないときは、§3.2 の失敗応答と同じ形で返す。本書のエラーではないので `error.id` は `null`、`error.code` は `adapter_no_token` / `adapter_server_unreachable` / `adapter_bad_response`。`details.applied` は `"no"`(送っていない・届いていない)または `"unknown"`(適用されたか不明)。`revision`・`session_id`・`audio_state` は `null` |
+| 接続先 | `http://127.0.0.1[:port]` または `http://localhost[:port]` だけ。それ以外の設定では起動しない。リダイレクトに従わない(REQ-S-007) |
+| 起動 | サーバーが止まっている、またはトークンがないときも、アダプタの起動は失敗させない。ツールの呼出し時に「アダプタ自身の失敗」を返す |
+| トークン | 環境変数 `SYNTH_AGENT_TOKEN` があればそれを使う。なければ、サーバーが起動時に書くトークンのファイルを呼出しのたびに読む(DEC-113) |
 
 MCP経由の結果は、同じ要求を共通コマンドAPIへ直接送った結果と一致しなければならない(VER-A-007)。
 
