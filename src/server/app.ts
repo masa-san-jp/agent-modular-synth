@@ -14,8 +14,10 @@ import { IncomingMessage, Server, ServerResponse, createServer } from "node:http
 import type { Duplex } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import type { TypeCatalog } from "../control/catalog.js";
-import { ERRORS, ErrorId } from "../control/errors.js";
-import { MAX_PATCH_BYTES, isValidPatchName, parsePatchText } from "../control/patch-doc.js";
+import { ErrorSpec, checkEnvelope, listTypes, okLen } from "../control/envelope.js";
+import { CommandError, ERRORS } from "../control/errors.js";
+import { tryStringify } from "../control/json.js";
+import { listPatches, readPatch } from "../control/library.js";
 import { COMMANDS, METER_FIELDS, METER_TYPE, OUT_TYPE } from "../control/session.js";
 import type { StoreResult } from "../control/store.js";
 import { FilePatchStore, MAX_PATCH_FILES } from "./file-store.js";
@@ -33,6 +35,14 @@ export interface AppLimits {
   maxPatchFiles: number;
   /** パッチファイル1つの大きさ [バイト](data-contract §10: 1 MiB)。 */
   maxPatchBytes: number;
+  /** 同時に接続できるエージェントの WebSocket の数(契約にない実装上の値)。超えた接続要求は 503 で断る。 */
+  maxAgentConnections: number;
+  /** タブの応答を待っている要求の数の上限(契約にない実装上の値)。超えた要求は送らずに ERR-010 で断る。 */
+  maxPendingRequests: number;
+  /** 相手が受信しないまま送信待ちにためてよい量 [バイト]。超えたら、その接続を切る(メモリを使い切らないため)。 */
+  maxBufferedBytes: number;
+  /** タブの生死を確かめる間隔 [ms]。次の確認までに返事(pong)がなければ接続を切る。0 で無効。 */
+  tabPingMs: number;
 }
 
 export const DEFAULT_APP_LIMITS: AppLimits = {
@@ -40,6 +50,10 @@ export const DEFAULT_APP_LIMITS: AppLimits = {
   maxRequestBytes: 2 * 1024 * 1024,
   maxPatchFiles: MAX_PATCH_FILES,
   maxPatchBytes: 1024 * 1024,
+  maxAgentConnections: 16,
+  maxPendingRequests: 256,
+  maxBufferedBytes: 32 * 1024 * 1024,
+  tabPingMs: 15000,
 };
 
 /** タブからの1通の上限 [バイト](応答・保存する文書を運ぶ。契約にない実装上の値)。 */
@@ -81,16 +95,6 @@ function isObj(v: unknown): v is Obj {
   return typeof v === "object" && v !== null && !Array.isArray(v);
 }
 
-function charLen(s: string): number {
-  let n = 0;
-  for (const _ of s) n++;
-  return n;
-}
-
-function okLen(v: unknown): v is string {
-  return typeof v === "string" && charLen(v) >= 1 && charLen(v) <= 64;
-}
-
 function newToken(): string {
   return randomBytes(32).toString("base64url");
 }
@@ -108,12 +112,6 @@ function headerOne(v: string | string[] | undefined): string | undefined {
   return Array.isArray(v) ? v[0] : v;
 }
 
-interface ErrorSpec {
-  id: ErrorId;
-  message: string;
-  details?: Obj;
-}
-
 /** 封筒から読めた範囲の情報(応答に写す)。 */
 interface EnvelopeInfo {
   requestId: string | null;
@@ -129,36 +127,6 @@ interface Known {
 }
 
 const NO_SESSION: Known = { session_id: null, revision: null, audio_state: null };
-
-const ENVELOPE_KEYS = ["v", "request_id", "command", "args", "expected_revision", "idempotency_key", "client_id"];
-
-/**
- * 封筒の形(operation-contract §3.1、§3.3 の1)。Session と同じ規則(未知のフィールドは ERR-001: docs/contract-notes.md)。
- * 問題がなければ null。
- */
-function checkEnvelope(r: unknown): ErrorSpec | null {
-  const invalid = (field: string, message: string): ErrorSpec => ({ id: "ERR-001", message, details: { field } });
-  if (!isObj(r)) return invalid("", "要求がオブジェクトでない");
-  for (const k of Object.keys(r)) {
-    if (!ENVELOPE_KEYS.includes(k)) return invalid(k, `封筒に未知のフィールド ${k}`);
-  }
-  if (typeof r.v !== "number" || !Number.isInteger(r.v)) return invalid("v", "v は整数(必須)");
-  if (!okLen(r.request_id)) return invalid("request_id", "request_id は 1〜64 文字の文字列(必須)");
-  if (typeof r.command !== "string") return invalid("command", "command は文字列(必須)");
-  if ("args" in r && !isObj(r.args)) return invalid("args", "args はオブジェクト");
-  if ("expected_revision" in r) {
-    const e = r.expected_revision;
-    if (typeof e !== "number" || !Number.isInteger(e) || e < 0) {
-      return invalid("expected_revision", "expected_revision は 0 以上の整数");
-    }
-  }
-  if ("idempotency_key" in r && !okLen(r.idempotency_key)) {
-    return invalid("idempotency_key", "idempotency_key は 1〜64 文字の文字列");
-  }
-  if ("client_id" in r && !okLen(r.client_id)) return invalid("client_id", "client_id は 1〜64 文字の文字列");
-  if (r.v !== 1) return { id: "ERR-012", message: `封筒の版 ${r.v} は未対応`, details: { supported: [1] } };
-  return null;
-}
 
 function envelopeInfo(r: unknown): EnvelopeInfo {
   if (!isObj(r)) return { requestId: null, command: null };
@@ -227,6 +195,7 @@ const STATUS_TEXT: Record<number, string> = {
   403: "Forbidden",
   404: "Not Found",
   426: "Upgrade Required",
+  503: "Service Unavailable",
 };
 
 /** WebSocket の接続要求を HTTP の応答で断る。 */
@@ -243,8 +212,12 @@ function rejectUpgrade(socket: Duplex, status: number, body: Obj): void {
   );
 }
 
+/** 文字列にできない応答(入れ子が深すぎる等)の代わりに返す本文。 */
+const UNENCODABLE = JSON.stringify({ v: 1, request_id: null, ok: false, command: null, revision: null, session_id: null, actor: { kind: "agent" }, audio_state: null, replayed: false, error: { id: "ERR-010", code: ERRORS["ERR-010"], message: "応答を JSON にできない", details: { reason: "unencodable_response" } } });
+
 function sendJson(res: ServerResponse, status: number, body: Obj, extra: Record<string, string> = {}): void {
-  const text = JSON.stringify(body);
+  if (res.headersSent || res.writableEnded) return; // 二重に応答しない
+  const text = tryStringify(body) ?? UNENCODABLE;
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     "Content-Length": Buffer.byteLength(text),
@@ -329,12 +302,31 @@ export function createApp(options: AppOptions): App {
     });
   const NO_INFO: EnvelopeInfo = { requestId: null, command: null };
 
+  /**
+   * WebSocket へ1通送る。相手が受信しないまま送信待ちが上限を超えていたら、ためずに接続を切る。送れたら true。
+   */
+  const sendWs = (ws: WebSocket, text: string): boolean => {
+    if (ws.readyState !== WebSocket.OPEN) return false;
+    if (ws.bufferedAmount > limits.maxBufferedBytes) {
+      ws.terminate();
+      return false;
+    }
+    try {
+      ws.send(text);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   // ---- エージェントへの通知(§10)。seq は接続ごとの連番 ----
   const broadcast = (event: string, sessionId: string | null, data: unknown): void => {
     for (const a of agents) {
       if (a.ws.readyState !== WebSocket.OPEN) continue;
+      const text = tryStringify({ v: 1, event, seq: a.seq + 1, session_id: sessionId, data });
+      if (text === null) return; // 文字列にできない通知は配らない
       a.seq += 1;
-      a.ws.send(JSON.stringify({ v: 1, event, seq: a.seq, session_id: sessionId, data }));
+      sendWs(a.ws, text);
     }
   };
   /** EVT-05(サーバーが出す)。 */
@@ -357,8 +349,10 @@ export function createApp(options: AppOptions): App {
   };
 
   // ---- タブへの中継 ----
-  const sendTab = (ws: WebSocket, m: ServerToTab): void => {
-    if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(m));
+  /** タブへ1通送る。送れなければ(文字列にできない、接続が開いていない、送信待ちが上限超え)false。 */
+  const sendTab = (ws: WebSocket, m: ServerToTab): boolean => {
+    const text = tryStringify(m);
+    return text !== null && sendWs(ws, text);
   };
 
   /**
@@ -367,8 +361,13 @@ export function createApp(options: AppOptions): App {
    */
   const forward = (request: unknown, info: EnvelopeInfo, clientId: string, deliver: (response: Obj) => void): void => {
     const t = tab;
-    if (!t) {
+    // 閉じる途中のタブへは送らない(送っていないので「適用されたか不明」の ERR-007 ではなく ERR-006)
+    if (!t || t.readyState !== WebSocket.OPEN) {
       deliver(failure(info, NO_SESSION, { id: "ERR-006", message: "パッチを持つタブが開かれていない" }));
+      return;
+    }
+    if (pending.size >= limits.maxPendingRequests) {
+      deliver(failure(info, known, { id: "ERR-010", message: "応答待ちの要求が多すぎる(この要求は送っていない)", details: { reason: "too_many_pending", limit: limits.maxPendingRequests } }));
       return;
     }
     const id = nextReqId++;
@@ -378,146 +377,27 @@ export function createApp(options: AppOptions): App {
       deliver(failure(info, known, { id: "ERR-007", message: "タブが時間内に応答しなかった", details: { timeout_ms: limits.tabTimeoutMs } }));
     }, limits.tabTimeoutMs);
     pending.set(id, { info, timer, resolve: deliver });
-    sendTab(t, { t: "req", id, client_id: clientId, request });
+    if (!sendTab(t, { t: "req", id, client_id: clientId, request })) {
+      // 送れなかった(適用されていない)。待ちを解いて、すぐ答える。
+      pending.delete(id);
+      clearTimeout(timer);
+      deliver(failure(info, known, { id: "ERR-010", message: "要求をタブへ送れなかった(この要求は適用されていない)", details: { reason: "not_forwarded" } }));
+    }
   };
 
   // ---- タブなしでも答えるコマンド(product-spec §4: patch.list、patch.read、module.list_types) ----
   const DIRECT = new Set(["module.list_types", "patch.list", "patch.read"]);
-  const badArg = (arg: string, reason: string, message?: string): ErrorSpec => ({
-    id: "ERR-003",
-    message: message ?? `引数 ${arg}: ${reason}`,
-    details: { arg, reason },
-  });
-  const unknownKey = (args: Obj, allowed: string[]): ErrorSpec | null => {
-    for (const k of Object.keys(args)) if (!allowed.includes(k)) return badArg(k, "unknown_key", `未知の引数 ${k}`);
-    return null;
-  };
-  /** 保存先の失敗 → 契約のエラー(src/control/controller.ts の storeError と同じ対応)。 */
-  const storeError = (operation: string, name: string | null, error: string, message?: string): ErrorSpec => {
-    switch (error) {
-      case "not_found":
-        return { id: "ERR-202", message: `保存パッチ ${name} はない`, details: { name } };
-      case "invalid_name":
-        return { id: "ERR-201", message: "パッチ名が規則に合わない", details: { name } };
-      case "too_large":
-        return { id: "ERR-206", message: "パッチの大きさが上限を超える", details: { limit_bytes: MAX_PATCH_BYTES } };
-      default:
-        return { id: "ERR-207", message: message ?? `保存先の ${operation} に失敗`, details: { reason: error, operation } };
-    }
-  };
-  /** ファイルに今書かれている `meta.saved_by.kind`(DAT-36。controller.ts の savedByKindOf と同じ)。 */
-  const savedByKindOf = (text: string): string | null => {
-    let doc: unknown;
+
+  /** タブなしで直接答えるコマンドの中身。タブ側(Session・Controller)と同じ関数を使う(src/control/envelope.ts、library.ts)。 */
+  const direct = async (cmd: string, args: Obj): Promise<Obj | ErrorSpec> => {
     try {
-      doc = JSON.parse(text);
-    } catch {
-      return null;
-    }
-    if (!isObj(doc) || !isObj(doc.meta)) return null;
-    const sb = doc.meta.saved_by;
-    if (!isObj(sb)) return null;
-    if (Object.keys(sb).some((k) => k !== "kind" && k !== "client_id")) return null;
-    if ("client_id" in sb && typeof sb.client_id !== "string") return null;
-    return sb.kind === "agent" || sb.kind === "human" ? sb.kind : null;
-  };
-
-  /**
-   * CMD-01。応答の形は Session(src/control/session.ts の cmdListTypes)と同じでなければならない。
-   * 共有できる関数がまだないので、同じ形をここで作っている(session.ts 側の変更に合わせること)。
-   */
-  const listTypes = (args: Obj): Obj | ErrorSpec => {
-    const k = unknownKey(args, ["type"]);
-    if (k) return k;
-    let infos = [...catalog.values()];
-    if ("type" in args) {
-      if (typeof args.type !== "string") return badArg("type", "type");
-      const one = catalog.get(args.type);
-      if (!one) return { id: "ERR-101", message: `未知のモジュール種別 ${args.type}`, details: { type: args.type } };
-      infos = [one];
-    }
-    const portOf = (p: { name: string; type: string; connectable: boolean }, direction: "in" | "out") => ({
-      name: p.name,
-      direction,
-      signal_type: p.type,
-      unit: null,
-      connectable: p.connectable,
-      unconnected: null,
-    });
-    const types = infos.map((t) => ({
-      type: t.type,
-      title: t.title,
-      category: null,
-      spec_version: t.specVersion,
-      singleton: t.type === OUT_TYPE,
-      ports: [...t.inputs.map((p) => portOf(p, "in")), ...t.outputs.map((p) => portOf(p, "out"))],
-      params: t.params.map((p) => ({
-        name: p.name,
-        kind: p.kind === "seed" ? "int" : p.kind,
-        unit: p.unit ?? null,
-        min: p.min,
-        max: p.max,
-        default: p.default,
-      })),
-      readouts: t.type === METER_TYPE ? [...METER_FIELDS] : [],
-    }));
-    return { types };
-  };
-
-  // CMD-14・CMD-15 の応答は、タブ側(src/control/controller.ts の planList / planRead)と同じでなければならない。
-  // 共有できる関数がまだないので、同じ規則をここで作っている(controller.ts 側の変更に合わせること)。
-
-  /** CMD-14。壊れた・読めないファイルも `readable: false` で載せる(DAT-34)。 */
-  const patchList = async (args: Obj): Promise<Obj | ErrorSpec> => {
-    const k = unknownKey(args, []);
-    if (k) return k;
-    const listed = await store.list();
-    if (!listed.ok) return storeError("list", null, "failed", listed.message);
-    const patches: Obj[] = [];
-    for (const info of listed.value) {
-      const r = await store.read(info.name);
-      if (!r.ok && r.error === "not_found") continue; // 一覧の後に消えた
-      let title: string | null = null;
-      let savedByKind: string | null = null;
-      let readable = false;
-      if (r.ok) {
-        const parsed = parsePatchText(r.value.text, catalog);
-        readable = parsed.ok;
-        if (parsed.ok) {
-          title = parsed.patch.meta.title;
-          savedByKind = parsed.patch.meta.saved_by?.kind ?? null;
-        } else {
-          savedByKind = savedByKindOf(r.value.text);
-          try {
-            const doc: unknown = JSON.parse(r.value.text);
-            if (isObj(doc) && isObj(doc.meta) && typeof doc.meta.title === "string") title = doc.meta.title;
-          } catch {
-            // JSON として読めない
-          }
-        }
-      }
-      patches.push({ name: info.name, title, bytes: info.bytes, modified_at: info.modified_at, saved_by_kind: savedByKind, readable });
-    }
-    return { patches };
-  };
-
-  /** CMD-15。検証・移行はしない。 */
-  const patchRead = async (args: Obj): Promise<Obj | ErrorSpec> => {
-    const k = unknownKey(args, ["name"]);
-    if (k) return k;
-    if (!("name" in args)) return badArg("name", "missing");
-    const name = args.name;
-    if (typeof name !== "string") return badArg("name", "type");
-    if (!isValidPatchName(name)) return { id: "ERR-201", message: "パッチ名が規則に合わない", details: { name } };
-    const r = await store.read(name);
-    if (!r.ok) return storeError("read", name, r.error, r.message);
-    let patch: unknown;
-    try {
-      patch = JSON.parse(r.value.text);
+      if (cmd === "module.list_types") return listTypes(catalog, args, OUT_TYPE, METER_TYPE, METER_FIELDS);
+      if (cmd === "patch.list") return await listPatches(store, catalog, args, limits.maxPatchFiles);
+      return await readPatch(store, args, limits.maxPatchFiles);
     } catch (e) {
-      const message = `JSONとして解釈できない: ${e instanceof Error ? e.message : String(e)}`;
-      return { id: "ERR-204", message, details: { issues: [{ rule: "DAT-V02", path: "", message }] } };
+      if (e instanceof CommandError) return { id: e.id, message: e.message, details: e.details };
+      return { id: "ERR-010", message: "想定外の失敗" };
     }
-    return { patch, bytes: r.value.info.bytes, modified_at: r.value.info.modified_at };
   };
 
   const isErrorSpec = (v: Obj | ErrorSpec): v is ErrorSpec => typeof (v as ErrorSpec).id === "string" && (v as ErrorSpec).id in ERRORS && "message" in v;
@@ -537,12 +417,7 @@ export function createApp(options: AppOptions): App {
     if (!DIRECT.has(cmd)) return failure(info, NO_SESSION, { id: "ERR-006", message: "パッチを持つタブが開かれていない" });
     // 読出しなので冪等キーは無視する(§7.6)。リビジョンがないので expected_revision は比べない。
     const args = (request.args as Obj | undefined) ?? {};
-    let out: Obj | ErrorSpec;
-    try {
-      out = cmd === "module.list_types" ? listTypes(args) : cmd === "patch.list" ? await patchList(args) : await patchRead(args);
-    } catch {
-      out = { id: "ERR-010", message: "想定外の失敗" };
-    }
+    const out = await direct(cmd, args);
     return isErrorSpec(out) ? failure(info, NO_SESSION, out) : success(info, NO_SESSION, out);
   };
 
@@ -613,6 +488,7 @@ export function createApp(options: AppOptions): App {
     const auth = agentAuth(req);
     const raw = await readBody(req);
     handleAgent(raw, auth, `http-${nextClient++}`, (response) => {
+      if (res.headersSent || res.writableEnded || res.destroyed) return; // 相手が先に切った・二重の応答
       const status = auth === "origin" && httpStatus(response) === 401 ? 403 : httpStatus(response);
       // 読み切っていない本文が残る場合は、応答の後で接続を閉じる
       sendJson(res, status, response, raw === null ? { Connection: "close" } : {});
@@ -668,9 +544,15 @@ export function createApp(options: AppOptions): App {
     ws.on("error", () => undefined);
     ws.on("close", () => agents.delete(conn));
     ws.on("message", (data) => {
-      handleAgent(toBuffer(data), null, clientId, (response) => {
-        if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(response));
-      });
+      const reply = (response: Obj): void => {
+        sendWs(ws, tryStringify(response) ?? UNENCODABLE);
+      };
+      try {
+        handleAgent(toBuffer(data), null, clientId, reply);
+      } catch {
+        // 1通の処理の失敗でプロセスを落とさない
+        reply(failure(NO_INFO, NO_SESSION, { id: "ERR-010", message: "想定外の失敗" }));
+      }
     });
   };
 
@@ -736,8 +618,36 @@ export function createApp(options: AppOptions): App {
     }
     tab = ws;
     known = NO_SESSION;
-    ws.on("message", (data) => onTabMessage(ws, toBuffer(data)));
+    ws.on("message", (data) => {
+      try {
+        onTabMessage(ws, toBuffer(data));
+      } catch {
+        // 1通の処理の失敗でプロセスを落とさない(その1通は捨てる)
+      }
+    });
+    // 生死の確認: 返事のないタブ(固まった、回線が黙って切れた)を切って、次のタブを受け付けられるようにする
+    let alive = true;
+    ws.on("pong", () => {
+      alive = true;
+    });
+    const ping =
+      limits.tabPingMs > 0
+        ? setInterval(() => {
+            if (!alive) {
+              ws.terminate();
+              return;
+            }
+            alive = false;
+            try {
+              ws.ping();
+            } catch {
+              ws.terminate();
+            }
+          }, limits.tabPingMs)
+        : null;
+    ping?.unref();
     ws.on("close", () => {
+      if (ping) clearInterval(ping);
       if (tab !== ws) return;
       const last = known;
       tab = null;
@@ -783,6 +693,10 @@ export function createApp(options: AppOptions): App {
         rejectUpgrade(socket, auth === "origin" ? 403 : 401, unauthorized(NO_INFO, auth));
         return;
       }
+      if (agents.size >= limits.maxAgentConnections) {
+        rejectUpgrade(socket, 503, failure(NO_INFO, NO_SESSION, { id: "ERR-010", message: "エージェントの接続が多すぎる", details: { reason: "too_many_connections", limit: limits.maxAgentConnections } }));
+        return;
+      }
       agentWss.handleUpgrade(req, socket, head, onAgent);
     } else if (url.pathname === "/tab") {
       if (!ownOrigin(req.headers.origin)) {
@@ -810,6 +724,7 @@ export function createApp(options: AppOptions): App {
         // ホストは固定(127.0.0.1)。引数で変えられない。
         server.listen(listenPort, HOST, () => {
           server.removeListener("error", ng);
+          void store.sweepTemp(); // 前回の実行で残った一時ファイルを片付ける
           const a = server.address();
           port = typeof a === "object" && a ? a.port : listenPort;
           ok(port);

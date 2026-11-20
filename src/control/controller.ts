@@ -12,9 +12,9 @@
 // この層の対象外(輸送・サーバーの責務): 認証 ERR-004、セッションなし ERR-006(patch.list / patch.read を
 // タブなしで応答すること)、応答待ち ERR-007、要求の大きさ ERR-011、通知の `seq`、EVT-05。
 import { CommandError, ErrorId } from "./errors.js";
+import { agentMayOverwrite, callStore, checkKeys, listPatches, patchNameArg as patchName, readPatch, storeError } from "./library.js";
 import {
   MAX_PATCH_BYTES,
-  PatchDocument,
   PatchLoadResult,
   isValidPatchName,
   parsePatchText,
@@ -24,7 +24,10 @@ import {
 } from "./patch-doc.js";
 import { ExternalRun, Session } from "./session.js";
 import { PatchStore, StoreError, StoreResult } from "./store.js";
-import { ActorInfo, ActorKind, CommandResponse, Patch, PatchMeta, SavedBy, SessionEvent, Warning } from "./types.js";
+import { ActorInfo, ActorKind, CommandResponse, PatchMeta, SavedBy, SessionEvent, Warning } from "./types.js";
+
+/** 保存先の応答を待つ時間の既定値 [ms](契約にない実装上の値)。超えたら ERR-207(保存先の失敗)。 */
+export const DEFAULT_STORE_TIMEOUT_MS = 10000;
 
 /** 専用フォルダ内の保存パッチのファイル数の上限(operation-contract §16、data-contract §10。暫定値)。 */
 export const MAX_PATCH_FILES = 1000;
@@ -55,6 +58,8 @@ export interface ControllerOptions {
   appVersion?: string;
   /** 保存パッチのファイル数の上限。 */
   maxPatchFiles?: number;
+  /** 保存先の応答を待つ時間 [ms]。0 以下で無制限。 */
+  storeTimeoutMs?: number;
 }
 
 type Args = Record<string, unknown>;
@@ -73,44 +78,10 @@ function bad(arg: string, reason: string, message?: string): CommandError {
   return new CommandError("ERR-003", message ?? `引数 ${arg}: ${reason}`, { arg, reason });
 }
 
-function checkKeys(a: Args, allowed: readonly string[]): void {
-  for (const k of Object.keys(a)) {
-    if (!allowed.includes(k)) throw bad(k, "unknown_key", `未知の引数 ${k}`);
-  }
-}
-
-/** 引数 `name`: 文字列でなければ ERR-003、規則(DAT-31)に合わなければ ERR-201。 */
-function patchName(a: Args): string {
-  if (!("name" in a)) throw bad("name", "missing");
-  const name = a.name;
-  if (typeof name !== "string") throw bad("name", "type");
-  if (!isValidPatchName(name)) throw new CommandError("ERR-201", "パッチ名が規則に合わない", { name });
-  return name;
-}
-
 /** RFC 3339 の UTC(秒まで)。 */
 function utcTimestamp(t: Date | number): string {
   const d = t instanceof Date ? t : new Date(t);
   return d.toISOString().replace(/\.\d+Z$/, "Z");
-}
-
-/**
- * ファイルに今書かれている `meta.saved_by.kind`(DAT-36)。
- * JSONとして読めない、`saved_by` がない、書式が不正のときは null(人が保存したものとして扱う)。
- */
-function savedByKindOf(text: string): ActorKind | null {
-  let doc: unknown;
-  try {
-    doc = JSON.parse(text);
-  } catch {
-    return null;
-  }
-  if (!isObj(doc) || !isObj(doc.meta)) return null;
-  const sb = doc.meta.saved_by;
-  if (!isObj(sb)) return null;
-  if (Object.keys(sb).some((k) => k !== "kind" && k !== "client_id")) return null;
-  if ("client_id" in sb && typeof sb.client_id !== "string") return null;
-  return sb.kind === "agent" || sb.kind === "human" ? sb.kind : null;
 }
 
 export class Controller {
@@ -119,6 +90,7 @@ export class Controller {
   private readonly now: () => Date | number;
   private readonly appVersion: string;
   private readonly maxPatchFiles: number;
+  private readonly storeTimeoutMs: number;
   private readonly listeners = new Set<(ev: ControllerEvent) => void>();
   /** 待ち行列の末尾(前の要求の処理の完了)。 */
   private tail: Promise<void> = Promise.resolve();
@@ -130,6 +102,7 @@ export class Controller {
     this.now = opts.now;
     this.appVersion = opts.appVersion ?? DEFAULT_APP_VERSION;
     this.maxPatchFiles = opts.maxPatchFiles ?? MAX_PATCH_FILES;
+    this.storeTimeoutMs = opts.storeTimeoutMs ?? DEFAULT_STORE_TIMEOUT_MS;
     this.session.subscribe((ev) => this.emit(ev));
   }
 
@@ -149,6 +122,8 @@ export class Controller {
   /**
    * 要求を1件処理して応答を返す。`actor` は受け口が決めた操作者(§3.1)。
    * 要求は呼んだ順に1本の待ち行列に入り、1件ずつ処理する(前の要求の応答が決まるまで、次の要求は始めない)。
+   * 例外は緊急停止(engine.panic): 待ち行列を通さず、その場で実行する(保存先の読み書きを待つ間も止められるようにする。
+   * CMD-23「止める操作を妨げない」)。緊急停止はパッチもリビジョンも変えないので、待っている要求の結果に影響しない。
    * 通知は応答の後に出す(§10): `deliver` を渡すと、応答を `deliver` へ渡してから通知をリスナーへ渡す。
    * `deliver` がなければ、通知をリスナーへ渡し終えてから応答を返す。
    */
@@ -160,6 +135,13 @@ export class Controller {
       if (text !== undefined) req = JSON.parse(text) as unknown;
     } catch {
       // JSON にできない値はそのまま渡す(Session が ERR-001 にする)
+    }
+    if (isObj(req) && req.command === "engine.panic") {
+      try {
+        return Promise.resolve(this.session.handle(req, actor, deliver));
+      } catch (e) {
+        return Promise.reject(e instanceof Error ? e : new Error(String(e)));
+      }
     }
     this.waiting++;
     const result = this.tail.then(() => this.handleOne(req, actor, deliver));
@@ -246,31 +228,14 @@ export class Controller {
 
   // ---- 保存先の呼出し ----
 
-  /** 保存先の例外(Promise の拒否)も「読み書きの失敗」として扱う。 */
-  private async call<T>(fn: () => Promise<StoreResult<T>>): Promise<StoreResult<T>> {
-    try {
-      return await fn();
-    } catch (e) {
-      return { ok: false, error: "failed", message: e instanceof Error ? e.message : String(e) };
-    }
+  /** 保存先の例外(Promise の拒否)と時間切れも「読み書きの失敗」として扱う。 */
+  private call<T>(fn: () => Promise<StoreResult<T>>): Promise<StoreResult<T>> {
+    return callStore(fn, this.storeTimeoutMs);
   }
 
   /** 保存先の失敗 → 契約のエラー。 */
   private storeError(operation: string, name: string | null, error: StoreError, message?: string): CommandError {
-    switch (error) {
-      case "not_found":
-        return new CommandError("ERR-202", `保存パッチ ${name} はない`, { name });
-      case "exists":
-        return new CommandError("ERR-203", `保存パッチ ${name} は既にある(上書きは overwrite: true)`, { name });
-      case "invalid_name":
-        return new CommandError("ERR-201", "パッチ名が規則に合わない", { name });
-      case "too_many":
-        return new CommandError("ERR-106", "保存パッチのファイル数の上限", { limit: "patch_files", max: this.maxPatchFiles });
-      case "too_large":
-        return new CommandError("ERR-206", "パッチの大きさが上限を超える", { limit_bytes: MAX_PATCH_BYTES });
-      default:
-        return new CommandError("ERR-207", message ?? `保存先の ${operation} に失敗`, { reason: error, operation });
-    }
+    return storeError(operation, name, error, message, this.maxPatchFiles);
   }
 
   private loadError(r: Extract<PatchLoadResult, { ok: false }>): CommandError {
@@ -292,9 +257,9 @@ export class Controller {
       existed = true;
       if (!overwrite) throw this.storeError("read", name, "exists");
       if (actor.kind === "agent") {
-        // 判定に使うのは、上書きされる側のファイルに今書かれている meta.saved_by.kind だけ
-        const kind = savedByKindOf(current.value.text);
-        if (kind !== "agent") {
+        // 判定に使うのは、上書きされる側のファイルの今の内容だけ: 文書として読めて、meta.saved_by.kind が agent のときだけ許す。
+        // 読めないファイル(壊れた JSON、重複キー、検証に通らない文書)は、人が保存したものとして扱う(§15.3)。
+        if (!agentMayOverwrite(current.value.text, this.session.typeCatalog)) {
           throw new CommandError("ERR-005", "エージェントが上書きできるのは、最後にエージェントが保存したファイルだけ", {
             command: "patch.save",
             actor_kind: actor.kind,
@@ -325,7 +290,7 @@ export class Controller {
       app_version: this.appVersion,
     };
     const doc = { ...patch, meta: { title: patch.meta.title, description: patch.meta.description, ...stamp } };
-    const text = serializePatchDocument(doc as unknown as PatchDocument);
+    const text = serializePatchDocument(doc);
     if (utf8ByteLength(text) > MAX_PATCH_BYTES) throw this.storeError("write", name, "too_large");
 
     const written = await this.call(() => this.store.write(name, text, existed));
@@ -366,7 +331,7 @@ export class Controller {
     const { patch, warnings, migrated } = loaded;
     return {
       run: (ops) => {
-        ops.replacePatch(patch as unknown as Patch);
+        ops.replacePatch(patch);
         return { result: { patch: this.session.getPatch(), migrated }, warnings: warnings as Warning[] };
       },
     };
@@ -375,62 +340,15 @@ export class Controller {
   // ---- CMD-14 patch.list ----
 
   private async planList(args: Args): Promise<Plan> {
-    checkKeys(args, []);
-    const listed = await this.call(() => this.store.list());
-    if (!listed.ok) throw this.storeError("list", null, "failed", listed.message);
-    const catalog = this.session.typeCatalog;
-    const patches: Record<string, unknown>[] = [];
-    const infos = listed.value.filter((f) => isValidPatchName(f.name)).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-    for (const info of infos) {
-      const r = await this.call(() => this.store.read(info.name));
-      if (!r.ok && r.error === "not_found") continue; // 一覧の後に消えた
-      let title: string | null = null;
-      let savedByKind: ActorKind | null = null;
-      let readable = false;
-      if (r.ok) {
-        const parsed = parsePatchText(r.value.text, catalog);
-        readable = parsed.ok;
-        if (parsed.ok) {
-          title = parsed.patch.meta.title;
-          savedByKind = parsed.patch.meta.saved_by?.kind ?? null;
-        } else {
-          savedByKind = savedByKindOf(r.value.text);
-          try {
-            const doc = JSON.parse(r.value.text) as unknown;
-            if (isObj(doc) && isObj(doc.meta) && typeof doc.meta.title === "string") title = doc.meta.title;
-          } catch {
-            // JSON として読めない
-          }
-        }
-      }
-      patches.push({
-        name: info.name,
-        title,
-        bytes: info.bytes,
-        modified_at: info.modified_at,
-        saved_by_kind: savedByKind,
-        readable,
-      });
-    }
-    return { run: () => ({ result: { patches } }) };
+    const result = await listPatches(this.store, this.session.typeCatalog, args, this.maxPatchFiles, this.storeTimeoutMs);
+    return { run: () => ({ result }) };
   }
 
   // ---- CMD-15 patch.read ----
 
   private async planRead(args: Args): Promise<Plan> {
-    checkKeys(args, ["name"]);
-    const name = patchName(args);
-    const r = await this.call(() => this.store.read(name));
-    if (!r.ok) throw this.storeError("read", name, r.error, r.message);
-    let patch: unknown;
-    try {
-      patch = JSON.parse(r.value.text);
-    } catch (e) {
-      const message = `JSONとして解釈できない: ${e instanceof Error ? e.message : String(e)}`;
-      throw new CommandError("ERR-204", message, { issues: [{ rule: "DAT-V02", path: "", message }] });
-    }
-    const { bytes, modified_at } = r.value.info;
-    return { run: () => ({ result: { patch, bytes, modified_at } }) };
+    const result = await readPatch(this.store, args, this.maxPatchFiles, this.storeTimeoutMs);
+    return { run: () => ({ result }) };
   }
 
   // ---- CMD-16 patch.delete(人のみ。権限は precheck が見る) ----

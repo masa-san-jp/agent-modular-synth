@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { ToWorklet, WorkletStatus } from "../src/audio/messages.js";
 import { WorkletBackend } from "../src/audio/worklet-backend.js";
+import { WorkletCore } from "../src/audio/worklet-core.js";
 import { EngineBackend } from "../src/control/backend.js";
 import { buildCatalog } from "../src/control/catalog.js";
 import { Session } from "../src/control/session.js";
@@ -14,61 +15,35 @@ const FS = 48000;
 const CATALOG = buildCatalog(REGISTRY);
 const bits = (b: Float32Array): number[] => Array.from(new Uint32Array(b.buffer, b.byteOffset, b.length));
 
-/** ワークレット(src/audio/worklet.ts)と同じ処理を、同じプロセス内で行う。 */
+/** ワークレットの中身(src/audio/worklet-core.ts。本物と同じクラス)を、同じプロセス内で動かす。 */
 class FakeWorklet {
-  readonly be = new EngineBackend(FS, REGISTRY);
-  constructor(private readonly onStatus: (s: WorkletStatus) => void) {}
+  readonly errors: { message: string; resync?: boolean }[] = [];
+  readonly core: WorkletCore;
+  /** true の間は、届いたメッセージをためて処理しない(メッセージが遅れて届く状況)。 */
+  hold = false;
+  private queue: ToWorklet[] = [];
+  constructor(private readonly onStatus: (s: WorkletStatus) => void) {
+    this.core = new WorkletCore(FS, REGISTRY, (m) => {
+      if (m.type === "error") this.errors.push(m);
+    });
+  }
+  get be(): EngineBackend {
+    return this.core.be;
+  }
   postMessage(msg: ToWorklet): void {
-    const be = this.be;
-    switch (msg.type) {
-      case "apply":
-        return be.applyPatch(msg.patch, msg.revision);
-      case "ops":
-        for (const o of msg.ops) {
-          if (o.op === "add") be.addModule(o.module);
-          else if (o.op === "remove") be.removeModule(o.id);
-          else if (o.op === "connect") be.connect(o.cable);
-          else if (o.op === "disconnect") be.disconnect(o.cable);
-          else be.setParam(o.id, o.name, o.value);
-        }
-        return be.commit(msg.revision);
-      case "start":
-        be.start();
-        return;
-      case "stop":
-        return be.stop();
-      case "panic":
-        return be.panic();
-      case "release_panic":
-        be.releasePanic();
-        return;
-      case "level":
-        be.setLevel(msg.db, msg.actor);
-        return;
-      case "midi":
-        return be.midi(msg.bytes);
-    }
+    const copy = JSON.parse(JSON.stringify(msg)) as ToWorklet; // MessagePort と同じく、写しが届く
+    if (this.hold) this.queue.push(copy);
+    else this.core.onMessage(copy);
+  }
+  release(): void {
+    this.hold = false;
+    for (const m of this.queue.splice(0)) this.core.onMessage(m);
   }
   render(frames: number): Float32Array {
     const L = new Float32Array(frames);
     const R = new Float32Array(frames);
-    for (let i = 0; i < frames; i += 128) this.be.processBlock(L.subarray(i, i + 128), R.subarray(i, i + 128));
-    const s = this.be.status();
-    this.onStatus({
-      fs: FS,
-      sampleTime: s.sampleTime,
-      running: s.audioState === "running",
-      panic: s.panic,
-      levelDb: s.levelDb,
-      agentMaxLevelDb: s.agentMaxLevelDb,
-      clipCount: s.clipCount,
-      nonfiniteModules: s.nonfiniteModules,
-      nonfiniteOutputStage: s.nonfiniteOutputStage,
-      engineRevision: s.engineRevision ?? null,
-      limiterGain: this.be.stage.status().limiterGain,
-      peak: this.be.takePeak(),
-      meters: this.be.meters(),
-    });
+    for (let i = 0; i < frames; i += 128) this.core.process(L.subarray(i, i + 128), R.subarray(i, i + 128));
+    this.onStatus(JSON.parse(JSON.stringify(this.core.status())) as WorkletStatus);
     return L;
   }
 }

@@ -356,7 +356,8 @@ test("待受アドレスは 127.0.0.1 だけ(server.address())。listen にホ�
   }));
 
 test("上限と時間の既定値は契約の値(要求 2 MiB、応答待ち 5 秒、ファイル数 1000、パッチ 1 MiB)", () => {
-  assert.deepEqual(DEFAULT_APP_LIMITS, { tabTimeoutMs: 5000, maxRequestBytes: 2 * 1024 * 1024, maxPatchFiles: 1000, maxPatchBytes: 1024 * 1024 });
+  const { tabTimeoutMs, maxRequestBytes, maxPatchFiles, maxPatchBytes } = DEFAULT_APP_LIMITS;
+  assert.deepEqual({ tabTimeoutMs, maxRequestBytes, maxPatchFiles, maxPatchBytes }, { tabTimeoutMs: 5000, maxRequestBytes: 2 * 1024 * 1024, maxPatchFiles: 1000, maxPatchBytes: 1024 * 1024 });
 });
 
 test("トークン: 省略時は乱数で発行し、2つは別の値。起動のたびに変わる。同じ値は拒否", async () => {

@@ -69,9 +69,19 @@ export class FilePatchStore implements PatchStore {
     return this.serial(async () => {
       const file = this.pathOf(name);
       if (file === null) return fail("invalid_name");
+      // 通常のファイルだけを開く。名前付きパイプなどを開くと、相手が現れるまで戻らず、以後の保存の操作が全部止まる。
+      // 先に種類を確かめ、確かめた後で差し替えられた場合に備えて、待たない指定(O_NONBLOCK)でも開く。
+      try {
+        const pre = await lstat(file);
+        if (pre.isSymbolicLink()) return fail("failed", "symlink");
+        if (!pre.isFile()) return fail("failed", "not_a_regular_file");
+      } catch (e) {
+        if (errCode(e) === "ENOENT") return fail("not_found");
+        throw e;
+      }
       let handle;
       try {
-        handle = await open(file, FS.O_RDONLY | (FS.O_NOFOLLOW ?? 0));
+        handle = await open(file, FS.O_RDONLY | (FS.O_NOFOLLOW ?? 0) | (FS.O_NONBLOCK ?? 0));
       } catch (e) {
         const code = errCode(e);
         if (code === "ENOENT") return fail("not_found");
@@ -159,6 +169,39 @@ export class FilePatchStore implements PatchStore {
       }
       return { ok: true, value: null };
     });
+  }
+
+  /**
+   * 書き込みの途中で残った一時ファイル(`.<名前>.<乱数>.tmp`。プロセスが途中で終わると残る)のうち、
+   * `olderThanMs` より古いものを消す。消した数を返す。失敗しても例外にしない。
+   */
+  sweepTemp(olderThanMs = 60 * 60 * 1000): Promise<number> {
+    return this.tail
+      .then(async () => {
+        let entries: string[];
+        try {
+          entries = await readdir(this.dir);
+        } catch {
+          return 0;
+        }
+        let removed = 0;
+        const now = Date.now();
+        for (const e of entries) {
+          if (!/^\.[a-z0-9][a-z0-9_-]{0,63}\.[0-9a-f]{16}\.tmp$/.test(e)) continue;
+          try {
+            const file = join(this.dir, e);
+            const st = await lstat(file);
+            if (st.isFile() && now - st.mtimeMs > olderThanMs) {
+              await unlink(file);
+              removed++;
+            }
+          } catch {
+            // 消えた・消せない: 何もしない
+          }
+        }
+        return removed;
+      })
+      .catch(() => 0);
   }
 
   // ---- 内部 ----
