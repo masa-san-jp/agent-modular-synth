@@ -13,7 +13,7 @@
 |---|---|---|
 | §3.1 封筒の未知のフィールド | args の未知キーしか規定がない。封筒の未知キー(`actor` を含む)は ERR-001 で拒否(打ち間違いの `expected_revision` を黙って無視しないため) | operation-contract §3.1 |
 | §5 ERR-003「IDの書式」 | 書式を検査するのは新しく付けるIDだけ。既存の対象を指すIDは、存在しなければ ERR-102 / ERR-115 | operation-contract §2.2「IDの書式を検査する範囲」 |
-| §2.2 次番号と失敗 | 失敗した要求(batch の途中失敗を含む)が使った番号は消費しない | operation-contract §2.2 自動採番の規則8 |
+| §2.2 次番号と失敗 | 失敗した要求(batch の途中失敗を含む)が使った番号は消費しない | operation-contract §2.2 自動採番の規則9 |
 | CMD-09 batch | `ops` が空なら ERR-003、500 超なら ERR-106、未定義のコマンド名は ERR-132、要素の余分なキーは ERR-003。`args` の省略は `{}` | operation-contract CMD-09 |
 | CMD-05 module.move | `ui` は x・y が必須で、他のキーは保持する。既存の `ui` に上書きでマージする | operation-contract CMD-05 |
 | CMD-11 patch.new | 既に空のパッチでも変更として扱う(リビジョン +1、履歴1件) | operation-contract CMD-11 |
