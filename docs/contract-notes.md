@@ -18,7 +18,7 @@
 | CMD-05 module.move | `ui` は x・y が必須で、他のキーは保持する。既存の `ui` に上書きでマージする | operation-contract CMD-05 |
 | CMD-11 patch.new | 既に空のパッチでも変更として扱う(リビジョン +1、履歴1件) | operation-contract CMD-11 |
 | §9.4 履歴のまとめ | 「同じ操作者」は種別と client_id の両方が一致。undo/redo を挟んだらまとめを切る | operation-contract §9.4 |
-| §7 冪等キー | 鍵は操作者をまたいで1つの集まり。再送の応答は `request_id` と `replayed` だけ差し替える | 未反映(理由: 鍵の操作者ごとの扱いは同時進行の修正で別途定める。応答の差し替えは operation-contract §7.2 に記載済み) |
+| §7 冪等キー | 鍵は操作者をまたいで1つの集まり。再送の応答は `request_id` と `replayed` だけ差し替える | operation-contract §7.1(Issue #24 の修正で、鍵は操作者の種別ごとの集まりに変わった。メモの「操作者をまたいで1つ」は古い)。応答の差し替えは §7.2 に記載済み |
 | §14 seed | `duplicate_seed` の `details` は `{module_id, param, value, conflicts}`。ノイズ源と S&H は同じ集まりで数える | operation-contract §14 |
 | CMD-21 | `stopped` のとき `fs`・`engine_revision` は null、計数は 0 | 記載済み: operation-contract CMD-21 |
 | CMD-01 module.list_types | 契約が求める `category`、ポートの `unit` と `unconnected`、パラメータの enum の区別と `values` は、実装の定義にまだなく `null` で返す。真偽型(`bool`)は区別する | 未反映(理由: 未達) |
@@ -28,14 +28,14 @@
 | 箇所 | 採った解釈 | 反映(Issue #24) |
 |---|---|---|
 | §8 DAT-V07 移行の道がない古い仕様版(例 `"0.0"`) | 文面では通るが、拒否する(ERR-205) | data-contract §8 の表 DAT-V07 |
-| DAT-V01 解釈済みの値の大きさ | 空白なしの JSON にしたときの UTF-8 バイト数で測る | 未反映(理由: 大きさの測り方は同時進行の修正で別途定める) |
+| DAT-V01 解釈済みの値の大きさ | 空白なしの JSON にしたときの UTF-8 バイト数で測る | data-contract §8 の表 DAT-V01 |
 | 旧版の既定値 | 現行と同じとする(旧版のパラメータの組は、現行から移行で増えた名前を除いたもの)。既定値や名前を変える改訂を入れるなら、旧版の定義を別に持つ必要がある | data-contract §9.5 |
 | 時刻の書式 | `YYYY-MM-DDTHH:MM:SS[.小数]Z` だけを受理(`+00:00` は拒否) | data-contract §3.2 |
 | 文字数 | Unicode の符号位置で数える | data-contract §3.2、operation-contract §3.1 |
 | `issues[].path` の書式 | `modules[1].params.cutoff`、`cables[0].from.port` の形。最上位は `""` | data-contract §8 の2 |
-| JSON の解釈 | 先頭の BOM、入れ子512段超は拒否。`1e999` は置かれた場所の規則で拒否 | data-contract §8 の表 DAT-V02(BOM)、§8 補足(`1e999`)。入れ子512段は未反映(入れ子の上限は同時進行の修正の範囲) |
+| JSON の解釈 | 先頭の BOM、入れ子512段超は拒否。`1e999` は置かれた場所の規則で拒否 | data-contract §8 の表 DAT-V02(BOM)、§8 補足(`1e999`)。入れ子512段は operation-contract CMD-15(`patch.read`)。`patch.load` での扱いは未反映(契約に上限の規定がない。下の表) |
 | `spec_version` の表記 | `"0.02"` は `0.2` と同じ版として扱い、正規化で `"0.2"` にする | data-contract §9.1 |
-| 保存時の書式 | 2文字字下げ、末尾改行、キーは契約の表の順 | 未反映(理由: 字下げは同時進行の修正で別途定める) |
+| 保存時の書式 | 2文字字下げ、末尾改行、キーは契約の表の順 | data-contract DAT-32(Issue #24 の修正で、`ui` の値は1行で書く形に変わった) |
 
 ## Issue #20 で追加した解釈(保存のコマンド、ローカルサーバー)
 ### 保存のコマンド(`src/control/controller.ts`)
@@ -43,7 +43,7 @@
 |---|---|---|
 | CMD-12 patch.save のエラー順 | 列挙順どおり 003 → 201 → 203 → 005 → 106 → 206 → 207 | operation-contract CMD-12 |
 | ERR-106 / ERR-207 の `details` | 値の名前が契約にない。ERR-106 は `limit: "patch_files"`、ERR-207 は保存先の失敗種別と `operation`(read / write / list / remove) | operation-contract §5 ERR-106、ERR-207 |
-| DAT-36「書式が不正な saved_by」 | オブジェクトでない、余分なキーがある、`client_id` が文字列でない、のいずれかを人の保存として扱う | 未反映(理由: 上書きの判定は同時進行の修正で実装が変わっている。報告) |
+| DAT-36「書式が不正な saved_by」 | オブジェクトでない、余分なキーがある、`client_id` が文字列でない、のいずれかを人の保存として扱う | data-contract DAT-36、operation-contract §15.3(Issue #24 の修正で、判定は「文書として検証に通り、`kind` が `agent`」に変わった。メモの定義は古い) |
 | CMD-14 patch.list の `readable` | 「`patch.load` が成功する(§8 の検証に通る)」を true。未知の版も false。並びは名前順 | operation-contract CMD-14、data-contract DAT-34 |
 | CMD-14 / CMD-15 の `modified_at` | ファイルの更新時刻(`meta.modified_at` ではない) | operation-contract CMD-14、CMD-15、data-contract DAT-34 |
 | CMD-13 `patch` がオブジェクトでない | ERR-003(ERR-204 ではない) | operation-contract CMD-13 |
@@ -96,18 +96,39 @@
 ### 編集画面(`src/web/ui.ts`)
 | 箇所 | 採った解釈 | 反映(Issue #24) |
 |---|---|---|
-| 操作契約 §12.2「UI は範囲外の値を送らない」 | スライダーは定義の範囲に制限する。数値欄に打たれた範囲外・非整数の値はそのまま送り、契約のエラー(ERR-123 / ERR-122)を表示する | 未反映(理由: 設計判断待ち) |
+| 操作契約 §12.2「UI は範囲外の値を送らない」 | スライダーは定義の範囲に制限する。数値欄に打たれた範囲外・非整数の値はそのまま送り、契約のエラー(ERR-123 / ERR-122)を表示する | 未反映(理由: 設計判断待ち。OPEN-017) |
 | 列挙型のパラメータ | 実装の定義に列挙の区別がないため、整数の数値欄になる(選択肢の名前は出ない) | 未反映(理由: 未達) |
-| スライダーの刻み | 範囲の約 1/1000 を 10 の累乗に丸めた値(BPM は 0.1) | 未反映(理由: 設計判断待ち) |
-| 保存の上書き | まず上書きなしで送り、ERR-203 のときに確認して上書きで再送する | 未反映(理由: 設計判断待ち) |
+| スライダーの刻み | 範囲の約 1/1000 を 10 の累乗に丸めた値(BPM は 0.1) | 未反映(理由: 設計判断待ち。OPEN-018) |
+| 保存の上書き | まず上書きなしで送り、ERR-203 のときに確認して上書きで再送する | 未反映(理由: 設計判断待ち。OPEN-019) |
 
 ### 実装の重複(整理が残る)
 - `src/mcp/tools.ts` のコマンドの表は契約 §6 の写しで、`src/control/session.ts` の `COMMANDS` と重複している(一致は試験で確認)。 **→ 反映不要(実装の整理)**
 
 ## この層で扱っていないもの(次の Issue)
 Web MIDI の可否、タブ接続の生死監視、同時接続数や待ち要求数の上限。(認証、セッションなし、応答待ち、要求の大きさ、通知の連番、EVT-05 / EVT-06、ファイルへの保存と自動保存は Issue #20 で実装した。)
-**→ 未反映(理由: 未達。契約に規定がない実装の範囲)。Web MIDI の可否(`midi.available`)は未実装。タブ接続の生死監視と、同時接続数・待ち要求数の上限は、同時進行の修正で実装が進んでいる。**
+**→ 未反映(理由: 未達。契約に規定がない実装の範囲)。Web MIDI の可否(`midi.available`)は未実装。タブ接続の生死監視と、同時接続数・待ち要求数の上限は、Issue #24 の修正で実装した(operation-contract §3.4 の8、§16)。**
 
 ## 実装上の整理が残る点
 - パッチの型と定数(format 名、IDの書式、上限)が `src/control/types.ts`・`session.ts` と `src/control/patch-doc.ts` に重複している。ファイル保存の実装時に一本化する。 **→ 反映不要(実装の整理)**
 - 画面(`src/web/`)は、操作をコマンド経由で行う最小のもの(Issue #20)。パッチを組み替える編集画面は未実装。 **→ 反映不要(実装の整理)**
+
+## Issue #24 の修正で増えた、契約にない実装上の値
+契約の本文には [暫定値] として書いた(確定値ではない)。値を変えるときは、実装の定数と契約の両方を直す。
+| 値 | 内容 | 実装の定数 | 契約での記載 |
+|---|---|---|---|
+| 10 秒 | 保存先の応答待ち。超えたら ERR-207(`reason: "failed"`) | `src/control/controller.ts` `DEFAULT_STORE_TIMEOUT_MS` | operation-contract CMD-12、§16 |
+| 16 MiB 相当の文字数 | 冪等キーで保存する応答の合計の大きさ | `src/control/session.ts` `idempotencyChars` | operation-contract §7.1、§16 |
+| 32 MiB 相当の文字数 | 置き換えの履歴が持つパッチの合計の大きさ | `src/control/session.ts` `historyChars` | operation-contract §9.7、§16 |
+| 9 桁 | 自動採番の計算に入れる番号の桁数 | `src/control/session.ts` `MAX_NUMBERED_DIGITS` | operation-contract §2.2 の規則8 |
+| 64 段 | 要求の入れ子の深さ。超えたら ERR-001(`too_deep`) | `src/control/json.ts` `MAX_REQUEST_DEPTH` | operation-contract §3.3 の1、§16 |
+| 8 段 | `ui` の入れ子の深さ | `src/control/json.ts` `MAX_UI_DEPTH` | data-contract DAT-11、§10、operation-contract §16 |
+| 512 段 | 保存文書の入れ子の深さ(読取りの上限) | `src/control/patch-doc.ts` `MAX_JSON_DEPTH` | operation-contract CMD-15(`patch.read`)だけ。`patch.load` での扱いは契約に書いていない |
+| 16 | エージェントの WebSocket の同時接続数 | `src/server/app.ts` `maxAgentConnections` | operation-contract §3.4 の8、§16 |
+| 256 | タブの応答を待つ要求の数 | `src/server/app.ts` `maxPendingRequests` | 同上 |
+| 32 MiB | 1つの接続の送信待ちの量 | `src/server/app.ts` `maxBufferedBytes` | 同上 |
+| 15 秒 | タブの生死を確かめる間隔 | `src/server/app.ts` `tabPingMs` | 同上 |
+| 16 MiB | タブからの1通の大きさ | `src/server/app.ts` `TAB_MAX_MESSAGE_BYTES` | 契約に書いていない(タブとサーバーの間の取り決め) |
+| 1 時間 | 起動時に消す一時ファイルの古さ | `src/server/file-store.ts` `sweepTemp` | data-contract DAT-32 |
+| 15 秒 | MCP アダプタの応答待ち | `src/mcp/adapter.ts` `DEFAULT_TIMEOUT_MS` | 契約に書いていない |
+
+batch の検査の順(Issue #24): `ops` の形(ERR-003)→ 件数(ERR-106)→ 各要素の形(ERR-003)→ 入れられないコマンド(ERR-132)→ 各操作(ERR-131)。operation-contract CMD-09 に記載済み。
