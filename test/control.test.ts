@@ -144,7 +144,7 @@ test("前提: P0 は revision 10、running、patch.get が P0 と一致する", 
   assert.deepEqual(res.result.history, { can_undo: false, can_redo: false });
 });
 
-test("AX-01: パッチ保存→復元", { skip: "対象外: patch.save / patch.load はファイル保存の Issue で実装する(現状は ERR-207)" }, () => {});
+test("AX-01: パッチ保存→復元", { skip: "この層(Session 単体)の対象外: 保存先を使うコマンドは Controller が処理する。AX-01 の確認は test/controller.test.ts" }, () => {});
 
 test("AX-02a: 無効な接続(方向)", () => {
   const r = rig();
@@ -405,7 +405,7 @@ test("AX-10d: 常設モジュールの削除", () => {
   });
 });
 
-test("AX-10e: トークンなし", { skip: "対象外: 認証(ERR-004)は輸送層(ローカルサーバー)の責務で、Session は受け口が決めた操作者だけを受け取る" }, () => {});
+test("AX-10e: トークンなし", { skip: "この層(Session 単体)の対象外: 認証(ERR-004)はローカルサーバーの責務。AX-10e の確認は test/server.test.ts" }, () => {});
 
 test("AX-11: 人とエージェントの取り消し", () => {
   const r = rig();
@@ -424,7 +424,7 @@ test("AX-11: 人とエージェントの取り消し", () => {
   assert.equal(data.command, "history.undo");
 });
 
-test("AX-12: 壊れたパッチの読込", { skip: "対象外: patch.load と読込時の検証(DAT-V06 → ERR-204)はファイル保存の Issue で実装する(現状は ERR-207)" }, () => {});
+test("AX-12: 壊れたパッチの読込", { skip: "この層(Session 単体)の対象外: patch.load と読込時の検証は Controller が処理する。AX-12 の確認は test/controller.test.ts" }, () => {});
 
 test("AX-13: seed の自動割当", () => {
   const r = rig();
@@ -439,7 +439,7 @@ test("AX-13: seed の自動割当", () => {
   assert.deepEqual(seeds, [1, 17]);
 });
 
-test("AX-14: セッションなし", { skip: "対象外: タブがない場合(ERR-006)と patch.list はサーバーの責務(Session があること自体がセッションあり)" }, () => {});
+test("AX-14: セッションなし", { skip: "この層(Session 単体)の対象外: タブがない場合(ERR-006)はローカルサーバーの責務。AX-14 の確認は test/server.test.ts" }, () => {});
 
 test("AX-15: 同じ値の設定", () => {
   const r = rig();
