@@ -91,7 +91,7 @@ export class IoMeterModule extends SynthModule {
   }
 
   /** 読出し値(§3)。直前に処理したサンプルの直後の値。 */
-  read(): Record<string, number | number[]> {
+  read(withFrame = true): Record<string, number | number[]> {
     return {
       level: this.level,
       peak: this.peak,
@@ -102,7 +102,7 @@ export class IoMeterModule extends SynthModule {
       windows: this.windows,
       peak_hold: this.peakHold,
       nonfinite_count: this.nfMeasured,
-      frame: Array.from(this.frame),
+      ...(withFrame ? { frame: Array.from(this.frame) } : {}),
       frame_seq: this.frameSeq,
     };
   }

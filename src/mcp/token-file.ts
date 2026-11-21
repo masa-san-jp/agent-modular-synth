@@ -45,13 +45,21 @@ export function removeTokenFile(path: string, token: string): void {
   }
 }
 
-export type TokenFileResult = { ok: true; token: string } | { ok: false; reason: "missing" | "unreadable" | "malformed" };
+export type TokenFileResult = { ok: true; token: string } | { ok: false; reason: "missing" | "unreadable" | "malformed" | "insecure" };
 
-/** トークンを読む。通常のファイルだけを読み、形が合わなければ使わない。 */
+/**
+ * トークンを読む。通常のファイルだけを読み、形が合わなければ使わない。
+ * 所有者以外が読み書きできる権限のファイル(POSIX)は使わない: 他の利用者が置いた・読めるトークンを信用しない。
+ */
 export function readTokenFile(path: string): TokenFileResult {
   let text: string;
   try {
-    if (!lstatSync(path).isFile()) return { ok: false, reason: "unreadable" };
+    const st = lstatSync(path);
+    if (!st.isFile()) return { ok: false, reason: "unreadable" };
+    if (process.platform !== "win32") {
+      if ((st.mode & 0o077) !== 0) return { ok: false, reason: "insecure" };
+      if (typeof process.getuid === "function" && st.uid !== process.getuid()) return { ok: false, reason: "insecure" };
+    }
     text = readFileSync(path, "utf8");
   } catch (e) {
     return { ok: false, reason: (e as NodeJS.ErrnoException).code === "ENOENT" ? "missing" : "unreadable" };

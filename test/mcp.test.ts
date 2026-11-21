@@ -20,7 +20,7 @@ import { buildCatalog } from "../src/control/catalog.js";
 import { Controller } from "../src/control/controller.js";
 import { COMMANDS, RecordingBackend, Session } from "../src/control/session.js";
 import { Patch } from "../src/control/types.js";
-import { AdapterConfig, ConfigError, DEFAULT_TIMEOUT_MS, createMcpServer, resolveConfig } from "../src/mcp/adapter.js";
+import { AdapterConfig, ConfigError, DEFAULT_TIMEOUT_MS, createMcpServer, resolveConfig, sendCommand } from "../src/mcp/adapter.js";
 import { readTokenFile, removeTokenFile, tokenFilePath, writeTokenFile } from "../src/mcp/token-file.js";
 import { TABLE, TOOLS } from "../src/mcp/tools.js";
 import { REGISTRY } from "../src/modules/registry.js";
@@ -941,7 +941,7 @@ test("独自の機能を持たない: アダプタが送るのは POST /api/comm
       } else if (body.command === "patch.get") {
         res.writeHead(200, { "Content-Type": "text/html" }).end("<html>別のプログラム</html>");
       } else {
-        res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ v: 1, request_id: body.request_id, ok: true, command: body.command, extra_field: [1, 2] }));
+        res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ v: 1, request_id: body.request_id, ok: true, command: body.command, result: {}, extra_field: [1, 2] }));
       }
     });
   });
@@ -977,5 +977,44 @@ test("独自の機能を持たない: アダプタが送るのは POST /api/comm
   } finally {
     for (const c of closers) await c().catch(() => undefined);
     await new Promise((ok) => stub.close(ok));
+  }
+});
+
+test("トークンのファイル: 所有者以外が読み書きできる権限のファイルは使わない(insecure)。応答は ok の真偽だけでなく、封筒の形を確かめる", { skip: process.platform === "win32" }, async () => {
+  const { chmodSync, writeFileSync, mkdtempSync, rmSync } = await import("node:fs");
+  const base = mkdtempSync(join(tmpdir(), "synth-token-mode-"));
+  try {
+    const path = join(base, "agent-token");
+    writeFileSync(path, "token-cccccccccccccccc\n", { mode: 0o600 });
+    assert.deepEqual(readTokenFile(path), { ok: true, token: "token-cccccccccccccccc" });
+    for (const mode of [0o644, 0o640, 0o604, 0o660]) {
+      chmodSync(path, mode);
+      assert.deepEqual(readTokenFile(path), { ok: false, reason: "insecure" }, mode.toString(8));
+    }
+    chmodSync(path, 0o600);
+    // 応答の形: ok があるだけの JSON は、共通コマンドの応答として通さない
+    const shapes: [unknown, boolean][] = [
+      [{ ok: true }, false],
+      [{ v: 1, ok: true }, false],
+      [{ v: 2, ok: true, result: {} }, false],
+      [{ v: 1, ok: false, error: "x" }, false],
+      [{ v: 1, ok: false, error: { id: "ERR-006" } }, false],
+      [{ v: 1, ok: true, result: {} }, true],
+      [{ v: 1, ok: false, error: { id: "ERR-006", code: "no_session", message: "", details: {} } }, true],
+    ];
+    for (const [body, pass] of shapes) {
+      const stub = createServer((_q, res) => res.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify(body)));
+      await new Promise<void>((ok) => stub.listen(0, "127.0.0.1", () => ok()));
+      try {
+        const cfg = resolveConfig({ SYNTH_URL: `http://127.0.0.1:${(stub.address() as AddressInfo).port}`, SYNTH_AGENT_TOKEN: AGENT_TOKEN });
+        const out = await sendCommand(cfg, { v: 1, request_id: "s1", command: "patch.get", client_id: "mcp" });
+        const isAdapterError = (out.error as Obj | undefined)?.code === "adapter_bad_response";
+        assert.equal(!isAdapterError, pass, JSON.stringify(body));
+      } finally {
+        await new Promise<void>((ok) => stub.close(() => ok()));
+      }
+    }
+  } finally {
+    rmSync(base, { recursive: true, force: true });
   }
 });

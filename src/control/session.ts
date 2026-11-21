@@ -9,7 +9,9 @@
 // `precheck` と `handleExternal` を使って処理する。Session.handle に直接渡すと ERR-207(reason: "not_implemented")を返す。
 
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
+import { checkEnvelope, listTypes } from "./envelope.js";
 import { CommandError } from "./errors.js";
+import { MAX_UI_DEPTH, depthExceeds } from "./json.js";
 import {
   ActorInfo,
   ActorKind,
@@ -95,6 +97,8 @@ export interface AudioBackend {
   setParam(moduleId: string, param: string, value: number): void;
   /** 1コマンド分の差分の終わり。同じブロック境界でまとめて適用し、反映後に engineRevision をこの値にする(§11.2)。 */
   commit?(revision: number): void;
+  /** 今 `start()` を呼べば成功するか。状態は変えない。ないバックエンドは「常に成功する」とみなす。 */
+  canStart?(): { ok: true } | { ok: false; reason: string };
   /** 音声の開始・再開(人の操作でだけ呼ばれる)。§2.4 の引き下げを行う。 */
   start(): { ok: true } | { ok: false; reason: string };
   /** 緊急停止: 即時に消音し、全モジュールの内部状態を初期化する。 */
@@ -126,8 +130,13 @@ export class RecordingBackend implements AudioBackend {
   nonfiniteModules = 0;
   nonfiniteOutputStage = 0;
   midiAvailable = false;
-  /** 設定すると start() がこの理由で失敗する。 */
+  /** 設定すると start() がこの理由で失敗する(canStart() も同じ理由で失敗を返す)。 */
   startFailure: string | null = null;
+  /** 設定すると、canStart() は成功を返すのに start() だけがこの理由で失敗する(起きにくい場合の試験用)。 */
+  lateStartFailure: string | null = null;
+  canStart(): { ok: true } | { ok: false; reason: string } {
+    return this.startFailure !== null ? { ok: false, reason: this.startFailure } : { ok: true };
+  }
   /** 設定すると、その名前のメソッドが例外を投げる(ERR-010 の試験用)。 */
   throwOn: string | null = null;
   /** meterRead が返す値(項目名 → 値)。 */
@@ -191,7 +200,7 @@ export class RecordingBackend implements AudioBackend {
   }
   start(): { ok: true } | { ok: false; reason: string } {
     this.rec("start");
-    if (this.startFailure !== null) return { ok: false, reason: this.startFailure };
+    if (this.startFailure !== null || this.lateStartFailure !== null) return { ok: false, reason: (this.startFailure ?? this.lateStartFailure)! };
     this.audioState = "running";
     this.reduce();
     return { ok: true };
@@ -259,6 +268,10 @@ export interface Limits {
   batchOps: number;
   history: number;
   idempotencyKeys: number;
+  /** 冪等キーで保存する応答の合計の大きさ [JSON の文字数]。超えたら古いものから捨てる(最新の1件は残す)。 */
+  idempotencyChars: number;
+  /** 履歴のうち、パッチ全体の置き換え(patch.new / patch.load)が持つパッチの合計の大きさ [JSON の文字数]。超えたら古い履歴から捨てる。 */
+  historyChars: number;
   uiBytes: number;
 }
 
@@ -268,6 +281,8 @@ export const DEFAULT_LIMITS: Limits = {
   batchOps: 500,
   history: 200,
   idempotencyKeys: 1000,
+  idempotencyChars: 16 * 1024 * 1024,
+  historyChars: 32 * 1024 * 1024,
   uiBytes: 1024,
 };
 
@@ -384,6 +399,8 @@ interface HistoryEntry {
   /** パッチ全体の置き換えか(§2.4 の契機)。 */
   replaced: boolean;
   coalesce?: Coalesce;
+  /** 置き換えの履歴が持つパッチ(前後)のおおよその大きさ [JSON の文字数]。置き換えでなければ 0(前後で大部分を共有するため)。 */
+  chars: number;
 }
 
 interface OpOutput {
@@ -471,6 +488,9 @@ function isObj(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
 }
 
+/** 自動採番の対象にする番号の桁数の上限(これより大きい番号のIDは、採番の計算に入れない)。 */
+const MAX_NUMBERED_DIGITS = 9;
+
 function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v)) as T;
 }
@@ -550,6 +570,7 @@ function parseUi(a: Args, key: string, required: boolean, maxBytes: number): Mod
     if (!(k in v)) throw bad(`${key}.${k}`, "missing");
     if (typeof v[k] !== "number" || !Number.isFinite(v[k])) throw bad(`${key}.${k}`, "type");
   }
+  if (depthExceeds(v, MAX_UI_DEPTH)) throw bad(key, "too_deep", `${key} の入れ子は ${MAX_UI_DEPTH} 段以内`);
   if (utf8Bytes(JSON.stringify(v)) > maxBytes) throw bad(key, "too_large", `${key} は ${maxBytes} バイト以内`);
   return clone(v);
 }
@@ -557,9 +578,9 @@ function parseUi(a: Args, key: string, required: boolean, maxBytes: number): Mod
 function numberedId(prefix: string, id: string): number | null {
   if (!id.startsWith(prefix)) return null;
   const rest = id.slice(prefix.length);
-  if (!/^[0-9]+$/.test(rest)) return null;
-  const n = Number(rest);
-  return Number.isSafeInteger(n) ? n : null;
+  // 桁数の多い番号(m9007199254740991 など)は対象外: 次番号が整数で表せる範囲を超えると、採番が進まなくなる
+  if (!/^[0-9]+$/.test(rest) || rest.replace(/^0+/, "").length > MAX_NUMBERED_DIGITS) return null;
+  return Number(rest);
 }
 
 function maxNumbered(prefix: string, ids: Iterable<string>): number {
@@ -605,7 +626,8 @@ export class Session {
   private nextM: number;
   private nextC: number;
   /** 冪等キー → 保存済みの成功応答(§7)。 */
-  private readonly keyed = new Map<string, { fingerprint: string; response: CommandResponse }>();
+  private readonly keyed = new Map<string, { fingerprint: string; response: CommandResponse; chars: number }>();
+  private keyedChars = 0;
   private readonly listeners = new Set<(ev: SessionEvent) => void>();
   /** 音声側へ最後に渡したリビジョン(バックエンドが engineRevision を返さないときに使う)。 */
   private pushedRevision: number | null = null;
@@ -649,6 +671,17 @@ export class Session {
 
   get history(): HistoryFlags {
     return { can_undo: this.undoStack.length > 0, can_redo: this.redoStack.length > 0 };
+  }
+
+  /**
+   * 音声側を、現在のパッチ全体から作り直す(音声側が差分の適用に失敗して、正本とずれたときに呼ぶ)。
+   * パッチ・リビジョン・履歴は変えない。全体の置き換えと同じく音量は引き下げられ、変われば EVT-03 が出る。
+   */
+  resyncBackend(): void {
+    if (this.backend.status().audioState === "stopped") return; // 止まっている間は、開始時に全体を渡す
+    this.backend.applyPatch(this.exportPatch(), this.rev);
+    this.pushedRevision = this.rev;
+    this.pollBackend();
   }
 
   /** 通知(EVT)を受け取る。戻り値を呼ぶと解除する。 */
@@ -772,28 +805,9 @@ export class Session {
     const snapshot = this.snapshot();
     try {
       // 1. 封筒の形(ERR-001 → ERR-012)
-      const invalid = (field: string, message: string) => new CommandError("ERR-001", message, { field });
-      if (!isObj(request)) throw invalid("", "要求がオブジェクトでない");
-      for (const k of Object.keys(r)) {
-        if (!["v", "request_id", "command", "args", "expected_revision", "idempotency_key", "client_id"].includes(k)) {
-          throw invalid(k, `封筒に未知のフィールド ${k}`);
-        }
-      }
-      if (typeof r.v !== "number" || !Number.isInteger(r.v)) throw invalid("v", "v は整数(必須)");
-      if (!okLen(r.request_id)) throw invalid("request_id", "request_id は 1〜64 文字の文字列(必須)");
-      if (typeof r.command !== "string") throw invalid("command", "command は文字列(必須)");
-      if ("args" in r && !isObj(r.args)) throw invalid("args", "args はオブジェクト");
-      if ("expected_revision" in r) {
-        const e = r.expected_revision;
-        if (typeof e !== "number" || !Number.isInteger(e) || e < 0) {
-          throw invalid("expected_revision", "expected_revision は 0 以上の整数");
-        }
-      }
-      if ("idempotency_key" in r && !okLen(r.idempotency_key)) {
-        throw invalid("idempotency_key", "idempotency_key は 1〜64 文字の文字列");
-      }
-      if ("client_id" in r && !okLen(r.client_id)) throw invalid("client_id", "client_id は 1〜64 文字の文字列");
-      if (r.v !== 1) throw new CommandError("ERR-012", `封筒の版 ${r.v} は未対応`, { supported: [1] });
+      const broken = checkEnvelope(request);
+      if (broken) throw new CommandError(broken.id, broken.message, broken.details ?? {});
+      if (!isObj(request) || typeof r.command !== "string" || typeof r.request_id !== "string") throw new Error("unreachable");
       const cmd = r.command;
       const args: Args = (r.args as Args | undefined) ?? {};
       const expected = r.expected_revision as number | undefined;
@@ -807,10 +821,12 @@ export class Session {
       }
 
       // 5. 冪等キー(読出しと engine.panic では無視する。§7.6)
+      // 鍵は操作者の種別ごとに別の空間にする: 人が使った鍵をエージェントが再送しても、人の応答は返らない
       const useKey = spec.keyed === true && key !== undefined;
+      const slot = `${actorKind}\u0000${key ?? ""}`;
       const fingerprint = useKey ? stable({ command: cmd, args, expected_revision: expected ?? null }) : "";
       if (useKey) {
-        const saved = this.keyed.get(key);
+        const saved = this.keyed.get(slot);
         if (saved) {
           if (saved.fingerprint !== fingerprint) {
             throw new CommandError("ERR-009", "同じ冪等キーで内容の違う要求", { idempotency_key: key });
@@ -839,9 +855,14 @@ export class Session {
       const response: CommandResponse = { ...base(), ok: true, warnings: out.warnings, result: out.result };
       this.seen = this.backend.status();
       if (useKey) {
-        this.keyed.set(key, { fingerprint, response: clone(response) });
-        while (this.keyed.size > this.limits.idempotencyKeys) {
-          this.keyed.delete(this.keyed.keys().next().value as string);
+        const text = JSON.stringify(response);
+        this.keyed.set(slot, { fingerprint, response: JSON.parse(text) as CommandResponse, chars: text.length });
+        this.keyedChars += text.length;
+        // 件数と合計の大きさの上限。古いものから捨てる(最新の1件は残す)
+        while (this.keyed.size > this.limits.idempotencyKeys || (this.keyed.size > 1 && this.keyedChars > this.limits.idempotencyChars)) {
+          const oldest = this.keyed.keys().next().value as string;
+          this.keyedChars -= this.keyed.get(oldest)!.chars;
+          this.keyed.delete(oldest);
         }
       }
       return response;
@@ -1062,10 +1083,15 @@ export class Session {
       // §9.4: 履歴上は1件(戻り先は最初の変更の前の値)
       this.undoStack[this.undoStack.length - 1] = { ...top!, after, revision };
     } else {
-      const entry: HistoryEntry = { command: ctx.command, actor: ctx.actor, revision, before, after, replaced };
+      const size = (st: State): number => JSON.stringify(st.modules).length + JSON.stringify(st.cables).length;
+      const entry: HistoryEntry = { command: ctx.command, actor: ctx.actor, revision, before, after, replaced, chars: replaced ? size(before) + size(after) : 0 };
       if (coalesce) entry.coalesce = coalesce;
       this.undoStack.push(entry);
       while (this.undoStack.length > this.limits.history) this.undoStack.shift();
+      // 置き換えの履歴はパッチ全体を2つ持つ。合計が上限を超えたら古い履歴から捨てる(最新の1件は残す)
+      let total = 0;
+      for (const e of this.undoStack) total += e.chars;
+      while (this.undoStack.length > 1 && total > this.limits.historyChars) total -= this.undoStack.shift()!.chars;
     }
     this.redoStack = [];
     this.install(ctx, after, d.changes, replaced);
@@ -1233,6 +1259,8 @@ export class Session {
 
   private allocId(prefix: "m" | "c", d: Draft): string {
     for (;;) {
+      const n = prefix === "m" ? d.nextM : d.nextC;
+      if (!Number.isSafeInteger(n + 1)) throw new Error("自動採番の番号が大きすぎる"); // 起きない(番号は桁数の上限つき)。固まらないための保険
       const id = prefix + (prefix === "m" ? d.nextM++ : d.nextC++);
       const used = prefix === "m" ? d.modules.some((m) => m.id === id) : d.cables.some((c) => c.id === id);
       if (!used) return id;
@@ -1547,37 +1575,9 @@ export class Session {
   // ---- 読出し ----
 
   private cmdListTypes(args: Args): ExecOutput {
-    checkKeys(args, ["type"]);
-    let infos = [...this.catalog.values()];
-    if ("type" in args) {
-      infos = [this.typeInfo(reqString(args, "type"))];
-    }
-    const port = (p: PortInfo, direction: "in" | "out") => ({
-      name: p.name,
-      direction,
-      signal_type: p.type,
-      unit: null, // 定義表(catalog)にない
-      connectable: p.connectable,
-      unconnected: null, // 定義表(catalog)にない
-    });
-    const types = infos.map((t) => ({
-      type: t.type,
-      title: t.title,
-      category: null, // 定義表(catalog)にない
-      spec_version: t.specVersion,
-      singleton: t.type === OUT_TYPE,
-      ports: [...t.inputs.map((p) => port(p, "in")), ...t.outputs.map((p) => port(p, "out"))],
-      params: t.params.map((p) => ({
-        name: p.name,
-        kind: p.kind === "seed" ? "int" : p.kind, // bool は 0/1 だけを受け付ける。enum の区別は定義表にまだない
-        unit: p.unit ?? null,
-        min: p.min,
-        max: p.max,
-        default: p.default,
-      })),
-      readouts: t.type === METER_TYPE ? [...METER_FIELDS] : [],
-    }));
-    return { result: { types }, warnings: [] };
+    const out = listTypes(this.catalog, args, OUT_TYPE, METER_TYPE, METER_FIELDS);
+    if ("id" in out) throw new CommandError(out.id, out.message, out.details ?? {});
+    return { result: out, warnings: [] };
   }
 
   private cmdModuleGet(args: Args): ExecOutput {
@@ -1694,6 +1694,12 @@ export class Session {
       else plain.before = { ...entry.before, stamp: this.state.stamp };
     }
     (dir === "undo" ? this.redoStack : this.undoStack).push(plain);
+    // 取り消しで履歴の先頭に戻ってきた項目も、まとめの続きにしない(間に他の変更とその取り消しが入っている)
+    const top = this.undoStack[this.undoStack.length - 1];
+    if (top?.coalesce !== undefined) {
+      const { coalesce: _cut, ...rest } = top;
+      this.undoStack[this.undoStack.length - 1] = rest;
+    }
     // §2.2 の規則4: 次番号は下げない
     this.nextM = Math.max(this.nextM, maxNumbered("m", next.modules.map((m) => m.id)) + 1);
     this.nextC = Math.max(this.nextC, maxNumbered("c", next.cables.map((c) => c.id)) + 1);
@@ -1710,9 +1716,17 @@ export class Session {
     const bMods = new Map(b.modules.map((m) => [m.id, m]));
     const aCables = new Map(a.cables.map((c) => [c.id, c]));
     const bCables = new Map(b.cables.map((c) => [c.id, c]));
+    // 同じIDで種別が変わるモジュールは「削除して追加」になる。音声側は削除でつながるケーブルも外すので、
+    // そのモジュールにつながるケーブルは、IDと両端が同じでも「外して、つなぎ直す」として扱う。
+    const swapped = new Set<string>();
+    for (const m of a.modules) {
+      const other = bMods.get(m.id);
+      if (other && other.type !== m.type) swapped.add(m.id);
+    }
+    const touchesSwapped = (c: Cable) => swapped.has(c.from.module) || swapped.has(c.to.module);
     for (const c of a.cables) {
       const other = bCables.get(c.id);
-      if (!other || !sameCable(c, other)) changes.push({ kind: "cable_removed", cable_id: c.id, cable: c });
+      if (!other || !sameCable(c, other) || touchesSwapped(c)) changes.push({ kind: "cable_removed", cable_id: c.id, cable: c });
     }
     for (const m of a.modules) {
       const other = bMods.get(m.id);
@@ -1734,7 +1748,7 @@ export class Session {
     }
     for (const c of b.cables) {
       const old = aCables.get(c.id);
-      if (!old || !sameCable(old, c)) changes.push({ kind: "cable_added", cable: c });
+      if (!old || !sameCable(old, c) || touchesSwapped(c)) changes.push({ kind: "cable_added", cable: c });
     }
     if (a.title !== b.title || a.description !== b.description) {
       changes.push({ kind: "meta_changed", meta: metaOf(b, b.stamp) });
@@ -1748,13 +1762,22 @@ export class Session {
     checkKeys(args, []);
     const before = this.backend.status();
     if (before.audioState !== "running") {
+      // 開始できないと分かっているなら、何も変えずに失敗する(§5: エラーで状態は変わらない。音量の引き下げも行わない)
+      const can = this.backend.canStart?.();
+      if (can && !can.ok) throw new CommandError("ERR-304", "音声を開始できなかった", { reason: can.reason });
       if (before.audioState === "stopped") {
         // 開始時に現在のパッチ全体から構築する(§2.3、§11.4)
         this.backend.applyPatch(this.exportPatch(), this.rev);
         this.pushedRevision = this.rev;
       }
       const r = this.backend.start();
-      if (!r.ok) throw new CommandError("ERR-304", "音声を開始できなかった", { reason: r.reason });
+      if (!r.ok) {
+        // 事前の確認を通ったのに失敗した場合: パッチの渡し直しで音量が下がっていれば、失敗でもその通知は出す(下がったことを隠さない)
+        const failed = this.backend.status();
+        this.seen = failed;
+        if (failed.levelDb !== before.levelDb) ctx.events.push(this.outputEvent(failed, null, "reset_to_default"));
+        throw new CommandError("ERR-304", "音声を開始できなかった", { reason: r.reason });
+      }
       const after = this.backend.status();
       if (after.audioState !== before.audioState || after.fs !== before.fs) ctx.events.push(this.stateEvent(after));
       if (after.levelDb !== before.levelDb) ctx.events.push(this.outputEvent(after, ctx.actor, "reset_to_default"));

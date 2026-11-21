@@ -18,6 +18,11 @@ export type ToWorklet =
   | { type: "panic" }
   | { type: "release_panic" }
   | { type: "level"; db: number; actor: "human" | "agent" }
+  /**
+   * メインスレッド側の写しの状態に合わせる(コマンドではない)。音声の用意ができた直後(それまでの操作の持ち越し)と、
+   * 状態のずれを見つけたときに送る。
+   */
+  | { type: "sync"; levelDb: number; agentMaxLevelDb: number; panic: boolean; running: boolean }
   /** 演奏入力(画面鍵盤・Web MIDI)。全ての MIDI-CV モジュールへ渡す。コマンド・履歴の対象外(DEC-008)。 */
   | { type: "midi"; bytes: number[] };
 
@@ -35,8 +40,16 @@ export interface WorkletStatus {
   limiterGain: number;
   /** 直近の観測区間の最終出力のピーク。 */
   peak: number;
-  /** メーター(MOD-IO-003)の読出し値。モジュールID → 項目名 → 値。ブロックが終わった直後の同一時点の組。 */
+  /**
+   * メーター(MOD-IO-003)の読出し値。モジュールID → 項目名 → 値。ブロックが終わった直後の同一時点の組。
+   * 波形フレーム(`frame`)は、前回送ったときから `frame_seq` が変わったモジュールだけに含める。
+   */
   meters: Record<string, Record<string, unknown>>;
+  /** これまでに受け取って処理したメッセージの数(メインスレッドが、送った分がすべて反映された状態かを見分けるのに使う)。 */
+  received: number;
 }
 
-export type FromWorklet = { type: "status"; status: WorkletStatus } | { type: "error"; message: string };
+export type FromWorklet =
+  | { type: "status"; status: WorkletStatus }
+  /** `resync` が true なら、音声側がパッチの正本とずれた可能性がある(メインスレッドはパッチ全体を渡し直す)。 */
+  | { type: "error"; message: string; resync?: boolean };

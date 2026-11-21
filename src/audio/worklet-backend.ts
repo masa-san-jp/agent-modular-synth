@@ -1,6 +1,12 @@
 // メインスレッド側の「音声バックエンド」。Session(同期)から呼ばれ、AudioWorklet へメッセージで伝える。
 // 音量・緊急停止・上限の規則は、ワークレット側と同じ OutputStage をここにも1つ持って写す
 // (同じ操作を同じ順に与えるので、状態は一致する)。計数とメーターは、ワークレットから届く最新の状態を使う。
+//
+// 写しと実体を一致させる仕組み:
+// - 音声の用意ができる(attach)前の操作はワークレットへ届かない。attach のときに写しの状態を1通(sync)で送る。
+// - ワークレットは、受け取ったメッセージの数を状態に入れて返す。送った分がすべて反映された状態なのに
+//   音量・上限・緊急停止・動作中かが写しと違えば、写しの状態を送り直す(sync)。
+// - 中断(ブラウザ・OSが音声を止めた)を知ったら、ワークレットも止める。復帰は開始と同じ扱い(音量の引き下げとフェードイン)。
 import type { EngineOp, FromWorklet, ToWorklet, WorkletStatus } from "./messages.js";
 import { OutputStage } from "./output-stage.js";
 import type { AudioBackend, BackendStatus, MeterReading, SetLevelResult } from "../control/session.js";
@@ -10,47 +16,118 @@ export interface WorkletPort {
   postMessage(msg: ToWorklet): void;
 }
 
+const NOT_READY = "音声がまだ用意されていない";
+
+export interface WorkletBackendOptions {
+  /** まだ1度も測定値が届いていないメーターの読出し値(初期状態のメーターの値)。 */
+  initialMeter?: () => Record<string, unknown>;
+}
+
 export class WorkletBackend implements AudioBackend {
   private port: WorkletPort | null = null;
   private fs: number | null = null;
   private mirror = new OutputStage(48000);
   private running = false;
+  private suspended = false;
   private ops: EngineOp[] = [];
   private last: WorkletStatus | null = null;
-  private sentRevision: number | null = null;
+  /** ワークレットへ送ったメッセージの数。 */
+  private sent = 0;
+  /** 届いた波形フレーム(モジュールID → frame)。状態には、変わったときだけ入ってくる。 */
+  private frames = new Map<string, unknown>();
+  /** 写しと実体のずれを見つけて送り直した回数(診断用)。 */
+  desyncCount = 0;
   /** 音声を開始できない理由(AudioContext がまだない等)。null なら開始できる。 */
-  startBlocker: string | null = "音声がまだ用意されていない";
+  startBlocker: string | null = NOT_READY;
 
-  /** AudioWorklet の用意ができたら呼ぶ(人の操作の中で AudioContext を作った後)。 */
+  constructor(private readonly options: WorkletBackendOptions = {}) {}
+
+  /**
+   * AudioWorklet の用意ができたら呼ぶ(人の操作の中で AudioContext を作った後)。
+   * それまでに行われた操作(音量、エージェントの上限、緊急停止)を、ワークレットへ持ち越す。
+   */
   attach(port: WorkletPort, fs: number): void {
     this.port = port;
     this.fs = fs;
     this.startBlocker = null;
+    this.sent = 0;
+    this.last = null;
+    this.frames.clear();
+    this.sendSync();
   }
 
-  /** ワークレットから届いた状態を取り込む。 */
+  /** ワークレットとの接続を捨てる(音声の処理が止まった、AudioContext が閉じた)。音声は「停止」になる。 */
+  detach(reason: string = NOT_READY): void {
+    this.port = null;
+    this.fs = null;
+    this.running = false;
+    this.suspended = false;
+    this.ops = [];
+    this.last = null;
+    this.frames.clear();
+    this.mirror.stop();
+    this.startBlocker = reason;
+  }
+
+  get attached(): boolean {
+    return this.port !== null;
+  }
+
+  private sendSync(): void {
+    const m = this.mirror.status();
+    this.send({ type: "sync", levelDb: m.levelDb, agentMaxLevelDb: m.agentMaxLevelDb, panic: m.panic, running: this.running && !this.suspended });
+  }
+
+  /** ワークレットから届いた状態を取り込む。ずれていたら送り直す。 */
   onMessage(msg: FromWorklet): void {
-    if (msg.type === "status") this.last = msg.status;
+    if (msg.type !== "status") return;
+    const w = msg.status;
+    this.last = w;
+    for (const [id, m] of Object.entries(w.meters)) {
+      if ("frame" in m) this.frames.set(id, m.frame);
+    }
+    for (const id of [...this.frames.keys()]) if (!(id in w.meters)) this.frames.delete(id);
+    // 送った分がすべて反映された状態だけを比べる(途中の状態は、まだ届いていない操作の分だけ違って当然)
+    if (w.received !== this.sent) return;
+    const m = this.mirror.status();
+    const running = this.running && !this.suspended;
+    if (w.levelDb !== m.levelDb || w.agentMaxLevelDb !== m.agentMaxLevelDb || w.panic !== m.panic || w.running !== running) {
+      this.desyncCount++;
+      this.sendSync();
+    }
   }
 
   get lastStatus(): WorkletStatus | null {
     return this.last;
   }
 
-  /** ブラウザや OS による中断・復帰(AudioContext の状態)を反映する。 */
+  /**
+   * ブラウザや OS による中断・復帰(AudioContext の状態)を反映する。
+   * 中断: ワークレットも止める(復帰した瞬間に、中断前の音量のまま音が出ないようにする)。
+   * 復帰: 音声の開始と同じ扱い(音量の引き下げとフェードイン。operation-contract §2.4)。
+   */
   setSuspended(suspended: boolean): void {
+    if (suspended === this.suspended) return;
     this.suspended = suspended;
+    if (!this.running) return;
+    if (suspended) {
+      this.mirror.stop();
+      this.send({ type: "stop" });
+    } else {
+      this.mirror.start();
+      this.send({ type: "start" });
+    }
   }
-  private suspended = false;
 
   private send(msg: ToWorklet): void {
-    this.port?.postMessage(msg);
+    if (!this.port) return; // 用意ができる前の操作は写しだけに行い、attach のときに持ち越す
+    this.sent++;
+    this.port.postMessage(msg);
   }
 
   applyPatch(patch: Patch, revision: number): void {
     this.ops = [];
     this.mirror.reduce("patch_replaced");
-    this.sentRevision = revision;
     this.send({ type: "apply", patch, revision });
   }
 
@@ -73,12 +150,16 @@ export class WorkletBackend implements AudioBackend {
   commit(revision: number): void {
     const ops = this.ops;
     this.ops = [];
-    this.sentRevision = revision;
     this.send({ type: "ops", ops, revision });
   }
 
+  canStart(): { ok: true } | { ok: false; reason: string } {
+    return this.startBlocker !== null || !this.port ? { ok: false, reason: this.startBlocker ?? NOT_READY } : { ok: true };
+  }
+
   start(): { ok: true } | { ok: false; reason: string } {
-    if (this.startBlocker !== null || !this.port) return { ok: false, reason: this.startBlocker ?? "音声がまだ用意されていない" };
+    const can = this.canStart();
+    if (!can.ok) return can;
     this.running = true;
     this.suspended = false;
     this.mirror.start();
@@ -121,13 +202,17 @@ export class WorkletBackend implements AudioBackend {
     };
   }
 
+  /**
+   * メーターの読出し値。追加した直後で、ワークレットからまだ値が届いていないメーターは、初期状態の値を返す
+   * (応答の `engine_revision` が現在のリビジョンより前なので、追加がまだ音に反映されていないことは呼ぶ側に分かる)。
+   */
   meterRead(moduleId: string, fields: readonly string[]): MeterReading {
     const w = this.last;
-    const all = w?.meters[moduleId];
-    if (!w || !all) throw new Error(`'${moduleId}' の読出し値がまだ届いていない`);
+    const all = w?.meters[moduleId] ?? this.options.initialMeter?.();
+    if (!all) throw new Error(`'${moduleId}' の読出し値がまだ届いていない`);
     const values: Record<string, unknown> = {};
-    for (const f of fields) values[f] = all[f];
-    return { values, sampleTime: w.sampleTime, fs: w.fs, engineRevision: w.engineRevision };
+    for (const f of fields) values[f] = f === "frame" && w?.meters[moduleId] ? (this.frames.get(moduleId) ?? []) : all[f];
+    return { values, sampleTime: w?.sampleTime ?? 0, fs: w?.fs ?? this.fs ?? 0, engineRevision: w?.engineRevision ?? null };
   }
 
   /** 演奏入力(画面鍵盤)。コマンド・履歴の対象外。 */
