@@ -220,6 +220,8 @@ async function main() {
     ok("エージェントが保存済みのパッチを読み込むと復元されて鳴る。音量は上がらない");
 
     // ---- 7) タブを閉じるとセッションなし ----
+    assert.deepEqual(await synth("errors"), [], "ワークレットと画面が記録したエラー");
+    assert.equal(await synth("desyncCount"), 0, "音量・緊急停止の写しとワークレットのずれ");
     ws.close();
     await page.close();
     await new Promise((r) => setTimeout(r, 300));

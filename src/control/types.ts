@@ -48,7 +48,7 @@ export interface PatchMeta {
 
 export interface Patch {
   format: "modular-synth-patch";
-  schema_version: 1;
+  schema_version: number;
   meta: PatchMeta;
   modules: PatchModule[];
   cables: Cable[];

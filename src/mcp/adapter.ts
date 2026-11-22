@@ -110,7 +110,9 @@ export async function sendCommand(config: AdapterConfig, request: Obj): Promise<
         "adapter_no_token",
         read.reason === "missing"
           ? `エージェント用トークンがない。ローカルサーバーが起動していない可能性がある(npm run dev で起動する)。トークンは環境変数 SYNTH_AGENT_TOKEN、またはサーバーが起動時に書くファイル ${config.tokenFile} から読む`
-          : `トークンのファイル ${config.tokenFile} を読めない、または内容がトークンの形でない`,
+          : read.reason === "insecure"
+            ? `トークンのファイル ${config.tokenFile} は、所有者以外が読み書きできる権限になっている、または所有者が違うため使わない(権限を 600 にする。通常はローカルサーバーが 600 で書く)`
+            : `トークンのファイル ${config.tokenFile} を読めない、または内容がトークンの形でない`,
         { token_file: config.tokenFile, reason: read.reason, applied: "no" },
       );
     }
@@ -149,7 +151,13 @@ export async function sendCommand(config: AdapterConfig, request: Obj): Promise<
   } catch {
     body = undefined;
   }
-  if (!isObj(body) || typeof body.ok !== "boolean") {
+  // 共通コマンドの応答の形(§3.2)か: 封筒の版、成否、成功なら result、失敗なら error(id と code)
+  const shaped =
+    isObj(body) &&
+    body.v === 1 &&
+    typeof body.ok === "boolean" &&
+    (body.ok ? isObj(body.result) : isObj(body.error) && typeof body.error.id === "string" && typeof body.error.code === "string");
+  if (!isObj(body) || !shaped) {
     return adapterFailure(request, "adapter_bad_response", `ローカルサーバーの応答が共通コマンドの応答の形でない(HTTP ${res.status})。SYNTH_URL が別のプログラムを指している可能性がある`, {
       url: config.endpoint,
       http_status: res.status,

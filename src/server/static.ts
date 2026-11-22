@@ -8,6 +8,17 @@ import { extname, join, normalize, resolve, sep } from "node:path";
 export const DEFAULT_PORT = 47800;
 export const HOST = "127.0.0.1";
 
+/**
+ * すべての応答に付けるヘッダ。画面を他のページの枠(iframe 等)に入れさせない:
+ * 透明な枠に重ねてクリックさせる方法で、人のみの操作(音声開始、緊急停止の解除、パッチの削除)を実行させないため。
+ */
+export const SECURITY_HEADERS: Record<string, string> = {
+  "X-Frame-Options": "DENY",
+  "Content-Security-Policy": "frame-ancestors 'none'",
+  "X-Content-Type-Options": "nosniff",
+  "Cache-Control": "no-store",
+};
+
 const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -35,7 +46,7 @@ export function createStaticHandler(rootDir: string, options: StaticOptions = {}
     void (async () => {
       try {
         if (req.method !== "GET" && req.method !== "HEAD") {
-          res.writeHead(405).end();
+          res.writeHead(405, SECURITY_HEADERS).end();
           return;
         }
         const url = new URL(req.url ?? "/", `http://${HOST}`);
@@ -44,7 +55,7 @@ export function createStaticHandler(rootDir: string, options: StaticOptions = {}
         const file = normalize(join(root, rel));
         // 配信フォルダの外(上位参照)は拒否する
         if (file !== root && !file.startsWith(root + sep)) {
-          res.writeHead(403).end();
+          res.writeHead(403, SECURITY_HEADERS).end();
           return;
         }
         let body: Buffer = await readFile(file);
@@ -52,13 +63,16 @@ export function createStaticHandler(rootDir: string, options: StaticOptions = {}
           body = Buffer.from(options.transformIndex(body.toString("utf8")), "utf8");
         }
         res.writeHead(200, {
+          ...SECURITY_HEADERS,
           "Content-Type": TYPES[extname(file)] ?? "application/octet-stream",
-          "Cache-Control": "no-store",
-          "X-Content-Type-Options": "nosniff",
         });
         res.end(req.method === "HEAD" ? undefined : body);
       } catch {
-        res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" }).end("not found");
+        if (res.headersSent) {
+          res.end();
+          return;
+        }
+        res.writeHead(404, { ...SECURITY_HEADERS, "Content-Type": "text/plain; charset=utf-8" }).end("not found");
       }
     })();
   };

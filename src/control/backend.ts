@@ -16,6 +16,8 @@ export class EngineBackend implements AudioBackend {
   private pending: Op[] = [];
   private pendingRevision: number | null = null;
   private engineRevision: number | null = null;
+  /** 差分の適用に失敗して、正本とずれた可能性があるときの理由(takeDesync() で読むと消える)。 */
+  private desync: string | null = null;
   /** 処理したサンプルの通算(緊急停止でエンジンを初期化しても戻らない)。 */
   private sampleTime = 0;
 
@@ -52,6 +54,7 @@ export class EngineBackend implements AudioBackend {
     this.pending = [];
     this.pendingRevision = null;
     this.engineRevision = revision;
+    this.desync = null; // 全体を作り直したので、ずれは解消
     this.stage.reduce("patch_replaced");
   }
 
@@ -80,12 +83,35 @@ export class EngineBackend implements AudioBackend {
     this.pendingRevision = revision;
   }
 
-  /** たまっている差分を適用する(ブロックの先頭で呼ぶ)。 */
+  /** 積んだだけでまだ適用していない差分を捨てる(差分の受け取りの途中で失敗したとき)。正本とずれるので、ずれとして記録する。 */
+  abortPending(reason: string): void {
+    this.pending = [];
+    this.pendingRevision = null;
+    this.desync ??= reason;
+  }
+
+  /** 差分の適用に失敗していれば、その理由を返して記録を消す。失敗していなければ null。呼ぶ側はパッチ全体を渡し直す。 */
+  takeDesync(): string | null {
+    const d = this.desync;
+    this.desync = null;
+    return d;
+  }
+
+  /**
+   * たまっている差分を適用する(ブロックの先頭で呼ぶ)。
+   * 1件が失敗しても残りは適用し、例外は外へ出さない(音声の処理を止めない)。失敗は takeDesync() で分かる。
+   */
   flush(): void {
     if (this.pending.length) {
       const ops = this.pending;
       this.pending = [];
-      for (const op of ops) op();
+      for (const op of ops) {
+        try {
+          op();
+        } catch (e) {
+          this.desync ??= e instanceof Error ? e.message : String(e);
+        }
+      }
     }
     if (this.pendingRevision !== null) {
       this.engineRevision = this.pendingRevision;
@@ -146,14 +172,27 @@ export class EngineBackend implements AudioBackend {
     return { values, sampleTime: this.sampleTime, fs: this.fs, engineRevision: this.engineRevision };
   }
 
-  /** メーター(MOD-IO-003)を持つモジュールすべての読出し値。モジュールID → 項目名 → 値。 */
-  meters(): Record<string, Record<string, unknown>> {
+  /**
+   * メーター(MOD-IO-003)を持つモジュールすべての読出し値。モジュールID → 項目名 → 値。
+   * `skipFrame(id, frameSeq)` が true を返したモジュールは、波形フレーム(`frame`)を含めない(大きいので、変わったときだけ運ぶ)。
+   */
+  meters(skipFrame?: (id: string, frameSeq: number) => boolean): Record<string, Record<string, unknown>> {
     const out: Record<string, Record<string, unknown>> = {};
     for (const id of this.engine.ids()) {
-      const m = this.engine.get(id) as unknown as { read?: () => Record<string, unknown> };
-      if (typeof m.read === "function") out[id] = m.read();
+      const m = this.engine.get(id) as unknown as { read?: (withFrame?: boolean) => Record<string, unknown> };
+      if (typeof m.read !== "function") continue;
+      const stats = m.read(false);
+      out[id] = skipFrame?.(id, Number(stats.frame_seq)) ? stats : m.read(true);
     }
     return out;
+  }
+
+  /** 状態(音量・上限・緊急停止・動作中か)を、メインスレッド側の写しの値に合わせる(OutputStage.adopt)。コマンドの処理ではない。 */
+  sync(state: { levelDb: number; agentMaxLevelDb: number; panic: boolean; running: boolean }): void {
+    this.running = state.running === true;
+    if (this.running) this.stage.start();
+    else this.stage.stop();
+    this.stage.adopt(state.levelDb, state.agentMaxLevelDb, state.panic);
   }
 
   /** 演奏入力(MIDI のバイト列)を、全ての MIDI-CV モジュールへ渡す。次のステップで到着順に処理される。 */

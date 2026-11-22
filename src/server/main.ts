@@ -11,7 +11,14 @@ import { DEFAULT_PORT, HOST } from "./static.js";
 
 const here = dirname(fileURLToPath(import.meta.url)); // dist/src/server
 const webRoot = join(here, "..", "..", "..", "web");
-const port = Number(process.env.PORT ?? DEFAULT_PORT);
+// 待受ポート: 環境変数 PORT(0〜65535 の整数。0 は「空いているポートを自動で選ぶ」)。未設定・空文字なら既定値。
+// それ以外の値では起動しない(空文字を 0 と解釈して、意図せず別のポートで待ち受けることがないようにする)。
+const portText = process.env.PORT;
+const port = portText === undefined || portText === "" ? DEFAULT_PORT : /^[0-9]{1,5}$/.test(portText) ? Number(portText) : NaN;
+if (!Number.isInteger(port) || port < 0 || port > 65535) {
+  console.error(`PORT は 0〜65535 の整数で指定する: ${JSON.stringify(portText)}`);
+  process.exit(1);
+}
 // パッチファイルの専用フォルダ(data-contract DAT-30)。場所は**仮の値**:
 // 環境変数 SYNTH_PATCH_DIR、なければホームの下の .agent-modular-synth/patches。
 // リポジトリの中ではなく、利用者のデータ用の場所に置く。確定は実装計画で行う。

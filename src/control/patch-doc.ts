@@ -1,6 +1,8 @@
 // パッチ文書(JSON)の検証・正規化・移行・生成。正本は specifications/synthesizer/data-contract.md(§3〜§5、§8〜§10)。
 // 同期的な純粋ロジック(DOM・ファイル・時刻・乱数に依らない)。入力は書き換えない(DAT-57、DAT-60)。
 import { ParamInfo, TypeCatalog, TypeInfo } from "./catalog.js";
+import { MAX_UI_DEPTH, depthExceeds } from "./json.js";
+import type { Cable, PatchMeta as Meta, ModuleUi, PatchModule as Module, Patch, PortRef, SavedBy } from "./types.js";
 
 // ---- 契約の定数 ----
 /** §3.1 `format` の固定値。 */
@@ -36,57 +38,19 @@ export const OUT_MODULE_TYPE = "MOD-IO-001";
 // ---- 型 ----
 export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 
+// 文書の型は types.ts のもの(コマンド処理と同じ型)。ここでは契約の節に合わせた別名だけを置く。
 /** §4.2 UI情報。`x`・`y` 以外のキーはそのまま保持する(DAT-11)。 */
-export interface PatchUi {
-  x?: number;
-  y?: number;
-  [key: string]: JsonValue | undefined;
-}
-
-export interface PatchSavedBy {
-  kind: "human" | "agent";
-  client_id?: string;
-}
-
+export type PatchUi = ModuleUi;
+export type PatchSavedBy = SavedBy;
 /** §3.2。 */
-export interface PatchMeta {
-  title: string;
-  description: string;
-  created_at?: string;
-  modified_at?: string;
-  saved_by?: PatchSavedBy;
-  app_version?: string;
-}
-
+export type PatchMeta = Meta;
 /** §4。正規化済みの文書では `params` はその種別の全パラメータを持つ(DAT-07)。 */
-export interface PatchModule {
-  id: string;
-  type: string;
-  spec_version: string;
-  params: Record<string, number>;
-  ui?: PatchUi;
-}
-
-export interface PatchPortRef {
-  module: string;
-  port: string;
-}
-
+export type PatchModule = Module;
+export type PatchPortRef = PortRef;
 /** §5。 */
-export interface PatchCable {
-  id: string;
-  from: PatchPortRef;
-  to: PatchPortRef;
-}
-
+export type PatchCable = Cable;
 /** §3.1。 */
-export interface PatchDocument {
-  format: typeof PATCH_FORMAT;
-  schema_version: number;
-  meta: PatchMeta;
-  modules: PatchModule[];
-  cables: PatchCable[];
-}
+export type PatchDocument = Patch;
 
 /** §8 `error.details.issues` の要素。 */
 export interface PatchIssue {
@@ -255,7 +219,7 @@ export function isValidPatchName(name: unknown): name is string {
 }
 
 // ---- 厳密なJSONの解釈(DAT-V02: 拡張表記・重複キー・コメントは不可) ----
-const MAX_JSON_DEPTH = 512;
+export const MAX_JSON_DEPTH = 512;
 class JsonError extends Error {}
 const NUMBER_RE = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
 
@@ -802,6 +766,10 @@ function validateFromStage2(input: unknown, catalog: TypeCatalog, options: Patch
       v18(path, "ui にJSONの値でないものがある");
       return;
     }
+    if (depthExceeds(m.ui, MAX_UI_DEPTH)) {
+      v18(path, `ui の入れ子が深すぎる(上限 ${MAX_UI_DEPTH} 段)`);
+      return;
+    }
     const bytes = utf8ByteLength(JSON.stringify(m.ui));
     if (bytes > MAX_UI_BYTES) v18(path, `ui が ${MAX_UI_BYTES} バイトを超えている(${bytes} バイト)`);
   });
@@ -862,7 +830,9 @@ function isUtcTimestamp(s: string): boolean {
 
 /**
  * 保存時の文字列。キーは契約 §3〜§5 の表の順、配列は現在の並びのまま(DAT-03)、`params` は持っている全項目(DAT-07)。
- * 2文字の字下げ、末尾に改行、BOMなし(DAT-32)。
+ * 2文字の字下げ、末尾に改行、BOMなし(DAT-32)。ただし各モジュールの `ui` の値は改行・字下げなしの1行で書く:
+ * `ui` は中身が自由な値で、字下げすると要素1つごとに行と空白が増え、上限内のパッチ(256 モジュール・1024 ケーブル・
+ * `ui` 1024 バイト)でも保存文書が 1 MiB を超えてしまうため。
  */
 export function serializePatchDocument(patch: PatchDocument): string {
   const meta: Obj = { title: patch.meta.title, description: patch.meta.description };
@@ -874,20 +844,29 @@ export function serializePatchDocument(patch: PatchDocument): string {
     meta.saved_by = sb;
   }
   if (patch.meta.app_version !== undefined) meta.app_version = patch.meta.app_version;
-  const ordered = {
-    format: patch.format,
-    schema_version: patch.schema_version,
-    meta,
-    modules: patch.modules.map((m) => {
-      const out: Obj = { id: m.id, type: m.type, spec_version: m.spec_version, params: m.params };
-      if (m.ui !== undefined) out.ui = m.ui;
-      return out;
-    }),
-    cables: patch.cables.map((c) => ({
-      id: c.id,
-      from: { module: c.from.module, port: c.from.port },
-      to: { module: c.to.module, port: c.to.port },
-    })),
-  };
-  return JSON.stringify(ordered, null, 2) + "\n";
+  const pretty = (v: unknown, indent: string): string => JSON.stringify(v, null, 2).replace(/\n/g, "\n" + indent);
+  const modules = patch.modules.map((m) => {
+    const lines = [
+      `      "id": ${JSON.stringify(m.id)}`,
+      `      "type": ${JSON.stringify(m.type)}`,
+      `      "spec_version": ${JSON.stringify(m.spec_version)}`,
+      `      "params": ${pretty(m.params, "      ")}`,
+    ];
+    if (m.ui !== undefined) lines.push(`      "ui": ${JSON.stringify(m.ui)}`);
+    return `    {\n${lines.join(",\n")}\n    }`;
+  });
+  const cables = patch.cables.map((c) =>
+    pretty({ id: c.id, from: { module: c.from.module, port: c.from.port }, to: { module: c.to.module, port: c.to.port } }, "    "),
+  );
+  const list = (items: string[], indentFirst: boolean): string =>
+    items.length === 0 ? "[]" : `[\n${items.map((t) => (indentFirst ? "    " + t : t)).join(",\n")}\n  ]`;
+  return (
+    "{\n" +
+    `  "format": ${JSON.stringify(patch.format)},\n` +
+    `  "schema_version": ${JSON.stringify(patch.schema_version)},\n` +
+    `  "meta": ${pretty(meta, "  ")},\n` +
+    `  "modules": ${list(modules, false)},\n` +
+    `  "cables": ${list(cables, true)}\n` +
+    "}\n"
+  );
 }

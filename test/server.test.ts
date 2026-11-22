@@ -356,7 +356,8 @@ test("待受アドレスは 127.0.0.1 だけ(server.address())。listen にホ�
   }));
 
 test("上限と時間の既定値は契約の値(要求 2 MiB、応答待ち 5 秒、ファイル数 1000、パッチ 1 MiB)", () => {
-  assert.deepEqual(DEFAULT_APP_LIMITS, { tabTimeoutMs: 5000, maxRequestBytes: 2 * 1024 * 1024, maxPatchFiles: 1000, maxPatchBytes: 1024 * 1024 });
+  const { tabTimeoutMs, maxRequestBytes, maxPatchFiles, maxPatchBytes } = DEFAULT_APP_LIMITS;
+  assert.deepEqual({ tabTimeoutMs, maxRequestBytes, maxPatchFiles, maxPatchBytes }, { tabTimeoutMs: 5000, maxRequestBytes: 2 * 1024 * 1024, maxPatchFiles: 1000, maxPatchBytes: 1024 * 1024 });
 });
 
 test("トークン: 省略時は乱数で発行し、2つは別の値。起動のたびに変わる。同じ値は拒否", async () => {
@@ -1036,3 +1037,212 @@ test("サーバーを止める口・任意の経路や任意ホストへの口�
     assert.equal((await rawHttp(r, { path: "/api/ws", headers: auth })).status, 426);
     assert.equal((await rawHttp(r, { path: `/tab?token=${TAB_TOKEN}` })).status, 426);
   }));
+
+// =====================================================================================
+// Issue #24 の独立レビューで見つかった不具合の再発防止
+// =====================================================================================
+
+/** 約2万段の入れ子の JSON(解釈は通るが、文字列へ戻す処理はスタックを使い切る)。 */
+const deepJson = (levels = 20000): string => '{"a":'.repeat(levels) + "0" + "}".repeat(levels);
+
+test("深い入れ子の要求(約2万段)は ERR-001 で拒否し、サーバーは落ちない(HTTP・WebSocket、タブあり・なし)", () =>
+  withRig({}, async (r) => {
+    const body = `{"v":1,"request_id":"deep-1","command":"patch.load","args":{"patch":${deepJson()}}}`;
+    for (const withTab of [false, true]) {
+      const tab = withTab ? await connectTab(r) : null;
+      const before = tab ? tab.reqs.length : 0;
+      const res = await post(r, body);
+      assert.equal(res.status, 400);
+      assert.equal(res.body.error.id, "ERR-001");
+      assert.equal(res.body.error.details.reason, "too_deep");
+      assert.equal(res.body.request_id, "deep-1");
+      const agent = await connectAgent(r);
+      agent.ws.send(body);
+      const viaWs = await agent.inbox.wait((m) => m.request_id === "deep-1");
+      assert.equal(viaWs.error.id, "ERR-001");
+      // 封筒そのものが深い場合(配列)
+      const arr = await post(r, "[".repeat(20000) + "]".repeat(20000));
+      assert.equal(arr.body.error.id, "ERR-001");
+      // タブへは中継していない。サーバーは動き続けている
+      if (tab) assert.equal(tab.reqs.length, before);
+      const alive = await post(r, req(withTab ? "patch.get" : "patch.list"));
+      assert.equal(alive.body.ok, true);
+      agent.ws.close();
+      if (tab) await tab.close();
+      await sleep(30);
+    }
+  }));
+
+test("保存フォルダに深い入れ子のファイルがあっても、patch.read は ERR-204、patch.list は readable:false で答え、サーバーは落ちない", () =>
+  withRig({}, async (r) => {
+    await mkdir(r.patchDir, { recursive: true });
+    await writeFile(join(r.patchDir, "deep.patch.json"), deepJson());
+    const read = await post(r, req("patch.read", { name: "deep" }));
+    assert.equal(read.body.ok, false);
+    assert.equal(read.body.error.id, "ERR-204");
+    const list = await post(r, req("patch.list"));
+    assert.equal(list.body.ok, true);
+    assert.deepEqual(list.body.result.patches.map((p: Obj) => [p.name, p.readable]), [["deep", false]]);
+  }));
+
+test("タブが深い入れ子の応答・通知を返しても、サーバーは落ちない(応答は ERR-010、通知は配らない)", () =>
+  withRig({}, async (r) => {
+    const tab = await connectTab(r, { respond: false });
+    await waitFor(() => tab.reqs.length >= 1); // 接続直後の読出し
+    const agent = await connectAgent(r);
+    const pending = post(r, req("patch.get"));
+    await waitFor(() => tab.reqs.length >= 2);
+    const id = tab.reqs[1]!.id as number;
+    tab.ws.send(`{"t":"evt","event":{"event":"patch.changed","session_id":"s","data":${deepJson()}}}`);
+    tab.ws.send(`{"t":"res","id":${id},"response":{"ok":true,"result":${deepJson()}}}`);
+    const res = await pending;
+    assert.equal(res.body.ok, false);
+    assert.equal(res.body.error.id, "ERR-010");
+    await sleep(50);
+    assert.equal(agent.events().filter((e) => e.event === "patch.changed").length, 0);
+    // サーバーは動き続けている
+    const again = post(r, req("patch.get"));
+    await waitFor(() => tab.reqs.length >= 3);
+    tab.ws.send(JSON.stringify({ t: "res", id: tab.reqs[2]!.id, response: { v: 1, ok: true, request_id: "x", result: {} } }));
+    assert.equal((await again).body.ok, true);
+  }));
+
+test("画面を他のページの枠に入れさせない: 静的配信と API のすべての応答に X-Frame-Options: DENY と frame-ancestors 'none' を付ける", () =>
+  withRig({}, async (r) => {
+    for (const path of ["/", "/index.html", "/app.js", "/nothing.js", "/..%2f..%2fetc/passwd"]) {
+      const res = await rawHttp(r, { path });
+      assert.equal(res.headers["x-frame-options"], "DENY", path);
+      assert.equal(res.headers["content-security-policy"], "frame-ancestors 'none'", path);
+      assert.equal(res.headers["x-content-type-options"], "nosniff", path);
+    }
+    const post405 = await rawHttp(r, { method: "POST", path: "/index.html" });
+    assert.equal(post405.status, 405);
+    assert.equal(post405.headers["x-frame-options"], "DENY");
+  }));
+
+test("エージェントの WebSocket の接続数には上限があり、超えた接続は 503 で断る。切断すれば、また接続できる", () =>
+  withRig({ maxAgentConnections: 2 }, async (r) => {
+    const a = await connectAgent(r);
+    await connectAgent(r);
+    const third = await openWs(r, "/api/ws", { Authorization: `Bearer ${AGENT_TOKEN}` });
+    assert.equal(third.ws, undefined);
+    assert.equal(third.rejected?.status, 503);
+    assert.equal((JSON.parse(third.rejected!.body) as Obj).error.id, "ERR-010");
+    a.ws.close();
+    await sleep(50);
+    const again = await openWs(r, "/api/ws", { Authorization: `Bearer ${AGENT_TOKEN}` });
+    assert.ok(again.ws);
+    // HTTP は数えない
+    assert.equal((await post(r, req("patch.list"))).body.ok, true);
+  }));
+
+test("タブの応答を待つ要求の数には上限があり、超えた要求はタブへ送らずに、すぐ ERR-010(too_many_pending)で断る", () =>
+  withRig({ maxPendingRequests: 3, tabTimeoutMs: 400 }, async (r) => {
+    const tab = await connectTab(r, { respond: false }); // 接続直後の読出し1件が応答待ちになる
+    await waitFor(() => tab.reqs.length >= 1);
+    const waiting = [post(r, req("patch.get")), post(r, req("patch.get"))];
+    await waitFor(() => tab.reqs.length >= 3);
+    const t0 = Date.now();
+    const over = await post(r, req("patch.get"));
+    assert.equal(over.body.error.id, "ERR-010");
+    assert.equal(over.body.error.details.reason, "too_many_pending");
+    assert.ok(Date.now() - t0 < 300, "待たずに断る");
+    assert.equal(tab.reqs.length, 3, "タブへは送っていない");
+    for (const w of await Promise.all(waiting)) assert.equal(w.body.error.id, "ERR-007");
+  }));
+
+test("受信しないエージェントへ通知をため続けない: 送信待ちが上限を超えたら、その接続を切る(他の接続は影響を受けない)", () =>
+  withRig({ maxBufferedBytes: 256 * 1024 }, async (r) => {
+    const tab = await connectTab(r);
+    const stuck = await connectAgent(r);
+    const fine = await connectAgent(r);
+    (stuck.ws as unknown as { _socket: { pause(): void } })._socket.pause(); // 受信を止める
+    let closed = false;
+    stuck.ws.on("close", () => (closed = true));
+    const pad = "x".repeat(16 * 1024);
+    // 止めていない接続が読み切れる速さで送る(上限は、読まない相手にだけ効く)
+    for (let i = 0; i < 4000 && !closed; i++) {
+      tab.ws.send(JSON.stringify({ t: "evt", event: { v: 1, event: "engine.diagnostic", session_id: "s-test", data: { pad } } }));
+      if (i % 4 === 3) await sleep(2);
+    }
+    await sleep(200);
+    // 受信を止めた接続はサーバー側から切られ、止めていない接続は通知を受け取り続けている
+    assert.ok(fine.events().length > 0);
+    (stuck.ws as unknown as { _socket: { resume(): void } })._socket.resume();
+    await waitFor(() => closed, 5000);
+    assert.equal((await fine.call(req("patch.get"))).ok, true);
+  }));
+
+test("返事をしないタブ(固まった・回線が黙って切れた)は、生死の確認で切り、次のタブを受け付ける", () =>
+  withRig({ tabPingMs: 60 }, async (r) => {
+    const dead = await connectTab(r);
+    (dead.ws as unknown as { _socket: { pause(): void } })._socket.pause(); // ping に返事をしなくなる
+    const second = await openWs(r, `/tab?token=${TAB_TOKEN}`, tabHeaders(r));
+    assert.deepEqual(await second.inbox!.wait((m) => m.t === "hello"), { t: "hello", accepted: false, reason: "another_tab" });
+    await sleep(250);
+    const third = await openWs(r, `/tab?token=${TAB_TOKEN}`, tabHeaders(r));
+    assert.deepEqual(await third.inbox!.wait((m) => m.t === "hello"), { t: "hello", accepted: true });
+    // 返事をするタブは切られない
+    await sleep(250);
+    assert.equal(third.ws!.readyState, WebSocket.OPEN);
+  }));
+
+test("保存フォルダに名前付きパイプがあっても、保存の操作は止まらない(読出しは失敗として返り、他のファイルは読める)", { skip: process.platform === "win32" }, () =>
+  withRig({}, async (r) => {
+    const { execFileSync } = await import("node:child_process");
+    await mkdir(r.patchDir, { recursive: true });
+    execFileSync("mkfifo", [join(r.patchDir, "pipe.patch.json")]);
+    const tab = await connectTab(r);
+    await tab.store({ t: "store", op: "write", name: "good", text: JSON.stringify(P0), overwrite: false });
+    const t0 = Date.now();
+    const read = await post(r, req("patch.get")); // タブ経由の要求も動く
+    assert.equal(read.body.ok, true);
+    const viaStore = await tab.store({ t: "store", op: "read", name: "pipe" });
+    assert.equal(viaStore.ok, false);
+    assert.equal(viaStore.error, "failed");
+    const good = await tab.store({ t: "store", op: "read", name: "good" });
+    assert.equal(good.ok, true);
+    await tab.close();
+    await sleep(30);
+    const list = await post(r, req("patch.list"));
+    assert.equal(list.body.ok, true);
+    assert.deepEqual(list.body.result.patches.map((p: Obj) => [p.name, p.readable]), [["good", true], ["pipe", false]]);
+    const direct = await post(r, req("patch.read", { name: "pipe" }));
+    assert.equal(direct.body.error.id, "ERR-207");
+    assert.ok(Date.now() - t0 < 3000, "待たされない");
+  }));
+
+test("書き込みの途中で残った古い一時ファイルは、起動時に片付ける(新しいものと、他の名前のファイルは消さない)", async () => {
+  const base = await mkdtemp(join(tmpdir(), "synth-sweep-"));
+  try {
+    const { utimes } = await import("node:fs/promises");
+    const old = join(base, ".song.0123456789abcdef.tmp");
+    const fresh = join(base, ".song.fedcba9876543210.tmp");
+    const other = join(base, ".notes.tmp");
+    for (const f of [old, fresh, other]) await writeFile(f, "x");
+    const past = new Date(Date.now() - 2 * 60 * 60 * 1000);
+    await utimes(old, past, past);
+    await utimes(other, past, past);
+    const store = new FilePatchStore(base);
+    assert.equal(await store.sweepTemp(), 1);
+    assert.deepEqual((await readdir(base)).sort(), [".notes.tmp", ".song.fedcba9876543210.tmp"]);
+  } finally {
+    await rm(base, { recursive: true, force: true });
+  }
+});
+
+test("PORT が数でなければ起動しない(空文字は既定のポート。意図しないポートで待ち受けない)", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { fileURLToPath } = await import("node:url");
+  const main = fileURLToPath(new URL("../src/server/main.js", import.meta.url));
+  const base = await mkdtemp(join(tmpdir(), "synth-port-"));
+  try {
+    for (const bad of ["abc", "-1", "70000", "80 ", "1e3"]) {
+      const out = spawnSync(process.execPath, [main], { env: { PATH: process.env.PATH ?? "", HOME: base, PORT: bad, SYNTH_PATCH_DIR: join(base, "p"), SYNTH_TOKEN_FILE: join(base, "t") }, encoding: "utf8", timeout: 10000 });
+      assert.equal(out.status, 1, `PORT=${JSON.stringify(bad)}`);
+      assert.match(out.stderr, /PORT は/);
+    }
+  } finally {
+    await rm(base, { recursive: true, force: true });
+  }
+});

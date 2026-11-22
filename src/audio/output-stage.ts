@@ -133,6 +133,22 @@ export class OutputStage {
     return { ok: true };
   }
 
+  /**
+   * 状態(音量・エージェントの上限・緊急停止)を、別の OutputStage の値に合わせる。
+   * コマンドの処理ではない: メインスレッド側の写しと音声スレッド側の実体を一致させるためだけに使う
+   * (音声の用意ができる前に行われた操作の持ち越し、ずれを見つけたときの合わせ直し)。
+   * 範囲外・非数は無視する。合わせた後は無音からフェードインする(音量が急に上がらない)。
+   */
+  adopt(levelDb: number, agentMaxLevelDb: number, panic: boolean): void {
+    const ok = (v: number): boolean => typeof v === "number" && Number.isFinite(v) && v >= this.cfg.minLevelDb && v <= this.cfg.maxLevelDb;
+    if (ok(levelDb)) this.levelDb = levelDb;
+    if (ok(agentMaxLevelDb)) this.agentMaxDb = agentMaxLevelDb;
+    this.panicOn = panic === true;
+    this.fade = 0;
+    this.levelGain = this.targetGain();
+    this.limGain = 1;
+  }
+
   /** 緊急停止: 即時に消音する。解除は releasePanic()(人のみ)。 */
   panic(): void {
     this.panicOn = true;
@@ -191,11 +207,21 @@ export class OutputStage {
     if (this.limGain > need) this.limGain = need;
     l *= this.limGain;
     r *= this.limGain;
-    // 4) 最終クリップ(保険)
-    if (l > 1 || l < -1 || r > 1 || r < -1) {
-      this.clips++;
-      l = l > 1 ? 1 : l < -1 ? -1 : l;
-      r = r > 1 ? 1 : r < -1 ? -1 : r;
+    // 4) 最終クリップ(保険)。「±1.0 以内」でないものをすべて直す: 内部の状態が壊れて非数になっていても、非数は外へ出さない
+    if (!(l >= -1 && l <= 1) || !(r >= -1 && r <= 1)) {
+      if (l !== l || r !== r) {
+        // 入力は 1) で有限にしてあるので、ここで非数になるのは内部の状態が壊れた場合だけ。状態を作り直して無音にする
+        this.nonfinite++;
+        this.levelGain = this.targetGain();
+        this.limGain = 1;
+        this.fade = 0;
+        l = 0;
+        r = 0;
+      } else {
+        this.clips++;
+        l = l > 1 ? 1 : l < -1 ? -1 : l;
+        r = r > 1 ? 1 : r < -1 ? -1 : r;
+      }
     }
     const a = Math.max(Math.abs(l), Math.abs(r));
     if (a > this.peak) this.peak = a;
