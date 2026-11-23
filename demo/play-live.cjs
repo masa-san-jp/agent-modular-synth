@@ -1,3 +1,4 @@
+// 使い方: node demo/play-live.cjs [曲のファイル(既定 piece.mjs。techno.mjs など)]
 // 実際の経路で鳴らす: サーバーを起動 → ブラウザのタブ(ヘッドレス)→ 人の役が「音声開始」を押す →
 // エージェント(このスクリプト)が HTTP の共通コマンドでパッチを組み、楽譜を 1 つずつ送って演奏を続ける。
 const fs = require("node:fs");
@@ -12,7 +13,8 @@ async function main() {
   const { createApp } = await load("server/app.js");
   const { buildCatalog } = await load("control/catalog.js");
   const { REGISTRY } = await load("modules/registry.js");
-  const { PATCH, SCORES } = await import(pathToFileURL(path.join(__dirname, "piece.mjs")).href);
+  const { PATCH, SECTIONS, TITLE } = await import(pathToFileURL(path.resolve(process.argv[2] || path.join(__dirname, "piece.mjs"))).href);
+  console.log(TITLE);
   const patchDir = fs.mkdtempSync(path.join(os.tmpdir(), "synth-demo-"));
   const app = createApp({ webRoot: path.join(root, "web"), patchDir, catalog: buildCatalog(REGISTRY) });
   const port = await app.listen(0);
@@ -46,26 +48,33 @@ async function main() {
     // 人の役: 途中で指示を書く
     let prompted = false;
     const peaks = [];
-    for (let i = 0; i < SCORES.length; i++) {
+    const tick = async () => {
+      await page.waitForTimeout(500);
+      peaks.push((await synth("status")).peak);
+      return (await agent("score.get_status")).result;
+    };
+    for (let i = 0; i < SECTIONS.length; i++) {
+      const sec = SECTIONS[i];
       // 次の楽譜を送る前に、状態と指示を読む
       const st = (await agent("score.get_status")).result;
       const pending = st.prompts.filter((p) => !p.acked);
-      const args = { ...SCORES[i], ...(pending.length ? { ack_prompt: pending[pending.length - 1].id } : {}) };
-      const r = await agent("score.play", args);
-      log(`楽譜 ${i + 1} を送った(音符 ${SCORES[i].notes.length} 個)。開始まで ${r.result.starts_in.toFixed(2)} 秒、予約の残り ${r.result.remaining.toFixed(2)} 秒${pending.length ? `。指示「${pending[pending.length - 1].text}」を反映済みにした` : ""}`);
-      // 次の楽譜を「書いている」間も演奏は続く。残りが 3 秒を切るまで待つ
+      const r = await agent("score.play", { ...sec.score, ...(pending.length ? { ack_prompt: pending[pending.length - 1].id } : {}) });
+      log(`楽譜 ${i + 1}(${sec.name}、音符 ${sec.score.notes.length} 個)を送った。開始まで ${r.result.starts_in.toFixed(2)} 秒、予約の残り ${r.result.remaining.toFixed(2)} 秒${pending.length ? `。指示「${pending[pending.length - 1].text}」を反映済みにした` : ""}`);
+      // この区間が始まったら、パラメータを動かす
+      const startAt = Date.now() + r.result.starts_in * 1000;
+      while (Date.now() < startAt) await tick();
+      for (const p of sec.params) await agent("param.set", p);
+      if (sec.params.length) log(`  区間「${sec.name}」に入った。パラメータを ${sec.params.length} 個動かした`);
+      // 次の楽譜を「書いている」間も演奏は続く。残りが 4 秒を切るまで待つ
       for (;;) {
-        await page.waitForTimeout(500);
-        const s = await synth("status");
-        peaks.push(s.peak);
-        const now = (await agent("score.get_status")).result;
-        if (!prompted && i === 1 && now.remaining < 6) {
-          await page.fill("#prompt-text", "次はもっと高く、動きを増やして");
+        const now = await tick();
+        if (!prompted && i === 1 && now.remaining < 8) {
+          await page.fill("#prompt-text", "もっと暗く、重く");
           await page.click("#prompt-send");
           prompted = true;
-          log("人が指示を書いた: 「次はもっと高く、動きを増やして」");
+          log("人が指示を書いた: 「もっと暗く、重く」");
         }
-        if (i < SCORES.length - 1 ? now.remaining < 3 : !now.playing) break;
+        if (i < SECTIONS.length - 1 ? now.remaining < 4 : !now.playing) break;
       }
     }
     log("演奏し終えた");

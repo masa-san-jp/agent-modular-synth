@@ -117,4 +117,6 @@ export const SCORE_4 = {
     { t: 14.5, dur: 3, note: A5, vel: 90 },
   ],
 };
-export const SCORES = [SCORE_1, SCORE_2, SCORE_3, SCORE_4];
+export const TITLE = "イ短調の小品(96 BPM)";
+/** 区間: 楽譜と、その区間に入った時点で動かすパラメータ(この曲では動かさない)。 */
+export const SECTIONS = [SCORE_1, SCORE_2, SCORE_3, SCORE_4].map((score, i) => ({ name: ["導入", "主題", "展開", "終わり"][i], score, params: [] }));

@@ -5,7 +5,10 @@ import { EngineBackend } from "../dist/src/control/backend.js";
 import { buildCatalog } from "../dist/src/control/catalog.js";
 import { Session } from "../dist/src/control/session.js";
 import { REGISTRY } from "../dist/src/modules/registry.js";
-import { PATCH, SCORES } from "./piece.mjs";
+
+// 使い方: node demo/render-wav.mjs <曲のファイル(piece.mjs / techno.mjs)> <出力.wav> [音量 dB(既定 -6)]
+const { PATCH, SECTIONS, TITLE } = await import(new URL(process.argv[2] ?? "./piece.mjs", `file://${process.cwd()}/`).href);
+const OUT = process.argv[3] ?? "out.wav";
 
 const FS = 48000;
 const be = new EngineBackend(FS, REGISTRY);
@@ -18,7 +21,7 @@ const send = (actor, command, args) => {
 };
 send("agent", "batch", { ops: PATCH });
 send("human", "engine.start");
-send("human", "output.set_level", { level_db: Number(process.argv[3] ?? -6) }); // 聞くためのファイルなので、人が音量を上げた状態にする
+send("human", "output.set_level", { level_db: Number(process.argv[4] ?? -6) }); // 聞くためのファイルなので、人が音量を上げた状態にする
 
 const left = [];
 const right = [];
@@ -27,16 +30,23 @@ const render = (seconds) => {
   const R = new Float32Array(128);
   for (let i = 0; i < Math.round((seconds * FS) / 128); i++) {
     be.processBlock(L, R);
-    left.push(...L);
-    right.push(...R);
+    for (let k = 0; k < 128; k++) {
+      left.push(L[k]);
+      right.push(R[k]);
+    }
   }
 };
+console.log(`${TITLE}: モジュール ${s.getPatch().modules.length} 個`);
 render(0.3);
-for (let i = 0; i < SCORES.length; i++) {
-  const r = send("agent", "score.play", SCORES[i]);
-  console.log(`楽譜 ${i + 1}: 開始まで ${r.result.starts_in.toFixed(2)} 秒、残り ${r.result.remaining.toFixed(2)} 秒`);
-  // 残りが約 3 秒になるまで進めてから、次を送る(最後は鳴り終わるまで + 余韻 3 秒)
-  render(i < SCORES.length - 1 ? r.result.remaining - 3 : r.result.remaining + 3);
+// 実際の演奏と同じ手順: 楽譜を送る → その区間が始まったらパラメータを動かす → 残りが 4 秒を切ったら次の楽譜を送る
+for (let i = 0; i < SECTIONS.length; i++) {
+  const sec = SECTIONS[i];
+  const r = send("agent", "score.play", sec.score);
+  console.log(`楽譜 ${i + 1}(${sec.name}、音符 ${sec.score.notes.length} 個): 開始まで ${r.result.starts_in.toFixed(2)} 秒、残り ${r.result.remaining.toFixed(2)} 秒`);
+  render(r.result.starts_in);
+  for (const p of sec.params) send("agent", "param.set", p);
+  const rest = r.result.remaining - r.result.starts_in;
+  render(i < SECTIONS.length - 1 ? rest - 4 : rest + 4);
 }
 const st = be.status();
 let peak = 0;
@@ -53,5 +63,5 @@ for (let i = 0; i < frames; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, left[i])) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, right[i])) * 32767), 46 + i * 4);
 }
-writeFileSync(process.argv[2], buf);
-console.log(`書き出し: ${process.argv[2]}(${(buf.length / 2 ** 20).toFixed(1)} MiB)`);
+writeFileSync(OUT, buf);
+console.log(`書き出し: ${OUT}(${(buf.length / 2 ** 20).toFixed(1)} MiB)`);
