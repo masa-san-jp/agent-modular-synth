@@ -26,11 +26,11 @@ const DEF: ModuleDef = {
     { name: "sine", type: "audio" },
   ],
   params: [
-    { name: "range", kind: "int", min: -2, max: 2, default: 0, unit: "oct" },
-    { name: "tune", kind: "float", min: -1, max: 1, default: 0, unit: "oct" },
-    { name: "fm_amt", kind: "float", min: -1, max: 1, default: 0, unit: "oct/V" },
-    { name: "pw", kind: "float", min: PW_MIN, max: PW_MAX, default: 0.5, unit: "ratio" },
-    { name: "pwm_amt", kind: "float", min: -1, max: 1, default: 0, unit: "ratio/10V" },
+    { name: "range", kind: "int", min: -2, max: 2, default: 0 },
+    { name: "tune", kind: "float", min: -1, max: 1, default: 0 },
+    { name: "fm_amt", kind: "float", min: -1, max: 1, default: 0 },
+    { name: "pw", kind: "float", min: PW_MIN, max: PW_MAX, default: 0.5 },
+    { name: "pwm_amt", kind: "float", min: -1, max: 1, default: 0 },
   ],
   stateful: true,
 };

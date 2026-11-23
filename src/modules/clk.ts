@@ -19,7 +19,7 @@ const DEF: ModuleDef = {
     { name: "gate", type: "gate" },
   ],
   params: [
-    { name: "bpm", kind: "float", min: 20, max: 1000, default: 120, unit: "BPM" },
+    { name: "bpm", kind: "float", min: 20, max: 1000, default: 120 },
     { name: "ppqn", kind: "int", min: 1, max: 96, default: 1 },
     { name: "swing", kind: "float", min: 0, max: 0.5, default: 0 },
     { name: "duty", kind: "float", min: 0.01, max: 0.99, default: 0.5 },

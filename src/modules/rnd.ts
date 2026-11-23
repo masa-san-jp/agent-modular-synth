@@ -22,9 +22,9 @@ const DEF: ModuleDef = {
   ],
   params: [
     { name: "seed", kind: "seed", min: 0, max: 4294967295, default: DEFAULT_SEED },
-    { name: "level", kind: "float", min: 0, max: 10, default: 5, unit: "V" },
+    { name: "level", kind: "float", min: 0, max: 10, default: 5 },
     { name: "scale", kind: "float", min: -2, max: 2, default: 1 },
-    { name: "offset", kind: "float", min: -10, max: 10, default: 0, unit: "V" },
+    { name: "offset", kind: "float", min: -10, max: 10, default: 0 },
   ],
   stateful: true,
 };

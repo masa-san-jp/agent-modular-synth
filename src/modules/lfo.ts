@@ -25,8 +25,8 @@ const DEF: ModuleDef = {
     { name: "square", type: "cv" },
   ],
   params: [
-    { name: "freq", kind: "float", min: F_MIN, max: F_MAX, default: 2.0, unit: "Hz" },
-    { name: "cv_amt", kind: "float", min: -1, max: 1, default: 1.0, unit: "oct/V" },
+    { name: "freq", kind: "float", min: F_MIN, max: F_MAX, default: 2.0 },
+    { name: "cv_amt", kind: "float", min: -1, max: 1, default: 1.0 },
     { name: "depth", kind: "float", min: 0, max: 1, default: 1.0 },
   ],
   stateful: true,

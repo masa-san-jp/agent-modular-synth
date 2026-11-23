@@ -17,12 +17,12 @@ const DEF: ModuleDef = {
   inputs: [{ name: "IN", type: "audio", unconnected: 0 }],
   outputs: [{ name: "THRU", type: "audio" }],
   params: [
-    { name: "window_ms", kind: "float", min: 1, max: 1000, default: 100, unit: "ms" },
-    { name: "capture_len", kind: "int", min: 4, max: RING_MAX, default: 512, unit: "sample" },
+    { name: "window_ms", kind: "float", min: 1, max: 1000, default: 100 },
+    { name: "capture_len", kind: "int", min: 4, max: RING_MAX, default: 512 },
     { name: "trig_mode", kind: "int", min: 0, max: 2, default: 1 },
-    { name: "trig_level", kind: "float", min: -12, max: 12, default: 0, unit: "V" },
+    { name: "trig_level", kind: "float", min: -12, max: 12, default: 0 },
     // 上限は capture_len−1(step で capture_len に合わせてクランプする)
-    { name: "pre", kind: "int", min: 0, max: RING_MAX - 1, default: 0, unit: "sample" },
+    { name: "pre", kind: "int", min: 0, max: RING_MAX - 1, default: 0 },
     { name: "channel", kind: "int", min: 1, max: 16, default: 1 },
   ],
   stateful: true,

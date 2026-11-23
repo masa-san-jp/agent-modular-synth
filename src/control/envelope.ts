@@ -59,28 +59,29 @@ export function checkEnvelope(r: unknown): ErrorSpec | null {
 
 /** CMD-01 の `types` の1要素。`singleton`・`readouts` は種別で決まる(呼ぶ側が種別名を渡す)。 */
 export function describeType(t: TypeInfo, outType: string, meterType: string, meterFields: readonly string[]): Obj {
-  const port = (p: { name: string; type: string; connectable: boolean }, direction: "in" | "out"): Obj => ({
+  const port = (p: TypeInfo["inputs"][number], direction: "in" | "out"): Obj => ({
     name: p.name,
     direction,
     signal_type: p.type,
-    unit: null, // 定義表(catalog)にない
+    unit: p.unit,
     connectable: p.connectable,
-    unconnected: null, // 定義表(catalog)にない
+    unconnected: p.unconnected,
   });
   return {
     type: t.type,
     title: t.title,
-    category: null, // 定義表(catalog)にない
+    category: t.category,
     spec_version: t.specVersion,
     singleton: t.type === outType,
     ports: [...t.inputs.map((p) => port(p, "in")), ...t.outputs.map((p) => port(p, "out"))],
     params: t.params.map((p) => ({
       name: p.name,
-      kind: p.kind === "seed" ? "int" : p.kind,
+      kind: p.values ? "enum" : p.kind === "seed" ? "int" : p.kind,
       unit: p.unit ?? null,
       min: p.min,
       max: p.max,
       default: p.default,
+      ...(p.values ? { values: p.values.map((v) => ({ value: v.value, label: v.label })) } : {}),
     })),
     readouts: t.type === meterType ? [...meterFields] : [],
   };

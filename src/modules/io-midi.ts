@@ -31,7 +31,7 @@ const DEF: ModuleDef = {
   ],
   params: [
     { name: "channel", kind: "int", min: 0, max: 16, default: 0 },
-    { name: "transpose", kind: "int", min: -48, max: 48, default: 0, unit: "semitone" },
+    { name: "transpose", kind: "int", min: -48, max: 48, default: 0 },
     { name: "voices", kind: "int", min: 1, max: 16, default: 1 },
     { name: "cc_number", kind: "int", min: 0, max: 127, default: 1 },
   ],

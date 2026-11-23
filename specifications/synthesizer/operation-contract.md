@@ -286,10 +286,12 @@
 - 引数: `type`(文字列、任意。指定時はその種別だけ返す。未知なら ERR-101)。
 - 返値: `types`(配列)。各要素:
   - `type`(仕様ID)、`title`、`category`、`spec_version`(実装している仕様版)、`singleton`(`MOD-IO-001` のみ `true`)
-  - `ports`: `{"name", "direction": "in"|"out", "signal_type", "unit", "connectable", "unconnected"}`。`signal_type` は COM-01 の型名。`connectable` は §13.6。
-  - `params`: `{"name", "kind": "float"|"int"|"enum"|"bool", "unit", "min", "max", "default", "values"}`。`values` は列挙型のみ(`{"value", "label"}` の配列)。
+  - `category` は機能分類(各モジュール仕様のフロントマターの `category`。例 `oscillator`、`filter`)。
+  - `ports`: `{"name", "direction": "in"|"out", "signal_type", "unit", "connectable", "unconnected"}`。`signal_type` は COM-01 の型名。`connectable` は §13.6。`unit` は仕様 §3 の単位(`V`、`FS`、`メッセージ`)。
+    - `unconnected` は、出力では `null`。入力では `{"value", "normal"}`: 未接続時の値が定数ならその値 [V] を `value` に入れ、`normal` は `null`。他の信号へ内部接続される入力は `value` が `null` で、`normal` がその信号の名前(`MOD-IO-001` の `IN_R` は `"IN_L"`、`MOD-RND-001` の `IN` は `"NOISE[n]"`)。メッセージ入力(`MOD-IO-002` の `MIDI`)は両方 `null`。
+  - `params`: `{"name", "kind": "float"|"int"|"enum"|"bool", "unit", "min", "max", "default", "values"}`。`unit` は仕様 §4 の単位(真偽型・列挙型・`seed` は `null`)。`values` は列挙型のみ(`{"value", "label"}` の配列。`min`〜`max` の整数をすべて含む)。列挙型の値の検証は整数型と同じ(§12)。
   - `readouts`: `meter.read` で読める項目(`MOD-IO-003` のみ)。
-- 内容の正本は各モジュール仕様の §3・§4。実装は仕様から作った定義表を返し、仕様と一致することを検証する(VER-A-001)。
+- 内容の正本は各モジュール仕様の §3・§4。実装は仕様から作った定義表を返し、仕様と一致することを検証する(VER-A-001)。分類・単位・未接続時の値・列挙の選択肢は、仕様から機械的に生成する(`tools/build_module_meta.py`)。
 - 検証エラー: ERR-101。副作用: なし。セッションがなくても応答できる。
 
 ### CMD-02 `module.add`

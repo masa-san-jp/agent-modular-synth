@@ -26,8 +26,8 @@ const DEF: ModuleDef = {
     { name: "eoc", type: "gate" },
   ],
   params: [
-    { name: "rise", kind: "float", min: T_MIN, max: T_MAX, default: 0.1, unit: "s" },
-    { name: "fall", kind: "float", min: T_MIN, max: T_MAX, default: 0.1, unit: "s" },
+    { name: "rise", kind: "float", min: T_MIN, max: T_MAX, default: 0.1 },
+    { name: "fall", kind: "float", min: T_MIN, max: T_MAX, default: 0.1 },
     // 列挙(0=線形, 1=指数)。0.5 以上を 1 に丸める(四捨五入、0.5 は切り上げ)。
     { name: "response", kind: "int", min: 0, max: 1, default: 0 },
   ],
