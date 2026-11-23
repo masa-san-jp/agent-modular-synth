@@ -7,6 +7,7 @@
 // - ワークレットは、受け取ったメッセージの数を状態に入れて返す。送った分がすべて反映された状態なのに
 //   音量・上限・緊急停止・動作中かが写しと違えば、写しの状態を送り直す(sync)。
 // - 中断(ブラウザ・OSが音声を止めた)を知ったら、ワークレットも止める。復帰は開始と同じ扱い(音量の引き下げとフェードイン)。
+import type { ScheduledEvent } from "../control/performance.js";
 import type { EngineOp, FromWorklet, ToWorklet, WorkletStatus } from "./messages.js";
 import { OutputStage } from "./output-stage.js";
 import type { AudioBackend, BackendStatus, MeterReading, SetLevelResult } from "../control/session.js";
@@ -246,7 +247,7 @@ export class WorkletBackend implements AudioBackend {
     return w.sampleTime + Math.round((elapsed / 1000) * w.fs);
   }
 
-  scheduleMidi(events: { at: number; bytes: number[] }[]): void {
+  scheduleMidi(events: ScheduledEvent[]): void {
     if (!this.running || this.suspended) return;
     this.send({ type: "schedule", events });
   }

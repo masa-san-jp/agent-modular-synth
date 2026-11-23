@@ -10,7 +10,7 @@
 
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
 import { checkEnvelope, listTypes } from "./envelope.js";
-import { MidiEventAt, Performance, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
+import { CheckedParam, MidiEventAt, Performance, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
 import { CommandError } from "./errors.js";
 import { MAX_UI_DEPTH, depthExceeds } from "./json.js";
 import {
@@ -792,6 +792,8 @@ export class Session {
         events.push(this.performanceEvent("stopped", null));
       }
     } else if (this.perf.prune(this.backend.sampleNow?.() ?? now.sampleTime)) {
+      // 演奏し終えた: 楽譜が動かしていたパラメータを、パッチの値へ戻す
+      this.backend.clearSchedule?.();
       events.push(this.performanceEvent("finished", null));
     }
     if (
@@ -1878,6 +1880,15 @@ export class Session {
     if (!this.backend.sampleNow || !this.backend.scheduleMidi || !this.backend.clearSchedule || s.fs === null) {
       throw new Error("この音声側は楽譜の予約に対応していない");
     }
+    // パラメータの変化: 対象と値を、param.set と同じ規則で確かめる(ERR-102 → ERR-121 → ERR-122 → ERR-123)。パッチは変えない
+    const checked: CheckedParam[] = score.params.map((p) => {
+      const m = this.state.modules.find((x) => x.id === p.moduleId);
+      if (!m) throw new CommandError("ERR-102", `モジュール ${p.moduleId} は存在しない`, { module_id: p.moduleId, arg: `params[${p.index}].module_id` });
+      const info = this.paramsOf(m.type).get(p.param);
+      if (!info) throw new CommandError("ERR-121", `${p.moduleId}(${m.type})にパラメータ ${p.param} はない`, { module_id: p.moduleId, param: p.param, arg: `params[${p.index}].param` });
+      if (info.kind === "seed") throw new CommandError("ERR-123", "seed は楽譜では動かせない", { module_id: p.moduleId, param: p.param, arg: `params[${p.index}].param` });
+      return { t: p.t, dur: info.kind === "float" ? p.dur : 0, moduleId: p.moduleId, param: p.param, value: this.checkParamValue(p.moduleId, info, p.value) };
+    });
     const fs = s.fs;
     const now = this.backend.sampleNow();
     this.perf.prune(now);
@@ -1898,7 +1909,7 @@ export class Session {
       this.backend.clearSchedule();
       this.perf.clear();
     }
-    this.backend.scheduleMidi(scoreEvents(score.notes, start, fs));
+    this.backend.scheduleMidi(scoreEvents(score.notes, start, fs, checked));
     const queued = this.perf.add(ctx.actor, start, end, score.notes.length);
     const acked = score.ackPrompt !== null && this.perf.ack(score.ackPrompt);
     ctx.events.push(this.performanceEvent(replace ? "score_replaced" : "score_queued", ctx.actor));

@@ -320,7 +320,7 @@ test("§17 ツール一覧(stdio の子プロセス): 25個。名前はコマン
       engine_get_status: [[], []],
       engine_panic: [[], []],
       output_set_level: [["level_db"], ["level_db"]],
-      score_play: [["notes", "length", "tempo_bpm", "mode", "ack_prompt"], ["notes"]],
+      score_play: [["notes", "params", "length", "tempo_bpm", "mode", "ack_prompt"], ["notes"]],
       score_stop: [[], []],
       score_get_status: [[], []],
     };
@@ -451,6 +451,9 @@ const SCRIPT: [string, Obj][] = [
   ["score_play", { tempo_bpm: 120, notes: [{ t: 0, dur: 1, note: 60 }, { t: 1, dur: 1, note: 64, vel: 90 }, { t: 2, dur: 2, note: 67, ch: 2 }], length: 4 }],
   ["score_play", { notes: [{ t: 0, dur: 0.5, note: 72 }], idempotency_key: "s-001" }], // 前の楽譜の末尾に続く
   ["score_play", { notes: [{ t: 0, dur: 0.5, note: 72 }], idempotency_key: "s-001" }], // 再送: 二重に予約しない
+  ["score_play", { notes: [{ t: 0, dur: 1, note: 60 }], params: [{ t: 0, dur: 1, module_id: "vcf1", param: "cutoff", value: 3 }, { t: 0.5, module_id: "vcf1", param: "res", value: 0.6 }] }], // パラメータの変化つき
+  ["score_play", { notes: [], length: 1, params: [{ t: 0, module_id: "vcf1", param: "cutoff", value: 99 }] }], // ERR-123
+  ["score_play", { notes: [], length: 1, params: [{ t: 0, module_id: "nope", param: "cutoff", value: 1 }] }], // ERR-102
   ["score_play", { notes: [{ t: 0, dur: 1, note: 128 }] }], // ERR-123
   ["score_play", { notes: [{ t: 0, dur: 1 }] }], // ERR-003
   ["score_play", { notes: [], length: 2, mode: "replace", ack_prompt: 0 }], // 休みだけの楽譜で置き換える

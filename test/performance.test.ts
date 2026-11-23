@@ -140,7 +140,8 @@ test("VER-A-009b 演奏中に次の楽譜を送ると、前の楽譜の末尾と
 });
 
 test("VER-A-009b 楽譜の末尾の音符と、続きの楽譜の先頭の同じ音は、切れてから鳴り直す(ノートオフが先)。音符は次の楽譜へはみ出せる", () => {
-  const ev = scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 1000, FS).concat(scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 1000 + FS, FS));
+  type Midi = { at: number; bytes: number[] };
+  const ev = scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 1000, FS).concat(scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 1000 + FS, FS)) as Midi[];
   ev.sort((a, b) => a.at - b.at || (a.bytes[0]! & 0x10) - (b.bytes[0]! & 0x10));
   assert.deepEqual(ev.map((e) => [e.at, e.bytes[0]]), [[1000, 0x90], [1000 + FS, 0x80], [1000 + FS, 0x90], [1000 + 2 * FS, 0x80]]);
   // はみ出す音符: length は最後の音符の開始以上ならよい
@@ -399,4 +400,152 @@ test("ワークレット経由: 予約がメッセージで届き、見積もっ
   assert.equal(core.be.scheduled, 0);
   render(1280);
   assert.equal(wb.desyncCount, 0);
+});
+
+// ---- 楽譜の中のパラメータの変化(CMD-26 の params) ----
+
+function paramRig() {
+  const r = rig();
+  r.ok("agent", "module.add", { id: "vcf", type: "MOD-FLT-001", params: { cutoff: 1 } });
+  r.ok("agent", "module.add", { id: "amp", type: "MOD-AMP-001" });
+  const be = r.be as EngineBackend;
+  const raw = (id: string, name: string): number => {
+    be.flush();
+    return (be as unknown as { engine: { get(id: string): { getRawParam(n: string): number } } }).engine.get(id).getRawParam(name);
+  };
+  const run = (samples: number): void => {
+    const L = new Float32Array(1);
+    for (let i = 0; i < samples; i++) be.processBlock(L, new Float32Array(1));
+  };
+  const patchValue = (id: string, name: string): number => r.s.getPatch().modules.find((m) => m.id === id)!.params[name]!;
+  return { ...r, be, raw, run, patchValue };
+}
+
+test("楽譜にパラメータの変化を書ける: 書いた位置のサンプルちょうどで音声側の値が変わる。パッチ・リビジョン・履歴は変わらない", () => {
+  const r = paramRig();
+  const rev = r.s.revision;
+  r.ok("agent", "score.play", { notes: [{ t: 0, dur: 2, note: 60 }], params: [{ t: 0.5, module_id: "vcf", param: "cutoff", value: 3 }, { t: 1, module_id: "vcf", param: "res", value: 0.5 }] });
+  r.run(LEAD + 24000 - 1);
+  assert.equal(r.raw("vcf", "cutoff"), 1, "位置の 1 サンプル前は元の値");
+  r.run(1);
+  // 位置のサンプルを処理する直前に変わる(そのサンプルから新しい値)
+  r.run(1);
+  assert.equal(r.raw("vcf", "cutoff"), 3);
+  assert.equal(r.raw("vcf", "res"), 0);
+  r.run(24000);
+  assert.equal(r.raw("vcf", "res"), 0.5);
+  assert.equal(r.be.overridden, 2);
+  assert.equal(r.patchValue("vcf", "cutoff"), 1, "パッチの値は変わらない");
+  assert.equal(r.s.revision, rev);
+  assert.equal((r.ok("agent", "module.get", { module_id: "vcf" }).result.module as { params: Record<string, number> }).params.cutoff, 1);
+});
+
+test("dur を付けると、その長さをかけて直線で動く(1 サンプルごと)。ブロック長 1 と 128 で同じ値になる", () => {
+  const sample = (block: number): number[] => {
+    const r = paramRig();
+    r.ok("agent", "score.play", { notes: [], length: 2, params: [{ t: 0, dur: 1, module_id: "vcf", param: "cutoff", value: 5 }] });
+    const out: number[] = [];
+    const L = new Float32Array(block);
+    for (let i = 0; i < (LEAD + FS + 1280) / block; i++) {
+      r.be.processBlock(L, new Float32Array(block));
+      if (((i + 1) * block) % 1280 === 0) out.push(r.raw("vcf", "cutoff"));
+    }
+    return out;
+  };
+  const a = sample(1);
+  assert.deepEqual(a, sample(128));
+  // 1280 サンプルごとの値: 始まる前は 1、動いている間は直線、終わった後は 5
+  a.forEach((v, i) => {
+    const done = (i + 1) * 1280 - LEAD; // 変化が始まってから処理したサンプル数
+    const expected = done <= 0 ? 1 : done >= FS ? 5 : 1 + (4 * done) / FS;
+    assert.ok(Math.abs(v - expected) < 1e-9, `${(i + 1) * 1280} サンプル目: ${v}(期待 ${expected})`);
+  });
+  assert.equal(a[0], 1);
+  assert.equal(a[a.length - 1], 5);
+  for (let i = 1; i < a.length; i++) assert.ok(a[i]! >= a[i - 1]!, "単調に増える");
+});
+
+test("演奏が終わる・止まる・緊急停止すると、楽譜が動かしたパラメータはパッチの値へ戻る。続きの楽譜がある間は戻らない", () => {
+  const r = paramRig();
+  r.ok("agent", "score.play", { notes: [], length: 0.2, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: 4 }] });
+  r.run(LEAD + 100);
+  assert.equal(r.raw("vcf", "cutoff"), 4);
+  // 続きを送る: 区切りをまたいでも戻らない
+  r.ok("agent", "score.play", { notes: [], length: 0.2 });
+  r.run(9600);
+  r.s.pollBackend();
+  assert.equal(r.raw("vcf", "cutoff"), 4, "演奏が続いている間は、動かした値のまま");
+  r.run(9600 + LEAD);
+  r.s.pollBackend(); // 演奏し終えた(EVT-07 finished)
+  assert.equal(r.raw("vcf", "cutoff"), 1, "終わるとパッチの値に戻る");
+  assert.equal(r.be.overridden, 0);
+  // 止める
+  r.ok("agent", "score.play", { notes: [], length: 5, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: -2 }, { t: 0, dur: 4, module_id: "vcf", param: "res", value: 1 }] });
+  r.run(LEAD + 4800);
+  assert.equal(r.raw("vcf", "cutoff"), -2);
+  assert.ok(r.raw("vcf", "res") > 0 && r.raw("vcf", "res") < 1, "動いている途中");
+  r.ok("agent", "score.stop");
+  assert.equal(r.raw("vcf", "cutoff"), 1);
+  assert.equal(r.raw("vcf", "res"), 0);
+  r.run(4800);
+  assert.equal(r.raw("vcf", "res"), 0, "止めた後は動かない");
+  // 緊急停止
+  r.ok("agent", "score.play", { notes: [], length: 5, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: 2 }] });
+  r.run(LEAD + 10);
+  r.ok("agent", "engine.panic");
+  assert.equal(r.raw("vcf", "cutoff"), 1);
+});
+
+test("演奏中に param.set でパッチの値を変えたら、パッチの側が優先される(演奏の後に戻す先もその値)", () => {
+  const r = paramRig();
+  r.ok("agent", "score.play", { notes: [], length: 1, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: 4 }, { t: 0, dur: 0.9, module_id: "vcf", param: "res", value: 1 }] });
+  r.run(LEAD + 100);
+  r.ok("human", "param.set", { module_id: "vcf", param: "cutoff", value: 2.5 });
+  r.ok("human", "param.set", { module_id: "vcf", param: "res", value: 0.2 });
+  r.run(100);
+  assert.equal(r.raw("vcf", "cutoff"), 2.5);
+  assert.equal(r.raw("vcf", "res"), 0.2, "進行中の変化も止まる");
+  r.run(FS + LEAD);
+  r.s.pollBackend();
+  assert.equal(r.raw("vcf", "cutoff"), 2.5);
+  assert.equal(r.raw("vcf", "res"), 0.2);
+  // モジュールを削除しても、予約済みの変化で落ちない
+  r.ok("agent", "score.play", { notes: [], length: 1, params: [{ t: 0.5, module_id: "amp", param: "gain", value: 1 }] });
+  r.ok("agent", "module.remove", { module_id: "amp" });
+  assert.doesNotThrow(() => r.run(FS + LEAD));
+  assert.equal(r.be.takeDesync(), null);
+});
+
+test("パラメータの変化の検査: 対象と値は param.set と同じ規則(ERR-102 / ERR-121 / ERR-122 / ERR-123)。失敗では何も予約しない", () => {
+  const r = paramRig();
+  const P = { t: 0, module_id: "vcf", param: "cutoff", value: 1 };
+  const cases: [Record<string, unknown>, string][] = [
+    [{ params: {} }, "ERR-003"],
+    [{ params: [1] }, "ERR-003"],
+    [{ params: [{ t: 0, module_id: "vcf", param: "cutoff" }] }, "ERR-003"],
+    [{ params: [{ ...P, extra: 1 }] }, "ERR-003"],
+    [{ params: [{ ...P, t: "0" }] }, "ERR-003"],
+    [{ params: [{ ...P, module_id: 1 }] }, "ERR-003"],
+    [{ params: Array.from({ length: 2001 }, () => P) }, "ERR-106"],
+    [{ params: [{ ...P, t: -1 }] }, "ERR-123"],
+    [{ params: [{ ...P, dur: -1 }] }, "ERR-123"],
+    [{ params: [{ ...P, module_id: "nope" }] }, "ERR-102"],
+    [{ params: [{ ...P, param: "nope" }] }, "ERR-121"],
+    [{ params: [{ ...P, value: "high" }] }, "ERR-122"],
+    [{ params: [{ ...P, value: 99 }] }, "ERR-123"],
+    [{ params: [{ t: 0, module_id: "amp", param: "response", value: 0.5 }] }, "ERR-122"],
+  ];
+  for (const [extra, id] of cases) {
+    const f = r.fail("agent", "score.play", { notes: [], length: 4, ...extra });
+    assert.equal(f.error.id, id, JSON.stringify(extra).slice(0, 80));
+  }
+  assert.equal(r.be.scheduled, 0);
+  assert.equal(r.perf().length, 0);
+  // 整数・列挙のパラメータは、dur を付けても切り替えになる(途中の値を取らない)
+  r.ok("agent", "score.play", { notes: [], length: 1, params: [{ t: 0, dur: 0.5, module_id: "amp", param: "response", value: 1 }] });
+  r.run(LEAD + 2);
+  assert.equal(r.raw("amp", "response"), 1);
+  // 同じ位置では、パラメータの変化が音符より先に行われる
+  const ev = scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 0, FS, [{ t: 0, dur: 0, moduleId: "vcf", param: "cutoff", value: 2 }]);
+  assert.deepEqual(ev.map((e) => ("param" in e ? "param" : e.bytes[0])), ["param", 0x90, 0x80]);
 });

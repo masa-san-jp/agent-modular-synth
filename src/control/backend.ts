@@ -20,6 +20,10 @@ export class EngineBackend implements AudioBackend {
   /** 予約済みの演奏入力(サンプル時刻の昇順)。`scheduleHead` より前は処理済み。 */
   private schedule: MidiEventAt[] = [];
   private scheduleHead = 0;
+  /** 楽譜が動かしているパラメータ(キーは "モジュールID\u0000名前")と、動かす前のパッチの値。演奏が終わる・止まると戻す。 */
+  private overrides = new Map<string, { id: string; name: string; original: number }>();
+  /** 進行中の、直線で動かす変化。 */
+  private ramps: { key: string; id: string; name: string; from: number; to: number; start: number; len: number }[] = [];
   /** 差分の適用に失敗して、正本とずれた可能性があるときの理由(takeDesync() で読むと消える)。 */
   private desync: string | null = null;
   /** 処理したサンプルの通算(緊急停止でエンジンを初期化しても戻らない)。 */
@@ -59,6 +63,9 @@ export class EngineBackend implements AudioBackend {
     this.pendingRevision = null;
     this.engineRevision = revision;
     this.desync = null; // 全体を作り直したので、ずれは解消
+    // 新しいエンジンはパッチの値で始まる。楽譜が動かしていた分は、ここで終わり(予約済みの変化は、この後も届く)
+    this.overrides.clear();
+    this.ramps = [];
     this.stage.reduce("patch_replaced");
   }
 
@@ -68,7 +75,11 @@ export class EngineBackend implements AudioBackend {
   }
 
   removeModule(moduleId: string): void {
-    this.pending.push(() => this.engine.remove(moduleId));
+    this.pending.push(() => {
+      this.engine.remove(moduleId);
+      for (const [key, o] of [...this.overrides]) if (o.id === moduleId) this.overrides.delete(key);
+      this.ramps = this.ramps.filter((r) => r.id !== moduleId);
+    });
   }
 
   connect(cable: Cable): void {
@@ -80,7 +91,12 @@ export class EngineBackend implements AudioBackend {
   }
 
   setParam(moduleId: string, param: string, value: number): void {
-    this.pending.push(() => this.engine.get(moduleId).setParam(param, value));
+    this.pending.push(() => {
+      this.engine.get(moduleId).setParam(param, value);
+      // パッチの値が変わった: 楽譜が動かしていても、パッチの側を優先する(演奏の後に戻す先も、この値になる)
+      const key = `${moduleId}\u0000${param}`;
+      if (this.overrides.delete(key)) this.ramps = this.ramps.filter((r) => r.key !== key);
+    });
   }
 
   commit(revision: number): void {
@@ -148,25 +164,82 @@ export class EngineBackend implements AudioBackend {
     return this.sampleTime;
   }
 
-  /** サンプル時刻つきの演奏入力を予約する。その時刻のサンプルを処理する直前に、全ての MIDI-CV モジュールへ渡す。 */
+  /**
+   * サンプル時刻つきの出来事(演奏入力、パラメータの変化)を予約する。その時刻のサンプルを処理する直前に行う。
+   * 演奏入力は全ての MIDI-CV モジュールへ渡す。パラメータの変化は音声側の値だけを変える(パッチは変えない)。
+   */
   scheduleMidi(events: readonly MidiEventAt[]): void {
     if (events.length === 0) return;
     const rest = this.schedule.slice(this.scheduleHead);
-    const add = events.map((e) => ({ at: e.at, bytes: [...e.bytes] }));
+    const add: MidiEventAt[] = events.map((e) => ("bytes" in e ? { at: e.at, bytes: [...e.bytes] } : { at: e.at, param: { ...e.param } }));
     // 既存の予約の末尾より後なら、後ろへ足すだけ(続きの楽譜はこの形)。そうでなければ並べ直す(同じ時刻は先に予約した方が先)
     const sorted = rest.length === 0 || add[0]!.at >= rest[rest.length - 1]!.at;
     this.schedule = sorted ? rest.concat(add) : rest.concat(add).sort((x, y) => x.at - y.at);
     this.scheduleHead = 0;
   }
 
-  /** 予約をすべて捨てる。捨てた予約のうちノートオフは、その場で渡す(鳴っている音を止める)。 */
+  /**
+   * 予約をすべて捨てる。捨てた予約のうちノートオフは、その場で渡す(鳴っている音を止める)。
+   * 楽譜が動かしていたパラメータは、パッチの値へ戻す。
+   */
   clearSchedule(): void {
     for (let i = this.scheduleHead; i < this.schedule.length; i++) {
-      const b = this.schedule[i]!.bytes;
-      if (((b[0] ?? 0) & 0xf0) === 0x80) this.midi(b);
+      const e = this.schedule[i]!;
+      if ("bytes" in e && ((e.bytes[0] ?? 0) & 0xf0) === 0x80) this.midi(e.bytes);
     }
     this.schedule = [];
     this.scheduleHead = 0;
+    this.ramps = [];
+    for (const o of this.overrides.values()) {
+      try {
+        this.engine.get(o.id).setParam(o.name, o.original);
+      } catch {
+        // モジュールがもうない
+      }
+    }
+    this.overrides.clear();
+  }
+
+  /** 予約されていた出来事 1 つを行う(その時刻のサンプルを処理する直前)。 */
+  private fire(e: MidiEventAt, t: number): void {
+    if ("bytes" in e) {
+      this.midi(e.bytes);
+      return;
+    }
+    const { module: id, name, value, ramp } = e.param;
+    let m: SynthModule;
+    let current: number;
+    try {
+      m = this.engine.get(id);
+      current = m.getRawParam(name);
+    } catch {
+      return; // 予約の後で、モジュールが削除された
+    }
+    const key = `${id}\u0000${name}`;
+    if (!this.overrides.has(key)) this.overrides.set(key, { id, name, original: current });
+    this.ramps = this.ramps.filter((r) => r.key !== key); // 同じパラメータの進行中の変化は、新しい方で置き換える
+    if (ramp > 0) this.ramps.push({ key, id, name, from: current, to: value, start: t, len: ramp });
+    else m.setParam(name, value);
+  }
+
+  /** 進行中の直線の変化を、1 サンプル分進める。 */
+  private advanceRamps(t: number): void {
+    for (let i = 0; i < this.ramps.length; i++) {
+      const r = this.ramps[i]!;
+      const k = t - r.start + 1;
+      const done = k >= r.len;
+      try {
+        this.engine.get(r.id).setParam(r.name, done ? r.to : r.from + ((r.to - r.from) * k) / r.len);
+      } catch {
+        // モジュールがもうない
+      }
+      if (done) this.ramps.splice(i--, 1);
+    }
+  }
+
+  /** 楽譜が今動かしているパラメータの数(診断用)。 */
+  get overridden(): number {
+    return this.overrides.size;
   }
 
   /** 予約済み(未処理)の演奏入力の数。 */
@@ -263,12 +336,13 @@ export class EngineBackend implements AudioBackend {
       // 予約済みの演奏入力のうち、このサンプルの時刻になったものを渡す(サンプル単位で正確。ブロック長に依らない)
       if (this.scheduleHead < sched.length) {
         const t = this.sampleTime + i;
-        while (this.scheduleHead < sched.length && sched[this.scheduleHead]!.at <= t) this.midi(sched[this.scheduleHead++]!.bytes);
+        while (this.scheduleHead < sched.length && sched[this.scheduleHead]!.at <= t) this.fire(sched[this.scheduleHead++]!, t);
         if (this.scheduleHead === sched.length) {
           this.schedule.length = 0;
           this.scheduleHead = 0;
         }
       }
+      if (this.ramps.length > 0) this.advanceRamps(this.sampleTime + i);
       this.engine.tick();
       st.step(preL[0]!, preR[0]!);
       left[i] = st.outL[0]!;
