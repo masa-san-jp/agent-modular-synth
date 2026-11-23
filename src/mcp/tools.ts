@@ -114,6 +114,24 @@ export const ARGS: Readonly<Record<string, ArgSpec>> = {
           additionalProperties: false,
         },
       },
+      params: {
+        type: "array",
+        description:
+          "パラメータの変化の並び(任意)。楽譜の中の位置で、モジュールのパラメータを動かす(フィルタを開く、ディレイを深くする、など)。音声側の値だけが変わり、パッチ・リビジョン・履歴は変わらない。演奏が終わる・止まると、パッチの値に戻る",
+        maxItems: 2000,
+        items: {
+          type: "object",
+          properties: {
+            t: { type: "number", minimum: 0, description: "楽譜の先頭から数えた位置(単位は音符と同じ)" },
+            dur: { type: "number", minimum: 0, description: "省略または 0 なら、その位置で値を切り替える。正の値なら、その長さをかけて、直前の値から直線で動かす(整数・真偽・列挙のパラメータは切り替えだけ)" },
+            module_id: str("モジュールID"),
+            param: str("パラメータ名"),
+            value: { type: "number", description: "動かす先の値。範囲は param_set と同じ(範囲外は拒否)" },
+          },
+          required: ["t", "module_id", "param", "value"],
+          additionalProperties: false,
+        },
+      },
       length: { type: "number", exclusiveMinimum: 0, description: "楽譜の長さ(単位は t と同じ)。次の楽譜はこの後に続く。省略時は最後の音符の終わり。小節の区切りに合わせると、続きがずれない" },
       tempo_bpm: { type: "number", minimum: 20, maximum: 1000, description: "指定すると t・dur・length の単位が拍になる。省略時は秒" },
       mode: str("append(既定): 予約があればその末尾に切れ目なく続け、なければ今から。replace: 予約を捨てて今から", { enum: ["append", "replace"] }),

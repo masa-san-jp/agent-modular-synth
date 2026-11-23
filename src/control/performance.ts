@@ -9,6 +9,8 @@ import type { ActorInfo } from "./types.js";
 export const SCORE_LIMITS = {
   /** 楽譜1つの音符の数。 */
   notes: 2000,
+  /** 楽譜1つの、パラメータの変化の数。 */
+  params: 2000,
   /** 楽譜1つの長さ [秒]。 */
   lengthSeconds: 600,
   /** 予約済み(まだ終わっていない)の楽譜の、音符の合計。 */
@@ -38,18 +40,40 @@ export interface ScoreNote {
   ch: number;
 }
 
+/** 楽譜の中のパラメータの変化(検査の前。モジュールとパラメータの存在・値の範囲は Session が見る)。 */
+export interface ScoreParam {
+  /** 楽譜の先頭から数えた位置 [秒]。 */
+  t: number;
+  /** 0 ならその位置で値を切り替える。正なら、その長さ [秒] をかけて、直前の値から直線で動かす。 */
+  dur: number;
+  moduleId: string;
+  param: string;
+  value: unknown;
+  /** 引数の中の番号(エラーの報告用)。 */
+  index: number;
+}
+
 export interface ParsedScore {
   notes: ScoreNote[];
+  params: ScoreParam[];
   lengthSeconds: number;
   mode: "append" | "replace";
   ackPrompt: number | null;
 }
 
-export interface MidiEventAt {
-  /** 音声側のサンプル時刻(処理したサンプルの通算)。 */
-  at: number;
-  bytes: number[];
-}
+/** 音声側へ予約する出来事: 演奏入力(MIDI のバイト列)か、パラメータの変化。 */
+export type ScheduledEvent =
+  | {
+      /** 音声側のサンプル時刻(処理したサンプルの通算)。 */
+      at: number;
+      bytes: number[];
+    }
+  | {
+      at: number;
+      param: { module: string; name: string; value: number; /** 0 なら切り替え。正なら、このサンプル数をかけて直線で動かす。 */ ramp: number };
+    };
+/** 以前の名前(演奏入力だけだった頃)。 */
+export type MidiEventAt = ScheduledEvent;
 
 type Args = Record<string, unknown>;
 
@@ -66,7 +90,7 @@ function isObj(v: unknown): v is Args {
 /** score.play の引数を検査して、秒の単位の楽譜にする。検査の順: ERR-003(形・型)→ ERR-106(数)→ ERR-123(値の範囲)。 */
 export function parseScore(a: Args): ParsedScore {
   for (const k of Object.keys(a)) {
-    if (!["notes", "length", "tempo_bpm", "mode", "ack_prompt"].includes(k)) throw bad(k, "unknown_key", `未知の引数 ${k}`);
+    if (!["notes", "params", "length", "tempo_bpm", "mode", "ack_prompt"].includes(k)) throw bad(k, "unknown_key", `未知の引数 ${k}`);
   }
   if (!("notes" in a)) throw bad("notes", "missing");
   const raw = a.notes;
@@ -104,8 +128,26 @@ export function parseScore(a: Args): ParsedScore {
     if ("vel" in n) int(n.vel, `notes[${i}].vel`);
     if ("ch" in n) int(n.ch, `notes[${i}].ch`);
   });
+  // パラメータの変化(任意)
+  const rawParams: unknown[] = [];
+  if ("params" in a) {
+    if (!Array.isArray(a.params)) throw bad("params", "type");
+    a.params.forEach((p: unknown, i: number) => {
+      if (!isObj(p)) throw bad(`params[${i}]`, "type");
+      for (const k of Object.keys(p)) {
+        if (!["t", "dur", "module_id", "param", "value"].includes(k)) throw bad(`params[${i}].${k}`, "unknown_key", `未知の引数 params[${i}].${k}`);
+      }
+      for (const k of ["t", "module_id", "param", "value"]) if (!(k in p)) throw bad(`params[${i}].${k}`, "missing");
+      num(p.t, `params[${i}].t`);
+      if ("dur" in p) num(p.dur, `params[${i}].dur`);
+      if (typeof p.module_id !== "string") throw bad(`params[${i}].module_id`, "type");
+      if (typeof p.param !== "string") throw bad(`params[${i}].param`, "type");
+      rawParams.push(p);
+    });
+  }
   if (raw.length === 0 && !("length" in a)) throw bad("length", "missing", "音符のない楽譜(休み)には length が要る");
   if (raw.length > SCORE_LIMITS.notes) throw new CommandError("ERR-106", "楽譜の音符の数の上限", { limit: "score_notes", max: SCORE_LIMITS.notes });
+  if (rawParams.length > SCORE_LIMITS.params) throw new CommandError("ERR-106", "楽譜のパラメータの変化の数の上限", { limit: "score_params", max: SCORE_LIMITS.params });
 
   // 値の範囲。tempo_bpm があれば、t・dur・length の単位は拍
   let beat = 1;
@@ -133,29 +175,55 @@ export function parseScore(a: Args): ParsedScore {
     lastStart = Math.max(lastStart, t);
     lastEnd = Math.max(lastEnd, t + dur);
   });
+  const params: ScoreParam[] = [];
+  (rawParams as Args[]).forEach((p, i) => {
+    const t = p.t as number;
+    const dur = (p.dur as number | undefined) ?? 0;
+    if (t < 0 || t > maxUnits) throw outOfRange(`params[${i}].t`, t, 0, maxUnits);
+    if (dur < 0 || dur > maxUnits) throw outOfRange(`params[${i}].dur`, dur, 0, maxUnits);
+    params.push({ t: t * beat, dur: dur * beat, moduleId: p.module_id as string, param: p.param as string, value: p.value, index: i });
+    lastStart = Math.max(lastStart, t);
+    lastEnd = Math.max(lastEnd, t + dur);
+  });
   // 長さ: 省略時は最後の音符の終わり。指定時は、どの音符の開始よりも後(音符の終わりは、次の楽譜へはみ出してよい)
   let length = lastEnd;
   if ("length" in a) {
     length = a.length as number;
-    const min = notes.length > 0 ? lastStart : 0;
+    const min = notes.length > 0 || params.length > 0 ? lastStart : 0;
     if (!(length > 0) || length > maxUnits || length < min) {
       throw new CommandError("ERR-123", `length は 0 より大きく、最後の音符の開始(${min})以上、${maxUnits} 以下`, { arg: "length", value: length, min, max: maxUnits });
     }
   }
-  return { notes, lengthSeconds: length * beat, mode, ackPrompt };
+  return { notes, params, lengthSeconds: length * beat, mode, ackPrompt };
 }
 
-/** 楽譜を、音声側のサンプル時刻つきの MIDI メッセージの列にする。同じ時刻では、ノートオフがノートオンより先。 */
-export function scoreEvents(notes: readonly ScoreNote[], startSample: number, fs: number): MidiEventAt[] {
-  const out: (MidiEventAt & { on: boolean; i: number })[] = [];
+/** 検査を通った、パラメータの変化(値は数値)。 */
+export interface CheckedParam {
+  t: number;
+  dur: number;
+  moduleId: string;
+  param: string;
+  value: number;
+}
+
+/**
+ * 楽譜を、音声側のサンプル時刻つきの出来事の列にする。
+ * 同じ時刻での順は: パラメータの変化 → ノートオフ → ノートオン(音が鳴り始める前に音色を決める)。
+ */
+export function scoreEvents(notes: readonly ScoreNote[], startSample: number, fs: number, params: readonly CheckedParam[] = []): ScheduledEvent[] {
+  const out: { ev: ScheduledEvent; rank: number; i: number }[] = [];
+  params.forEach((p, i) => {
+    const at = startSample + Math.round(p.t * fs);
+    out.push({ ev: { at, param: { module: p.moduleId, name: p.param, value: p.value, ramp: Math.round(p.dur * fs) } }, rank: 0, i });
+  });
   notes.forEach((n, i) => {
     const on = startSample + Math.round(n.t * fs);
     const off = Math.max(on + 1, startSample + Math.round((n.t + n.dur) * fs));
-    out.push({ at: on, bytes: [0x90 | (n.ch - 1), n.note, n.vel], on: true, i });
-    out.push({ at: off, bytes: [0x80 | (n.ch - 1), n.note, 0], on: false, i });
+    out.push({ ev: { at: on, bytes: [0x90 | (n.ch - 1), n.note, n.vel] }, rank: 2, i });
+    out.push({ ev: { at: off, bytes: [0x80 | (n.ch - 1), n.note, 0] }, rank: 1, i });
   });
-  out.sort((x, y) => x.at - y.at || Number(x.on) - Number(y.on) || x.i - y.i);
-  return out.map(({ at, bytes }) => ({ at, bytes }));
+  out.sort((x, y) => x.ev.at - y.ev.at || x.rank - y.rank || x.i - y.i);
+  return out.map((o) => o.ev);
 }
 
 export interface QueuedScore {
