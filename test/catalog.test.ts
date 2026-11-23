@@ -105,7 +105,7 @@ for (const info of catalog.values()) {
 test("仕様との照合の件数", () => {
   console.log(`照合: 既定値 ${checkedDefaults} 件、範囲 ${checkedRanges} 件。機械的に読めなかった表記 ${unparsed.length} 件`);
   for (const u of unparsed) console.log(`  未照合: ${u}`);
-  assert.equal(catalog.size, 18);
+  assert.equal(catalog.size, 19);
 });
 
 // ---- 分類・単位・未接続時の値・列挙の選択肢(CMD-01。仕様から生成した表 src/modules/meta.generated.ts) ----
@@ -116,7 +116,7 @@ test("生成した付随情報(meta.generated.ts)は、今の仕様から作り�
   assert.match(out, /^OK/);
 });
 
-test("全18種別: 分類は仕様のフロントマター、ポートの単位と未接続時の値は仕様 §3 と実装の両方に一致する", async () => {
+test("全19種別: 分類は仕様のフロントマター、ポートの単位と未接続時の値は仕様 §3 と実装の両方に一致する", async () => {
   const { REGISTRY: reg } = await import("../src/modules/registry.js");
   let ports = 0;
   for (const info of catalog.values()) {
@@ -148,7 +148,7 @@ test("全18種別: 分類は仕様のフロントマター、ポートの単位�
       }
     }
   }
-  assert.equal(ports, 97, `照合したポート ${ports}`);
+  assert.equal(ports, 100, `照合したポート ${ports}`);
   // 定数でない入力は、この3つだけ
   const special: string[] = [];
   for (const info of catalog.values()) for (const p of info.inputs) if (p.unconnected!.value === null) special.push(`${info.type}.${p.name}=${p.unconnected!.normal}`);
@@ -186,7 +186,7 @@ test("module.list_types(CMD-01): category・単位・未接続時の値が埋ま
       }
     }
   }
-  assert.deepEqual(enums.sort(), ["MOD-AMP-001.response", "MOD-FNC-001.response", "MOD-IO-003.trig_mode"]);
+  assert.deepEqual(enums.sort(), ["MOD-AMP-001.response", "MOD-FNC-001.response", "MOD-IO-003.trig_mode", "MOD-SAT-001.mode"]);
   const amp = types.find((t) => t.type === "MOD-AMP-001")!.params.find((p) => p.name === "response")!;
   assert.deepEqual(amp.values, [{ value: 0, label: "線形" }, { value: 1, label: "指数" }]);
   assert.equal(types.find((t) => t.type === "MOD-OSC-001")!.category, "oscillator");

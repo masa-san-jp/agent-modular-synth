@@ -1418,11 +1418,11 @@ test("meter.read: 既定は frame 以外の全項目。frame は明示したと�
   });
 });
 
-test("module.list_types: 18種を返す。type 指定で1種、未知なら ERR-101。セッションの状態は変えない", () => {
+test("module.list_types: 19種を返す。type 指定で1種、未知なら ERR-101。セッションの状態は変えない", () => {
   const r = rig();
   unchanged(r, () => {
     const all = r.ok("agent", "module.list_types").result.types as { type: string; singleton: boolean }[];
-    assert.equal(all.length, 18);
+    assert.equal(all.length, 19);
     assert.deepEqual(all.filter((t) => t.singleton).map((t) => t.type), ["MOD-IO-001"]);
     const one = r.ok("agent", "module.list_types", { type: "MOD-IO-001" }).result.types as {
       type: string;

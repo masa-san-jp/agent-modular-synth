@@ -771,6 +771,59 @@ export const MODULE_META: Record<string, ModuleMeta> = {
       }
     }
   },
+  "MOD-SAT-001": {
+    "category": "waveshaper",
+    "ports": {
+      "in": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "drive_cv": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "out": {
+        "unit": "V"
+      }
+    },
+    "params": {
+      "drive": {
+        "unit": "dB"
+      },
+      "bias": {
+        "unit": "無次元"
+      },
+      "mode": {
+        "unit": null,
+        "values": [
+          {
+            "value": 0,
+            "label": "ソフト"
+          },
+          {
+            "value": 1,
+            "label": "ハード"
+          },
+          {
+            "value": 2,
+            "label": "フォールド"
+          }
+        ]
+      },
+      "mix": {
+        "unit": "無次元"
+      },
+      "level": {
+        "unit": "無次元"
+      }
+    }
+  },
   "MOD-SEQ-001": {
     "category": "clock_sequencer",
     "ports": {

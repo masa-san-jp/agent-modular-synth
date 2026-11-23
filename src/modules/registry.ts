@@ -16,6 +16,7 @@ import { MixModule } from "./mix.js";
 import { NseModule } from "./nse.js";
 import { OscModule } from "./osc.js";
 import { RndModule } from "./rnd.js";
+import { SatModule } from "./sat.js";
 import { SeqModule } from "./seq.js";
 import { UtlModule } from "./utl.js";
 
@@ -36,6 +37,7 @@ export const REGISTRY: ReadonlyMap<string, ModuleFactory> = new Map<string, Modu
   ["MOD-NSE-001", (fs) => new NseModule(fs)],
   ["MOD-OSC-001", (fs) => new OscModule(fs)],
   ["MOD-RND-001", (fs) => new RndModule(fs)],
+  ["MOD-SAT-001", (fs) => new SatModule(fs)],
   ["MOD-SEQ-001", (fs) => new SeqModule(fs)],
   ["MOD-UTL-001", (fs) => new UtlModule(fs)],
 ]);

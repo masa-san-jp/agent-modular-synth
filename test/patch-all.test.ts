@@ -1,4 +1,4 @@
-// 18種すべてを1つのパッチに入れた確認: 生成・接続・実行ができ、出力が有限で範囲内、
+// 19種すべてを1つのパッチに入れた確認: 生成・接続・実行ができ、出力が有限で範囲内、
 // ブロック長・2回実行・スナップショット(JSON 経由)でビット同一(VER-NF-003 の該当部分)。
 import assert from "node:assert/strict";
 import { test } from "node:test";
@@ -32,6 +32,7 @@ function build(): Engine {
   add("mix", "MOD-MIX-001", { level1: 0.5, level2: 0.5, level3: 0.1 });
   add("flt", "MOD-FLT-001", { cutoff: 1.5, res: 0.4, cv2_level: 0.3 });
   add("vca", "MOD-AMP-001");
+  add("sat", "MOD-SAT-001", { drive: 9, bias: 0.2, mix: 0.7 });
   add("dly", "MOD-DLY-001", { time: 0.03, feedback: 0.4, mix: 0.3 });
   add("meter", "MOD-IO-003");
   add("out", "MOD-IO-001");
@@ -59,7 +60,9 @@ function build(): Engine {
   c("env.env", "trim.in");
   c("trim.out", "vca.cv1");
   c("fnc.out", "vca.cv2");
-  c("vca.out", "dly.in");
+  c("vca.out", "sat.in");
+  c("lfo.tri", "sat.drive_cv");
+  c("sat.out", "dly.in");
   c("dly.out", "meter.IN");
   c("meter.THRU", "out.IN_L");
   c("dly.out", "out.IN_R");
@@ -93,11 +96,11 @@ function render(e: Engine, total: number, blockSize: number): Float32Array[] {
 }
 const bits = (bufs: Float32Array[]): number[] => bufs.flatMap((b) => Array.from(new Uint32Array(b.buffer, b.byteOffset, b.length)));
 
-test("18種すべてを登録している", () => {
-  assert.equal(REGISTRY.size, 18);
+test("19種すべてを登録している", () => {
+  assert.equal(REGISTRY.size, 19);
 });
 
-test("18種を使ったパッチ: 実行でき、音が出て、出力は有限で飽和範囲(±100)内。置換カウンタは 0", () => {
+test("19種を使ったパッチ: 実行でき、音が出て、出力は有限で飽和範囲(±100)内。置換カウンタは 0", () => {
   const e = build();
   const [L, R] = render(e, 36000, 128);
   let peak = 0;
@@ -111,13 +114,13 @@ test("18種を使ったパッチ: 実行でき、音が出て、出力は有限�
   for (const id of e.ids()) assert.equal(e.get(id).nonfiniteCount, 0, `${id} の置換カウンタ`);
 });
 
-test("18種のパッチ: ブロック長1と128、2回実行でビット同一", () => {
+test("19種のパッチ: ブロック長1と128、2回実行でビット同一", () => {
   const a = bits(render(build(), 20480, 128));
   assert.deepEqual(bits(render(build(), 20480, 1)), a);
   assert.deepEqual(bits(render(build(), 20480, 128)), a);
 });
 
-test("18種のパッチ: 途中のスナップショット(JSON 経由)から復元するとビット同一に続く", () => {
+test("19種のパッチ: 途中のスナップショット(JSON 経由)から復元するとビット同一に続く", () => {
   const a = build();
   render(a, 14080, 128); // 声が鳴っていて、遅延バッファ・乱数・シーケンサが途中の状態
   const snap = JSON.parse(JSON.stringify(a.snapshot()));
