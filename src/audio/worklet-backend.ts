@@ -155,8 +155,15 @@ export class WorkletBackend implements AudioBackend {
   commit(revision: number): void {
     const ops = this.ops;
     this.ops = [];
-    this.send({ type: "ops", ops, revision });
+    this.send(this.perfOn ? { type: "ops", ops, revision, sentAt: Date.now() } : { type: "ops", ops, revision });
   }
+
+  /** 性能の測定(ワークレット側でのブロックごとの処理時間の集計)を始める・やめる。 */
+  setPerf(enabled: boolean): void {
+    this.perfOn = enabled;
+    this.send({ type: "perf", enabled });
+  }
+  private perfOn = false;
 
   canStart(): { ok: true } | { ok: false; reason: string } {
     return this.startBlocker !== null || !this.port ? { ok: false, reason: this.startBlocker ?? NOT_READY } : { ok: true };

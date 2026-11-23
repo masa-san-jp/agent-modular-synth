@@ -44,6 +44,8 @@ npm run test:review-browser # 独立レビュー(#24)で見つかった不具合
 npm run test:midi-browser # MIDI 機器の接続の確認(試験用の機器を使う。同上)
 npm run test:score-browser # エージェントの演奏(楽譜と指示)の確認(同上)
 npm run test:e2e     # 上のブラウザ試験6つをまとめて実行
+npm run bench        # 性能の測定(エンジン単体。約 5 分)。結果は bench/results/
+npm run bench:browser # 性能の測定(ブラウザ。約 3 分)。読み方は docs/perf/
 npm run mcp          # MCP アダプタを stdio で起動する(通常は MCP クライアントが起動する)
 npm run check        # npm test に加えて、仕様文書の検査
 ```
@@ -74,6 +76,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 - `src/mcp/`: MCP アダプタ(stdio)。共通コマンドを1対1でツールにする薄い変換層で、ローカルサーバーの `POST /api/command` だけを呼ぶ。
 - `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)、MIDI 機器の接続(`midi.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)、契約の受入例(`AX-…`、`DX-…`)。`test/browser/` は実際のブラウザでの端から端の確認。
+- `src/perf/`: 性能の測定(測定用のパッチと、エンジン単体の測定)。結果の記録は [docs/perf/](docs/perf/20261123-performance-measurement.md)。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
 ## 検査・生成ツール

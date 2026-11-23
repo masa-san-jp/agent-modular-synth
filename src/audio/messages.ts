@@ -12,7 +12,9 @@ export type EngineOp =
 export type ToWorklet =
   | { type: "apply"; patch: Patch; revision: number }
   /** 1コマンド分の差分。次のブロックの先頭でまとめて適用する。 */
-  | { type: "ops"; ops: EngineOp[]; revision: number }
+  | { type: "ops"; ops: EngineOp[]; revision: number; /** 送った時刻(Date.now())。性能の測定中だけ使う。 */ sentAt?: number }
+  /** 性能の測定(ブロックごとの処理時間の集計)を始める・やめる。始めるたびに集計を 0 に戻す。 */
+  | { type: "perf"; enabled: boolean }
   | { type: "start" }
   | { type: "stop" }
   | { type: "panic" }
@@ -49,8 +51,28 @@ export interface WorkletStatus {
    * 波形フレーム(`frame`)は、前回送ったときから `frame_seq` が変わったモジュールだけに含める。
    */
   meters: Record<string, Record<string, unknown>>;
+  /** 性能の測定の集計(測定中だけ)。 */
+  perf?: PerfStats;
   /** これまでに受け取って処理したメッセージの数(メインスレッドが、送った分がすべて反映された状態かを見分けるのに使う)。 */
   received: number;
+}
+
+/** ブロックごとの処理時間の集計(verification-plan VER-NF-004 の負荷値。負荷値 = 処理時間 ÷ 1 ブロックの再生時間)。 */
+export interface PerfStats {
+  /** 使った時計("performance.now" か "Date.now"。後者は 1 ms 刻みなので、平均だけが意味を持つ)。 */
+  clock: string;
+  blocks: number;
+  /** 負荷値の平均と最大。 */
+  meanLoad: number;
+  maxLoad: number;
+  /** 負荷値が 1.0 を超えたブロックの数。 */
+  over: number;
+  /** 負荷値の度数(幅 0.05 ごと。最後の区間はそれ以上すべて)。 */
+  histogram: number[];
+  /** 差分を送ってから、音声側が適用するまでの時間 [ms](L2)。件数・合計・最大。 */
+  applyCount: number;
+  applySumMs: number;
+  applyMaxMs: number;
 }
 
 export type FromWorklet =

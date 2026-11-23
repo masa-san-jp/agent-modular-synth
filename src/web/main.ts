@@ -619,6 +619,18 @@ const debug = {
   get autosaveProblem(): string | null {
     return autosaveProblem;
   },
+  /** 性能の測定(npm run bench:browser が使う)。ワークレット側でブロックごとの処理時間を集計する。 */
+  perf(enabled: boolean): void {
+    backend.setPerf(enabled);
+  },
+  /** 性能の測定用: 演奏入力(MIDI のバイト列)を送る。画面鍵盤と同じ経路。 */
+  sendMidiForBench(bytes: number[]): void {
+    backend.midi(bytes);
+  },
+  /** 音声の出力の時計と遅延(L3 の計算値)。 */
+  get audioClock() {
+    return ctx ? { currentTime: ctx.currentTime, baseLatency: ctx.baseLatency, outputLatency: (ctx as AudioContext & { outputLatency?: number }).outputLatency ?? null, sampleRate: ctx.sampleRate } : null;
+  },
   get midiState(): MidiState {
     return midi.current;
   },

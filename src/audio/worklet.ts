@@ -14,8 +14,13 @@ declare class AudioWorkletProcessor {
 
 const STATUS_INTERVAL_SECONDS = 0.05;
 
+// 性能の測定用の時計。描画スレッドで高精度の時計(performance.now)が使えるかは環境に依存する。なければ Date.now(1 ms 刻み)。
+const perf = (globalThis as { performance?: { now?: () => number } }).performance;
+const PERF_CLOCK =
+  perf && typeof perf.now === "function" ? { name: "performance.now", now: () => perf.now!() } : { name: "Date.now", now: () => Date.now() };
+
 class SynthProcessor extends AudioWorkletProcessor {
-  private readonly core = new WorkletCore(sampleRate, REGISTRY, (msg) => this.port.postMessage(msg));
+  private readonly core = new WorkletCore(sampleRate, REGISTRY, (msg) => this.port.postMessage(msg), PERF_CLOCK);
   private sinceStatus = 0;
   private scratchR = new Float32Array(128);
 

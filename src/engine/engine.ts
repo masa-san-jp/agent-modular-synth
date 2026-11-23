@@ -40,6 +40,11 @@ export class Engine {
   /** キーは "toModule\u0000toPortIndex"。1つの入力にケーブルは1本まで。 */
   private readonly cables = new Map<string, Cable>();
   private stepCount = 0;
+  /**
+   * 1サンプルの処理の手順(モジュールの並びと、各入力がどの出力の遅延値を読むか)。
+   * 構成(モジュール・ケーブル)が変わったら null にし、次の tick で作り直す。毎サンプル名前で引き直さない。
+   */
+  private plan: { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] | null = null;
 
   constructor(readonly fs: number) {
     if (!(fs > 0) || !Number.isFinite(fs)) throw new Error("fs は正の有限値");
@@ -53,6 +58,7 @@ export class Engine {
     if (this.modules.has(id)) throw new Error(`モジュールID '${id}' は使用中`);
     if (module.sampleRate !== this.fs) throw new Error(`'${id}' の fs がエンジンと異なる`);
     this.modules.set(id, module);
+    this.plan = null;
     this.latches.set(
       id,
       module.outputs.map(() => ({ channels: 1, values: new Float32Array(MAX_CHANNELS) })),
@@ -63,6 +69,7 @@ export class Engine {
   remove(id: string): void {
     if (!this.modules.delete(id)) throw new Error(`モジュール '${id}' はない`);
     this.latches.delete(id);
+    this.plan = null;
     for (const [k, c] of [...this.cables]) {
       if (c.fromModule === id || c.toModule === id) this.cables.delete(k);
     }
@@ -91,6 +98,7 @@ export class Engine {
     const key = `${toModule}\u0000${ti}`;
     if (this.cables.has(key)) throw new Error(`入力 '${toModule}.${toPort}' は使用中`);
     this.cables.set(key, { fromModule, fromPort: fi, toModule, toPort: ti });
+    this.plan = null;
   }
 
   disconnect(toModule: string, toPort: string): void {
@@ -99,35 +107,65 @@ export class Engine {
     if (ti < 0 || !this.cables.delete(`${toModule}\u0000${ti}`)) {
       throw new Error(`入力 '${toModule}.${toPort}' にケーブルはない`);
     }
+    this.plan = null;
+  }
+
+  private buildPlan(): { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] {
+    const plan: { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] = [];
+    for (const [id, m] of this.modules) {
+      const sources: (Latch | null)[] = [];
+      for (let i = 0; i < m.inputs.length; i++) {
+        const cable = this.cables.get(`${id}\u0000${i}`);
+        sources.push(cable ? this.latches.get(cable.fromModule)![cable.fromPort]! : null);
+      }
+      plan.push({ module: m, sources, latches: this.latches.get(id)! });
+    }
+    return plan;
   }
 
   /** 1サンプル進める。全モジュールが前のステップの出力を読み、同時に出力を書く。 */
   tick(): void {
+    const plan = this.plan ?? (this.plan = this.buildPlan());
+    const count = plan.length;
     // 1) 入力を読む(ケーブルの1サンプル遅延値)
-    for (const [id, m] of this.modules) {
-      for (let i = 0; i < m.inputs.length; i++) {
-        const port = m.inputs[i]!;
-        const cable = this.cables.get(`${id}\u0000${i}`);
-        if (!cable) {
+    for (let k = 0; k < count; k++) {
+      const entry = plan[k]!;
+      const inputs = entry.module.inputs;
+      const sources = entry.sources;
+      for (let i = 0; i < sources.length; i++) {
+        const port = inputs[i]!;
+        const latch = sources[i]!;
+        if (latch === null) {
           if (port.connected) port.disconnect();
           continue;
         }
-        const latch = this.latches.get(cable.fromModule)![cable.fromPort]!;
+        // 写すのは、使われるチャンネルの分だけ(単音なら 1 個)。チャンネル数が減った直後の 1 回は、前の数の分まで写して
+        // 以前の値を残さない。チャンネル数より後ろの値は、どのモジュールも読まない(COM-08)
+        const n = latch.channels;
+        const upto = port.connected && port.channels > n ? port.channels : n;
         port.connected = true;
-        port.channels = latch.channels;
-        port.values.set(latch.values);
+        port.channels = n;
+        const src = latch.values;
+        const dst = port.values;
+        for (let c = 0; c < upto; c++) dst[c] = src[c]!;
       }
     }
     // 2) 状態を更新し、出力を書く
-    for (const m of this.modules.values()) m.step();
+    for (let k = 0; k < count; k++) plan[k]!.module.step();
     // 3) 出力を次のステップ用に保持する
-    for (const [id, m] of this.modules) {
-      const ls = this.latches.get(id)!;
-      for (let o = 0; o < m.outputs.length; o++) {
-        const out = m.outputs[o]!;
+    for (let k = 0; k < count; k++) {
+      const entry = plan[k]!;
+      const outputs = entry.module.outputs;
+      const ls = entry.latches;
+      for (let o = 0; o < ls.length; o++) {
+        const out = outputs[o]!;
         const l = ls[o]!;
-        l.channels = out.channels;
-        l.values.set(out.values);
+        const n = out.channels;
+        const upto = l.channels > n ? l.channels : n;
+        l.channels = n;
+        const src = out.values;
+        const dst = l.values;
+        for (let c = 0; c < upto; c++) dst[c] = src[c]!;
       }
     }
     this.stepCount++;
