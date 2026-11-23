@@ -89,6 +89,8 @@ export abstract class SynthModule {
   readonly outputs: OutPort[] = [];
   /** 設定されたパラメータ値(正規化前)。 */
   protected readonly rawParams = new Map<string, number>();
+  /** 正規化後の有効値の控え(名前 → 値)。setParam で消す。param() は毎サンプル呼ばれるので、定義の検索と正規化を繰り返さない。 */
+  private readonly effective = new Map<string, number>();
   /** COM-12: 置換カウンタ(診断値。出力には影響しない)。 */
   nonfiniteCount = 0;
   protected fs: number;
@@ -125,6 +127,7 @@ export abstract class SynthModule {
   setParam(name: string, value: number): void {
     if (!this.rawParams.has(name)) throw new Error(`${this.def.specId}: パラメータ '${name}' はない`);
     this.rawParams.set(name, value);
+    this.effective.delete(name);
   }
 
   /** 設定されたままの値(正規化前)。 */
@@ -136,9 +139,13 @@ export abstract class SynthModule {
 
   /** 正規化後の有効値(COM-12/13)。 */
   param(name: string): number {
+    const cached = this.effective.get(name);
+    if (cached !== undefined) return cached;
     const def = this.def.params.find((p) => p.name === name);
     if (!def) throw new Error(`${this.def.specId}: パラメータ '${name}' はない`);
-    return normalizeParam(def, this.rawParams.get(name)!);
+    const v = normalizeParam(def, this.rawParams.get(name)!);
+    this.effective.set(name, v);
+    return v;
   }
 
   /**

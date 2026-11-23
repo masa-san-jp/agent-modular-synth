@@ -2,7 +2,16 @@
 // src/audio/worklet.ts はこれを AudioWorkletProcessor に包むだけ。
 import { EngineBackend } from "../control/backend.js";
 import type { ModuleFactory } from "../engine/module.js";
-import type { FromWorklet, ToWorklet, WorkletStatus } from "./messages.js";
+import type { FromWorklet, PerfStats, ToWorklet, WorkletStatus } from "./messages.js";
+
+/** 負荷値の度数の区間の幅と数(0.05 × 80 = 4.0 まで。それ以上は最後の区間)。 */
+const PERF_BIN = 0.05;
+const PERF_BINS = 80;
+
+export interface PerfClock {
+  name: string;
+  now(): number;
+}
 
 export class WorkletCore {
   readonly be: EngineBackend;
@@ -12,11 +21,24 @@ export class WorkletCore {
   private failed = false;
   /** 前回の状態の送信で運んだ波形フレームの番号(モジュールID → frame_seq)。 */
   private sentFrames = new Map<string, number>();
+  // ---- 性能の測定(測定中だけ動く。普段は時計を読まない) ----
+  private perfOn = false;
+  private perfBlocks = 0;
+  private perfSum = 0;
+  private perfMax = 0;
+  private perfOver = 0;
+  private perfHist = new Uint32Array(PERF_BINS);
+  private applyAt: number[] = [];
+  private applyCount = 0;
+  private applySum = 0;
+  private applyMax = 0;
 
   constructor(
     readonly fs: number,
     registry: ReadonlyMap<string, ModuleFactory>,
     private readonly post: (msg: FromWorklet) => void,
+    /** ブロックの処理時間を測る時計(測定用)。なければ測定はできない。 */
+    private readonly perfClock: PerfClock | null = null,
   ) {
     this.be = new EngineBackend(fs, registry);
   }
@@ -46,6 +68,7 @@ export class WorkletCore {
               else be.setParam(o.id, o.name, o.value);
             }
             be.commit(msg.revision);
+            if (this.perfOn && typeof msg.sentAt === "number") this.applyAt.push(msg.sentAt);
           } catch (e) {
             // 途中まで積んだ差分は適用しない(1コマンド分は、全部か、なしか)。正本とずれるので、全体の渡し直しを求める
             be.abortPending(e instanceof Error ? e.message : String(e));
@@ -71,6 +94,18 @@ export class WorkletCore {
           break;
         case "midi":
           be.midi(msg.bytes);
+          break;
+        case "perf":
+          this.perfOn = msg.enabled && this.perfClock !== null;
+          this.perfBlocks = 0;
+          this.perfSum = 0;
+          this.perfMax = 0;
+          this.perfOver = 0;
+          this.perfHist.fill(0);
+          this.applyAt = [];
+          this.applyCount = 0;
+          this.applySum = 0;
+          this.applyMax = 0;
           break;
         case "schedule":
           be.scheduleMidi(msg.events);
@@ -99,7 +134,29 @@ export class WorkletCore {
       return;
     }
     try {
-      this.be.processBlock(left, right);
+      if (this.perfOn && this.perfClock) {
+        // 送られた差分は、このブロックの先頭で適用される(L2 の終点)
+        if (this.applyAt.length > 0) {
+          const wall = Date.now();
+          for (const at of this.applyAt) {
+            const ms = Math.max(0, wall - at);
+            this.applyCount++;
+            this.applySum += ms;
+            if (ms > this.applyMax) this.applyMax = ms;
+          }
+          this.applyAt.length = 0;
+        }
+        const t0 = this.perfClock.now();
+        this.be.processBlock(left, right);
+        const load = (this.perfClock.now() - t0) / ((left.length / this.fs) * 1000);
+        this.perfBlocks++;
+        this.perfSum += load;
+        if (load > this.perfMax) this.perfMax = load;
+        if (load > 1) this.perfOver++;
+        this.perfHist[Math.min(PERF_BINS - 1, Math.floor(load / PERF_BIN))]!++;
+      } else {
+        this.be.processBlock(left, right);
+      }
     } catch (e) {
       this.failed = true;
       left.fill(0);
@@ -132,7 +189,22 @@ export class WorkletCore {
       limiterGain: st.limiterGain,
       peak: this.be.takePeak(),
       meters,
+      ...(this.perfOn ? { perf: this.perfStats() } : {}),
       received: this.received,
+    };
+  }
+
+  private perfStats(): PerfStats {
+    return {
+      clock: this.perfClock?.name ?? "なし",
+      blocks: this.perfBlocks,
+      meanLoad: this.perfBlocks > 0 ? this.perfSum / this.perfBlocks : 0,
+      maxLoad: this.perfMax,
+      over: this.perfOver,
+      histogram: Array.from(this.perfHist),
+      applyCount: this.applyCount,
+      applySumMs: this.applySum,
+      applyMaxMs: this.applyMax,
     };
   }
 }
