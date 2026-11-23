@@ -77,6 +77,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 - `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)、MIDI 機器の接続(`midi.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)、契約の受入例(`AX-…`、`DX-…`)。`test/browser/` は実際のブラウザでの端から端の確認。
 - `src/perf/`: 性能の測定(測定用のパッチと、エンジン単体の測定)。結果の記録は [docs/perf/](docs/perf/20261123-performance-measurement.md)。
+- `demo/`: エージェントが楽譜を書いて鳴らす実例。曲は `piece.mjs`(イ短調の小品)と `techno.mjs`(ダークテクノ。キック・ハイハット・低音・スタブの 27 モジュール、楽譜 6 つ、区間ごとにパラメータも動かす)。`play-live.cjs` は、サーバー → タブ → 音声の実際の経路で、楽譜を続けて送って演奏する(`node demo/play-live.cjs demo/techno.mjs`)。`render-wav.mjs` は、同じ演奏を音声ファイルに書き出す(`node demo/render-wav.mjs demo/techno.mjs out.wav`)。どちらも先に `npm run build` が要る。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
 ## 検査・生成ツール
