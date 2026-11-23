@@ -38,6 +38,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   oscillator: "オシレータ",
   noise: "ノイズ",
   filter: "フィルタ",
+  waveshaper: "歪み・波形整形",
   amplifier: "アンプ・ミキサー",
   modulation: "変調(エンベロープ・LFO)",
   clock_sequencer: "クロック・シーケンサ",

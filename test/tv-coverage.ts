@@ -30,5 +30,5 @@ for (const specId of [...REGISTRY.keys()].sort()) {
 const specIds = new Set([...REGISTRY.keys()]);
 const stray = [...registered].filter((id) => !specIds.has(id.slice(3, id.lastIndexOf("-"))));
 if (stray.length) console.log(`仕様にない検証例の登録: ${stray.join(", ")}`);
-console.log(`検証例の網羅: ${total - missing}/${total}(実装済みモジュール ${REGISTRY.size} 種 / 仕様 18 種)`);
+console.log(`検証例の網羅: ${total - missing}/${total}(実装済みモジュール ${REGISTRY.size} 種 / 仕様 19 種)`);
 if (missing > 0 || stray.length > 0) process.exit(1);

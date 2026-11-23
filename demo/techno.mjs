@@ -2,7 +2,7 @@
 // 8 小節(32 拍 = 約 14.5 秒)の楽譜 × 6: 導入 → 低音 → 全部 → ブレイク → 山場 → 終わり。
 // チャンネル: 1 = キック、2 = ハイハット(ノイズ)、3 = 低音、4 = 和音のスタブ、5 = 低い持続音(ドローン)。
 // フィルタやディレイの動きは、楽譜の中に書いてある(params)。拍に正確に合い、パッチは変えない。
-// 重さを出す工夫: キックの残響を低域だけ残す(ランブル)、低音は少しずらした 2 つのノコギリ波 + 矩形波の 3 層、
+// 重さを出す工夫: キックと低音を歪ませる(MOD-SAT-001)、キックの残響を低域だけ残す(ランブル)、低音は少しずらした 2 つのノコギリ波 + 矩形波の 3 層、
 // スタブも 2 層、低い持続音が下で鳴り続ける。
 
 const add = (id, type, params) => ({ command: "module.add", args: { id, type, ...(params ? { params } : {}) } });
@@ -13,7 +13,7 @@ const con = (from, to) => {
 };
 const set = (module_id, param, value) => ({ module_id, param, value });
 
-export const TITLE = "ダークテクノ(130 BPM、重い版)";
+export const TITLE = "ダークテクノ(130 BPM、歪みつきの重い版)";
 
 export const PATCH = [
   // --- キック(ch 1): 正弦波。ピッチ用のエンベロープで、打った瞬間だけ音程を上げて落とす。余韻を長めにして胴鳴りを出す ---
@@ -28,10 +28,13 @@ export const PATCH = [
   con("k_penv.env", "k_osc.fm"),
   con("k_osc.sine", "k_vca.in1"),
   con("k_env.env", "k_vca.cv2"),
+  // キックを歪ませて倍音を足す(小さいスピーカーでも聞こえる芯ができ、押し出しが強くなる)
+  add("k_sat", "MOD-SAT-001", { drive: 15, bias: 0.12, level: 0.8 }),
+  con("k_vca.out", "k_sat.in"),
   // --- ランブル: キックをディレイで繰り返し、低域だけを残す。キックの合間が低い唸りで埋まる ---
   add("r_dly", "MOD-DLY-001", { time: 0.1731, feedback: 0.55, mix: 1 }), // 16 分音符 1.5 個ぶん
   add("r_vcf", "MOD-FLT-001", { cutoff: -1.9, res: 0.2 }),
-  con("k_vca.out", "r_dly.in"),
+  con("k_sat.out", "r_dly.in"),
   con("r_dly.out", "r_vcf.in"),
   // --- ハイハット(ch 2): ノイズを短く切る。音符が長いとオープン。強さ(ベロシティ)で音量が変わる ---
   add("h_midi", "MOD-IO-002", { channel: 2 }),
@@ -64,13 +67,16 @@ export const PATCH = [
   con("b_pre.out", "b_vcf.in"),
   con("b_env.env", "b_vcf.cv2"),
   con("b_lfo.tri", "b_vcf.cv3"),
-  con("b_vcf.out", "b_vca.in1"),
+  // 低音を歪ませる: フィルタの後で曲げるので、唸るような倍音が乗る。歪みの量は楽譜が動かす
+  add("b_sat", "MOD-SAT-001", { drive: 14, bias: 0.2, level: 0.7 }),
+  con("b_vcf.out", "b_sat.in"),
+  con("b_sat.out", "b_vca.in1"),
   con("b_env.env", "b_vca.cv2"),
   // --- スタブ(ch 4): 短い暗い和音(3 声)。少しずらした 2 層。ディレイで尾を引かせる ---
   add("s_midi", "MOD-IO-002", { channel: 4, voices: 4 }),
   add("s_osc", "MOD-OSC-001"),
   add("s_osc2", "MOD-OSC-001", { tune: 0.015 }),
-  add("s_pre", "MOD-MIX-001", { level1: 0.6, level2: 0.6 }),
+  add("s_pre", "MOD-MIX-001", { level1: 0.95, level2: 0.95 }),
   add("s_env", "MOD-ENV-001", { attack: 0.002, decay: 0.22, sustain: 0, release: 0.16 }),
   add("s_vcf", "MOD-FLT-001", { cutoff: -0.3, res: 0.4, cv2_level: 0.3 }),
   add("s_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
@@ -105,10 +111,10 @@ export const PATCH = [
   con("d_vcf.out", "d_vca.in1"),
   con("d_env.env", "d_vca.cv2"),
   // --- まとめ: キック・ランブル・低音・ハットは中央。スタブは左に元の音、右にディレイ。ドローンは左右に ---
-  add("mix", "MOD-MIX-001", { level1: 0.7, level2: 0.55, level3: 0.85, level4: 0.45, master: 1 }),
+  add("mix", "MOD-MIX-001", { level1: 0.44, level2: 0.5, level3: 0.5, level4: 0.62, master: 1 }),
   add("mixl", "MOD-MIX-001", { level1: 1, level2: 0.9, level3: 0.4, level4: 0.5, master: 1 }),
   add("mixr", "MOD-MIX-001", { level1: 1, level2: 0.35, level3: 0.9, level4: 0.5, master: 1 }),
-  con("k_vca.out", "mix.in1"),
+  con("k_sat.out", "mix.in1"),
   con("r_vcf.out", "mix.in2"),
   con("b_vca.out", "mix.in3"),
   con("h_vel.out", "mix.in4"),
@@ -227,6 +233,7 @@ const S4 = score(
     par(0, 16, "s_vcf", "cutoff", 0.6),
     par(16, 16, "b_vcf", "cutoff", 0.2), // 後半: 低音のフィルタが開いていく
     par(16, 16, "b_vcf", "res", 0.8),
+    par(16, 16, "b_sat", "drive", 24), // 歪みも強くなっていく
     par(16, 16, "d_vcf", "cutoff", -1),
   ],
 );
@@ -245,6 +252,8 @@ const S5 = score(
     par(0, 0, "s_dly", "feedback", 0.5),
     par(0, 0, "s_vcf", "cutoff", 0.1),
     par(0, 0, "d_vcf", "cutoff", -1.4),
+    par(0, 0, "b_sat", "drive", 20),
+    par(0, 0, "k_sat", "drive", 18),
     par(16, 16, "b_vcf", "cutoff", -0.1),
   ],
 );
@@ -261,7 +270,7 @@ const S6 = {
     ...stabs(6, [[0, Am, 110]]),
     ...drone(0, 7, 90),
   ],
-  params: [par(0, 24, "b_vcf", "cutoff", -2.6), par(0, 0, "b_vcf", "res", 0.6), par(0, 0, "s_dly", "feedback", 0.66), par(0, 28, "d_vcf", "cutoff", -3)],
+  params: [par(0, 16, "b_sat", "drive", 12), par(0, 0, "k_sat", "drive", 15), par(0, 24, "b_vcf", "cutoff", -2.6), par(0, 0, "b_vcf", "res", 0.6), par(0, 0, "s_dly", "feedback", 0.66), par(0, 28, "d_vcf", "cutoff", -3)],
 };
 
 /** 区間: 楽譜(パラメータの動きも楽譜の中にある)。 */

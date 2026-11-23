@@ -20,6 +20,7 @@
 | [MOD-NSE-001](MOD-NSE-001.md) | ノイズ源(白色ノイズ) | REF-005-007, F-005-030, F-005-031, REF-010-010, F-010-034, REF-005-002, F-005-009, F-005-010, F-005-014 | 5 | 2 | 1 |
 | [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | REF-001-005, F-001-005, F-001-015, F-001-016, F-001-017, F-001-018, F-001-019, M001, REF-005-002, F-005-009, F-005-010, F-005-013, F-005-014, F-005-011 | 8 | 5 | 1 |
 | [MOD-RND-001](MOD-RND-001.md) | サンプル&ホールド/ランダム | REF-004-009, F-003-007, F-004-043, F-004-044, F-004-022, REF-002-003, F-002-006, F-002-020, F-002-023, REF-005-007, F-005-031, F-005-009, F-005-011 | 5 | 3 | 1 |
+| [MOD-SAT-001](MOD-SAT-001.md) | サチュレータ(歪み・波形整形) | REF-005-002, F-005-009, F-005-010, F-005-014 | 2 | 5 | 0 |
 | [MOD-SEQ-001](MOD-SEQ-001.md) | ステップシーケンサ | M006, REF-003-007, F-003-020, F-003-022, F-003-037, F-003-038, F-005-011, F-005-012, F-001-034, REF-007-005 | 6 | 5 | 1 |
 | [MOD-UTL-001](MOD-UTL-001.md) | アッテヌバータ/オフセット | REF-002-002, F-002-016, F-002-017, F-002-011, REF-005-002, F-005-009, F-005-010, F-005-014 | 5 | 1 | 2 |
 
@@ -244,6 +245,14 @@
 | S-03 | F-002-023 | SRC-002-07 | Panel Controls 項目3; Overview 新機能の節 | manufacturer_doc/high |
 | S-04 | F-005-031 | SRC-005-02 | fund 'VCV Noise' | manufacturer_doc/high |
 | S-05 | F-005-011 | SRC-005-01 | VoltageStandards 'Triggers and Gates' | manufacturer_doc/high |
+
+### MOD-SAT-001 サチュレータ(歪み・波形整形)
+
+| 記述ID | 根拠ID | 出典ID | 節・箇所 | 根拠の種別/確度 |
+|---|---|---|---|---|
+| S-01 | F-005-009 | SRC-005-01 | VoltageStandards 'Levels' | manufacturer_doc/high |
+| S-01 | F-005-010 | SRC-005-01 | VoltageStandards 'Output Saturation' | manufacturer_doc/high |
+| S-02 | F-005-014 | SRC-005-01 | VoltageStandards 'NaNs and Infinity' | manufacturer_doc/high |
 
 ### MOD-SEQ-001 ステップシーケンサ
 

@@ -130,7 +130,7 @@ async function main() {
     const got = await agentOk("patch.get");
     assert.equal(got.result.patch.modules.length, 6);
     const types = await agentOk("module.list_types");
-    assert.equal(types.result.types.length, 18);
+    assert.equal(types.result.types.length, 19);
     const revBefore = got.revision;
     // エージェントが、鍵盤なしで鳴る構成を足す(VCO2 を出力の右へ直結)
     const b = await agentOk("batch", { ops: [
