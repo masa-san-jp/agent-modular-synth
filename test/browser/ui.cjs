@@ -267,6 +267,23 @@ async function main() {
     await waitFor(async () => (await moduleOf("seq")).params["gate[2]"] === 0, "真偽のパラメータ");
     ok("パラメータが多い種別は折りたたみ表示。真偽のパラメータはチェックボックスで変えられる");
 
+    // 列挙型のパラメータは、選択肢を名前で選べる。追加の一覧は機能分類ごとにまとまっている
+    await page.selectOption("#add-type", "MOD-AMP-001");
+    await page.fill("#add-id", "amp");
+    await page.click("#add-module");
+    const resp = page.locator('#module-list [data-module="amp"] select[data-param="response"]');
+    await resp.waitFor();
+    assert.deepEqual(await resp.locator("option").allTextContents(), ["線形(0)", "指数(1)"]);
+    assert.equal(await resp.inputValue(), "0");
+    await resp.selectOption({ label: "指数(1)" });
+    await waitFor(async () => (await moduleOf("amp")).params.response === 1, "列挙型のパラメータ");
+    await page.click("#undo"); // 他の操作(取り消し)による変更も、選択肢の表示に反映される
+    await waitFor(async () => (await resp.inputValue()) === "0", "取り消しで選択肢が戻る");
+    const groups = await page.locator("#add-type optgroup").evaluateAll((gs) => gs.map((g) => g.label));
+    assert.ok(groups.includes("オシレータ") && groups.includes("フィルタ") && groups.length === 10, JSON.stringify(groups));
+    assert.equal(await page.locator('#add-type optgroup[label="オシレータ"] option').count(), 1);
+    ok("列挙型のパラメータは名前の選択肢で変えられる。モジュールの追加の一覧は機能分類ごとに並ぶ");
+
     if (process.env.UI_SCREENSHOT) await page.screenshot({ path: process.env.UI_SCREENSHOT, fullPage: true });
 
     // 保存済みパッチの削除(人のみ)。確認の後に消える

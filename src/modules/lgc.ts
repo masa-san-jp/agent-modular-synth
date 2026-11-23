@@ -22,8 +22,8 @@ const DEF: ModuleDef = {
     { name: "cmp", type: "gate" },
   ],
   params: [
-    { name: "ref", kind: "float", min: -12, max: 12, default: 0, unit: "V" },
-    { name: "hyst", kind: "float", min: 0, max: 10, default: 0, unit: "V" },
+    { name: "ref", kind: "float", min: -12, max: 12, default: 0 },
+    { name: "hyst", kind: "float", min: 0, max: 10, default: 0 },
   ],
   stateful: true,
 };

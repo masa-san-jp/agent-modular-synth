@@ -21,7 +21,7 @@
 | §7 冪等キー | 鍵は操作者をまたいで1つの集まり。再送の応答は `request_id` と `replayed` だけ差し替える | operation-contract §7.1(Issue #24 の修正で、鍵は操作者の種別ごとの集まりに変わった。メモの「操作者をまたいで1つ」は古い)。応答の差し替えは §7.2 に記載済み |
 | §14 seed | `duplicate_seed` の `details` は `{module_id, param, value, conflicts}`。ノイズ源と S&H は同じ集まりで数える | operation-contract §14 |
 | CMD-21 | `stopped` のとき `fs`・`engine_revision` は null、計数は 0 | 記載済み: operation-contract CMD-21 |
-| CMD-01 module.list_types | 契約が求める `category`、ポートの `unit` と `unconnected`、パラメータの enum の区別と `values` は、実装の定義にまだなく `null` で返す。真偽型(`bool`)は区別する | 未反映(理由: 未達) |
+| CMD-01 module.list_types | 契約が求める `category`、ポートの `unit` と `unconnected`、パラメータの enum の区別と `values` は、実装の定義にまだなく `null` で返す。真偽型(`bool`)は区別する | **解消**(2026-11-23): 仕様から生成した表(`src/modules/meta.generated.ts`)で埋めた。`unconnected` の形は operation-contract CMD-01 |
 | 未対応のコマンド | patch.save / load / list / read / delete は、ファイル保存が未実装のため ERR-207(`details.reason: "not_implemented"`)。手前の検査(権限、引数の形、パッチ名)は実装済み | 反映不要(Issue #20 で保存のコマンドを実装済み) |
 
 ## データ契約の不足
@@ -97,7 +97,7 @@
 | 箇所 | 採った解釈 | 反映(Issue #24) |
 |---|---|---|
 | 操作契約 §12.2「UI は範囲外の値を送らない」 | スライダーは定義の範囲に制限する。数値欄に打たれた範囲外・非整数の値はそのまま送り、契約のエラー(ERR-123 / ERR-122)を表示する | 未反映(理由: 設計判断待ち。OPEN-017) |
-| 列挙型のパラメータ | 実装の定義に列挙の区別がないため、整数の数値欄になる(選択肢の名前は出ない) | 未反映(理由: 未達) |
+| 列挙型のパラメータ | 実装の定義に列挙の区別がないため、整数の数値欄になる(選択肢の名前は出ない) | **解消**(2026-11-23): 名前の選択肢で表示する |
 | スライダーの刻み | 範囲の約 1/1000 を 10 の累乗に丸めた値(BPM は 0.1) | 未反映(理由: 設計判断待ち。OPEN-018) |
 | 保存の上書き | まず上書きなしで送り、ERR-203 のときに確認して上書きで再送する | 未反映(理由: 設計判断待ち。OPEN-019) |
 

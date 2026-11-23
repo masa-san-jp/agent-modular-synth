@@ -19,7 +19,7 @@ const DEF: ModuleDef = {
   ],
   outputs: [{ name: "out", type: "audio" }],
   params: [
-    { name: "cutoff", kind: "float", min: -5, max: 6, default: 3.0, unit: "V" },
+    { name: "cutoff", kind: "float", min: -5, max: 6, default: 3.0 },
     { name: "res", kind: "float", min: 0, max: 1, default: 0.0 },
     { name: "cv2_level", kind: "float", min: -1, max: 1, default: 1.0 },
     { name: "cv3_level", kind: "float", min: -1, max: 1, default: 1.0 },

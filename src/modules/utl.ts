@@ -11,8 +11,8 @@ const DEF: ModuleDef = {
   inputs: [{ name: "in", type: "cv", unconnected: 0 }],
   outputs: [{ name: "out", type: "cv" }],
   params: [
-    { name: "gain", kind: "float", min: -1, max: 1, default: 1, unit: "V/V" },
-    { name: "offset", kind: "float", min: -10, max: 10, default: 0, unit: "V" },
+    { name: "gain", kind: "float", min: -1, max: 1, default: 1 },
+    { name: "offset", kind: "float", min: -10, max: 10, default: 0 },
   ],
   stateful: false,
 };

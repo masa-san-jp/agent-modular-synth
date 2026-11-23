@@ -19,10 +19,10 @@ const DEF: ModuleDef = {
     { name: "inv", type: "cv" },
   ],
   params: [
-    { name: "attack", kind: "float", min: 0.001, max: 60, default: 0.01, unit: "s" },
-    { name: "decay", kind: "float", min: 0.001, max: 60, default: 0.1, unit: "s" },
+    { name: "attack", kind: "float", min: 0.001, max: 60, default: 0.01 },
+    { name: "decay", kind: "float", min: 0.001, max: 60, default: 0.1 },
     { name: "sustain", kind: "float", min: 0, max: 1, default: 0.5 },
-    { name: "release", kind: "float", min: 0.001, max: 60, default: 0.1, unit: "s" },
+    { name: "release", kind: "float", min: 0.001, max: 60, default: 0.1 },
   ],
   stateful: true,
 };

@@ -19,7 +19,7 @@
     "test:e2e": "npm run build && node test/browser/smoke.cjs && node test/browser/ui.cjs && node test/browser/mcp-e2e.cjs && node test/browser/review24.cjs",
     "dev": "npm run build && node dist/src/server/main.js",
     "mcp": "node dist/src/mcp/main.js",
-    "check": "npm test && python3 tools/validate_specs.py && python3 tools/validate_product_spec.py"
+    "check": "npm test && python3 tools/build_module_meta.py --check && python3 tools/validate_specs.py && python3 tools/validate_product_spec.py"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

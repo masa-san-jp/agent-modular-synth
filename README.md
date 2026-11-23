@@ -65,7 +65,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 ### 構成
 - `src/engine/`: グラフ実行(1サンプル処理、ケーブルの1サンプル遅延)、ポート(最大16チャンネル)、乱数、共通部品、スナップショット。ブラウザのAPIに依存しない。
 - `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。18種すべてを実装済み(一覧は `src/modules/registry.ts`)。仕様に記述がなく実装側で補った解釈は [docs/implementation-notes.md](docs/implementation-notes.md)。
-- `src/control/`: 共通コマンド処理(パッチの正本、コマンドの検証と適用、リビジョン、履歴、権限、通知: `session.ts`)、保存のコマンドを含む非同期の窓口(`controller.ts`)、タブ側とサーバーが共有する部品(封筒の検査と種別一覧 `envelope.ts`、保存パッチの一覧・読出し `library.ts`、入れ子の深さ `json.ts`)、パッチ文書の検証・移行・生成(`patch-doc.ts`)、種別の定義の一覧(`catalog.ts`)、音声とつなぐ実装(`backend.ts`)。ブラウザにもサーバーにも依存しない。契約に記述がなく補った解釈は [docs/contract-notes.md](docs/contract-notes.md)。
+- `src/control/`: 共通コマンド処理(パッチの正本、コマンドの検証と適用、リビジョン、履歴、権限、通知: `session.ts`)、保存のコマンドを含む非同期の窓口(`controller.ts`)、タブ側とサーバーが共有する部品(封筒の検査と種別一覧 `envelope.ts`、保存パッチの一覧・読出し `library.ts`、入れ子の深さ `json.ts`)、パッチ文書の検証・移行・生成(`patch-doc.ts`)、種別の定義の一覧(`catalog.ts`。分類・単位・選択肢は、仕様から `tools/build_module_meta.py` で生成した `src/modules/meta.generated.ts`)、音声とつなぐ実装(`backend.ts`)。ブラウザにもサーバーにも依存しない。契約に記述がなく補った解釈は [docs/contract-notes.md](docs/contract-notes.md)。
 - `src/audio/`: 出力保護(`output-stage.ts`)、AudioWorklet(`worklet.ts`。中身は試験できる形の `worklet-core.ts`)、メインスレッド側の窓口(`worklet-backend.ts`。音量・緊急停止の写しと、ワークレットとの合わせ直し)。
 - `src/server/`: ローカルサーバー(`app.ts`: エージェント用API、認証、タブへの中継。`file-store.ts`: 専用フォルダへの保存)。127.0.0.1 だけで待ち受ける。
 - `src/mcp/`: MCP アダプタ(stdio)。共通コマンドを1対1でツールにする薄い変換層で、ローカルサーバーの `POST /api/command` だけを呼ぶ。

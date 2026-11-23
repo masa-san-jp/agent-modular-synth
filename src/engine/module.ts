@@ -23,7 +23,6 @@ export interface ParamDef {
   min: number;
   max: number;
   default: number;
-  unit?: string;
 }
 
 export interface ModuleDef {

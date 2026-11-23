@@ -33,6 +33,20 @@ const FOLD_PARAMS = 8; // これより多いパラメータは折りたたむ
 const HISTORY_MAX = 10;
 const PATCH_NAME = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 
+/** 機能分類(仕様のフロントマター category)の表示名。 */
+const CATEGORY_LABEL: Record<string, string> = {
+  oscillator: "オシレータ",
+  noise: "ノイズ",
+  filter: "フィルタ",
+  amplifier: "アンプ・ミキサー",
+  modulation: "変調(エンベロープ・LFO)",
+  clock_sequencer: "クロック・シーケンサ",
+  random_logic: "ランダム・ロジック",
+  time_effect: "時間系エフェクト",
+  utility: "ユーティリティ",
+  io_utility: "入出力・計測",
+};
+
 const COMMAND_LABEL: Record<string, string> = {
   "module.add": "モジュール追加",
   "module.remove": "モジュール削除",
@@ -107,6 +121,8 @@ interface ParamControl {
   info: ParamInfo;
   number?: HTMLInputElement;
   range?: HTMLInputElement;
+  /** 列挙型の選択肢。 */
+  select?: HTMLSelectElement;
   check?: HTMLInputElement;
 }
 
@@ -190,6 +206,13 @@ export function createEditor(deps: EditorDeps): Editor {
       check.addEventListener("change", () => set(check.checked ? 1 : 0));
       control.check = check;
       row.append(check);
+    } else if (p.values && p.values.length > 0) {
+      // 列挙型: 選択肢を名前で出す(送るのは数値)
+      const select = el("select", { id: inputId, "data-param": p.name });
+      for (const v of p.values) select.append(el("option", { value: String(v.value) }, `${v.label}(${v.value})`));
+      select.addEventListener("change", () => set(Number(select.value)));
+      control.select = select;
+      row.append(select);
     } else {
       const isFloat = p.kind === "float";
       const step = isFloat ? floatStep(p) : 1;
@@ -279,6 +302,7 @@ export function createEditor(deps: EditorDeps): Editor {
       const v = m.params[c.info.name];
       if (v === undefined) continue;
       if (c.check && c.check.checked !== (v !== 0)) c.check.checked = v !== 0;
+      if (c.select && c.select.value !== String(v)) c.select.value = String(v);
       if (c.number) setInput(c.number, formatValue(c.info, v), force);
       if (c.range && (force || dragging !== c.range) && Number(c.range.value) !== v) c.range.value = String(v);
     }
@@ -377,9 +401,17 @@ export function createEditor(deps: EditorDeps): Editor {
   });
 
   // ---- モジュールの追加 ----
+  // 機能分類ごとにまとめて並べる
+  const groups = new Map<string, HTMLOptGroupElement>();
   for (const info of catalog.values()) {
     if (info.type === OUTPUT_TYPE) continue; // 常設の出力は追加できない(ERR-105)
-    addType.append(el("option", { value: info.type }, `${info.title}(${info.type})`));
+    let group = groups.get(info.category);
+    if (!group) {
+      group = el("optgroup", { label: CATEGORY_LABEL[info.category] ?? info.category });
+      groups.set(info.category, group);
+      addType.append(group);
+    }
+    group.append(el("option", { value: info.type }, `${info.title}(${info.type})`));
   }
   addButton.addEventListener("click", () => {
     const id = addId.value.trim();

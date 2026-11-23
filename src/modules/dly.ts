@@ -16,7 +16,7 @@ const DEF: ModuleDef = {
   ],
   outputs: [{ name: "out", type: "audio" }],
   params: [
-    { name: "time", kind: "float", min: 0, max: 2.0, default: 0.25, unit: "s" },
+    { name: "time", kind: "float", min: 0, max: 2.0, default: 0.25 },
     { name: "feedback", kind: "float", min: 0, max: 1, default: 0.0 },
     { name: "mix", kind: "float", min: 0, max: 1, default: 0.5 },
   ],

@@ -14,7 +14,7 @@ const DEF: ModuleDef = {
   inputs: [],
   outputs: [{ name: "out", type: "audio" }],
   params: [
-    { name: "level", kind: "float", min: 0, max: 10, default: 5, unit: "V" },
+    { name: "level", kind: "float", min: 0, max: 10, default: 5 },
     { name: "seed", kind: "seed", min: 0, max: 4294967295, default: DEFAULT_SEED },
   ],
   stateful: true,
