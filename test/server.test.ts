@@ -858,7 +858,7 @@ test("タブなしの module.list_types: Session と同じ形・同じ内容を�
       assert.equal(got.audio_state, null);
       assert.deepEqual(Object.keys(got).sort(), Object.keys(expected).sort());
     }
-    assert.equal((await post(r, req("module.list_types"))).body.result.types.length, 19);
+    assert.equal((await post(r, req("module.list_types"))).body.result.types.length, 20);
     for (const args of [{ type: "MOD-XYZ-999" }, { type: 5 }, { typo: 1 }]) {
       const q = req("module.list_types", args);
       const expected = session.handle(q, "agent");

@@ -549,3 +549,53 @@ test("パラメータの変化の検査: 対象と値は param.set と同じ規�
   const ev = scoreEvents([{ t: 0, dur: 1, note: 60, vel: 100, ch: 1 }], 0, FS, [{ t: 0, dur: 0, moduleId: "vcf", param: "cutoff", value: 2 }]);
   assert.deepEqual(ev.map((e) => ("param" in e ? "param" : e.bytes[0])), ["param", 0x90, 0x80]);
 });
+
+// ---- ミキサー卓(MOD-MIX-002)の読出し: エージェントが音を聞かずに配分を確かめる ----
+
+test("meter.read でミキサー卓の全チャンネルの音量と帯域を 1 回で読める。読出し値を持たないモジュールは ERR-303、種別にない項目は ERR-003", () => {
+  const r = rig();
+  r.ok("agent", "batch", {
+    ops: [
+      { command: "module.add", args: { id: "lo", type: "MOD-OSC-001", params: { range: -2 } } }, // 約 65 Hz
+      { command: "module.add", args: { id: "hi", type: "MOD-OSC-001", params: { range: 2, tune: 1 } } }, // 約 2093 Hz
+      { command: "module.add", args: { id: "desk", type: "MOD-MIX-002", params: { "level[1]": 1, "level[2]": 0.25, "pan[2]": 1, window_ms: 100 } } },
+      { command: "cable.connect", args: { from: { module: "lo", port: "sine" }, to: { module: "desk", port: "in1" } } },
+      { command: "cable.connect", args: { from: { module: "hi", port: "sine" }, to: { module: "desk", port: "in2" } } },
+      { command: "cable.connect", args: { from: { module: "desk", port: "L" }, to: { module: "out", port: "IN_L" } } },
+      { command: "cable.connect", args: { from: { module: "desk", port: "R" }, to: { module: "out", port: "IN_R" } } },
+    ],
+  });
+  const be = r.be as EngineBackend;
+  const L = new Float32Array(128);
+  for (let i = 0; i < 100; i++) be.processBlock(L, new Float32Array(128)); // 約 0.27 秒
+  const got = r.ok("agent", "meter.read", { module_id: "desk" });
+  const v = got.result.values as Record<string, number[]> & { windows: number; out_low: number; out_high: number };
+  assert.deepEqual(Object.keys(v).sort(), ["ch_audible", "ch_high", "ch_low", "ch_mid", "ch_peak", "ch_rms", "out_high", "out_low", "out_mid", "out_peak", "out_rms", "send_peak", "send_rms", "windows"]);
+  assert.ok(v.windows >= 2);
+  // チャンネル 1(低い正弦波、音量 1): 実効値 約 3.54 V、低域が最大
+  assert.ok(Math.abs(v.ch_rms[0]! - 5 / Math.SQRT2) < 0.05, String(v.ch_rms[0]));
+  assert.ok(v.ch_low[0]! > v.ch_mid[0]! && v.ch_low[0]! > v.ch_high[0]!);
+  // チャンネル 2(高い正弦波、音量 0.25): 実効値 約 0.88 V、高域が最大
+  assert.ok(Math.abs(v.ch_rms[1]! - 1.25 / Math.SQRT2) < 0.02, String(v.ch_rms[1]));
+  assert.ok(v.ch_high[1]! > v.ch_mid[1]! && v.ch_high[1]! > v.ch_low[1]!);
+  assert.deepEqual(v.ch_rms.slice(2), [0, 0, 0, 0, 0, 0]);
+  assert.deepEqual(v.ch_audible, [1, 1, 1, 1, 1, 1, 1, 1]);
+  // 項目を選んで読む
+  const some = r.ok("agent", "meter.read", { module_id: "desk", fields: ["ch_rms", "windows"] }).result.values as Record<string, unknown>;
+  assert.deepEqual(Object.keys(some), ["ch_rms", "windows"]);
+  // ソロを入れると、読出し値でも分かる(パッチを変えずに楽譜で一時的に入れる)
+  r.ok("agent", "score.play", { notes: [], length: 1, params: [{ t: 0, module_id: "desk", param: "solo[2]", value: 1 }] });
+  for (let i = 0; i < 120; i++) be.processBlock(L, new Float32Array(128));
+  const solo = r.ok("agent", "meter.read", { module_id: "desk", fields: ["ch_audible", "ch_rms"] }).result.values as Record<string, number[]>;
+  assert.deepEqual(solo.ch_audible, [0, 1, 0, 0, 0, 0, 0, 0]);
+  assert.ok(solo.ch_rms[0]! < 0.01, "ソロでないチャンネルは消える");
+  assert.equal(r.s.getPatch().modules.find((m) => m.id === "desk")!.params["solo[2]"], 0, "パッチの値は変わらない");
+  // エラー
+  assert.equal(r.fail("agent", "meter.read", { module_id: "lo" }).error.id, "ERR-303");
+  assert.equal(r.fail("agent", "meter.read", { module_id: "desk", fields: ["level"] }).error.id, "ERR-003"); // MOD-IO-003 の項目
+  assert.equal(r.fail("agent", "meter.read", { module_id: "desk", fields: ["nope"] }).error.id, "ERR-003");
+  assert.equal(r.fail("agent", "meter.read", { module_id: "nope" }).error.id, "ERR-102");
+  // module.list_types に読出し値の項目が載る
+  const types = r.ok("agent", "module.list_types", { type: "MOD-MIX-002" }).result.types as { readouts: string[]; category: string }[];
+  assert.ok(types[0]!.readouts.includes("ch_rms") && types[0]!.readouts.includes("out_low"));
+});

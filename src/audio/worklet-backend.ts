@@ -23,7 +23,7 @@ export interface WorkletBackendOptions {
   /** 経過時間を測る時計 [ms](音声側の今のサンプル時刻を、最後に届いた状態から見積もるのに使う)。既定は performance.now()。 */
   clock?: () => number;
   /** まだ1度も測定値が届いていないメーターの読出し値(初期状態のメーターの値)。 */
-  initialMeter?: () => Record<string, unknown>;
+  initialMeter?: (moduleId: string) => Record<string, unknown> | undefined;
 }
 
 export class WorkletBackend implements AudioBackend {
@@ -221,7 +221,7 @@ export class WorkletBackend implements AudioBackend {
    */
   meterRead(moduleId: string, fields: readonly string[]): MeterReading {
     const w = this.last;
-    const all = w?.meters[moduleId] ?? this.options.initialMeter?.();
+    const all = w?.meters[moduleId] ?? this.options.initialMeter?.(moduleId);
     if (!all) throw new Error(`'${moduleId}' の読出し値がまだ届いていない`);
     const values: Record<string, unknown> = {};
     for (const f of fields) values[f] = f === "frame" && w?.meters[moduleId] ? (this.frames.get(moduleId) ?? []) : all[f];

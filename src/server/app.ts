@@ -18,7 +18,7 @@ import { ErrorSpec, checkEnvelope, listTypes, okLen } from "../control/envelope.
 import { CommandError, ERRORS } from "../control/errors.js";
 import { tryStringify } from "../control/json.js";
 import { listPatches, readPatch } from "../control/library.js";
-import { COMMANDS, METER_FIELDS, METER_TYPE, OUT_TYPE } from "../control/session.js";
+import { COMMANDS, OUT_TYPE, READOUTS } from "../control/session.js";
 import type { StoreResult } from "../control/store.js";
 import { FilePatchStore, MAX_PATCH_FILES } from "./file-store.js";
 import type { ServerToTab } from "./protocol.js";
@@ -391,7 +391,7 @@ export function createApp(options: AppOptions): App {
   /** タブなしで直接答えるコマンドの中身。タブ側(Session・Controller)と同じ関数を使う(src/control/envelope.ts、library.ts)。 */
   const direct = async (cmd: string, args: Obj): Promise<Obj | ErrorSpec> => {
     try {
-      if (cmd === "module.list_types") return listTypes(catalog, args, OUT_TYPE, METER_TYPE, METER_FIELDS);
+      if (cmd === "module.list_types") return listTypes(catalog, args, OUT_TYPE, READOUTS);
       if (cmd === "patch.list") return await listPatches(store, catalog, args, limits.maxPatchFiles);
       return await readPatch(store, args, limits.maxPatchFiles);
     } catch (e) {

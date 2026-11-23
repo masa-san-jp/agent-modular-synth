@@ -17,6 +17,7 @@
 | [MOD-LFO-001](MOD-LFO-001.md) | LFO(低周波オシレータ) | REF-001-008, F-001-027, F-001-028, F-001-029, F-001-007, REF-005-002, F-005-013, F-005-009, F-005-010, F-005-011, F-005-014 | 7 | 4 | 1 |
 | [MOD-LGC-001](MOD-LGC-001.md) | 論理・比較 | F-005-011, F-001-006, F-001-009, F-002-003, F-002-016, F-016-029, REF-016-012, F-005-012 | 5 | 3 | 1 |
 | [MOD-MIX-001](MOD-MIX-001.md) | ミキサー | REF-001-009, F-001-031, F-001-032, F-017-033, F-014-022, F-001-009, F-005-010 | 4 | 3 | 2 |
+| [MOD-MIX-002](MOD-MIX-002.md) | ミキサー卓(8チャンネル) | REF-001-009, F-001-009, REF-005-002, F-005-009, F-005-010, F-005-014 | 3 | 6 | 1 |
 | [MOD-NSE-001](MOD-NSE-001.md) | ノイズ源(白色ノイズ) | REF-005-007, F-005-030, F-005-031, REF-010-010, F-010-034, REF-005-002, F-005-009, F-005-010, F-005-014 | 5 | 2 | 1 |
 | [MOD-OSC-001](MOD-OSC-001.md) | VCO(電圧制御オシレータ) | REF-001-005, F-001-005, F-001-015, F-001-016, F-001-017, F-001-018, F-001-019, M001, REF-005-002, F-005-009, F-005-010, F-005-013, F-005-014, F-005-011 | 8 | 5 | 1 |
 | [MOD-RND-001](MOD-RND-001.md) | サンプル&ホールド/ランダム | REF-004-009, F-003-007, F-004-043, F-004-044, F-004-022, REF-002-003, F-002-006, F-002-020, F-002-023, REF-005-007, F-005-031, F-005-009, F-005-011 | 5 | 3 | 1 |
@@ -204,6 +205,15 @@
 | S-04 | F-001-009 | SRC-001-02 | Technical Details Signals in the A-100 末尾 | manufacturer_doc/high |
 | S-04 | F-005-010 | SRC-005-01 | VoltageStandards 'Output Saturation' | manufacturer_doc/high |
 | S-05 | F-014-022 | SRC-014-04 | Product page '530 Dual VCA' | manufacturer_doc/high |
+
+### MOD-MIX-002 ミキサー卓(8チャンネル)
+
+| 記述ID | 根拠ID | 出典ID | 節・箇所 | 根拠の種別/確度 |
+|---|---|---|---|---|
+| S-01 | F-001-009 | SRC-001-02 | Technical Details Signals in the A-100 末尾 | manufacturer_doc/high |
+| S-02 | F-005-009 | SRC-005-01 | VoltageStandards 'Levels' | manufacturer_doc/high |
+| S-02 | F-005-010 | SRC-005-01 | VoltageStandards 'Output Saturation' | manufacturer_doc/high |
+| S-03 | F-005-014 | SRC-005-01 | VoltageStandards 'NaNs and Infinity' | manufacturer_doc/high |
 
 ### MOD-NSE-001 ノイズ源(白色ノイズ)
 

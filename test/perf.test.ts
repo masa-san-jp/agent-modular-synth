@@ -28,15 +28,15 @@ test("測定用のパッチ(BP-0 / BP-1 / BP-POLY / BP-ALL / BP-N / BP-M)は、�
   assert.equal(build(bp1()).getPatch().modules.length, 6);
   assert.equal(build(bpPoly()).getPatch().modules.find((m) => m.id === "midi")!.params.voices, 16);
   const all = build(bpAll()).getPatch();
-  assert.deepEqual([...new Set(all.modules.map((m) => m.type))].sort(), [...CATALOG.keys()].sort(), "BP-ALL は 19 種すべてを含む");
-  assert.equal(all.modules.length, 19);
+  assert.deepEqual([...new Set(all.modules.map((m) => m.type))].sort(), [...CATALOG.keys()].sort(), "BP-ALL は 20 種すべてを含む");
+  assert.equal(all.modules.length, 20);
   for (const n of [1, 2, 4, 16, 64]) {
     const p = build(bpN(n)).getPatch();
     assert.equal(p.modules.length, bpNModules(n));
     assert.equal(p.modules.filter((m) => m.type === "MOD-OSC-001").length, n);
   }
   assert.ok(bpNModules(64) <= 256, "N = 64 は製品の上限(256 モジュール)に収まる");
-  assert.equal(BPM_TYPES.length, 18, "常設の出力を除く 18 種");
+  assert.equal(BPM_TYPES.length, 19, "常設の出力を除く 19 種");
   for (const type of BPM_TYPES) {
     const p = build(bpM(type, 4)).getPatch();
     assert.equal(p.modules.filter((m) => m.id.startsWith("u")).length, 4, type);

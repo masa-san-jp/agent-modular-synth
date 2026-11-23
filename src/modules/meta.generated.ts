@@ -654,6 +654,204 @@ export const MODULE_META: Record<string, ModuleMeta> = {
       }
     }
   },
+  "MOD-MIX-002": {
+    "category": "amplifier",
+    "ports": {
+      "in1": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in2": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in3": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in4": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in5": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in6": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in7": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "in8": {
+        "unit": "V",
+        "unconnected": {
+          "value": 0.0,
+          "normal": null
+        }
+      },
+      "L": {
+        "unit": "V"
+      },
+      "R": {
+        "unit": "V"
+      },
+      "SEND": {
+        "unit": "V"
+      }
+    },
+    "params": {
+      "level[1]": {
+        "unit": "無次元"
+      },
+      "level[2]": {
+        "unit": "無次元"
+      },
+      "level[3]": {
+        "unit": "無次元"
+      },
+      "level[4]": {
+        "unit": "無次元"
+      },
+      "level[5]": {
+        "unit": "無次元"
+      },
+      "level[6]": {
+        "unit": "無次元"
+      },
+      "level[7]": {
+        "unit": "無次元"
+      },
+      "level[8]": {
+        "unit": "無次元"
+      },
+      "pan[1]": {
+        "unit": "無次元"
+      },
+      "pan[2]": {
+        "unit": "無次元"
+      },
+      "pan[3]": {
+        "unit": "無次元"
+      },
+      "pan[4]": {
+        "unit": "無次元"
+      },
+      "pan[5]": {
+        "unit": "無次元"
+      },
+      "pan[6]": {
+        "unit": "無次元"
+      },
+      "pan[7]": {
+        "unit": "無次元"
+      },
+      "pan[8]": {
+        "unit": "無次元"
+      },
+      "mute[1]": {
+        "unit": null
+      },
+      "mute[2]": {
+        "unit": null
+      },
+      "mute[3]": {
+        "unit": null
+      },
+      "mute[4]": {
+        "unit": null
+      },
+      "mute[5]": {
+        "unit": null
+      },
+      "mute[6]": {
+        "unit": null
+      },
+      "mute[7]": {
+        "unit": null
+      },
+      "mute[8]": {
+        "unit": null
+      },
+      "solo[1]": {
+        "unit": null
+      },
+      "solo[2]": {
+        "unit": null
+      },
+      "solo[3]": {
+        "unit": null
+      },
+      "solo[4]": {
+        "unit": null
+      },
+      "solo[5]": {
+        "unit": null
+      },
+      "solo[6]": {
+        "unit": null
+      },
+      "solo[7]": {
+        "unit": null
+      },
+      "solo[8]": {
+        "unit": null
+      },
+      "send[1]": {
+        "unit": "無次元"
+      },
+      "send[2]": {
+        "unit": "無次元"
+      },
+      "send[3]": {
+        "unit": "無次元"
+      },
+      "send[4]": {
+        "unit": "無次元"
+      },
+      "send[5]": {
+        "unit": "無次元"
+      },
+      "send[6]": {
+        "unit": "無次元"
+      },
+      "send[7]": {
+        "unit": "無次元"
+      },
+      "send[8]": {
+        "unit": "無次元"
+      },
+      "master": {
+        "unit": "無次元"
+      },
+      "window_ms": {
+        "unit": "ミリ秒"
+      }
+    }
+  },
   "MOD-NSE-001": {
     "category": "noise",
     "ports": {

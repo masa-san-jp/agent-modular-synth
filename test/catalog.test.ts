@@ -105,7 +105,7 @@ for (const info of catalog.values()) {
 test("仕様との照合の件数", () => {
   console.log(`照合: 既定値 ${checkedDefaults} 件、範囲 ${checkedRanges} 件。機械的に読めなかった表記 ${unparsed.length} 件`);
   for (const u of unparsed) console.log(`  未照合: ${u}`);
-  assert.equal(catalog.size, 19);
+  assert.equal(catalog.size, 20);
 });
 
 // ---- 分類・単位・未接続時の値・列挙の選択肢(CMD-01。仕様から生成した表 src/modules/meta.generated.ts) ----
@@ -116,7 +116,7 @@ test("生成した付随情報(meta.generated.ts)は、今の仕様から作り�
   assert.match(out, /^OK/);
 });
 
-test("全19種別: 分類は仕様のフロントマター、ポートの単位と未接続時の値は仕様 §3 と実装の両方に一致する", async () => {
+test("全20種別: 分類は仕様のフロントマター、ポートの単位と未接続時の値は仕様 §3 と実装の両方に一致する", async () => {
   const { REGISTRY: reg } = await import("../src/modules/registry.js");
   let ports = 0;
   for (const info of catalog.values()) {
@@ -148,7 +148,7 @@ test("全19種別: 分類は仕様のフロントマター、ポートの単位�
       }
     }
   }
-  assert.equal(ports, 100, `照合したポート ${ports}`);
+  assert.equal(ports, 111, `照合したポート ${ports}`);
   // 定数でない入力は、この3つだけ
   const special: string[] = [];
   for (const info of catalog.values()) for (const p of info.inputs) if (p.unconnected!.value === null) special.push(`${info.type}.${p.name}=${p.unconnected!.normal}`);
@@ -157,7 +157,7 @@ test("全19種別: 分類は仕様のフロントマター、ポートの単位�
 
 test("module.list_types(CMD-01): category・単位・未接続時の値が埋まり、列挙型は kind: enum と values を持つ", async () => {
   const { listTypes } = await import("../src/control/envelope.js");
-  const out = listTypes(catalog, {}, "MOD-IO-001", "MOD-IO-003", ["level"]);
+  const out = listTypes(catalog, {}, "MOD-IO-001", { "MOD-IO-003": ["level"] });
   assert.ok("types" in out);
   if (!("types" in out)) return;
   type P = { name: string; kind: string; unit: string | null; min: number; max: number; default: number; values?: { value: number; label: string }[] };
