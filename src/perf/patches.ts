@@ -72,7 +72,7 @@ export function bpNModules(n: number): number {
   return bpN(n).filter((o) => o.command === "module.add").length + 1;
 }
 
-/** BP-ALL: 19 種を各 1 個含み、どのモジュールも信号を処理しているパッチ。 */
+/** BP-ALL: 20 種を各 1 個含み、どのモジュールも信号を処理しているパッチ。 */
 export function bpAll(): BenchOp[] {
   return [
     add("clk", "MOD-CLK-001", { bpm: 240, ppqn: 4 }),
@@ -92,6 +92,7 @@ export function bpAll(): BenchOp[] {
     add("dly", "MOD-DLY-001", { time: 0.12, feedback: 0.3, mix: 0.3 }),
     add("utl", "MOD-UTL-001", { gain: 0.8 }),
     add("sat", "MOD-SAT-001", { drive: 9 }),
+    add("desk", "MOD-MIX-002"),
     add("mt", "MOD-IO-003"),
     con("clk.clock", "div.clock"),
     con("clk.clock", "seq.CLOCK"),
@@ -115,7 +116,9 @@ export function bpAll(): BenchOp[] {
     con("sat.out", "dly.in"),
     con("dly.out", "utl.in"),
     con("utl.out", "mt.IN"),
-    con("mt.THRU", "out.IN_L"),
+    con("mt.THRU", "desk.in1"),
+    con("nse.out", "desk.in2"),
+    con("desk.L", "out.IN_L"),
   ];
 }
 
@@ -138,6 +141,7 @@ export function bpM(type: string, k: number): BenchOp[] {
     "MOD-LFO-001": [],
     "MOD-LGC-001": [["d_lfo.square", "a"], ["d_osc.pulse", "b"]],
     "MOD-MIX-001": [["d_osc.saw", "in1"], ["d_osc.tri", "in2"], ["d_lfo.sine", "in3"], ["d_osc.sine", "in4"]],
+    "MOD-MIX-002": [["d_osc.saw", "in1"], ["d_osc.tri", "in2"], ["d_lfo.sine", "in3"], ["d_osc.sine", "in4"], ["d_osc.pulse", "in5"], ["d_lfo.tri", "in6"], ["d_lfo.saw", "in7"], ["d_lfo.square", "in8"]],
     "MOD-NSE-001": [],
     "MOD-OSC-001": [["d_lfo.sine", "pitch"]],
     "MOD-RND-001": [["d_clk.clock", "TRIG"]],
@@ -157,5 +161,5 @@ export function bpM(type: string, k: number): BenchOp[] {
 /** BP-M の対象の種別(常設の出力 MOD-IO-001 は 1 個しか置けないので対象外)。 */
 export const BPM_TYPES: readonly string[] = [
   "MOD-AMP-001", "MOD-CLK-001", "MOD-CLK-002", "MOD-DLY-001", "MOD-ENV-001", "MOD-FLT-001", "MOD-FNC-001", "MOD-IO-002", "MOD-IO-003",
-  "MOD-LFO-001", "MOD-LGC-001", "MOD-MIX-001", "MOD-NSE-001", "MOD-OSC-001", "MOD-RND-001", "MOD-SAT-001", "MOD-SEQ-001", "MOD-UTL-001",
+  "MOD-LFO-001", "MOD-LGC-001", "MOD-MIX-001", "MOD-MIX-002", "MOD-NSE-001", "MOD-OSC-001", "MOD-RND-001", "MOD-SAT-001", "MOD-SEQ-001", "MOD-UTL-001",
 ];

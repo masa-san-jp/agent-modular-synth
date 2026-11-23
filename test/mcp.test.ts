@@ -336,7 +336,7 @@ test("§17 ツール一覧(stdio の子プロセス): 25個。名前はコマン
     // 種別は module.list_types と同じ定義表から
     const add = tools.find((t) => t.name === "module_add")!.inputSchema as Obj;
     assert.deepEqual(add.properties.type.enum, [...CATALOG.keys()]);
-    assert.equal(add.properties.type.enum.length, 19);
+    assert.equal(add.properties.type.enum.length, 20);
   }));
 
 test("§17 ツールの説明: 読出しのみ・取り消し不可などの性質が、契約 §6 の表のとおりに付いている", () => {
@@ -727,7 +727,7 @@ test("セッションなし(AX-14): タブがないと patch_get は ERR-006(rev
     assert.equal(list.isError, false);
     assert.deepEqual(list.body.result.patches, []);
     const types = await call(client, "module_list_types");
-    assert.equal(types.body.result.types.length, 19);
+    assert.equal(types.body.result.types.length, 20);
   }));
 
 test("トークン誤り: サーバーの応答(AX-10e: ERR-004)をそのままエラー結果で返す。パッチの内容を返さない", () =>

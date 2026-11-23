@@ -58,7 +58,7 @@ export function checkEnvelope(r: unknown): ErrorSpec | null {
 }
 
 /** CMD-01 の `types` の1要素。`singleton`・`readouts` は種別で決まる(呼ぶ側が種別名を渡す)。 */
-export function describeType(t: TypeInfo, outType: string, meterType: string, meterFields: readonly string[]): Obj {
+export function describeType(t: TypeInfo, outType: string, readouts: Readonly<Record<string, readonly string[]>>): Obj {
   const port = (p: TypeInfo["inputs"][number], direction: "in" | "out"): Obj => ({
     name: p.name,
     direction,
@@ -83,12 +83,13 @@ export function describeType(t: TypeInfo, outType: string, meterType: string, me
       default: p.default,
       ...(p.values ? { values: p.values.map((v) => ({ value: v.value, label: v.label })) } : {}),
     })),
-    readouts: t.type === meterType ? [...meterFields] : [],
+    readouts: [...(readouts[t.type] ?? [])],
   };
 }
 
 /** CMD-01 の全体。`args.type` の検査を含む。失敗は ErrorSpec。 */
-export function listTypes(catalog: TypeCatalog, args: Obj, outType: string, meterType: string, meterFields: readonly string[]): { types: Obj[] } | ErrorSpec {
+/** `readouts`: 種別 → `meter.read` で読める項目(読出し値を持つ種別だけ)。 */
+export function listTypes(catalog: TypeCatalog, args: Obj, outType: string, readouts: Readonly<Record<string, readonly string[]>>): { types: Obj[] } | ErrorSpec {
   for (const k of Object.keys(args)) {
     if (k !== "type") return { id: "ERR-003", message: `未知の引数 ${k}`, details: { arg: k, reason: "unknown_key" } };
   }
@@ -99,5 +100,5 @@ export function listTypes(catalog: TypeCatalog, args: Obj, outType: string, mete
     if (!one) return { id: "ERR-101", message: `未知のモジュール種別 ${args.type}`, details: { type: args.type } };
     infos = [one];
   }
-  return { types: infos.map((t) => describeType(t, outType, meterType, meterFields)) };
+  return { types: infos.map((t) => describeType(t, outType, readouts)) };
 }

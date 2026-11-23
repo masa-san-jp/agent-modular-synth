@@ -2,6 +2,7 @@
 // 8 小節(32 拍 = 約 14.5 秒)の楽譜 × 6: 導入 → 低音 → 全部 → ブレイク → 山場 → 終わり。
 // チャンネル: 1 = キック、2 = ハイハット(ノイズ)、3 = 低音、4 = 和音のスタブ、5 = 低い持続音(ドローン)。
 // フィルタやディレイの動きは、楽譜の中に書いてある(params)。拍に正確に合い、パッチは変えない。
+// 音量の配分は、ミキサー卓(MOD-MIX-002)のメーターを読んで決める(エージェントは音を聞けないので、数値で確かめる)。
 // 重さを出す工夫: キックと低音を歪ませる(MOD-SAT-001)、キックの残響を低域だけ残す(ランブル)、低音は少しずらした 2 つのノコギリ波 + 矩形波の 3 層、
 // スタブも 2 層、低い持続音が下で鳴り続ける。
 
@@ -93,7 +94,6 @@ export const PATCH = [
   con("s_env.env", "s_vca.cv2"),
   con("s_vca.out", "s_vel.in1"),
   con("s_midi.VEL", "s_vel.cv2"),
-  con("s_vel.out", "s_dly.in"),
   // --- ドローン(ch 5): 低いラとミを鳴らし続ける。ゆっくり立ち上がり、フィルタの開き具合は楽譜が動かす ---
   add("d_midi", "MOD-IO-002", { channel: 5, voices: 2 }),
   add("d_osc", "MOD-OSC-001"),
@@ -110,24 +110,21 @@ export const PATCH = [
   con("d_pre.out", "d_vcf.in"),
   con("d_vcf.out", "d_vca.in1"),
   con("d_env.env", "d_vca.cv2"),
-  // --- まとめ: キック・ランブル・低音・ハットは中央。スタブは左に元の音、右にディレイ。ドローンは左右に ---
-  add("mix", "MOD-MIX-001", { level1: 0.44, level2: 0.5, level3: 0.5, level4: 0.62, master: 1 }),
-  add("mixl", "MOD-MIX-001", { level1: 1, level2: 0.9, level3: 0.4, level4: 0.5, master: 1 }),
-  add("mixr", "MOD-MIX-001", { level1: 1, level2: 0.35, level3: 0.9, level4: 0.5, master: 1 }),
-  con("k_sat.out", "mix.in1"),
-  con("r_vcf.out", "mix.in2"),
-  con("b_vca.out", "mix.in3"),
-  con("h_vel.out", "mix.in4"),
-  con("mix.out", "mixl.in1"),
-  con("s_vel.out", "mixl.in2"),
-  con("s_dly.out", "mixl.in3"),
-  con("d_vca.out", "mixl.in4"),
-  con("mix.out", "mixr.in1"),
-  con("s_vel.out", "mixr.in2"),
-  con("s_dly.out", "mixr.in3"),
-  con("d_vca.out", "mixr.in4"),
-  con("mixl.out", "out.IN_L"),
-  con("mixr.out", "out.IN_R"),
+  // --- まとめ: ミキサー卓(MOD-MIX-002)。チャンネルごとの音量は、最初は仮の値。演奏の前に、卓のメーターを読んで決める(サウンドチェック) ---
+  //   1 キック / 2 ランブル / 3 低音 / 4 ハット / 5 スタブ(左寄り。センドでディレイへ)/ 6 ディレイの戻り(右寄り)/ 7 ドローン
+  add("desk", "MOD-MIX-002", { "pan[5]": -0.45, "send[5]": 1, "pan[6]": 0.55, "pan[4]": 0.15, window_ms: 400 }),
+  con("k_sat.out", "desk.in1"),
+  con("r_vcf.out", "desk.in2"),
+  con("b_vca.out", "desk.in3"),
+  con("h_vel.out", "desk.in4"),
+  con("s_vel.out", "desk.in5"),
+  con("s_dly.out", "desk.in6"),
+  con("d_vca.out", "desk.in7"),
+  con("desk.SEND", "s_dly.in"),
+  con("desk.L", "out.IN_L"),
+  con("desk.R", "out.IN_R"),
+  // 卓の出力を、出力モジュールで持ち上げる(卓の中に余裕を残したまま、最後の段で音量を稼ぐ。大きすぎる分は製品のリミッターが抑える)
+  { command: "param.set", args: { module_id: "out", param: "level", value: 1.8 } },
 ];
 
 // ---- 楽譜を書くための道具(単位は拍。1 小節 = 4 拍) ----
@@ -271,6 +268,20 @@ const S6 = {
     ...drone(0, 7, 90),
   ],
   params: [par(0, 16, "b_sat", "drive", 12), par(0, 0, "k_sat", "drive", 15), par(0, 24, "b_vcf", "cutoff", -2.6), par(0, 0, "b_vcf", "res", 0.6), par(0, 0, "s_dly", "feedback", 0.66), par(0, 28, "d_vcf", "cutoff", -3)],
+};
+
+/**
+ * サウンドチェックの設定: 卓のメーター(meter.read)を読んで、チャンネルごとの音量を決める。
+ * `targets` は、チャンネル番号 → 目標の音量(実効値 [V]。±5 V が基準)。キックを一番大きく、低音がそれに続く配分。
+ * `score` は、全パートが鳴る区間(山場)。`outPeak` は、卓の出力の最大の目標 [V]。
+ */
+export const SOUNDCHECK = {
+  desk: "desk",
+  score: S5,
+  targets: { 1: 1.0, 2: 0.3, 3: 0.75, 4: 0.24, 5: 0.26, 6: 0.18, 7: 0.24 },
+  names: { 1: "キック", 2: "ランブル", 3: "低音", 4: "ハット", 5: "スタブ", 6: "ディレイ", 7: "ドローン" },
+  outPeak: 4.6,
+  settleSeconds: 6, // ドローンがゆっくり立ち上がる(2.5 秒)のを待つ
 };
 
 /** 区間: 楽譜(パラメータの動きも楽譜の中にある)。 */

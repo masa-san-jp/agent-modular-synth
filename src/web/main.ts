@@ -161,9 +161,17 @@ class ServerLink implements PatchStore {
 // ---------------------------------------------------------------------------------------
 
 const catalog = buildCatalog(REGISTRY);
+/** 追加した直後のモジュール(まだ測定値が届いていない)の読出し値 = その種別の初期状態の値。 */
+function initialMeterOf(moduleId: string): Record<string, unknown> | undefined {
+  const type: string | undefined = currentPatch().modules.find((m) => m.id === moduleId)?.type;
+  const make = type ? REGISTRY.get(type) : undefined;
+  const fresh = make ? (make(48000) as unknown as { read?: () => Record<string, unknown> }) : undefined;
+  return typeof fresh?.read === "function" ? fresh.read() : undefined;
+}
+let currentPatch: () => Patch = () => ({ format: "modular-synth-patch", schema_version: 1, meta: { title: "", description: "" }, modules: [], cables: [] });
 const backend = new WorkletBackend({
   // 追加した直後のメーター(まだ測定値が届いていない)の読出し値 = 初期状態のメーターの値
-  initialMeter: () => (REGISTRY.get("MOD-IO-003")!(48000) as unknown as { read(): Record<string, unknown> }).read(),
+  initialMeter: (moduleId: string): Record<string, unknown> | undefined => initialMeterOf(moduleId),
 });
 const link = new ServerLink();
 
@@ -212,6 +220,7 @@ const session = new Session({
 });
 /** 起動時のリビジョン(自動保存から復元した値、または 0)。 */
 const initialRevision = session.revision;
+currentPatch = () => session.getPatch();
 const controller = new Controller({ session, store: link, now: () => new Date() });
 
 let requestSeq = 0;

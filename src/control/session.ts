@@ -9,6 +9,7 @@
 // `precheck` と `handleExternal` を使って処理する。Session.handle に直接渡すと ERR-207(reason: "not_implemented")を返す。
 
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
+import { MIX2_READOUTS } from "../modules/mix2.js";
 import { checkEnvelope, listTypes } from "./envelope.js";
 import { CheckedParam, MidiEventAt, Performance, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
 import { CommandError } from "./errors.js";
@@ -324,6 +325,14 @@ export const METER_FIELDS = [
   "frame",
   "frame_seq",
 ] as const;
+
+/** 読出し値を持つ種別 → `meter.read` で読める項目(各モジュール仕様 §3)。 */
+export const READOUTS: Readonly<Record<string, readonly string[]>> = {
+  [METER_TYPE]: METER_FIELDS,
+  "MOD-MIX-002": MIX2_READOUTS,
+};
+/** どれかの種別が持つ読出し値の名前すべて。 */
+export const ALL_READOUT_NAMES: readonly string[] = [...new Set(Object.values(READOUTS).flat())];
 
 const ID_RE = /^[a-z][a-z0-9_]{0,31}$/;
 const PATCH_NAME_RE = /^[a-z0-9][a-z0-9_-]{0,63}$/;
@@ -1627,7 +1636,7 @@ export class Session {
   // ---- 読出し ----
 
   private cmdListTypes(args: Args): ExecOutput {
-    const out = listTypes(this.catalog, args, OUT_TYPE, METER_TYPE, METER_FIELDS);
+    const out = listTypes(this.catalog, args, OUT_TYPE, READOUTS);
     if ("id" in out) throw new CommandError(out.id, out.message, out.details ?? {});
     return { result: out, warnings: [] };
   }
@@ -1677,20 +1686,23 @@ export class Session {
   private cmdMeterRead(args: Args): ExecOutput {
     checkKeys(args, ["module_id", "fields"]);
     const id = reqString(args, "module_id");
-    let fields: string[] = METER_FIELDS.filter((f) => f !== "frame");
+    const module = this.state.modules.find((m) => m.id === id);
+    const known: readonly string[] | undefined = module ? READOUTS[module.type] : undefined;
+    // 既定は、波形フレーム(大きい)以外の全項目。種別が分からないうちは、どの読出し値の名前でも通す(存在の検査が先: ERR-102)
+    let fields: string[] = (known ?? []).filter((f) => f !== "frame");
     if ("fields" in args) {
       const f = args.fields;
       if (!Array.isArray(f)) throw bad("fields", "type");
+      const names: readonly string[] = known ?? ALL_READOUT_NAMES;
       f.forEach((name: unknown, i: number) => {
         if (typeof name !== "string") throw bad(`fields[${i}]`, "type");
-        if (!(METER_FIELDS as readonly string[]).includes(name)) throw bad(`fields[${i}]`, "unknown_field", `未知の項目 ${name}`);
+        if (!names.includes(name)) throw bad(`fields[${i}]`, "unknown_field", `未知の項目 ${name}`);
       });
       fields = [...new Set(f as string[])];
     }
-    const module = this.state.modules.find((m) => m.id === id);
     if (!module) throw new CommandError("ERR-102", `モジュール ${id} は存在しない`, { module_id: id });
-    if (module.type !== METER_TYPE) {
-      throw new CommandError("ERR-303", `${id} は ${METER_TYPE} でない`, { module_id: id, type: module.type });
+    if (!known) {
+      throw new CommandError("ERR-303", `${id}(${module.type})は読出し値を持たない`, { module_id: id, type: module.type });
     }
     const s = this.backend.status();
     if (s.audioState !== "running") {

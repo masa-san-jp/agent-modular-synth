@@ -293,7 +293,8 @@ export class EngineBackend implements AudioBackend {
       const m = this.engine.get(id) as unknown as { read?: (withFrame?: boolean) => Record<string, unknown> };
       if (typeof m.read !== "function") continue;
       const stats = m.read(false);
-      out[id] = skipFrame?.(id, Number(stats.frame_seq)) ? stats : m.read(true);
+      // 波形フレームを持たない読出し値(ミキサー卓など)は、そのまま
+      out[id] = !("frame_seq" in stats) || skipFrame?.(id, Number(stats.frame_seq)) ? stats : m.read(true);
     }
     return out;
   }

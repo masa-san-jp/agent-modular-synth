@@ -13,6 +13,7 @@ import { IoOutModule } from "./io-out.js";
 import { LfoModule } from "./lfo.js";
 import { LgcModule } from "./lgc.js";
 import { MixModule } from "./mix.js";
+import { Mix2Module } from "./mix2.js";
 import { NseModule } from "./nse.js";
 import { OscModule } from "./osc.js";
 import { RndModule } from "./rnd.js";
@@ -34,6 +35,7 @@ export const REGISTRY: ReadonlyMap<string, ModuleFactory> = new Map<string, Modu
   ["MOD-LFO-001", (fs) => new LfoModule(fs)],
   ["MOD-LGC-001", (fs) => new LgcModule(fs)],
   ["MOD-MIX-001", (fs) => new MixModule(fs)],
+  ["MOD-MIX-002", (fs) => new Mix2Module(fs)],
   ["MOD-NSE-001", (fs) => new NseModule(fs)],
   ["MOD-OSC-001", (fs) => new OscModule(fs)],
   ["MOD-RND-001", (fs) => new RndModule(fs)],

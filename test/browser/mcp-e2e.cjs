@@ -89,7 +89,7 @@ async function main() {
     const noTab = await tool("patch_get");
     assert.equal(noTab.isError, true);
     assert.equal(noTab.body.error.id, "ERR-006");
-    assert.equal((await toolOk("module_list_types")).result.types.length, 19);
+    assert.equal((await toolOk("module_list_types")).result.types.length, 20);
     ok("タブがない間、patch_get は ERR-006 のエラー結果。module_list_types は応答する");
 
     // ---- 2) タブを開く。人が音声を開始する(エージェントは開始できない) ----

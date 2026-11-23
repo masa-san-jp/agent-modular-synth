@@ -5,7 +5,7 @@
 // - 説明: 読出しのみ・取り消し不可などの性質を、§6 の表(下の TABLE)から機械的に付ける。
 // 下の TABLE と ARGS は契約 §6 の写し。コマンドの集合・権限・batch の可否は src/control/session.ts の COMMANDS と
 // 一致し、表の各列は契約の文書と一致することを試験(test/mcp.test.ts)で確かめる。
-import { COMMANDS, METER_FIELDS } from "../control/session.js";
+import { ALL_READOUT_NAMES, COMMANDS } from "../control/session.js";
 import { REGISTRY } from "../modules/registry.js";
 
 type Schema = Record<string, unknown>;
@@ -232,7 +232,7 @@ export const ARGS: Readonly<Record<string, ArgSpec>> = {
       fields: {
         type: "array",
         description: "読む項目。省略時は frame 以外の全項目(frame は明示したときだけ返す)",
-        items: { type: "string", enum: [...METER_FIELDS] },
+        items: { type: "string", enum: [...ALL_READOUT_NAMES] },
       },
     },
     required: ["module_id"],

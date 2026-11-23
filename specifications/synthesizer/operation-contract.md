@@ -33,7 +33,7 @@
 ### 2.2 識別子と参照
 | 対象 | 形式 | 規則 |
 |---|---|---|
-| モジュール種別 `type` | 仕様ID(例 `MOD-OSC-001`) | product-spec §6 の19種。名前を変えない(保存済みパッチを壊すため。F-018-015) |
+| モジュール種別 `type` | 仕様ID(例 `MOD-OSC-001`) | product-spec §6 の20種。名前を変えない(保存済みパッチを壊すため。F-018-015) |
 | モジュールID | `^[a-z][a-z0-9_]{0,31}$` | パッチ内で一意。`module.add` で指定できる。省略時は `m<N>`(自動採番。規則は表の下) |
 | 常設の出力 | ID `out`、種別 `MOD-IO-001` | 常に1つだけ存在。追加・削除不可(product-spec §6) |
 | ケーブルID | `^[a-z][a-z0-9_]{0,31}$` | パッチ内で一意。省略時は `c<N>`(規則はモジュールIDと同じ) |
@@ -294,7 +294,7 @@
   - `ports`: `{"name", "direction": "in"|"out", "signal_type", "unit", "connectable", "unconnected"}`。`signal_type` は COM-01 の型名。`connectable` は §13.6。`unit` は仕様 §3 の単位(`V`、`FS`、`メッセージ`)。
     - `unconnected` は、出力では `null`。入力では `{"value", "normal"}`: 未接続時の値が定数ならその値 [V] を `value` に入れ、`normal` は `null`。他の信号へ内部接続される入力は `value` が `null` で、`normal` がその信号の名前(`MOD-IO-001` の `IN_R` は `"IN_L"`、`MOD-RND-001` の `IN` は `"NOISE[n]"`)。メッセージ入力(`MOD-IO-002` の `MIDI`)は両方 `null`。
   - `params`: `{"name", "kind": "float"|"int"|"enum"|"bool", "unit", "min", "max", "default", "values"}`。`unit` は仕様 §4 の単位(真偽型・列挙型・`seed` は `null`)。`values` は列挙型のみ(`{"value", "label"}` の配列。`min`〜`max` の整数をすべて含む)。列挙型の値の検証は整数型と同じ(§12)。
-  - `readouts`: `meter.read` で読める項目(`MOD-IO-003` のみ)。
+  - `readouts`: `meter.read` で読める項目(読出し値を持つ種別だけ: `MOD-IO-003`、`MOD-MIX-002`。ほかは空)。
 - 内容の正本は各モジュール仕様の §3・§4。実装は仕様から作った定義表を返し、仕様と一致することを検証する(VER-A-001)。分類・単位・未接続時の値・列挙の選択肢は、仕様から機械的に生成する(`tools/build_module_meta.py`)。
 - 検証エラー: ERR-101。副作用: なし。セッションがなくても応答できる。
 
@@ -427,15 +427,16 @@
 ### CMD-20 `meter.read`
 | 引数 | 型 | 必須 | 既定 | 内容 |
 |---|---|---|---|---|
-| `module_id` | 文字列 | ○ | — | `MOD-IO-003` のモジュール |
-| `fields` | 文字列の配列 | × | `frame` 以外の全項目 | 読む項目。名前は MOD-IO-003 §3 の読出し値(`level`, `peak`, `rms`, `mean`, `vmin`, `vmax`, `windows`, `peak_hold`, `nonfinite_count`, `frame`, `frame_seq`)。未知の名前は ERR-003 |
+| `module_id` | 文字列 | ○ | — | 読出し値を持つモジュール(`MOD-IO-003` メーター、`MOD-MIX-002` ミキサー卓) |
+| `fields` | 文字列の配列 | × | `frame` 以外の全項目 | 読む項目。名前は、そのモジュールの種別の仕様 §3 の読出し値(種別ごとの一覧は `module.list_types` の `readouts`)。`MOD-MIX-002` は `ch_peak`・`ch_rms`・`ch_low`・`ch_mid`・`ch_high`(チャンネルごとの配列)、`out_peak`・`out_rms`・`out_low`・`out_mid`・`out_high`、`send_peak`・`send_rms`、`ch_audible`、`windows`。`MOD-IO-003` は(`level`, `peak`, `rms`, `mean`, `vmin`, `vmax`, `windows`, `peak_hold`, `nonfinite_count`, `frame`, `frame_seq`)。未知の名前は ERR-003 |
 - 返値: `values`(項目名→値。単位と更新時点は MOD-IO-003 §3)、`sample_time`(エンジンの通算サンプル番号)、`fs`、`engine_revision`(§11.3)。
 - **測定チャンネル**: `values` はチャンネル別の配列ではなく**1組**で、MOD-IO-003 のパラメータ `channel`(1〜16、既定1。MOD-IO-003 v0.2 §4)で選んだ1チャンネルの値である。`meter.read` にチャンネルを指定する引数はない。ポリ信号の別の声部を測るときは、`param.set` で `channel` を変え、`windows`(波形は `frame_seq`)が増えてから読む(切替をまたぐ窓・フレームには両方のチャンネルの値が混ざり、`peak_hold` と `nonfinite_count` は切替前の分を含む: MOD-IO-003 §5)。`channel` が入力のチャンネル数を超えるときは 0 V を測定した値が返る(エラーにしない)。複数の声部を同時に測るには MOD-IO-003 を複数置く。
 - `values.nonfinite_count` は**測定チャンネル**に来た NaN/∞ のサンプル数(MOD-IO-003 §3)で、CMD-21 の `output.nonfinite_count`(エンジン全体の集計)とは別の値である。
 - `frame`(最大4096個の数値)は大きいので、`fields` で明示したときだけ返す。
 - 値は「ある処理ブロックが終わった直後」の同一時点の組で返す [設計判断: MOD-IO-003 §11 が#3に委ねた取得タイミング]。
 - メーターを追加した直後で、音声エンジンからまだ測定値が届いていないときは、初期状態の値(MOD-IO-003 §5)を返す。返値の `engine_revision` が追加のリビジョンより前なので、未反映と分かる(§11.3)。
-- 検証エラー: ERR-102, ERR-303, ERR-301, ERR-003。副作用: なし(測定状態を初期化しない)。
+- **ミキサー卓の読出し**(MOD-MIX-002): 1 回の `meter.read` で、8 チャンネルすべてと出力・センドの値が返る。音を聞けないエージェントは、これで配分を確かめる(どのチャンネルが大きいか、低・中・高のどの帯域が多いか)。単位は V(±5 V が音声の基準。dB は `20·log10(値/5)`)。
+- 検証エラー: ERR-102, ERR-303(読出し値を持たない種別), ERR-301, ERR-003(その種別にない項目名を含む)。副作用: なし(測定状態を初期化しない)。
 
 ### CMD-21 `engine.get_status`
 - 引数: なし。

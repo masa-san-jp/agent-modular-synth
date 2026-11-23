@@ -6,7 +6,7 @@
 | 段階 | Issue | 状態 |
 |---|---|---|
 | 第1段階 リファレンス調査・出典付きDB | [#1](https://github.com/masa-san-jp/agent-modular-synth/issues/1) | 完了(精査済みDB+拡張DB22対象) |
-| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 完了(共通規約+18仕様。後から歪みのモジュール MOD-SAT-001 を追加して 19 仕様) |
+| 第2段階 機能別モジュール仕様 | [#2](https://github.com/masa-san-jp/agent-modular-synth/issues/2) | 完了(共通規約+18仕様。後から歪みのモジュール MOD-SAT-001 とミキサー卓 MOD-MIX-002 を追加して 20 仕様) |
 | 第3段階 製品仕様・操作契約・実装計画 | [#3](https://github.com/masa-san-jp/agent-modular-synth/issues/3) | 完了(仕様 v0.4。実装で補った解釈を反映済み: #24) |
 | 実装 第1〜6弾(エンジン、音声、全モジュール、コマンド処理、サーバーと保存、MCP と編集画面) | #11、#14、#16、#18、#20、#22 | 完了 |
 | 独立レビューと、仕様・契約の更新 | [#24](https://github.com/masa-san-jp/agent-modular-synth/issues/24) | レビュー指摘を修正(記録: [docs/review-issue24.md](docs/review-issue24.md)) |
@@ -31,7 +31,7 @@
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
 ## 実装(作業中)
-19種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。**エージェントは楽譜を書いて演奏でき、人は画面から演奏への指示を送れる**(Issue #29、DEC-018)。MIDI 機器は「MIDI を接続」でつなげる(Web MIDI 対応のブラウザ)。配線を線で描く表示は未実装。
+20種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。**エージェントは楽譜を書いて演奏でき、人は画面から演奏への指示を送れる**(Issue #29、DEC-018)。MIDI 機器は「MIDI を接続」でつなげる(Web MIDI 対応のブラウザ)。配線を線で描く表示は未実装。
 
 ```
 npm install          # 依存を入れる(Node.js 22 以上)
@@ -69,7 +69,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 
 ### 構成
 - `src/engine/`: グラフ実行(1サンプル処理、ケーブルの1サンプル遅延)、ポート(最大16チャンネル)、乱数、共通部品、スナップショット。ブラウザのAPIに依存しない。
-- `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。19種すべてを実装済み(一覧は `src/modules/registry.ts`)。仕様に記述がなく実装側で補った解釈は [docs/implementation-notes.md](docs/implementation-notes.md)。
+- `src/modules/`: モジュールの実装(仕様は `specifications/modules/`)。20種すべてを実装済み(一覧は `src/modules/registry.ts`)。仕様に記述がなく実装側で補った解釈は [docs/implementation-notes.md](docs/implementation-notes.md)。
 - `src/control/`: 共通コマンド処理(パッチの正本、コマンドの検証と適用、リビジョン、履歴、権限、通知: `session.ts`)、保存のコマンドを含む非同期の窓口(`controller.ts`)、楽譜の予約と人からの指示(`performance.ts`)、タブ側とサーバーが共有する部品(封筒の検査と種別一覧 `envelope.ts`、保存パッチの一覧・読出し `library.ts`、入れ子の深さ `json.ts`)、パッチ文書の検証・移行・生成(`patch-doc.ts`)、種別の定義の一覧(`catalog.ts`。分類・単位・選択肢は、仕様から `tools/build_module_meta.py` で生成した `src/modules/meta.generated.ts`)、音声とつなぐ実装(`backend.ts`)。ブラウザにもサーバーにも依存しない。契約に記述がなく補った解釈は [docs/contract-notes.md](docs/contract-notes.md)。
 - `src/audio/`: 出力保護(`output-stage.ts`)、AudioWorklet(`worklet.ts`。中身は試験できる形の `worklet-core.ts`)、メインスレッド側の窓口(`worklet-backend.ts`。音量・緊急停止の写しと、ワークレットとの合わせ直し)。
 - `src/server/`: ローカルサーバー(`app.ts`: エージェント用API、認証、タブへの中継。`file-store.ts`: 専用フォルダへの保存)。127.0.0.1 だけで待ち受ける。
@@ -77,7 +77,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 - `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)、MIDI 機器の接続(`midi.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)、契約の受入例(`AX-…`、`DX-…`)。`test/browser/` は実際のブラウザでの端から端の確認。
 - `src/perf/`: 性能の測定(測定用のパッチと、エンジン単体の測定)。結果の記録は [docs/perf/](docs/perf/20261123-performance-measurement.md)。
-- `demo/`: エージェントが楽譜を書いて鳴らす実例。曲は `piece.mjs`(イ短調の小品)と `techno.mjs`(ダークテクノ。歪ませたキックとその残響・ハイハット・歪ませた 3 層の低音・スタブ・低い持続音の 43 モジュール、楽譜 6 つ。フィルタやディレイの動きも楽譜に書いてある)。`play-live.cjs` は、サーバー → タブ → 音声の実際の経路で、楽譜を続けて送って演奏する(`node demo/play-live.cjs demo/techno.mjs`)。`render-wav.mjs` は、同じ演奏を音声ファイルに書き出す(`node demo/render-wav.mjs demo/techno.mjs out.wav`)。どちらも先に `npm run build` が要る。
+- `demo/`: エージェントが楽譜を書いて鳴らす実例。曲は `piece.mjs`(イ短調の小品)と `techno.mjs`(ダークテクノ。歪ませたキックとその残響・ハイハット・歪ませた 3 層の低音・スタブ・低い持続音を、ミキサー卓でまとめた 41 モジュール、楽譜 6 つ。フィルタやディレイの動きも楽譜に書いてある)。`soundcheck.mjs` は、音を聞けないエージェントが、ミキサー卓のメーターを読んで各パートの音量を決める手順(テクノは演奏の前にこれを行う)。`play-live.cjs` は、サーバー → タブ → 音声の実際の経路で、楽譜を続けて送って演奏する(`node demo/play-live.cjs demo/techno.mjs`)。`render-wav.mjs` は、同じ演奏を音声ファイルに書き出す(`node demo/render-wav.mjs demo/techno.mjs out.wav`)。どちらも先に `npm run build` が要る。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
 ## 検査・生成ツール

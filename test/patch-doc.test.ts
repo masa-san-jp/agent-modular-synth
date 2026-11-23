@@ -606,11 +606,11 @@ test("DAT-08: 書かれていないパラメータは既定値で補い、warnin
     ["out", ["level", "mute"]],
     ["vcf1", ["cutoff", "cv2_level", "cv3_level"]],
   ]);
-  // 全19種: params なしで読むと、種別の全パラメータが既定値で入る(DAT-07 の形になる)
+  // 全20種: params なしで読むと、種別の全パラメータが既定値で入る(DAT-07 の形になる)
   const all: any = { format: PATCH_FORMAT, schema_version: 1, modules: [], cables: [] };
   let n = 0;
   for (const t of catalog.values()) all.modules.push({ id: t.type === "MOD-IO-001" ? "out" : `m${++n}`, type: t.type, spec_version: t.specVersion });
-  assert.equal(all.modules.length, 19);
+  assert.equal(all.modules.length, 20);
   const ra = expectOk(validatePatchDocument(all, catalog));
   for (const m of ra.patch.modules) {
     const info = catalog.get(m.type)!;

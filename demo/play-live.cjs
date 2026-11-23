@@ -13,7 +13,7 @@ async function main() {
   const { createApp } = await load("server/app.js");
   const { buildCatalog } = await load("control/catalog.js");
   const { REGISTRY } = await load("modules/registry.js");
-  const { PATCH, SECTIONS, TITLE } = await import(pathToFileURL(path.resolve(process.argv[2] || path.join(__dirname, "piece.mjs"))).href);
+  const { PATCH, SECTIONS, TITLE, SOUNDCHECK } = await import(pathToFileURL(path.resolve(process.argv[2] || path.join(__dirname, "piece.mjs"))).href);
   console.log(TITLE);
   const patchDir = fs.mkdtempSync(path.join(os.tmpdir(), "synth-demo-"));
   const app = createApp({ webRoot: path.join(root, "web"), patchDir, catalog: buildCatalog(REGISTRY) });
@@ -45,6 +45,13 @@ async function main() {
     await page.waitForTimeout(300);
     t0 = Date.now();
     log("人が音声を開始した");
+    // サウンドチェック(曲が設定を持っていれば): エージェントが卓のメーターを読んで、音量の配分を決める
+    if (SOUNDCHECK) {
+      const { soundcheck } = await import(pathToFileURL(path.join(__dirname, "soundcheck.mjs")).href);
+      log("サウンドチェック(エージェントが、聞く代わりにメーターを読む)");
+      await soundcheck({ send: async (command, args) => (await agent(command, args)).result, advance: (sec) => page.waitForTimeout(sec * 1000) }, SOUNDCHECK, (t) => console.log(t));
+      log("サウンドチェック終わり。演奏を始める");
+    }
     // 人の役: 途中で指示を書く
     let prompted = false;
     const peaks = [];
@@ -84,7 +91,7 @@ async function main() {
     console.log(`\n演奏中の出力ピーク: 最小 ${Math.min(...peaks).toFixed(3)} / 最大 ${Math.max(...peaks).toFixed(3)}(0.5 秒ごとに ${peaks.length} 回)`);
     console.log(`演奏後のピーク: ${end.peak.toFixed(3)} / 最終クリップ ${end.clipCount} / 非有限値 ${end.nonfiniteModules + end.nonfiniteOutputStage}`);
     console.log(`画面の指示の一覧: ${JSON.stringify(list)}`);
-    console.log(`リビジョン: ${await synth("revision")}(演奏では変わらない) / 画面とワークレットのエラー: ${JSON.stringify(errors.concat(await synth("errors")))}`);
+    console.log(`リビジョン: ${await synth("revision")}(進むのは、パッチを組んだ分とサウンドチェックで音量を直した分だけ。演奏では進まない) / 画面とワークレットのエラー: ${JSON.stringify(errors.concat(await synth("errors")))}`);
   } finally {
     await browser.close();
     await app.close();

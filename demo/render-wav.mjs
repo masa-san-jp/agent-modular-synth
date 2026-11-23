@@ -7,7 +7,7 @@ import { Session } from "../dist/src/control/session.js";
 import { REGISTRY } from "../dist/src/modules/registry.js";
 
 // 使い方: node demo/render-wav.mjs <曲のファイル(piece.mjs / techno.mjs)> <出力.wav> [音量 dB(既定 -6)]
-const { PATCH, SECTIONS, TITLE } = await import(new URL(process.argv[2] ?? "./piece.mjs", `file://${process.cwd()}/`).href);
+const { PATCH, SECTIONS, TITLE, SOUNDCHECK } = await import(new URL(process.argv[2] ?? "./piece.mjs", `file://${process.cwd()}/`).href);
 const OUT = process.argv[3] ?? "out.wav";
 
 const FS = 48000;
@@ -38,6 +38,14 @@ const render = (seconds) => {
 };
 console.log(`${TITLE}: モジュール ${s.getPatch().modules.length} 個`);
 render(0.3);
+// サウンドチェック(曲が設定を持っていれば): 卓のメーターを読んで音量の配分を決める。この間の音は、書き出しに入れない
+if (SOUNDCHECK) {
+  const { soundcheck } = await import("./soundcheck.mjs");
+  console.log("サウンドチェック:");
+  await soundcheck({ send: (command, args) => send("agent", command, args).result, advance: (sec) => render(sec) }, SOUNDCHECK);
+  left.length = 0;
+  right.length = 0;
+}
 // 実際の演奏と同じ手順: 楽譜を送る → その区間が始まったらパラメータを動かす → 残りが 4 秒を切ったら次の楽譜を送る
 for (let i = 0; i < SECTIONS.length; i++) {
   const sec = SECTIONS[i];
