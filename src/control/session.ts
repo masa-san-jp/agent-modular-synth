@@ -384,6 +384,7 @@ export const COMMANDS: Readonly<Record<string, CommandSpec>> = {
   "performance.read": {},
   "performance.replay": { keyed: true },
   "performance.set_plan": { keyed: true },
+  "performance.render": {},
 };
 
 // =====================================================================================
@@ -1048,6 +1049,7 @@ export class Session {
       case "performance.list":
       case "performance.read":
       case "performance.replay":
+      case "performance.render":
         return ctx.external ? this.runExternal(ctx, ctx.external) : this.cmdPerformanceUnsupported();
       case "patch.save":
       case "patch.load":

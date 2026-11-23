@@ -24,6 +24,7 @@ import {
 } from "./patch-doc.js";
 import { MAX_JSON_DEPTH } from "./patch-doc.js";
 import { depthExceeds } from "./json.js";
+import { RENDER_LIMITS, RenderOptions, parseRenderArgs } from "./render.js";
 import { PERFORMANCE_FORMAT, PERFORMANCE_SCHEMA_VERSION, PerformanceRecord } from "./performance.js";
 import { ExternalRun, Session } from "./session.js";
 import { PatchStore, StoreError, StoreResult } from "./store.js";
@@ -41,7 +42,7 @@ export const DEFAULT_APP_VERSION = "0.0.1";
 /** 保存先を使うコマンド(CMD-12〜16)。 */
 export const STORAGE_COMMANDS: ReadonlySet<string> = new Set([
   "patch.save", "patch.load", "patch.list", "patch.read", "patch.delete",
-  "performance.list", "performance.read", "performance.replay",
+  "performance.list", "performance.read", "performance.replay", "performance.render",
 ]);
 
 /** 演奏データ 1 つの大きさの上限 [バイト](暫定値)。超えたら、その演奏の保存をやめて知らせる。 */
@@ -82,6 +83,11 @@ export interface ControllerOptions {
    * 口は PatchStore と同じ(名前 → 文字列)。なければ、演奏データは保存されず、performance.* は ERR-207。
    */
   performanceStore?: PatchStore;
+  /**
+   * 演奏データを音声ファイルに書き出す口(CMD-34。サーバーが別スレッドで行う)。頼む・進み具合を聞くの両方に使う。
+   * なければ performance.render は ERR-207。
+   */
+  renderer?: (name: string, options: RenderOptions) => Promise<StoreResult<Record<string, unknown>>>;
 }
 
 type Args = Record<string, unknown>;
@@ -121,6 +127,7 @@ export class Controller {
   private readonly maxPatchFiles: number;
   private readonly storeTimeoutMs: number;
   private readonly performances: PatchStore | null;
+  private readonly renderer: ControllerOptions["renderer"] | null;
   /** 演奏の通し番号 → 保存した名前と、始まりの時刻。 */
   private readonly perfNames = new Map<number, { name: string; startedAt: string; failed: boolean }>();
   private perfTail: Promise<void> = Promise.resolve();
@@ -137,6 +144,7 @@ export class Controller {
     this.maxPatchFiles = opts.maxPatchFiles ?? MAX_PATCH_FILES;
     this.storeTimeoutMs = opts.storeTimeoutMs ?? DEFAULT_STORE_TIMEOUT_MS;
     this.performances = opts.performanceStore ?? null;
+    this.renderer = opts.renderer ?? null;
     this.session.subscribe((ev) => {
       this.emit(ev);
       if (ev.event === "performance.changed") this.savePerformances();
@@ -302,6 +310,8 @@ export class Controller {
         return this.planPerformanceRead(args);
       case "performance.replay":
         return this.planPerformanceReplay(args);
+      case "performance.render":
+        return this.planPerformanceRender(args);
       default:
         return this.planDelete(args);
     }
@@ -478,6 +488,22 @@ export class Controller {
   private async planPerformanceRead(args: Args): Promise<Plan> {
     const { doc, bytes, modified_at } = await this.readPerformance(args);
     return { run: () => ({ result: { performance: doc, bytes, modified_at } }) };
+  }
+
+  /** CMD-34 performance.render: 演奏データを、演奏せずに音声ファイルへ書き出す(頼む・進み具合を聞く)。 */
+  private async planPerformanceRender(args: Args): Promise<Plan> {
+    const { name, options } = parseRenderArgs(args);
+    if (!this.renderer) throw new CommandError("ERR-207", "音声ファイルへ書き出す口がない", { reason: "not_configured" });
+    const renderer = this.renderer;
+    await this.perfTail; // 書きかけの保存を待つ(直前の楽譜まで書き出しに入る)
+    const r = await this.call(() => renderer(name, options));
+    if (!r.ok) {
+      if (r.error === "not_found") throw new CommandError("ERR-202", `演奏データ ${name} はない`, { name });
+      if (r.error === "too_many") throw new CommandError("ERR-106", `同時に待たせられる書き出しは ${RENDER_LIMITS.maxJobs} 件まで`, { limit: "render_jobs", max: RENDER_LIMITS.maxJobs });
+      throw this.storeError("read", name, r.error, r.message);
+    }
+    const state = r.value;
+    return { run: () => ({ result: { name, ...state } }) };
   }
 
   /** CMD-32 performance.replay: 演奏データのパッチへ置き換え、記録された楽譜をすべて予約する。 */

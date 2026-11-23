@@ -33,7 +33,9 @@ export type TabToServer =
   | { t: "store"; id: number; op: "list"; area?: StoreArea }
   | { t: "store"; id: number; op: "read"; name: string; area?: StoreArea }
   | { t: "store"; id: number; op: "write"; name: string; text: string; overwrite: boolean; area?: StoreArea }
-  | { t: "store"; id: number; op: "remove"; name: string };
+  | { t: "store"; id: number; op: "remove"; name: string }
+  /** 演奏データを音声ファイルに書き出す(頼む・進み具合を聞く。operation-contract CMD-34)。 */
+  | { t: "store"; id: number; op: "render"; name: string; level_db: number; tail_seconds: number };
 
 export type StoreArea = "patches" | "performances";
 

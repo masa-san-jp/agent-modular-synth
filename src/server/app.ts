@@ -19,10 +19,13 @@ import { ErrorSpec, checkEnvelope, listTypes, okLen } from "../control/envelope.
 import { CommandError, ERRORS } from "../control/errors.js";
 import { tryStringify } from "../control/json.js";
 import { listPatches, readPatch } from "../control/library.js";
-import { COMMANDS, OUT_TYPE, READOUTS } from "../control/session.js";
+import { isValidPatchName } from "../control/patch-doc.js";
+import { RENDER_LIMITS, parseRenderArgs } from "../control/render.js";
+import { COMMANDS, LEVEL_MAX_DB, LEVEL_MIN_DB, OUT_TYPE, READOUTS } from "../control/session.js";
 import type { StoreResult } from "../control/store.js";
 import { FilePatchStore, MAX_PATCH_FILES } from "./file-store.js";
 import type { ServerToTab } from "./protocol.js";
+import { RenderJobs } from "./render-jobs.js";
 import { DEFAULT_PORT, HOST, createStaticHandler } from "./static.js";
 
 // ---- 上限と時間(いずれも契約の暫定値) ----
@@ -269,6 +272,7 @@ export function createApp(options: AppOptions): App {
     maxBytes: MAX_PERFORMANCE_BYTES,
     suffix: ".performance.json",
   });
+  const renderJobs = new RenderJobs(performanceStore);
 
   // ---- 状態(接続だけ。パッチは持たない) ----
   let port = 0;
@@ -400,13 +404,22 @@ export function createApp(options: AppOptions): App {
   };
 
   // ---- タブなしでも答えるコマンド(product-spec §4: patch.list、patch.read、module.list_types) ----
-  const DIRECT = new Set(["module.list_types", "patch.list", "patch.read"]);
+  const DIRECT = new Set(["module.list_types", "patch.list", "patch.read", "performance.render"]);
 
   /** タブなしで直接答えるコマンドの中身。タブ側(Session・Controller)と同じ関数を使う(src/control/envelope.ts、library.ts)。 */
   const direct = async (cmd: string, args: Obj): Promise<Obj | ErrorSpec> => {
     try {
       if (cmd === "module.list_types") return listTypes(catalog, args, OUT_TYPE, READOUTS);
       if (cmd === "patch.list") return await listPatches(store, catalog, args, limits.maxPatchFiles);
+      if (cmd === "performance.render") {
+        // 音声ファイルへの書き出しは、サーバーだけでできる(タブも、音声の開始も要らない)
+        const { name, options } = parseRenderArgs(args);
+        const r = await renderJobs.request(name, options);
+        if (r.ok) return { name, ...r.value };
+        if (r.error === "not_found") return { id: "ERR-202", message: `演奏データ ${name} はない`, details: { name } };
+        if (r.error === "too_many") return { id: "ERR-106", message: `同時に待たせられる書き出しは ${RENDER_LIMITS.maxJobs} 件まで`, details: { limit: "render_jobs", max: RENDER_LIMITS.maxJobs } };
+        return { id: "ERR-207", message: "演奏データを読めない", details: { operation: "read", name, reason: r.error } };
+      }
       return await readPatch(store, args, limits.maxPatchFiles);
     } catch (e) {
       if (e instanceof CommandError) return { id: e.id, message: e.message, details: e.details };
@@ -583,6 +596,11 @@ export function createApp(options: AppOptions): App {
         if (typeof m.name !== "string") return { ok: false, error: "invalid_name" };
         if (typeof m.text !== "string" || typeof m.overwrite !== "boolean") return { ok: false, error: "failed", message: "bad_message" };
         return target.write(m.name, m.text, m.overwrite);
+      case "render":
+        if (typeof m.name !== "string" || !isValidPatchName(m.name)) return { ok: false, error: "invalid_name" };
+        if (typeof m.level_db !== "number" || typeof m.tail_seconds !== "number" || !Number.isFinite(m.level_db) || !Number.isFinite(m.tail_seconds)) return { ok: false, error: "failed", message: "bad_message" };
+        if (m.level_db < LEVEL_MIN_DB || m.level_db > LEVEL_MAX_DB || m.tail_seconds < 0 || m.tail_seconds > RENDER_LIMITS.maxTailSeconds) return { ok: false, error: "failed", message: "bad_message" };
+        return renderJobs.request(m.name, { levelDb: m.level_db, tailSeconds: m.tail_seconds });
       case "remove":
         if (performances) return { ok: false, error: "failed", message: "unknown_op" }; // 演奏データを消す口はない
         return typeof m.name === "string" ? store.remove(m.name) : { ok: false, error: "invalid_name" };
@@ -752,6 +770,7 @@ export function createApp(options: AppOptions): App {
       });
     },
     close(): Promise<void> {
+      void renderJobs.close();
       for (const [id, p] of pending) {
         pending.delete(id);
         clearTimeout(p.timer);

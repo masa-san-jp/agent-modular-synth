@@ -156,6 +156,10 @@ class ServerLink implements PatchStore {
   }
 
   /** 演奏データの保存先(サーバーの別の専用フォルダ)。削除の口はない。 */
+  /** 演奏データを音声ファイルに書き出す(サーバーが行う。頼む・進み具合を聞く)。 */
+  render(name: string, levelDb: number, tailSeconds: number): Promise<StoreResult<Record<string, unknown>>> {
+    return this.call((id) => ({ t: "store", id, op: "render", name, level_db: levelDb, tail_seconds: tailSeconds }));
+  }
   readonly performances: PatchStore = {
     list: () => this.call((id) => ({ t: "store", id, op: "list", area: "performances" })),
     read: (name) => this.call((id) => ({ t: "store", id, op: "read", name, area: "performances" })),
@@ -229,7 +233,13 @@ const session = new Session({
 /** 起動時のリビジョン(自動保存から復元した値、または 0)。 */
 const initialRevision = session.revision;
 currentPatch = () => session.getPatch();
-const controller = new Controller({ session, store: link, performanceStore: link.performances, now: () => new Date() });
+const controller = new Controller({
+  session,
+  store: link,
+  performanceStore: link.performances,
+  renderer: (name, options) => link.render(name, options.levelDb, options.tailSeconds),
+  now: () => new Date(),
+});
 
 let requestSeq = 0;
 /** 人の操作(この画面からのコマンド)。 */
@@ -611,7 +621,45 @@ async function refreshPerformances(): Promise<void> {
     b.title = "今のパッチを、この演奏を始めた時点のパッチに置き換えて演奏します(「取り消し」で戻せます)";
     b.addEventListener("click", () => void run("performance.replay", { name: it.name }));
     li.append(b);
+    // 音声ファイルへの書き出し(演奏はしない。サーバーが別に計算する)
+    const w = document.createElement("button");
+    w.type = "button";
+    w.className = "small";
+    w.textContent = "音声ファイルに書き出す";
+    w.title = "演奏せずに、この演奏の音声ファイル(WAV)を作ります。保存先は、演奏データと同じフォルダです";
+    const note = document.createElement("span");
+    note.className = "render-state";
+    w.addEventListener("click", () => void renderToFile(it.name, w, note));
+    li.append(" ", w, " ", note);
     list.appendChild(li);
+  }
+}
+
+/** 音声ファイルへの書き出しを頼み、終わるまで進み具合を聞いて表示する。 */
+async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLElement): Promise<void> {
+  button.disabled = true;
+  try {
+    for (;;) {
+      const r = await human("performance.render", { name });
+      if (!r.ok) {
+        note.textContent = `書き出せません: ${r.error.message}`;
+        return;
+      }
+      const s = r.result as { status: string; progress?: number; path?: string; seconds?: number; peak?: number; clip_count?: number; error?: { message: string } };
+      if (s.status === "done") {
+        const loud = (s.clip_count ?? 0) > 0 ? `。音が大きすぎて ${s.clip_count} サンプルが頭打ち` : "";
+        note.textContent = `書き出しました: ${s.path}(${Math.round(s.seconds ?? 0)} 秒${loud})`;
+        return;
+      }
+      if (s.status === "failed") {
+        note.textContent = `書き出せません: ${s.error?.message ?? ""}`;
+        return;
+      }
+      note.textContent = s.status === "queued" ? "順番待ち…" : `書き出し中… ${Math.round((s.progress ?? 0) * 100)}%`;
+      await new Promise((ok) => setTimeout(ok, 700));
+    }
+  } finally {
+    button.disabled = false;
   }
 }
 

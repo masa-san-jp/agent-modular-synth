@@ -192,6 +192,22 @@ async function main() {
     await page.click("#score-stop");
     ok("保存した演奏を、エージェントと画面から再演奏できる(楽譜どおりに鳴る)");
 
+    // ---- 8) 演奏せずに、音声ファイルに書き出す(画面のボタンと、エージェント) ----
+    await waitFor(async () => (await peak()) === 0, "止めた後の無音");
+    await page.click(`#performance-list li[data-performance="${oldest}"] button:has-text("音声ファイルに書き出す")`);
+    await waitFor(async () => /書き出しました/.test(await page.textContent(`#performance-list li[data-performance="${oldest}"] .render-state`)), "画面からの書き出し");
+    const wavPath = path.join(perfDir, `${oldest}.wav`);
+    assert.ok(fs.existsSync(wavPath), "演奏データと同じフォルダに <名前>.wav");
+    assert.ok((await page.textContent(`#performance-list li[data-performance="${oldest}"] .render-state`)).includes(wavPath), "画面に場所が出る");
+    const rendered = (await agentOk("performance.render", { name: oldest })).result;
+    assert.equal(rendered.status, "done", "エージェントが同じ引数で聞くと、書き出し済みの結果が返る");
+    assert.equal(fs.statSync(wavPath).size, rendered.bytes);
+    assert.ok(rendered.peak > 0.01 && rendered.clip_count === 0);
+    assert.equal(rendered.scores, 3);
+    assert.equal((await agentOk("score.get_status")).result.playing, false, "演奏はしていない");
+    assert.equal(await peak(), 0, "音は出ていない");
+    ok("演奏せずに、演奏データから音声ファイル(WAV)を書き出せる(画面のボタン、エージェント)", `${rendered.seconds.toFixed(1)} 秒、${(rendered.bytes / 2 ** 20).toFixed(1)} MiB`);
+
     // 演奏の長さの予定: 画面で決めると、エージェントが読める
     await page.fill("#plan-minutes", "3");
     await page.click("#plan-set");

@@ -26,7 +26,7 @@ export interface CommandRow {
   undoNote?: string;
 }
 
-/** 契約 §6 の表(CMD-01〜33)。「人のみ」の4件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
+/** 契約 §6 の表(CMD-01〜34)。「人のみ」の4件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
 export const TABLE: readonly CommandRow[] = [
   { id: "CMD-01", command: "module.list_types", summary: "モジュール種別の定義を列挙", changes: false, undo: "na" },
   { id: "CMD-02", command: "module.add", summary: "モジュールを追加", changes: true, undo: "yes" },
@@ -61,6 +61,7 @@ export const TABLE: readonly CommandRow[] = [
   { id: "CMD-31", command: "performance.read", summary: "保存された演奏データの中身を読む", changes: false, undo: "na" },
   { id: "CMD-32", command: "performance.replay", summary: "保存された演奏データを再演奏する(パッチを置き換える)", changes: true, undo: "yes" },
   { id: "CMD-33", command: "performance.set_plan", summary: "演奏の長さの予定を決める(決めなければ、止めるまで続く)", changes: false, undo: "no" },
+  { id: "CMD-34", command: "performance.render", summary: "保存された演奏データを、演奏せずに音声ファイル(WAV)へ書き出す", changes: false, undo: "no" },
 ];
 
 // ---- 引数(契約 §6 の各コマンドの引数表。値の検査はコマンド処理が行う。ここは形を伝えるだけ) ----
@@ -155,6 +156,15 @@ export const ARGS: Readonly<Record<string, ArgSpec>> = {
     properties: { name: str("演奏データの名前", { pattern: PATCH_NAME }) },
     required: ["name"],
     note: "今のパッチは、演奏データが持つパッチ(演奏を始めた時点のもの)に置き換わる。予約済みの楽譜は捨てる。音声が動作中のときだけ。",
+  },
+  "performance.render": {
+    properties: {
+      name: str("演奏データの名前", { pattern: PATCH_NAME }),
+      level_db: { type: "number", minimum: -60, maximum: 0, description: "書き出しのマスター音量(dB)。既定 -6" },
+      tail_seconds: { type: "number", minimum: 0, maximum: 30, description: "演奏の終わりの後に足す時間(秒。残響のため)。既定 2" },
+    },
+    required: ["name"],
+    note: "実際には演奏しない(音は出ない。音声の開始も、タブも要らない)。1回目の呼び出しで書き出しが始まり、status が queued / rendering で返る。同じ引数でもう一度呼ぶと進み具合が返り、done になったら path(音声ファイルの場所)、peak、clip_count が入る。clip_count が 0 でなければ、level_db を下げて書き出し直す。",
   },
   "performance.set_plan": {
     properties: { duration_seconds: { type: ["number", "null"], minimum: 1, maximum: 86400, description: "演奏の長さの予定(秒)。null は「止めるまで続ける」" } },
