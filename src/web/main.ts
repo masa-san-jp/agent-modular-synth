@@ -154,6 +154,14 @@ class ServerLink implements PatchStore {
   remove(name: string): Promise<StoreResult<null>> {
     return this.call((id) => ({ t: "store", id, op: "remove", name }));
   }
+
+  /** 演奏データの保存先(サーバーの別の専用フォルダ)。削除の口はない。 */
+  readonly performances: PatchStore = {
+    list: () => this.call((id) => ({ t: "store", id, op: "list", area: "performances" })),
+    read: (name) => this.call((id) => ({ t: "store", id, op: "read", name, area: "performances" })),
+    write: (name, text, overwrite) => this.call((id) => ({ t: "store", id, op: "write", name, text, overwrite, area: "performances" })),
+    remove: () => Promise.resolve({ ok: false, error: "failed", message: "演奏データは削除できない" }),
+  };
 }
 
 // ---------------------------------------------------------------------------------------
@@ -221,7 +229,7 @@ const session = new Session({
 /** 起動時のリビジョン(自動保存から復元した値、または 0)。 */
 const initialRevision = session.revision;
 currentPatch = () => session.getPatch();
-const controller = new Controller({ session, store: link, now: () => new Date() });
+const controller = new Controller({ session, store: link, performanceStore: link.performances, now: () => new Date() });
 
 let requestSeq = 0;
 /** 人の操作(この画面からのコマンド)。 */
@@ -328,6 +336,11 @@ controller.subscribe((ev) => {
   if (recentEvents.length > 200) recentEvents.shift();
   link.send({ t: "evt", event: ev });
   if ((ev as { event?: string }).event === "patch.changed" || (ev as { type?: string }).type === "patch.changed") scheduleAutosave();
+  if ((ev as { event?: string }).event === "performance.saved") {
+    const d = (ev as { data: { name: string | null; ok: boolean; entries: number; closed: boolean; reason?: string } }).data;
+    lastSaved = d.ok ? `演奏データ: ${d.name}(楽譜 ${d.entries} 個${d.closed ? "、保存済み" : "、演奏中"})` : `演奏データを保存できませんでした(${d.reason ?? "不明"})`;
+    if (d.ok && d.closed) void refreshPerformances();
+  }
   editor?.onEvent(ev); // 誰が何をしたかを変更の履歴に出す
   render();
 });
@@ -397,6 +410,7 @@ async function ensureAudio(): Promise<void> {
       if (m.type === "status") {
         backend.onMessage(m);
         session.pollBackend(); // 音声状態・診断の変化を通知にする
+        void controller.savePerformances(); // 演奏し終えた後に閉じた演奏データを保存する
         renderStatus();
       } else if (m.type === "error") {
         debug.errors.push(m.message);
@@ -571,13 +585,45 @@ function renderStatus(): void {
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
 }
 
+const formatClock = (sec: number): string => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+/** 最後に保存した演奏データの表示。 */
+let lastSaved = "";
+
+/** 保存された演奏データの一覧(新しい順)。再演奏のボタンを付ける。 */
+async function refreshPerformances(): Promise<void> {
+  const list = $("performance-list");
+  const r = await human("performance.list");
+  list.textContent = "";
+  if (!r.ok) {
+    list.appendChild(Object.assign(document.createElement("li"), { textContent: "(保存された演奏を読めません。サーバーに接続していない可能性があります)" }));
+    return;
+  }
+  const items = (r.result.performances as { name: string; bytes: number }[]).slice(0, 30);
+  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "(まだありません)" }));
+  for (const it of items) {
+    const li = document.createElement("li");
+    li.dataset.performance = it.name;
+    li.append(`${it.name} `);
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "small";
+    b.textContent = "再演奏";
+    b.title = "今のパッチを、この演奏を始めた時点のパッチに置き換えて演奏します(「取り消し」で戻せます)";
+    b.addEventListener("click", () => void run("performance.replay", { name: it.name }));
+    li.append(b);
+    list.appendChild(li);
+  }
+}
+
 /** エージェントの演奏(予約済みの楽譜と、人からの指示)の表示。 */
 let shownPrompts = "";
 function renderPerformance(): void {
   const p = session.performance;
-  $("perf-state").textContent = p.playing
-    ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒)`
-    : "演奏していません(エージェントが楽譜を送ると始まります)";
+  const plan = p.plan.duration_seconds === null ? "止めるまで続ける" : `予定 ${Math.round(p.plan.duration_seconds / 60)} 分`;
+  const elapsed = p.plan.elapsed_seconds > 0 ? `、経過 ${formatClock(p.plan.elapsed_seconds)}` : "";
+  $("perf-state").textContent =
+    (p.playing ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒${elapsed})` : "演奏していません(エージェントが楽譜を送ると始まります)") + ` / 演奏の長さ: ${plan}`;
+  $("perf-saved").textContent = lastSaved;
   $<HTMLButtonElement>("score-stop").disabled = !p.playing;
   // 指示の一覧は、中身が変わったときだけ作り直す
   const key = JSON.stringify(p.prompts);
@@ -706,6 +752,14 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 演奏データ: 一覧と、演奏の長さの予定
+  $("performance-refresh").addEventListener("click", () => void refreshPerformances());
+  $("plan-form").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const text = $<HTMLInputElement>("plan-minutes").value.trim();
+    const minutes = Number(text);
+    void run("performance.set_plan", { duration_seconds: text === "" || !(minutes > 0) ? null : minutes * 60 });
+  });
   // エージェントの演奏: 止める、指示を送る
   $("score-stop").addEventListener("click", () => void run("score.stop"));
   $("prompt-form").addEventListener("submit", (ev) => {

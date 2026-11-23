@@ -89,13 +89,13 @@ npm run dev
 ```
 `batch` の `ops` の中の `command` は、ツール名ではなく `.` 区切りのコマンド名で書く。
 
-### ツール(25個)
+### ツール(29個)
 ツール名は、共通コマンド名の `.` を `_` に置き換えたもの。各ツールの入力は、そのコマンドの引数に、任意の `expected_revision` と `idempotency_key` を加えたもの。
 
 | 分類 | ツール |
 |---|---|
-| 読出しのみ | `module_list_types`、`module_get`、`patch_get`、`patch_list`、`patch_read`、`meter_read`、`engine_get_status`、`score_get_status` |
-| 演奏 | `score_play`(楽譜を送る)、`score_stop`(止める) |
+| 読出しのみ | `module_list_types`、`module_get`、`patch_get`、`patch_list`、`patch_read`、`meter_read`、`engine_get_status`、`score_get_status`、`performance_list`、`performance_read` |
+| 演奏 | `score_play`(楽譜を送る)、`score_stop`(止める)、`performance_set_plan`(演奏の長さの予定)、`performance_replay`(保存した演奏を再演奏する。パッチを置き換える) |
 | パッチを変える(`history_undo` で取り消せる) | `module_add`、`module_remove`、`module_move`、`cable_connect`、`cable_disconnect`、`param_set`、`batch`、`patch_new`、`patch_load`、`patch_set_meta` |
 | 取り消し・やり直し | `history_undo`、`history_redo` |
 | パッチ以外を変える(取り消し不可) | `patch_save`、`engine_panic`、`output_set_level` |
@@ -130,6 +130,11 @@ npm run dev
    - `out_peak`: 出力の最大。12 V に近ければ、卓の中で頭打ちになっている。
    - 直すときは `param_set` で `level[i]`(音量)や `pan[i]`(左右)を変える。あるパートだけを確かめたいときは、楽譜の `params` で `solo[i]` を一時的に 1 にする(パッチは変わらない)。
    - 値は窓(既定 300 ms)ごとに更新される。`windows` が増えたら新しい値。
+7. **演奏は自動で残る**。送った楽譜は、演奏を始めた時点のパッチと一緒に、日時つきの名前(`yyyymmdd-hhmmss`)で保存される(既定の保存先は `~/.agent-modular-synth/performances`。環境変数 `SYNTH_PERFORMANCE_DIR` で変えられる)。保存の操作は要らない。
+   - `performance_list` で一覧(新しい順)、`performance_read` で中身(パッチと、演奏した楽譜の並び)を読める。**前に何を演奏したかを読み返して、続きや別の版を考える**のに使う。
+   - `performance_replay` で、保存した演奏をそのまま再演奏できる(今のパッチは、その演奏のパッチに置き換わる。`history_undo` で戻せる)。
+   - 1つの演奏は、最初の楽譜から、止めるまで。演奏し終えて 30 秒以内に次の楽譜を送れば、同じ演奏の続きになる。
+8. **演奏の長さ**は、あらかじめ決めても、止めるまで続けてもよい。人かエージェントが `performance_set_plan` で予定(秒)を決めると、`score_get_status` と `score_play` の応答の `plan` に `duration_seconds`(予定)と `elapsed_seconds`(経過)が載る。シンセは予定の長さで演奏を止めないので、**終わりが近づいたら、終わりの楽譜を書いて、続きを送るのをやめる**。`duration_seconds` が `null` なら、人が止めるまで続ける。
 7. 止めるときは `score_stop`。予約を全部やり直すときは `score_play` に `mode: "replace"` を付ける。
 
 - 音が出るのは、人が「音声開始」を押した後だけ(それまでは `ERR-301`)。緊急停止や音声の停止で、予約済みの楽譜はすべて捨てられる。

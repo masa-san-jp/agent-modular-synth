@@ -67,7 +67,7 @@ const P0: Patch = {
   ],
 };
 
-/** 契約 §17 の「公開するツール」: 25個。人のみの4つはツールにしない。 */
+/** 契約 §17 の「公開するツール」: 29個。人のみの4つはツールにしない。 */
 const HUMAN_ONLY_TOOLS = ["patch_delete", "engine_start", "engine_release_panic", "prompt_send"];
 
 // ---- 契約の文書から §6 の表を読む(ツールの名前・説明を「契約の表から機械的に」確かめるため) ----
@@ -162,7 +162,7 @@ interface FakeTab {
 async function connectTab(r: Rig, opts: { respond?: boolean } = {}): Promise<FakeTab> {
   const backend = new RecordingBackend({ audioState: "running" });
   const session = new Session({ catalog: CATALOG, backend, sessionId: "s-test", patch: P0, revision: 10 });
-  const controller = new Controller({ session, store: new FilePatchStore(r.patchDir), now: () => 0 });
+  const controller = new Controller({ session, store: new FilePatchStore(r.patchDir), performanceStore: new FilePatchStore(join(r.base, "performances"), { suffix: ".performance.json" }), now: () => 0 });
   const ws = new WebSocket(`ws://127.0.0.1:${r.port}/tab?token=${TAB_TOKEN}`, { headers: { Origin: `http://127.0.0.1:${r.port}` } });
   r.sockets.push(ws);
   const relayed: Obj[] = [];
@@ -253,6 +253,8 @@ function comparable(body: Obj): Obj {
   delete c.request_id;
   if (c.command === "patch.read" && c.result) delete c.result.modified_at;
   if (c.command === "patch.list" && c.result) for (const p of c.result.patches) delete p.modified_at;
+  if (c.command === "performance.read" && c.result) delete c.result.modified_at;
+  if (c.command === "performance.list" && c.result) for (const p of c.result.performances) delete p.modified_at;
   return c;
 }
 
@@ -260,19 +262,19 @@ function comparable(body: Obj): Obj {
 // ツール一覧(§17)
 // =====================================================================================
 
-test("§17 ツール一覧(stdio の子プロセス): 25個。名前はコマンド名の . を _ に替えたもの。人のみの4つはない。入力に expected_revision と idempotency_key がある", () =>
+test("§17 ツール一覧(stdio の子プロセス): 29個。名前はコマンド名の . を _ に替えたもの。人のみの4つはない。入力に expected_revision と idempotency_key がある", () =>
   withRig({}, async (r) => {
     const { client } = await connectChild({ SYNTH_URL: r.url, SYNTH_AGENT_TOKEN: AGENT_TOKEN }, r.closers);
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 25);
+    assert.equal(tools.length, 29);
     const names = tools.map((t) => t.name);
-    assert.equal(new Set(names).size, 25, "重複なし");
+    assert.equal(new Set(names).size, 29, "重複なし");
     // 契約 §6 の表で権限が「両方」のコマンドすべて
     const table = contractTable();
-    assert.equal(table.length, 29, "契約の表は CMD-01〜29");
+    assert.equal(table.length, 33, "契約の表は CMD-01〜33");
     const both = table.filter((row) => row.permission.startsWith("両方"));
     const humanOnly = table.filter((row) => row.permission === "人のみ");
-    assert.equal(both.length + humanOnly.length, 29);
+    assert.equal(both.length + humanOnly.length, 33);
     assert.deepEqual(names, both.map((row) => row.command.replaceAll(".", "_")));
     assert.deepEqual(humanOnly.map((row) => row.command.replaceAll(".", "_")).sort(), [...HUMAN_ONLY_TOOLS].sort());
     for (const n of HUMAN_ONLY_TOOLS) assert.equal(names.includes(n), false, `${n} はツールにしない`);
@@ -323,6 +325,10 @@ test("§17 ツール一覧(stdio の子プロセス): 25個。名前はコマン
       score_play: [["notes", "params", "length", "tempo_bpm", "mode", "ack_prompt"], ["notes"]],
       score_stop: [[], []],
       score_get_status: [[], []],
+      performance_list: [[], []],
+      performance_read: [["name"], ["name"]],
+      performance_replay: [["name"], ["name"]],
+      performance_set_plan: [["duration_seconds"], ["duration_seconds"]],
     };
     assert.deepEqual(Object.keys(expected), names);
     for (const n of names) {
@@ -360,8 +366,8 @@ test("§17 ツールの説明: 読出しのみ・取り消し不可などの性�
     if (note) assert.ok(d.includes(note[1]), `${tool.name}: ${note[1]}`);
   }
   // 取り消せないのは保存・緊急停止・音量(契約の表の 取消 ×、権限 両方)
-  assert.deepEqual(TOOLS.filter((t) => t.description.includes("取り消し不可")).map((t) => t.name), ["patch_save", "engine_panic", "output_set_level", "score_play", "score_stop"]);
-  assert.deepEqual(TOOLS.filter((t) => t.description.includes("読出しのみ")).map((t) => t.name), ["module_list_types", "module_get", "patch_get", "patch_list", "patch_read", "meter_read", "engine_get_status", "score_get_status"]);
+  assert.deepEqual(TOOLS.filter((t) => t.description.includes("取り消し不可")).map((t) => t.name), ["patch_save", "engine_panic", "output_set_level", "score_play", "score_stop", "performance_set_plan"]);
+  assert.deepEqual(TOOLS.filter((t) => t.description.includes("読出しのみ")).map((t) => t.name), ["module_list_types", "module_get", "patch_get", "patch_list", "patch_read", "meter_read", "engine_get_status", "score_get_status", "performance_list", "performance_read"]);
 });
 
 test("ツール定義の表は、契約 §6 の表とコマンド処理の定義(COMMANDS)に一致する", () => {
@@ -384,7 +390,13 @@ test("ツール定義の表は、契約 §6 の表とコマンド処理の定義
 // 結果の一致(VER-A-007)
 // =====================================================================================
 
-/** 25個のツールすべてを含む操作の列(成功・失敗・警告・再送を含む)。 */
+/** 偽のタブは時刻 0 で動くので、最初の演奏データの名前は、時刻 0 のその場所の日時になる。 */
+const PERF_NAME = ((d: Date) => {
+  const p = (n: number, w = 2) => String(n).padStart(w, "0");
+  return `${p(d.getFullYear(), 4)}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+})(new Date(0));
+
+/** 29個のツールすべてを含む操作の列(成功・失敗・警告・再送を含む)。 */
 const SCRIPT: [string, Obj][] = [
   ["module_list_types", {}],
   ["module_list_types", { type: "MOD-OSC-001" }],
@@ -458,21 +470,32 @@ const SCRIPT: [string, Obj][] = [
   ["score_play", { notes: [{ t: 0, dur: 1 }] }], // ERR-003
   ["score_play", { notes: [], length: 2, mode: "replace", ack_prompt: 0 }], // 休みだけの楽譜で置き換える
   ["score_get_status", {}],
+  ["performance_set_plan", { duration_seconds: 120 }],
+  ["performance_set_plan", { duration_seconds: 0 }], // ERR-123
+  ["performance_set_plan", {}], // ERR-003
+  ["performance_list", {}], // 置き換えで演奏が分かれたので 2 件(同じ秒なので、2 つ目は -2)
+  ["performance_read", { name: PERF_NAME }],
+  ["performance_read", { name: "nothing" }], // ERR-202
+  ["performance_replay", { name: PERF_NAME }], // パッチを置き換え、楽譜を予約し直す
+  ["performance_replay", { name: "nothing" }], // ERR-202
+  ["score_get_status", {}],
+  ["performance_set_plan", { duration_seconds: null }],
   ["score_stop", {}],
   ["score_stop", {}], // 予約がなくても成功する
+  ["performance_list", {}],
   ["engine_panic", { expected_revision: 0 }], // expected_revision は無視される(CMD-23)
   ["engine_get_status", {}],
   ["patch_get", {}],
 ];
 
-test("VER-A-007 MCP 経由の結果は、同じ要求を POST /api/command へ直接送った結果と一致する(25個のツールすべて。成功・失敗・警告・再送)", async () => {
+test("VER-A-007 MCP 経由の結果は、同じ要求を POST /api/command へ直接送った結果と一致する(29個のツールすべて。成功・失敗・警告・再送)", async () => {
   const viaMcp = await startRig();
   const direct = await startRig();
   try {
     await connectTab(viaMcp);
     await connectTab(direct);
     const client = await connectMemory(viaMcp);
-    assert.deepEqual([...new Set(SCRIPT.map(([name]) => name))].sort(), TOOLS.map((t) => t.name).sort(), "操作の列は25個のツールすべてを含む");
+    assert.deepEqual([...new Set(SCRIPT.map(([name]) => name))].sort(), TOOLS.map((t) => t.name).sort(), "操作の列は29個のツールすべてを含む");
     let okCount = 0;
     let ngCount = 0;
     for (const [i, [name, input]] of SCRIPT.entries()) {
@@ -763,7 +786,7 @@ test("サーバー停止時: アダプタは起動でき、ツール一覧も返
   let app: App | undefined;
   try {
     const { client, stderr } = await connectChild({ SYNTH_URL: `http://127.0.0.1:${port}`, SYNTH_AGENT_TOKEN: AGENT_TOKEN }, closers);
-    assert.equal((await client.listTools()).tools.length, 25);
+    assert.equal((await client.listTools()).tools.length, 29);
     const down = await call(client, "patch_get");
     assert.equal(down.isError, true);
     assert.equal(down.body.ok, false);
@@ -796,7 +819,7 @@ test("トークンがないとき: 環境変数もファイルもなければ、
     const tab = await connectTab(r);
     const tokenFile = join(r.base, "state", "agent-token");
     const { client, stderr } = await connectChild({ SYNTH_URL: r.url, SYNTH_TOKEN_FILE: tokenFile }, r.closers);
-    assert.equal((await client.listTools()).tools.length, 25, "起動は失敗しない");
+    assert.equal((await client.listTools()).tools.length, 29, "起動は失敗しない");
     const none = await call(client, "patch_get");
     assert.equal(none.isError, true);
     assert.equal(none.body.error.id, null);
@@ -969,7 +992,7 @@ test("独自の機能を持たない: アダプタが送るのは POST /api/comm
     await client.listTools();
     assert.equal(seen.length, 0);
     for (const t of TOOLS) await client.callTool({ name: t.name, arguments: {} });
-    assert.equal(seen.length, 25, "ツールの呼出し1回につき要求1件");
+    assert.equal(seen.length, 29, "ツールの呼出し1回につき要求1件");
     for (const q of seen) {
       assert.equal(q.method, "POST");
       assert.equal(q.url, "/api/command");

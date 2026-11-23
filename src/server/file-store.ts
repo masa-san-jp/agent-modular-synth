@@ -20,6 +20,8 @@ export interface FilePatchStoreOptions {
   maxFiles?: number;
   /** 1ファイルの大きさの上限 [バイト](既定 1 MiB)。 */
   maxBytes?: number;
+  /** ファイル名の末尾(既定 `.patch.json`)。演奏データは `.performance.json`。 */
+  suffix?: string;
 }
 
 function fail<T>(error: StoreError, message?: string): StoreResult<T> {
@@ -39,6 +41,7 @@ export class FilePatchStore implements PatchStore {
   readonly dir: string;
   readonly maxFiles: number;
   readonly maxBytes: number;
+  readonly suffix: string;
   /** 操作を1件ずつ行うための列(件数の検査と書き込みの間に別の書き込みを挟まない)。 */
   private tail: Promise<unknown> = Promise.resolve();
 
@@ -46,6 +49,7 @@ export class FilePatchStore implements PatchStore {
     this.dir = resolve(dir);
     this.maxFiles = options.maxFiles ?? MAX_PATCH_FILES;
     this.maxBytes = options.maxBytes ?? MAX_PATCH_BYTES;
+    this.suffix = options.suffix ?? PATCH_FILE_SUFFIX;
   }
 
   list(): Promise<StoreResult<StoredPatchInfo[]>> {
@@ -55,7 +59,7 @@ export class FilePatchStore implements PatchStore {
       for (const name of names) {
         try {
           // リンクはたどらない(リンク自体の情報を返す。読出しは read が拒否する)
-          const st = await lstat(join(this.dir, name + PATCH_FILE_SUFFIX));
+          const st = await lstat(join(this.dir, name + this.suffix));
           out.push({ name, bytes: st.size, modified_at: isoTime(st.mtimeMs) });
         } catch (e) {
           if (errCode(e) !== "ENOENT") throw e; // 一覧の途中で消えたものは載せない
@@ -219,7 +223,7 @@ export class FilePatchStore implements PatchStore {
    */
   private pathOf(name: unknown): string | null {
     if (!isValidPatchName(name)) return null;
-    const fileName = name + PATCH_FILE_SUFFIX;
+    const fileName = name + this.suffix;
     const file = resolve(this.dir, fileName);
     if (dirname(file) !== this.dir || basename(file) !== fileName) return null;
     return file;
@@ -246,8 +250,8 @@ export class FilePatchStore implements PatchStore {
     }
     const out: string[] = [];
     for (const e of entries) {
-      if (!e.endsWith(PATCH_FILE_SUFFIX)) continue;
-      const name = e.slice(0, -PATCH_FILE_SUFFIX.length);
+      if (!e.endsWith(this.suffix)) continue;
+      const name = e.slice(0, -this.suffix.length);
       if (isValidPatchName(name)) out.push(name);
     }
     return out.sort();

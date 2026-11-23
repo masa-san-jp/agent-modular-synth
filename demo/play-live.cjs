@@ -96,6 +96,7 @@ async function main() {
     await browser.close();
     await app.close();
     fs.rmSync(patchDir, { recursive: true, force: true });
+    fs.rmSync(`${patchDir}-performances`, { recursive: true, force: true });
   }
 }
 main().catch((e) => { console.error(e); process.exit(1); });

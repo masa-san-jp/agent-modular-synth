@@ -285,6 +285,10 @@
 | CMD-27 | `score.stop` | 予約済みの楽譜をすべて捨て、鳴っている音を止める | × | × | 両方 | × | REQ-A-009 |
 | CMD-28 | `score.get_status` | 演奏の状態と、人からの指示を読む | × | — | 両方 | × | REQ-A-009 |
 | CMD-29 | `prompt.send` | 演奏への指示(プロンプト)をエージェントへ送る | × | × | 人のみ | × | REQ-A-009 |
+| CMD-30 | `performance.list` | 保存された演奏データ(演奏した楽譜の記録)の一覧 | × | — | 両方 | × | REQ-A-010 |
+| CMD-31 | `performance.read` | 保存された演奏データの中身を読む | × | — | 両方 | × | REQ-A-010 |
+| CMD-32 | `performance.replay` | 保存された演奏データを再演奏する(パッチを置き換える) | ○ | ○ | 両方 | × | REQ-A-010 |
+| CMD-33 | `performance.set_plan` | 演奏の長さの予定を決める(決めなければ、止めるまで続く) | × | × | 両方 | × | REQ-A-010 |
 
 ### CMD-01 `module.list_types`
 - 引数: `type`(文字列、任意。指定時はその種別だけ返す。未知なら ERR-101)。
@@ -541,12 +545,47 @@
   - `playing`(予約済みの楽譜があるか)、`remaining`(予約の末尾までの秒。なければ 0)
   - `scores`: `{"score_id", "actor", "starts_in", "ends_in", "notes"}` の配列(終わった楽譜は載らない)
   - `prompts`: `{"id", "text", "acked"}` の配列(新しいものが後。最大 20 件)。`acked` は、その指示を踏まえた楽譜が送られたか
+  - `plan`: `{"duration_seconds", "elapsed_seconds"}`。`duration_seconds` は演奏の長さの予定(CMD-33。決めていなければ `null` = 止めるまで続ける)、`elapsed_seconds` は今の演奏の先頭からの経過(演奏していなければ 0)
 - **演奏を続ける手順**(エージェント): (1) 楽譜を送る。(2) `remaining` が尽きる前に、次の楽譜を `append` で送る。(3) 送る前に `prompts` の `acked: false` を読み、踏まえた楽譜には `ack_prompt` を付ける。`remaining` が 0 になってから送っても演奏は再開するが、間が空く。
 
 ### CMD-29 `prompt.send`(人のみ)
 - 引数: `text`(文字列、前後の空白を除いて 1〜500 文字)。返値: `prompt`(`{"id", "text", "acked": false}`)。
 - 検証エラー: ERR-003(`details.reason`: `missing` / `type` / `empty` / `too_long`)。
 - 副作用: 通知 EVT-07(`prompt_sent`)。音声が動作中でなくても送れる。指示は保存しない(再読込で消える)。
+
+### 6.3 演奏データ(保存と再演奏。DEC-021)
+演奏した楽譜は、**演奏データ**として自動で保存する(形式と保存先は data-contract §15)。保存するのは楽譜(文字の情報)と、演奏を始めた時点のパッチで、音声そのものではない。同じパッチに同じ楽譜を同じ位置で予約すれば同じ演奏になるので、演奏データがあれば再演奏できる。
+
+- **1つの演奏**は、最初の楽譜から、止める・置き換える・緊急停止・音声の停止まで。演奏し終えた後 30 秒([暫定値])以内に次の楽譜が来れば、同じ演奏の続きとして扱う(間は無音として残る)。
+- 名前はアプリが付ける: 演奏を始めた、その場所の日時 `yyyymmdd-hhmmss`(同じ秒に始まった別の演奏があれば `-2`〜`-9` を付ける)。名前の順が時系列になる。
+- 楽譜が足されるたびに同じファイルを書き直す(途中でタブを閉じても、そこまでの演奏は残る)。保存のたびに通知 EVT-08。
+- 演奏データは、アプリから消さない・書き換えない(増える一方。整理は、人がフォルダの中で行う)。
+- 保存に失敗しても、演奏は止めない(EVT-08 の `ok: false` で知らせ、その演奏の保存はやめる)。
+- 演奏の長さは、あらかじめ決めても(CMD-33)、決めずに止めるまで続けてもよい。予定は**情報**で、アプリはその長さで演奏を止めない(曲の終わり方は、楽譜を書く側が決める)。
+
+### CMD-30 `performance.list`
+- 引数: なし。返値: `performances`(`{"name", "bytes", "modified_at"}` の配列。**新しい順**)。
+- エラー: ERR-207(保存先が使えない)。
+
+### CMD-31 `performance.read`
+- 引数: `name`(保存名。`patch.read` と同じ書式)。返値: `performance`(data-contract §15 の形)、`bytes`、`modified_at`。
+- 演奏中の演奏データも読める(そこまでの楽譜が入っている)。中身の検証はしない(JSON として解釈できることだけ確かめる)。
+- エラー: ERR-003、ERR-202(その名前がない)、ERR-204(JSON として解釈できない)、ERR-207。
+
+### CMD-32 `performance.replay`
+- 引数: `name`。返値: `name`、`scores`(予約した楽譜の数)、`length_seconds`(演奏の長さ)、`migrated`(`patch.load` と同じ。移行がなければ `null`)。
+- パッチを演奏データのパッチ(演奏を始めた時点のもの。`patch.load` と同じ検証・移行を通す)へ**置き換え**、予約済みの楽譜を捨ててから、記録された楽譜を、記録された位置のとおりにすべて予約する。パッチの置き換えは履歴に入る(取り消せる)。
+- 再演奏も1つの演奏として保存する(演奏データに `replay_of` = 元の名前が入る)。
+- 元の演奏の途中でパッチが変わっていた場合、その変更は再現しない(警告 `patch_changes_ignored`)。楽譜のパラメータの変化(`params`)は再現する。
+- 検査順: 引数 → 読み出し(ERR-202 / ERR-207)→ 形式と版(ERR-204(DAT-V19)/ ERR-205)→ パッチの検証(`patch.load` と同じ)→ 音声が動作中か(ERR-301)→ 各楽譜の検証(`score.play` と同じエラー。`details.entry` に何番目か)。失敗したら、パッチも予約も変えない。
+- 予約の数と時間の上限(§16 の `queued_notes`、`score_horizon_seconds`)は掛けない(演奏データの大きさの上限で抑える)。
+- 副作用: 通知 EVT-01(`patch_replaced`)、EVT-07(`score_replaced`)、EVT-08。
+
+### CMD-33 `performance.set_plan`
+- 引数: `duration_seconds`(1〜86400 の数値、または `null` = 止めるまで続ける)。返値: `plan`(CMD-28 と同じ)。
+- 検証エラー: ERR-003(欠落・型)、ERR-123(範囲外)。
+- 予定は演奏データにも残る。音声が動作中でなくても決められる。再読込で消える(既定は `null`)。
+- 副作用: 値が変われば、通知 EVT-07(`plan_changed`)。
 
 ## 7. 再送と冪等性
 1. `idempotency_key` を付けた要求の**成功応答**を、コマンド処理(タブ側)が鍵ごとに保存する。保存件数は直近 1000 件 [暫定値]、範囲は同じ `session_id` の間。鍵は**操作者の種別(`human` / `agent`)ごとに別の集まり**で、人が使った鍵をエージェントが再送しても人の応答は返らない(同じ種別の中では `client_id` を区別しない)。保存する応答の合計の大きさにも上限がある(JSON にして 16 MiB 相当の文字数 [暫定値])。件数か大きさの上限を超えたら古いものから捨て、最新の1件は残す。対象は次のとおり [設計判断: 例外を最小にし、「鍵を付ければ再送しても1回分しか効かない」を一様に保証する]。
@@ -599,7 +638,8 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 | EVT-04 | `engine.diagnostic` | 非有限値の置換(各モジュールの COM-12 による置換の集計、または出力段での置換。DEC-112)、または最終クリップが新たに起きたとき(REQ-S-006)。多発時は間引き、累計を載せる | `nonfinite_count`, `nonfinite_detail`(`{"modules", "output_stage"}`), `clip_count`(定義は CMD-21 と同じ) |
 | EVT-05 | `session.changed` | パッチを持つタブがつながった・切れたとき(サーバーが出す) | `connected`, `session_id`, `revision` |
 | EVT-06 | `library.changed` | 保存パッチが保存・削除されたとき | `name`, `action`(`saved` / `deleted`), `actor` |
-| EVT-07 | `performance.changed` | 楽譜が予約・置き換え・停止された、演奏し終えた、指示が送られた・反映済みになったとき | CMD-28 の返値の全項目、`reason`(`score_queued` / `score_replaced` / `stopped` / `finished` / `prompt_sent` / `prompt_acked`)、`actor`(演奏し終えた、またはアプリが止めたときは `null`) |
+| EVT-07 | `performance.changed` | 楽譜が予約・置き換え・停止された、演奏し終えた、指示が送られた・反映済みになったとき | CMD-28 の返値の全項目、`reason`(`score_queued` / `score_replaced` / `stopped` / `finished` / `prompt_sent` / `prompt_acked` / `plan_changed`)、`actor`(演奏し終えた、またはアプリが止めたときは `null`) |
+| EVT-08 | `performance.saved` | 演奏データを保存した、または保存に失敗したとき(§6.3) | `name`(失敗時は `null`), `ok`, `entries`(楽譜の数), `length_seconds`, `closed`(演奏が終わって、これが最後の保存か), 失敗時 `reason`(`too_large` または保存先のエラー) |
 
 - EVT-01 は**要求した本人にも**届く(`request_id` で自分の操作と分かる)。`actor` により「誰のどの操作でリビジョンが進んだか」が分かる(REQ-A-006)。
 - `changes` は適用された変更の列。各要素の `kind` は `module_added`(`module`)、`module_removed`(`module_id`)、`cable_added`(`cable`)、`cable_removed`(`cable_id`)、`param_changed`(`module_id`, `param`, `value`)、`module_moved`(`module_id`, `ui`)、`meta_changed`(`meta`)、`patch_replaced`(内容は載せない。`patch.get` で取り直す)。`module.remove` では、外れたケーブルの `cable_removed` も並ぶ。`history.undo`/`redo` でも、実際に起きた変更を同じ形で載せる。並びは `cable_removed` → `module_removed` → `module_added` → `param_changed`・`module_moved` → `cable_added` → `meta_changed`。同じIDのモジュールの種別が変わるときは `module_removed` と `module_added` になり、そのモジュールにつながるケーブルは、IDと両端が同じでも `cable_removed` と `cable_added` として載る。
@@ -709,13 +749,17 @@ WebSocketで接続した利用者とUIに、状態の変化を知らせる。HTT
 | 予約済みの楽譜の音符の合計 | 10000 | ERR-106(`limit: "queued_notes"`) |
 | 予約できる時間(今から予約の末尾まで) | 900 秒 | ERR-106(`limit: "score_horizon_seconds"`) |
 | 人からの指示1件の長さ / 保持する数 | 500 文字 / 20 件 | ERR-003 / 古いものから捨てる |
+| 演奏データ1つの大きさ | 8 MiB | その演奏の保存をやめる(EVT-08 `ok: false`, `reason: "too_large"`)。演奏は続く |
+| 保存先の演奏データのファイル数 | 10000 | 新しい演奏を保存できない(EVT-08 `ok: false`)。演奏は続く |
+| 演奏の長さの予定 | 86400 秒 | ERR-123 |
+| 演奏し終えてから、同じ演奏の続きとして扱う時間 | 30 秒 | 過ぎたら演奏データを閉じる(次の楽譜は新しい演奏) |
 
 ## 17. MCPアダプタとの対応
 MCPアダプタは共通コマンドを1対1でツールにする薄い変換層で、独自の状態・機能を持たない(DEC-002, REQ-A-007, product-spec §7.2)。輸送方式は OPEN-008。
 | 項目 | 規則 |
 |---|---|
 | ツール名 | コマンド名の `.` を `_` に置き換える(`module.add` → `module_add`、`patch.get` → `patch_get`、`batch` → `batch`)。接頭辞は付けない |
-| 公開するツール | §6 の表で権限が「両方」のコマンドすべて(25個)。「人のみ」の `patch.delete`、`engine.start`、`engine.release_panic`、`prompt.send` は**ツールにしない** |
+| 公開するツール | §6 の表で権限が「両方」のコマンドすべて(29個)。「人のみ」の `patch.delete`、`engine.start`、`engine.release_panic`、`prompt.send` は**ツールにしない** |
 | 入力 | そのコマンドの `args` のフィールドに、任意の `expected_revision` と `idempotency_key` を加えたもの。入力スキーマは `module.list_types` と同じ定義表・本書の引数表から作る。「どちらか一方」「少なくとも一方」の条件(CMD-07、CMD-13、CMD-17)は、スキーマではなく説明文に書く。アダプタは入力を検査せず、コマンド処理が返す本書のエラーをそのまま返す |
 | 封筒 | アダプタが `v`、`request_id`(自動生成)、`client_id` を補う。操作者は常に `agent`。`client_id` は固定の `mcp`(環境変数 `SYNTH_CLIENT_ID` で変えられる) |
 | 出力 | テキスト1つ。応答の封筒(§3.2)をそのままJSONで返す。`ok: false` はツールのエラー結果として返し、`error` を保つ(エラーを握りつぶさない) |

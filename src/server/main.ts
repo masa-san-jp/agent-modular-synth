@@ -23,15 +23,18 @@ if (!Number.isInteger(port) || port < 0 || port > 65535) {
 // 環境変数 SYNTH_PATCH_DIR、なければホームの下の .agent-modular-synth/patches。
 // リポジトリの中ではなく、利用者のデータ用の場所に置く。確定は実装計画で行う。
 const patchDir = resolve(process.env.SYNTH_PATCH_DIR ?? join(homedir(), ".agent-modular-synth", "patches"));
+// 演奏データの専用フォルダ(data-contract §15)。環境変数 SYNTH_PERFORMANCE_DIR、なければホームの下の .agent-modular-synth/performances。
+const performanceDir = resolve(process.env.SYNTH_PERFORMANCE_DIR ?? join(homedir(), ".agent-modular-synth", "performances"));
 // エージェント用トークンの受け渡し用ファイル(MCP アダプタが読む。docs/mcp-setup.md)。
 // 場所は環境変数 SYNTH_TOKEN_FILE、なければ ~/.agent-modular-synth/agent-token。所有者だけが読める(0600)。終了時に消す。
 const tokenFile = tokenFilePath(process.env);
 
-const app = createApp({ webRoot, patchDir, catalog: buildCatalog(REGISTRY) });
+const app = createApp({ webRoot, patchDir, performanceDir, catalog: buildCatalog(REGISTRY) });
 app.listen(port).then(
   (p) => {
     console.log(`http://${HOST}:${p}/ を開いてください(終了は Ctrl+C)`);
     console.log(`パッチの保存フォルダ: ${patchDir}`);
+    console.log(`演奏データの保存フォルダ: ${performanceDir}`);
     console.log("エージェント用API:");
     console.log(`  WebSocket  ws://${HOST}:${p}/api/ws`);
     console.log(`  HTTP       POST http://${HOST}:${p}/api/command`);

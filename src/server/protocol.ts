@@ -29,10 +29,13 @@ export type TabToServer =
   /** 通知(操作契約 §10)。サーバーは接続中のエージェントへ配る。 */
   | { t: "evt"; event: Json }
   /** 保存先の操作(PatchStore と同じ意味)。 */
-  | { t: "store"; id: number; op: "list" }
-  | { t: "store"; id: number; op: "read"; name: string }
-  | { t: "store"; id: number; op: "write"; name: string; text: string; overwrite: boolean }
+  /** `area` を省くとパッチの保存先。"performances" は演奏データの保存先(削除の操作はない)。 */
+  | { t: "store"; id: number; op: "list"; area?: StoreArea }
+  | { t: "store"; id: number; op: "read"; name: string; area?: StoreArea }
+  | { t: "store"; id: number; op: "write"; name: string; text: string; overwrite: boolean; area?: StoreArea }
   | { t: "store"; id: number; op: "remove"; name: string };
+
+export type StoreArea = "patches" | "performances";
 
 // ---- エージェント(WebSocket)----
 // エージェント → サーバー: 操作契約 §3 の要求(JSON テキスト1通 = 1要求)。

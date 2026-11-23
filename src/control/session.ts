@@ -11,7 +11,7 @@
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
 import { MIX2_READOUTS } from "../modules/mix2.js";
 import { checkEnvelope, listTypes } from "./envelope.js";
-import { CheckedParam, MidiEventAt, Performance, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
+import { CheckedParam, MidiEventAt, ParsedScore, Performance, PerformanceRecord, PerformanceUpdate, QueuedScore, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
 import { CommandError } from "./errors.js";
 import { MAX_UI_DEPTH, depthExceeds } from "./json.js";
 import {
@@ -380,6 +380,10 @@ export const COMMANDS: Readonly<Record<string, CommandSpec>> = {
   "score.stop": {},
   "score.get_status": {},
   "prompt.send": { keyed: true, humanOnly: true },
+  "performance.list": {},
+  "performance.read": {},
+  "performance.replay": { keyed: true },
+  "performance.set_plan": { keyed: true },
 };
 
 // =====================================================================================
@@ -467,6 +471,11 @@ export interface ExternalOps {
    * リビジョン・履歴・EVT-01 の対象外。
    */
   setSaveStamp(stamp: Pick<PatchMeta, "created_at" | "modified_at" | "saved_by" | "app_version">): void;
+  /**
+   * 演奏データを再演奏する(performance.replay): パッチを演奏データのもの(検証・正規化済み)へ置き換え、記録された楽譜をすべて予約する。
+   * 音声が動作中でなければ ERR-301。演奏データの楽譜が検証に通らなければ、そのエラー。失敗したら、何も変えない(パッチも元のまま)。
+   */
+  replayPerformance(patch: Patch, record: PerformanceRecord, name: string): { scores: number; length_seconds: number; warnings: Warning[] };
 }
 
 /** 保存のコマンドの中身。同期で、CommandError を投げれば失敗の応答になる。 */
@@ -719,6 +728,11 @@ export class Session {
     this.pollBackend();
   }
 
+  /** 前回から変わった演奏データ(演奏した楽譜の記録)を取り出す。保存する側(Controller)が呼ぶ。 */
+  takePerformanceUpdates(): PerformanceUpdate[] {
+    return this.perf.takeRecordUpdates().map((u) => ({ id: u.id, closed: u.closed, record: clone(u.record) }));
+  }
+
   /** 演奏の状態(予約済みの楽譜と、人からの指示。CMD-28 の返値と同じ)。 */
   get performance(): PerformanceStatus {
     return this.performanceStatus();
@@ -795,15 +809,21 @@ export class Session {
     }
     // 演奏: 音声が動作中でなくなったら予約を捨てる。最後まで演奏し終えたら知らせる
     if (now.audioState !== "running") {
+      this.perf.closeRecord("audio_stopped", now.sampleTime);
       if (this.perf.playing) {
         this.backend.clearSchedule?.();
         this.perf.clear();
         events.push(this.performanceEvent("stopped", null));
       }
-    } else if (this.perf.prune(this.backend.sampleNow?.() ?? now.sampleTime)) {
-      // 演奏し終えた: 楽譜が動かしていたパラメータを、パッチの値へ戻す
-      this.backend.clearSchedule?.();
-      events.push(this.performanceEvent("finished", null));
+    } else {
+      const sample = this.backend.sampleNow?.() ?? now.sampleTime;
+      if (this.perf.prune(sample)) {
+        // 演奏し終えた: 楽譜が動かしていたパラメータを、パッチの値へ戻す
+        this.backend.clearSchedule?.();
+        events.push(this.performanceEvent("finished", null));
+      }
+      // 演奏し終えた後、次の楽譜が来ないまま時間が過ぎたら、演奏データを閉じる(少し遅れた続きは、同じ演奏として残す)
+      this.perf.closeIfIdle(sample);
     }
     if (
       now.clipCount > before.clipCount ||
@@ -1023,6 +1043,12 @@ export class Session {
         return { result: { ...this.performanceStatus() }, warnings: [] };
       case "prompt.send":
         return this.cmdPromptSend(args, ctx);
+      case "performance.set_plan":
+        return this.cmdSetPlan(args, ctx);
+      case "performance.list":
+      case "performance.read":
+      case "performance.replay":
+        return ctx.external ? this.runExternal(ctx, ctx.external) : this.cmdPerformanceUnsupported();
       case "patch.save":
       case "patch.load":
       case "patch.list":
@@ -1858,7 +1884,9 @@ export class Session {
     if (!before.panic) ctx.events.push(this.outputEvent(after, ctx.actor, "panic"));
     // 予約済みの楽譜はすべて捨てる(解除した後に、続きが鳴り出さない)
     this.backend.clearSchedule?.();
-    if (this.perf.clear()) ctx.events.push(this.performanceEvent("stopped", ctx.actor));
+    const stopped = this.perf.clear();
+    this.perf.closeRecord("panic", this.backend.sampleNow?.() ?? after.sampleTime);
+    if (stopped) ctx.events.push(this.performanceEvent("stopped", ctx.actor));
     return { result: { panic: true }, warnings: [] };
   }
 
@@ -1877,6 +1905,10 @@ export class Session {
       remaining: end === null ? 0 : sec(end),
       scores: this.perf.scores.map((q) => ({ score_id: q.id, actor: q.actor, starts_in: sec(q.startSample), ends_in: sec(q.endSample), notes: q.notes })),
       prompts: this.perf.prompts,
+      plan: {
+        duration_seconds: this.perf.planSeconds,
+        elapsed_seconds: this.perf.recordBase === null ? 0 : Math.max(0, Math.round(((now - this.perf.recordBase) / fs) * 1000) / 1000),
+      },
     };
   }
 
@@ -1884,16 +1916,20 @@ export class Session {
     return { v: 1, event: "performance.changed", session_id: this.sessionId, data: { ...this.performanceStatus(), reason, actor } };
   }
 
-  private cmdScorePlay(args: Args, ctx: Ctx): ExecOutput {
-    const score = parseScore(args);
+  /** 演奏できる状態かを確かめ、音声側のサンプルレートと今のサンプル時刻を返す(ERR-301)。 */
+  private performable(): { fs: number; now: number } {
     const s = this.backend.status();
     if (s.audioState !== "running") throw new CommandError("ERR-301", "音声が動作中でない", { audio_state: s.audioState });
     if (s.panic) throw new CommandError("ERR-301", "緊急停止中は演奏できない", { audio_state: s.audioState, panic: true });
     if (!this.backend.sampleNow || !this.backend.scheduleMidi || !this.backend.clearSchedule || s.fs === null) {
       throw new Error("この音声側は楽譜の予約に対応していない");
     }
-    // パラメータの変化: 対象と値を、param.set と同じ規則で確かめる(ERR-102 → ERR-121 → ERR-122 → ERR-123)。パッチは変えない
-    const checked: CheckedParam[] = score.params.map((p) => {
+    return { fs: s.fs, now: this.backend.sampleNow() };
+  }
+
+  /** 楽譜の中のパラメータの変化を、param.set と同じ規則で確かめる(ERR-102 → ERR-121 → ERR-122 → ERR-123)。パッチは変えない。 */
+  private checkScoreParams(score: ParsedScore): CheckedParam[] {
+    return score.params.map((p) => {
       const m = this.state.modules.find((x) => x.id === p.moduleId);
       if (!m) throw new CommandError("ERR-102", `モジュール ${p.moduleId} は存在しない`, { module_id: p.moduleId, arg: `params[${p.index}].module_id` });
       const info = this.paramsOf(m.type).get(p.param);
@@ -1901,8 +1937,23 @@ export class Session {
       if (info.kind === "seed") throw new CommandError("ERR-123", "seed は楽譜では動かせない", { module_id: p.moduleId, param: p.param, arg: `params[${p.index}].param` });
       return { t: p.t, dur: info.kind === "float" ? p.dur : 0, moduleId: p.moduleId, param: p.param, value: this.checkParamValue(p.moduleId, info, p.value) };
     });
-    const fs = s.fs;
-    const now = this.backend.sampleNow();
+  }
+
+  /** 楽譜を音声側へ予約し、演奏の状態と演奏データに足す。 */
+  private queueScore(actor: ActorInfo, raw: Args, score: ParsedScore, checked: CheckedParam[], start: number, fs: number, replayOf?: string): QueuedScore {
+    const end = start + Math.max(1, Math.round(score.lengthSeconds * fs));
+    this.backend.scheduleMidi!(scoreEvents(score.notes, start, fs, checked));
+    const queued = this.perf.add(actor, start, end, score.notes.length);
+    // 演奏データには、渡された楽譜をそのまま残す(mode と ack_prompt は、演奏の内容ではないので除く)
+    const { mode: _m, ack_prompt: _a, ...kept } = raw;
+    this.perf.recordScore(clone(actor), clone(kept), start, end, fs, this.exportPatch(), this.rev, replayOf);
+    return queued;
+  }
+
+  private cmdScorePlay(args: Args, ctx: Ctx): ExecOutput {
+    const score = parseScore(args);
+    const { fs, now } = this.performable();
+    const checked = this.checkScoreParams(score);
     this.perf.prune(now);
     const replace = score.mode === "replace";
     // 開始: 予約があれば、その末尾に切れ目なく続ける。なければ(または置き換えなら)、少しの余裕を置いて今から
@@ -1918,11 +1969,11 @@ export class Session {
     }
     // ここから状態を変える
     if (replace) {
-      this.backend.clearSchedule();
+      this.backend.clearSchedule!();
       this.perf.clear();
+      this.perf.closeRecord("replaced", now); // 置き換えは、新しい演奏の始まり(演奏データも分ける)
     }
-    this.backend.scheduleMidi(scoreEvents(score.notes, start, fs, checked));
-    const queued = this.perf.add(ctx.actor, start, end, score.notes.length);
+    const queued = this.queueScore(ctx.actor, args, score, checked, start, fs);
     const acked = score.ackPrompt !== null && this.perf.ack(score.ackPrompt);
     ctx.events.push(this.performanceEvent(replace ? "score_replaced" : "score_queued", ctx.actor));
     if (acked) ctx.events.push(this.performanceEvent("prompt_acked", ctx.actor));
@@ -1933,15 +1984,60 @@ export class Session {
     const st = this.performanceStatus();
     const mine = st.scores.find((q) => q.score_id === queued.id);
     return {
-      result: { score_id: queued.id, starts_in: mine?.starts_in ?? 0, ends_in: mine?.ends_in ?? 0, remaining: st.remaining, queued_scores: st.scores.length, prompts: st.prompts },
+      result: { score_id: queued.id, starts_in: mine?.starts_in ?? 0, ends_in: mine?.ends_in ?? 0, remaining: st.remaining, queued_scores: st.scores.length, prompts: st.prompts, plan: st.plan },
       warnings,
     };
+  }
+
+  /**
+   * 保存した演奏データを再演奏する(performance.replay の中身。パッチは、呼ぶ側が先に置き換えてある)。
+   * 予約済みの楽譜を捨て、記録された位置のとおりに、すべての楽譜を予約する。予約の数と時間の上限は掛けない
+   * (演奏データの大きさの上限で抑えられている)。
+   */
+  private replayRecord(ctx: Ctx, record: PerformanceRecord, name: string): { scores: number; length_seconds: number; warnings: Warning[] } {
+    const { fs, now } = this.performable();
+    const parsed = record.entries.map((e, i) => {
+      try {
+        const score = parseScore(e.score);
+        return { at: e.at, raw: e.score, score, checked: this.checkScoreParams(score), actor: e.actor };
+      } catch (err) {
+        if (err instanceof CommandError) throw new CommandError(err.id, `演奏データの楽譜 ${i + 1}: ${err.message}`, { ...err.details, entry: i });
+        throw err;
+      }
+    });
+    this.backend.clearSchedule!();
+    this.perf.clear();
+    this.perf.closeRecord("replaced", now);
+    const base = now + Math.round(SCORE_LIMITS.leadSeconds * fs);
+    for (const p of parsed) this.queueScore(ctx.actor, p.raw, p.score, p.checked, base + Math.round(p.at * fs), fs, name);
+    ctx.events.push(this.performanceEvent("score_replaced", ctx.actor));
+    const warnings: Warning[] = [];
+    if (record.entries.some((e) => e.patch_changed)) {
+      warnings.push({ code: "patch_changes_ignored", message: "元の演奏では途中でパッチが変わっていた。再演奏は、演奏を始めた時点のパッチで行う", details: {} });
+    }
+    return { scores: parsed.length, length_seconds: record.length_seconds, warnings };
+  }
+
+  /** CMD-33 performance.set_plan: 演奏の長さの予定(エージェントへの情報。この長さで自動的に止めることはしない)。 */
+  private cmdSetPlan(args: Args, ctx: Ctx): ExecOutput {
+    checkKeys(args, ["duration_seconds"]);
+    if (!("duration_seconds" in args)) throw bad("duration_seconds", "missing");
+    const d = args.duration_seconds;
+    if (d !== null && (typeof d !== "number" || !Number.isFinite(d))) throw bad("duration_seconds", "type");
+    if (d !== null && (d < 1 || d > SCORE_LIMITS.planMaxSeconds)) {
+      throw new CommandError("ERR-123", `duration_seconds は 1〜${SCORE_LIMITS.planMaxSeconds}(または null)`, { arg: "duration_seconds", value: d, min: 1, max: SCORE_LIMITS.planMaxSeconds });
+    }
+    const changed = this.perf.planSeconds !== d;
+    this.perf.planSeconds = d;
+    if (changed) ctx.events.push(this.performanceEvent("plan_changed", ctx.actor));
+    return { result: { plan: this.performanceStatus().plan }, warnings: [] };
   }
 
   private cmdScoreStop(args: Args, ctx: Ctx): ExecOutput {
     checkKeys(args, []);
     this.backend.clearSchedule?.(); // 予約がなくても毎回実行する(鳴り続けている音を止める)
     const had = this.perf.clear();
+    this.perf.closeRecord("stopped", this.backend.sampleNow?.() ?? this.backend.status().sampleTime);
     if (had) ctx.events.push(this.performanceEvent("stopped", ctx.actor));
     return { result: { stopped: had }, warnings: [] };
   }
@@ -1954,6 +2050,7 @@ export class Session {
     const n = charLen(text.trim());
     if (n < 1 || n > SCORE_LIMITS.promptChars) throw bad("text", n < 1 ? "empty" : "too_long", `text は 1〜${SCORE_LIMITS.promptChars} 文字`);
     const p = this.perf.addPrompt(text.trim());
+    this.perf.recordPrompt(p.id, p.text, this.backend.sampleNow?.() ?? this.backend.status().sampleTime);
     ctx.events.push(this.performanceEvent("prompt_sent", ctx.actor));
     return { result: { prompt: p }, warnings: [] };
   }
@@ -2004,9 +2101,7 @@ export class Session {
 
   /** 保存のコマンドの中身(Controller が保存先の読み書きを済ませて渡したもの)を実行する。 */
   private runExternal(ctx: Ctx, run: ExternalRun): ExecOutput {
-    const out = run({
-      actor: clone(ctx.actor),
-      replacePatch: (patch) => {
+    const replacePatch = (patch: Patch): void => {
         const next = this.importPatch(patch);
         const d = this.newDraft();
         d.title = next.title;
@@ -2018,13 +2113,37 @@ export class Session {
         d.nextM = Math.max(d.nextM, maxNumbered("m", next.modules.map((m) => m.id)) + 1);
         d.nextC = Math.max(d.nextC, maxNumbered("c", next.cables.map((c) => c.id)) + 1);
         this.commit(ctx, d, true);
-      },
+    };
+    const out = run({
+      actor: clone(ctx.actor),
+      replacePatch,
       setSaveStamp: (stamp) => {
         // 履歴の中の状態とは別のオブジェクトにする(履歴・リビジョンの対象外)
         this.state = { ...this.state, stamp: clone(stamp) };
       },
+      replayPerformance: (patch, record, name) => {
+        this.performable(); // 先に確かめる(演奏できないなら、パッチも変えない)
+        const before = this.snapshot();
+        const kept = ctx.events.length;
+        try {
+          replacePatch(patch);
+          return this.replayRecord(ctx, record, name);
+        } catch (e) {
+          // 楽譜の検証で失敗した: パッチの置き換えを取り消す
+          this.restore(before);
+          ctx.events.length = kept;
+          this.backend.applyPatch(this.exportPatch(), this.rev);
+          this.pushedRevision = this.rev;
+          throw e;
+        }
+      },
     });
     return { result: out.result, warnings: out.warnings ?? [] };
+  }
+
+  /** 保存先を持たない Session に performance.list / read / replay を直接渡したとき(Controller を通さないとき)。 */
+  private cmdPerformanceUnsupported(): ExecOutput {
+    throw new CommandError("ERR-207", "演奏データの保存先がない", { reason: "not_implemented" });
   }
 
   /**

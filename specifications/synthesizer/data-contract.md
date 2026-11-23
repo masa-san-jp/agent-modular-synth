@@ -439,6 +439,7 @@ DX-10:
 | `patch.load`(CMD-13) | §8 の検証、§9 の移行。成功時は全体を置き換え、失敗時は不変 |
 | `patch.new`(CMD-11) | §3.3。`meta` の時刻・`saved_by`・`app_version` は「なし」 |
 | `patch.list` / `patch.read` / `patch.delete`(CMD-14〜16) | §7.2 |
+| `performance.list` / `performance.read` / `performance.replay`(CMD-30〜32)、通知 `performance.saved`(EVT-08) | §15 |
 | `module.add` / `param.set` | パラメータの検証は DAT-09(operation-contract §12 と同一) |
 | 通知 `patch.changed`(EVT-01) | `changes` 内の `module`・`cable` は §4・§5 の形 |
 
@@ -450,3 +451,30 @@ DX-10:
 | 専用フォルダの既定の場所、既定の待受ポート | 実装計画で決める(DAT-30、§7.1 の注意)。実装の仮の値 [暫定値]: フォルダは環境変数 `SYNTH_PATCH_DIR`、なければ `~/.agent-modular-synth/patches`。待受ポートは 47800(環境変数 `PORT` で変えられる) |
 | ポリフォニー関連のパラメータ | #2 の改訂(全18仕様 0.2)で確定し、§9.5 に反映済み。増えたパラメータは MOD-IO-002 の `voices`(既定1)と MOD-IO-003 の `channel`(既定1)の2つ |
 | 配布ライセンスとパッチ例の扱い | OPEN-005 |
+
+## 15. 演奏データ(演奏した楽譜の記録。DEC-021)
+演奏した楽譜を、再演奏できる形で残すファイル。パッチ文書(§3)とは別の形式で、別のフォルダに置く。コマンドは operation-contract §6.3(CMD-30〜33)、通知は EVT-08。
+
+- **DAT-62** 保存先はサーバーの専用フォルダ(パッチの専用フォルダとは別)。実装の仮の値 [暫定値]: 環境変数 `SYNTH_PERFORMANCE_DIR`、なければ `~/.agent-modular-synth/performances`。置き方は §7.2 と同じ(フォルダの外に出ない、一時ファイルへ書いてから入れ替える、所有者だけが読み書きできる権限)。
+- **DAT-63** ファイル名は `<名前>.performance.json`。名前はアプリが付ける: 演奏を始めた、その場所(タブを開いている機器)の日時 `yyyymmdd-hhmmss`。同じ名前が既にあれば `-2`〜`-9` を付ける(既にあるファイルを上書きしない)。名前の昇順が、演奏の古い順になる。
+- **DAT-64** 1つの演奏に1つのファイル。楽譜が足されるたびに、同じファイルを全体ごと書き直す。演奏中のファイルは `ended_by` が `null`(途中でタブやサーバーが止まった場合も、そのまま残る)。
+- **DAT-65** 形(JSON、UTF-8、末尾に改行):
+
+| フィールド | 型 | 内容 |
+|---|---|---|
+| `format` | 文字列 | 固定 `"modular-synth-performance"` |
+| `schema_version` | 整数 | 1 |
+| `started_at` / `ended_at` | 文字列 / 文字列または `null` | 演奏の始まり・終わりの時刻(RFC 3339、UTC。§3 の時刻と同じ書式)。演奏中の `ended_at` は `null` |
+| `ended_by` | 文字列または `null` | 終わり方: `finished`(演奏し終えた)、`stopped`(`score.stop`)、`replaced`(置き換え・再演奏の開始)、`panic`(緊急停止)、`audio_stopped`(音声の停止・中断)。演奏中は `null` |
+| `fs` | 数値 | 演奏したときのサンプルレート [Hz] |
+| `length_seconds` | 数値 | 演奏の先頭から、最後の楽譜の終わりまで(途中で止めた場合は、止めた時点まで)[秒] |
+| `plan` | オブジェクト | `{"duration_seconds": 数値または null}`。演奏の長さの予定(CMD-33) |
+| `replay_of` | 文字列(任意) | 再演奏のとき、元の演奏データの名前 |
+| `patch` | オブジェクト | **演奏を始めた時点のパッチ**(§3 の形。全パラメータを含む) |
+| `entries` | 配列 | 演奏した楽譜。各要素は `{"at", "actor", "score", "patch_changed"?}` |
+| `prompts` | 配列 | 演奏中に人が送った指示。各要素は `{"at", "id", "text"}` |
+
+- **DAT-66** `entries[].at` は、演奏の先頭(最初の楽譜の開始)から数えた、その楽譜の開始位置 [秒](サンプル数 ÷ `fs`)。`score` は `score.play` に渡された引数から `mode` と `ack_prompt` を除いたもの(`notes`、`params`、`length`、`tempo_bpm`)。`actor` は送った操作者(§3 の `saved_by` と同じ形)。`patch_changed: true` は、前の楽譜の後にパッチが変わっていた印(変更の内容は残さない)。
+- **DAT-67** 再演奏(CMD-32)は、`patch` へ置き換えてから、各楽譜を「再演奏の先頭 + `at`」の位置に予約する。サンプルレートが同じなら、元の演奏と同じサンプルの並びになる(§12 の決定性。違うサンプルレートでは `at` を丸め直すので、位置が 1 サンプル未満ずれうる)。演奏中のパッチの変更と、人の鍵盤・MIDI 機器の演奏は記録しないので、再現しない。
+- **DAT-68** 上限 [暫定値]: 1つ 8 MiB、ファイル数 10000。超えたら、その演奏の保存をやめる(演奏は続く。operation-contract §16)。アプリは演奏データを消さない。
+- **DAT-V19** 再演奏のときの検証: オブジェクトである、`entries` が 1 件以上の配列で、各要素が `at`(0 以上の有限の数値)と `score`(オブジェクト)を持つ。違反は ERR-204。`format` と `schema_version` の不一致は ERR-205。`patch` は §8 の検証(DAT-V01〜V18)と §9 の移行を通す。各 `score` は `score.play` と同じ検証を通す。

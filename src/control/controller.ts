@@ -22,6 +22,9 @@ import {
   utf8ByteLength,
   validatePatchDocument,
 } from "./patch-doc.js";
+import { MAX_JSON_DEPTH } from "./patch-doc.js";
+import { depthExceeds } from "./json.js";
+import { PERFORMANCE_FORMAT, PERFORMANCE_SCHEMA_VERSION, PerformanceRecord } from "./performance.js";
 import { ExternalRun, Session } from "./session.js";
 import { PatchStore, StoreError, StoreResult } from "./store.js";
 import { ActorInfo, ActorKind, CommandResponse, PatchMeta, SavedBy, SessionEvent, Warning } from "./types.js";
@@ -36,7 +39,21 @@ export const MAX_PATCH_FILES = 1000;
 export const DEFAULT_APP_VERSION = "0.0.1";
 
 /** 保存先を使うコマンド(CMD-12〜16)。 */
-export const STORAGE_COMMANDS: ReadonlySet<string> = new Set(["patch.save", "patch.load", "patch.list", "patch.read", "patch.delete"]);
+export const STORAGE_COMMANDS: ReadonlySet<string> = new Set([
+  "patch.save", "patch.load", "patch.list", "patch.read", "patch.delete",
+  "performance.list", "performance.read", "performance.replay",
+]);
+
+/** 演奏データ 1 つの大きさの上限 [バイト](暫定値)。超えたら、その演奏の保存をやめて知らせる。 */
+export const MAX_PERFORMANCE_BYTES = 8 * 1024 * 1024;
+
+/** EVT-08: 演奏データを保存した(または保存に失敗した)。 */
+export interface PerformanceSavedEvent {
+  v: 1;
+  event: "performance.saved";
+  session_id: string;
+  data: { name: string | null; ok: boolean; entries: number; length_seconds: number; closed: boolean; reason?: string };
+}
 
 /** EVT-06 */
 export interface LibraryChangedEvent {
@@ -47,7 +64,7 @@ export interface LibraryChangedEvent {
 }
 
 /** Controller が出す通知(Session の通知 + EVT-06)。`seq` は輸送層が付ける。 */
-export type ControllerEvent = SessionEvent | LibraryChangedEvent;
+export type ControllerEvent = SessionEvent | LibraryChangedEvent | PerformanceSavedEvent;
 
 export interface ControllerOptions {
   session: Session;
@@ -60,6 +77,11 @@ export interface ControllerOptions {
   maxPatchFiles?: number;
   /** 保存先の応答を待つ時間 [ms]。0 以下で無制限。 */
   storeTimeoutMs?: number;
+  /**
+   * 演奏データの保存先(data-contract §15)。あれば、演奏した楽譜を日時つきの名前で保存する。
+   * 口は PatchStore と同じ(名前 → 文字列)。なければ、演奏データは保存されず、performance.* は ERR-207。
+   */
+  performanceStore?: PatchStore;
 }
 
 type Args = Record<string, unknown>;
@@ -78,6 +100,13 @@ function bad(arg: string, reason: string, message?: string): CommandError {
   return new CommandError("ERR-003", message ?? `引数 ${arg}: ${reason}`, { arg, reason });
 }
 
+/** 演奏データの名前に使う、その場所の時刻(`yyyymmdd-hhmmss`)。名前の順が、そのまま時系列になる。 */
+function localStamp(t: Date | number): string {
+  const d = t instanceof Date ? t : new Date(t);
+  const p = (n: number, w = 2): string => String(n).padStart(w, "0");
+  return `${p(d.getFullYear(), 4)}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+}
+
 /** RFC 3339 の UTC(秒まで)。 */
 function utcTimestamp(t: Date | number): string {
   const d = t instanceof Date ? t : new Date(t);
@@ -91,6 +120,10 @@ export class Controller {
   private readonly appVersion: string;
   private readonly maxPatchFiles: number;
   private readonly storeTimeoutMs: number;
+  private readonly performances: PatchStore | null;
+  /** 演奏の通し番号 → 保存した名前と、始まりの時刻。 */
+  private readonly perfNames = new Map<number, { name: string; startedAt: string; failed: boolean }>();
+  private perfTail: Promise<void> = Promise.resolve();
   private readonly listeners = new Set<(ev: ControllerEvent) => void>();
   /** 待ち行列の末尾(前の要求の処理の完了)。 */
   private tail: Promise<void> = Promise.resolve();
@@ -103,7 +136,11 @@ export class Controller {
     this.appVersion = opts.appVersion ?? DEFAULT_APP_VERSION;
     this.maxPatchFiles = opts.maxPatchFiles ?? MAX_PATCH_FILES;
     this.storeTimeoutMs = opts.storeTimeoutMs ?? DEFAULT_STORE_TIMEOUT_MS;
-    this.session.subscribe((ev) => this.emit(ev));
+    this.performances = opts.performanceStore ?? null;
+    this.session.subscribe((ev) => {
+      this.emit(ev);
+      if (ev.event === "performance.changed") this.savePerformances();
+    });
   }
 
   /** 処理中・処理待ちの要求の数。 */
@@ -154,6 +191,44 @@ export class Controller {
       },
     );
     return result;
+  }
+
+  /**
+   * 変わった演奏データを保存する(演奏した楽譜の記録。日時つきの名前)。楽譜が足されるたびに同じファイルを書き直すので、
+   * 途中でタブを閉じても、そこまでの演奏は残る。演奏の通知のたびに自動で呼ばれる。演奏し終えた後の「閉じる」を拾うため、
+   * 状態の確認(Session.pollBackend)の後にも呼ぶこと。コマンドの待ち行列とは別に、順に書く。
+   */
+  savePerformances(): Promise<void> {
+    const updates = this.session.takePerformanceUpdates();
+    if (updates.length === 0 || !this.performances) return this.perfTail;
+    const store = this.performances;
+    for (const u of updates) {
+      this.perfTail = this.perfTail.then(async () => {
+        let entry = this.perfNames.get(u.id);
+        if (entry?.failed) return;
+        const first = !entry;
+        if (!entry) {
+          entry = { name: localStamp(this.now()), startedAt: utcTimestamp(this.now()), failed: false };
+          this.perfNames.set(u.id, entry);
+        }
+        const record = { ...u.record, started_at: entry.startedAt, ended_at: u.closed ? utcTimestamp(this.now()) : null };
+        const text = JSON.stringify(record) + "\n";
+        const fail = (reason: string): void => {
+          entry!.failed = true;
+          this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: null, ok: false, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed, reason } });
+        };
+        if (utf8ByteLength(text) > MAX_PERFORMANCE_BYTES) return fail("too_large");
+        let r = await this.call(() => store.write(entry!.name, text, !first));
+        // 同じ秒に始まった別の演奏のファイルがあれば、名前に連番を付ける(上書きしない)
+        for (let n = 2; first && !r.ok && r.error === "exists" && n <= 9; n++) {
+          entry.name = `${entry.name.replace(/-[2-9]$/, "")}-${n}`;
+          r = await this.call(() => store.write(entry!.name, text, false));
+        }
+        if (!r.ok) return fail(r.error);
+        this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: entry.name, ok: true, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed } });
+      });
+    }
+    return this.perfTail;
   }
 
   /** 待ち行列が空になる(今までに受けた要求がすべて処理される)まで待つ。 */
@@ -221,6 +296,12 @@ export class Controller {
         return this.planList(args);
       case "patch.read":
         return this.planRead(args);
+      case "performance.list":
+        return this.planPerformanceList(args);
+      case "performance.read":
+        return this.planPerformanceRead(args);
+      case "performance.replay":
+        return this.planPerformanceReplay(args);
       default:
         return this.planDelete(args);
     }
@@ -349,6 +430,76 @@ export class Controller {
   private async planRead(args: Args): Promise<Plan> {
     const result = await readPatch(this.store, args, this.maxPatchFiles, this.storeTimeoutMs);
     return { run: () => ({ result }) };
+  }
+
+  // ---- 演奏データ(CMD-30〜32。data-contract §15) ----
+
+  private performanceStoreOrFail(): PatchStore {
+    if (!this.performances) throw new CommandError("ERR-207", "演奏データの保存先がない", { reason: "not_configured" });
+    return this.performances;
+  }
+
+  /** CMD-30 performance.list: 保存された演奏データの名前(新しい順。名前の頭が日時なので、名前の降順)。 */
+  private async planPerformanceList(args: Args): Promise<Plan> {
+    checkKeys(args, []);
+    const store = this.performanceStoreOrFail();
+    await this.perfTail; // 書きかけの保存を待つ(直前の楽譜まで見える)
+    const listed = await this.call(() => store.list());
+    if (!listed.ok) throw this.storeError("list", null, "failed", listed.message);
+    const performances = listed.value
+      .filter((f) => isValidPatchName(f.name))
+      .sort((a, b) => (a.name < b.name ? 1 : a.name > b.name ? -1 : 0))
+      .map((f) => ({ name: f.name, bytes: f.bytes, modified_at: f.modified_at }));
+    return { run: () => ({ result: { performances } }) };
+  }
+
+  private async readPerformance(args: Args): Promise<{ name: string; doc: unknown; bytes: number; modified_at: string }> {
+    checkKeys(args, ["name"]);
+    const name = patchName(args);
+    const store = this.performanceStoreOrFail();
+    await this.perfTail; // 書きかけの保存を待つ
+    const r = await this.call(() => store.read(name));
+    if (!r.ok) {
+      if (r.error === "not_found") throw new CommandError("ERR-202", `演奏データ ${name} はない`, { name });
+      throw this.storeError("read", name, r.error, r.message);
+    }
+    const invalid = (message: string): CommandError => new CommandError("ERR-204", message, { issues: [{ rule: "DAT-V02", path: "", message }] });
+    let doc: unknown;
+    try {
+      doc = JSON.parse(r.value.text);
+    } catch (e) {
+      throw invalid(`JSONとして解釈できない: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    if (depthExceeds(doc, MAX_JSON_DEPTH)) throw invalid("JSONとして解釈できない: 入れ子が深すぎる");
+    return { name, doc, bytes: r.value.info.bytes, modified_at: r.value.info.modified_at };
+  }
+
+  /** CMD-31 performance.read: 演奏データの中身(演奏を始めた時点のパッチと、演奏した楽譜の並び)。 */
+  private async planPerformanceRead(args: Args): Promise<Plan> {
+    const { doc, bytes, modified_at } = await this.readPerformance(args);
+    return { run: () => ({ result: { performance: doc, bytes, modified_at } }) };
+  }
+
+  /** CMD-32 performance.replay: 演奏データのパッチへ置き換え、記録された楽譜をすべて予約する。 */
+  private async planPerformanceReplay(args: Args): Promise<Plan> {
+    const { name, doc } = await this.readPerformance(args);
+    const bad204 = (path: string, message: string): CommandError => new CommandError("ERR-204", `演奏データが不正: ${message}`, { issues: [{ rule: "DAT-V19", path, message }] });
+    if (!isObj(doc)) throw bad204("", "オブジェクトでない");
+    if (doc.format !== PERFORMANCE_FORMAT) throw new CommandError("ERR-205", "演奏データの形式が違う", { format: doc.format ?? null });
+    if (doc.schema_version !== PERFORMANCE_SCHEMA_VERSION) throw new CommandError("ERR-205", "演奏データの版が未対応", { schema_version: doc.schema_version ?? null, supported: [PERFORMANCE_SCHEMA_VERSION] });
+    if (!Array.isArray(doc.entries) || doc.entries.length === 0) throw bad204("entries", "楽譜がない");
+    doc.entries.forEach((e: unknown, i: number) => {
+      if (!isObj(e) || typeof e.at !== "number" || !Number.isFinite(e.at) || e.at < 0 || !isObj(e.score)) throw bad204(`entries[${i}]`, "at(0 以上の数値)と score(オブジェクト)が要る");
+    });
+    const loaded = validatePatchDocument(doc.patch, this.session.typeCatalog);
+    if (!loaded.ok) throw this.loadError(loaded);
+    const record = doc as unknown as PerformanceRecord;
+    return {
+      run: (ops) => {
+        const r = ops.replayPerformance(loaded.patch, record, name);
+        return { result: { name, scores: r.scores, length_seconds: r.length_seconds, migrated: loaded.migrated }, warnings: [...(loaded.warnings as Warning[]), ...r.warnings] };
+      },
+    };
   }
 
   // ---- CMD-16 patch.delete(人のみ。権限は precheck が見る) ----

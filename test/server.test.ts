@@ -956,6 +956,28 @@ test("タブなしの patch.list / patch.read: 専用フォルダを直接読む
 // 保存先(タブからの store 操作)
 // =====================================================================================
 
+test("VER-A-010f 演奏データの保存先: パッチとは別のフォルダへ <名前>.performance.json で置く。消す口はない", () =>
+  withRig({}, async (r) => {
+    const tab = await connectTab(r);
+    const dir = `${r.patchDir}-performances`;
+    const w = await tab.store({ op: "write", area: "performances", name: "20261123-210405", text: '{"a":1}', overwrite: false });
+    assert.equal(w.ok, true);
+    assert.deepEqual(await readdir(dir), ["20261123-210405.performance.json"]);
+    assert.equal((await tab.store({ op: "write", area: "performances", name: "20261123-210405", text: "{}", overwrite: false })).error, "exists");
+    assert.equal((await tab.store({ op: "write", area: "performances", name: "20261123-210405", text: '{"a":2}', overwrite: true })).ok, true);
+    assert.equal((await tab.store({ op: "read", area: "performances", name: "20261123-210405" })).value.text, '{"a":2}');
+    assert.deepEqual((await tab.store({ op: "list", area: "performances" })).value.map((i: Obj) => i.name), ["20261123-210405"]);
+    // パッチの保存先とは混ざらない
+    assert.deepEqual((await tab.store({ op: "list" })).value, []);
+    assert.equal((await tab.store({ op: "read", name: "20261123-210405" })).error, "not_found");
+    // 消す口はない。知らない保存先は失敗。名前の規則はパッチと同じ
+    assert.equal((await tab.store({ op: "remove", area: "performances", name: "20261123-210405" })).ok, false);
+    assert.equal((await tab.store({ op: "list", area: "elsewhere" })).ok, false);
+    assert.equal((await tab.store({ op: "write", area: "performances", name: "../x", text: "{}", overwrite: false })).error, "invalid_name");
+    assert.deepEqual(await readdir(dir), ["20261123-210405.performance.json"]);
+    await rm(dir, { recursive: true, force: true });
+  }));
+
 test("タブからの store 操作: 専用フォルダに書き・読み・一覧・削除し、store_res を返す", () =>
   withRig({ maxPatchFiles: 2, maxPatchBytes: 200 }, async (r) => {
     const tab = await connectTab(r);

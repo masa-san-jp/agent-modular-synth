@@ -155,6 +155,52 @@ async function main() {
     assert.equal(await peak(), 0, "解除の後、楽譜の続きは鳴らない");
     ok("人が「演奏を止める」で止められる。緊急停止で予約が捨てられ、解除の後に続きは鳴らない");
 
+    // ---- 7) 演奏した楽譜が、日時つきの名前で保存される。画面とエージェントから再演奏できる ----
+    const perfDir = `${patchDir}-performances`;
+    const files = fs.readdirSync(perfDir).sort();
+    assert.ok(files.length === 2, `演奏ごとにファイルがある: ${files.join(", ")}`);
+    for (const f of files) assert.match(f, /^\d{8}-\d{6}(-[2-9])?\.performance\.json$/);
+    const listed = (await agentOk("performance.list")).result.performances.map((p) => p.name);
+    assert.deepEqual(listed, files.map((f) => f.replace(".performance.json", "")).reverse(), "一覧は新しい順");
+    const oldest = listed.at(-1);
+    const doc = (await agentOk("performance.read", { name: oldest })).result.performance;
+    assert.equal(doc.format, "modular-synth-performance");
+    assert.equal(doc.ended_by, "stopped", "人が「演奏を止める」で止めた");
+    assert.equal(doc.entries.length, 3, "演奏し終えて 30 秒以内の続きは、同じ演奏に入る");
+    assert.deepEqual(doc.entries.slice(0, 2).map((e) => e.at), [0, 2], "2 つの楽譜が、切れ目なく続いた位置で残っている");
+    assert.ok(doc.entries[2].at > 4, "間を空けて送った楽譜は、実際に始まった位置");
+    assert.deepEqual(doc.prompts.map((p) => p.text), ["もっと高い音で"]);
+    assert.deepEqual(doc.entries[0].score.notes.map((n) => n.note), [60, 72]);
+    assert.ok(doc.patch.modules.some((m) => m.id === "mt"), "演奏を始めた時点のパッチ");
+    assert.match(await page.textContent("#perf-saved"), /保存/);
+    ok("演奏した楽譜が、日時つきの名前で専用フォルダに保存され、エージェントが一覧・中身を読める", files.join(", "));
+
+    // 再演奏(エージェント): 保存した楽譜のとおりに鳴る(60 → 72 → 67)
+    const revBefore = await synth("revision");
+    const replay = await agentOk("performance.replay", { name: oldest });
+    assert.equal(replay.result.scores, 3);
+    assert.equal(await synth("revision"), revBefore + 1, "パッチの置き換えでリビジョンが進む");
+    await waitFor(async () => (await pitch()) === 0 && (await peak()) > 0.01, "再演奏の 1 音目(60)");
+    await waitFor(async () => (await pitch()) === 1, "再演奏の 2 音目(72)");
+    await agentOk("score.stop");
+    // 再演奏(画面): 一覧のボタンから
+    await page.click("#performance-refresh");
+    await waitFor(async () => (await page.locator("#performance-list li[data-performance]").count()) >= 3, "画面の一覧");
+    await page.click(`#performance-list li[data-performance="${oldest}"] button`);
+    await waitFor(async () => (await agentOk("score.get_status")).result.playing, "画面からの再演奏");
+    await waitFor(async () => (await peak()) > 0.01, "鳴る");
+    await page.click("#score-stop");
+    ok("保存した演奏を、エージェントと画面から再演奏できる(楽譜どおりに鳴る)");
+
+    // 演奏の長さの予定: 画面で決めると、エージェントが読める
+    await page.fill("#plan-minutes", "3");
+    await page.click("#plan-set");
+    await waitFor(async () => (await agentOk("score.get_status")).result.plan.duration_seconds === 180, "予定が届く");
+    await page.fill("#plan-minutes", "");
+    await page.click("#plan-set");
+    await waitFor(async () => (await agentOk("score.get_status")).result.plan.duration_seconds === null, "止めるまで続ける");
+    ok("人が演奏の長さを決めると、エージェントが読める。空にすると「止めるまで」");
+
     assert.deepEqual(await synth("errors"), [], "ワークレットと画面が記録したエラー");
     assert.equal(await synth("desyncCount"), 0);
     assert.deepEqual(pageErrors, [], "ページのエラー");
@@ -164,6 +210,7 @@ async function main() {
     await browser.close();
     await app.close();
     fs.rmSync(patchDir, { recursive: true, force: true });
+    fs.rmSync(`${patchDir}-performances`, { recursive: true, force: true });
   }
   console.log(`演奏のブラウザ試験: ${results.length} 項目すべて合格(Chromium ヘッドレス)`);
 }

@@ -73,7 +73,7 @@ export interface ActorInfo {
   client_id?: string;
 }
 
-export type WarningCode = "type_mismatch" | "duplicate_seed" | "migrated" | "param_defaulted" | "no_midi_module";
+export type WarningCode = "type_mismatch" | "duplicate_seed" | "migrated" | "param_defaulted" | "no_midi_module" | "patch_changes_ignored";
 
 export interface Warning {
   code: WarningCode;
@@ -200,13 +200,18 @@ export interface PerformanceStatus {
   scores: { score_id: number; actor: ActorInfo; starts_in: number; ends_in: number; notes: number }[];
   /** 人からの指示(新しいものが後)。`acked` は、エージェントがその指示を踏まえた楽譜を送ったか。 */
   prompts: { id: number; text: string; acked: boolean }[];
+  /**
+   * 演奏の長さの予定。`duration_seconds` は、あらかじめ決めた長さ(決めていなければ null = 止めるまで続ける)。
+   * `elapsed_seconds` は、今の演奏が始まってからの経過(演奏していなければ 0)。
+   */
+  plan: { duration_seconds: number | null; elapsed_seconds: number };
 }
 
 /** EVT-07 */
 export interface PerformanceChangedEvent extends EventBase {
   event: "performance.changed";
   data: PerformanceStatus & {
-    reason: "score_queued" | "score_replaced" | "stopped" | "finished" | "prompt_sent" | "prompt_acked";
+    reason: "score_queued" | "score_replaced" | "stopped" | "finished" | "prompt_sent" | "prompt_acked" | "plan_changed";
     /** 演奏が終わった・アプリが止めた(緊急停止、音声の停止)ときは null。 */
     actor: ActorInfo | null;
   };

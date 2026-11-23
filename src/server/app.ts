@@ -10,6 +10,7 @@
 // - タブの口(/tab)はタブ用トークンと Origin(自サーバーのオリジンだけ)を検査する。
 // - サーバーを止める口、任意の経路を読み書きする口、任意ホストへ送信する口は作らない(REQ-S-007)。
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
+import { dirname, join, resolve } from "node:path";
 import { IncomingMessage, Server, ServerResponse, createServer } from "node:http";
 import type { Duplex } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
@@ -58,6 +59,9 @@ export const DEFAULT_APP_LIMITS: AppLimits = {
 
 /** タブからの1通の上限 [バイト](応答・保存する文書を運ぶ。契約にない実装上の値)。 */
 const TAB_MAX_MESSAGE_BYTES = 16 * 1024 * 1024;
+/** 演奏データのファイル数と、1 つの大きさの上限(暫定値)。 */
+export const MAX_PERFORMANCE_FILES = 10000;
+export const MAX_PERFORMANCE_BYTES = 8 * 1024 * 1024;
 /** 2つ目のタブを閉じるときの終了コード(アプリ用の範囲)。 */
 export const CLOSE_ANOTHER_TAB = 4001;
 
@@ -66,6 +70,8 @@ export interface AppOptions {
   webRoot: string;
   /** パッチファイルの専用フォルダ(data-contract DAT-30)。コマンドの引数では変えられない。 */
   patchDir: string;
+  /** 演奏データの専用フォルダ(data-contract §15)。省略時は、`<パッチのフォルダ>-performances`。 */
+  performanceDir?: string;
   /** モジュール種別の定義(タブなしでも module.list_types に答えるため)。 */
   catalog: TypeCatalog;
   /** エージェント用トークン。省略時は乱数で発行する。 */
@@ -81,6 +87,8 @@ export interface App {
   readonly tabToken: string;
   /** 専用フォルダの保存先。 */
   readonly store: FilePatchStore;
+  /** 演奏データの保存先。 */
+  readonly performanceStore: FilePatchStore;
   /** 127.0.0.1 の指定ポートで待ち受ける(ホストは選べない)。実際のポートを返す。 */
   listen(port?: number): Promise<number>;
   /** 待受と全接続を閉じる(プロセス内からだけ呼べる。通信の口はない)。 */
@@ -255,6 +263,12 @@ export function createApp(options: AppOptions): App {
 
   const catalog = options.catalog;
   const store = new FilePatchStore(options.patchDir, { maxFiles: limits.maxPatchFiles, maxBytes: limits.maxPatchBytes });
+  // 演奏データ: 専用フォルダの直下の `<名前>.performance.json` だけを扱う(パッチと同じ規則。タブから削除する口はない)
+  const performanceStore = new FilePatchStore(options.performanceDir ?? `${resolve(options.patchDir)}-performances`, {
+    maxFiles: MAX_PERFORMANCE_FILES,
+    maxBytes: MAX_PERFORMANCE_BYTES,
+    suffix: ".performance.json",
+  });
 
   // ---- 状態(接続だけ。パッチは持たない) ----
   let port = 0;
@@ -557,16 +571,20 @@ export function createApp(options: AppOptions): App {
   };
 
   const storeOp = async (m: Obj): Promise<StoreResult<unknown>> => {
+    if (m.area !== undefined && m.area !== "patches" && m.area !== "performances") return { ok: false, error: "failed", message: "unknown_area" };
+    const performances = m.area === "performances";
+    const target = performances ? performanceStore : store;
     switch (m.op) {
       case "list":
-        return store.list();
+        return target.list();
       case "read":
-        return typeof m.name === "string" ? store.read(m.name) : { ok: false, error: "invalid_name" };
+        return typeof m.name === "string" ? target.read(m.name) : { ok: false, error: "invalid_name" };
       case "write":
         if (typeof m.name !== "string") return { ok: false, error: "invalid_name" };
         if (typeof m.text !== "string" || typeof m.overwrite !== "boolean") return { ok: false, error: "failed", message: "bad_message" };
-        return store.write(m.name, m.text, m.overwrite);
+        return target.write(m.name, m.text, m.overwrite);
       case "remove":
+        if (performances) return { ok: false, error: "failed", message: "unknown_op" }; // 演奏データを消す口はない
         return typeof m.name === "string" ? store.remove(m.name) : { ok: false, error: "invalid_name" };
       default:
         return { ok: false, error: "failed", message: "unknown_op" };
@@ -718,6 +736,7 @@ export function createApp(options: AppOptions): App {
     agentToken,
     tabToken,
     store,
+    performanceStore,
     listen(listenPort: number = DEFAULT_PORT): Promise<number> {
       return new Promise((ok, ng) => {
         server.once("error", ng);
@@ -725,6 +744,7 @@ export function createApp(options: AppOptions): App {
         server.listen(listenPort, HOST, () => {
           server.removeListener("error", ng);
           void store.sweepTemp(); // 前回の実行で残った一時ファイルを片付ける
+          void performanceStore.sweepTemp();
           const a = server.address();
           port = typeof a === "object" && a ? a.port : listenPort;
           ok(port);
