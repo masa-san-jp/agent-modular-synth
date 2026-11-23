@@ -53,7 +53,7 @@ export const TABLE: readonly CommandRow[] = [
   { id: "CMD-23", command: "engine.panic", summary: "緊急停止(全消音)", changes: false, undo: "no" },
   { id: "CMD-24", command: "engine.release_panic", summary: "緊急停止の解除", changes: false, undo: "no" },
   { id: "CMD-25", command: "output.set_level", summary: "マスター音量を設定", changes: false, undo: "no", permissionNote: "エージェントは上限内" },
-  { id: "CMD-26", command: "score.play", summary: "楽譜(時刻つきの音符の並び)を予約して演奏する", changes: false, undo: "no" },
+  { id: "CMD-26", command: "score.play", summary: "楽譜(どの音を、何拍目から、何拍のばすかの並び)を予約して演奏する", changes: false, undo: "no" },
   { id: "CMD-27", command: "score.stop", summary: "予約済みの楽譜をすべて捨て、鳴っている音を止める", changes: false, undo: "no" },
   { id: "CMD-28", command: "score.get_status", summary: "演奏の状態と、人からの指示を読む", changes: false, undo: "na" },
   { id: "CMD-29", command: "prompt.send", summary: "演奏への指示(プロンプト)をエージェントへ送る", changes: false, undo: "no" },
@@ -104,7 +104,7 @@ export const ARGS: Readonly<Record<string, ArgSpec>> = {
         items: {
           type: "object",
           properties: {
-            t: { type: "number", minimum: 0, description: "楽譜の先頭からの開始時刻(tempo_bpm があれば拍、なければ秒)" },
+            t: { type: "number", minimum: 0, description: "楽譜の先頭から数えた、音の始まる位置(tempo_bpm があれば拍、なければ秒)" },
             dur: { type: "number", exclusiveMinimum: 0, description: "長さ(単位は t と同じ)" },
             note: { type: "integer", minimum: 0, maximum: 127, description: "MIDI ノート番号。60 = C4(中央のド)。1 上がるごとに半音" },
             vel: { type: "integer", minimum: 1, maximum: 127, description: "強さ。既定 100" },

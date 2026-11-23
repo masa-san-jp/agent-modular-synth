@@ -64,7 +64,7 @@ const edges = (g: boolean[]): { on: number[]; off: number[] } => {
 
 // ---- VER-A-009a 時刻 ----
 
-test("VER-A-009a 楽譜の音符は、楽譜の時刻から計算したサンプルちょうどで MIDI-CV に届く(予約がなければ 0.1 秒後に始まる)", () => {
+test("VER-A-009a 楽譜の音符は、楽譜の中の位置から計算したサンプルちょうどで MIDI-CV に届く(予約がなければ 0.1 秒後に始まる)", () => {
   const r = rig();
   const res = r.ok("agent", "score.play", { notes: [{ t: 0, dur: 0.25, note: 60 }, { t: 0.5, dur: 0.125, note: 62 }] });
   assert.equal(res.result.score_id, 1);
