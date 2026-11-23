@@ -45,6 +45,21 @@
   <div class="row" id="keys" aria-label="画面鍵盤(押している間だけ鳴ります。MIDI-CV モジュールが必要です)"></div>
 </section>
 
+<section aria-labelledby="h-perf">
+  <h2 id="h-perf">エージェントの演奏</h2>
+  <p>エージェントは楽譜を書いて演奏します。下の欄に指示を書くと、エージェントは次の楽譜を書くときにそれを読みます。</p>
+  <div class="row">
+    <span id="perf-state"></span>
+    <button id="score-stop" type="button">演奏を止める</button>
+  </div>
+  <form id="prompt-form" class="row">
+    <label for="prompt-text">演奏への指示</label>
+    <input id="prompt-text" type="text" maxlength="500" size="40" autocomplete="off" placeholder="例: もっと静かに、テンポを落として">
+    <button id="prompt-send" type="submit">送る</button>
+  </form>
+  <ul id="prompt-list" aria-label="送った指示"></ul>
+</section>
+
 <section aria-labelledby="h-patch">
   <h2 id="h-patch">パッチ</h2>
   <div class="row mono" id="patch"></div>

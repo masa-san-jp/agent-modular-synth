@@ -72,6 +72,12 @@ export class WorkletCore {
         case "midi":
           be.midi(msg.bytes);
           break;
+        case "schedule":
+          be.scheduleMidi(msg.events);
+          break;
+        case "clear_schedule":
+          be.clearSchedule();
+          break;
       }
     } catch (e) {
       // apply の失敗などで、音声側がパッチの正本と合っていない

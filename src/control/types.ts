@@ -73,7 +73,7 @@ export interface ActorInfo {
   client_id?: string;
 }
 
-export type WarningCode = "type_mismatch" | "duplicate_seed" | "migrated" | "param_defaulted";
+export type WarningCode = "type_mismatch" | "duplicate_seed" | "migrated" | "param_defaulted" | "no_midi_module";
 
 export interface Warning {
   code: WarningCode;
@@ -191,4 +191,25 @@ export interface EngineDiagnosticEvent extends EventBase {
  * Session が出す通知。`seq`(接続ごとの連番。§10)は接続を持つ輸送層が付けるので、ここにはない。
  * EVT-05(session.changed)はサーバー、EVT-06(library.changed)はファイル保存の実装が出す。
  */
-export type SessionEvent = PatchChangedEvent | EngineStateChangedEvent | OutputChangedEvent | EngineDiagnosticEvent;
+/** 演奏の状態(CMD-28 の返値、EVT-07 の中身)。時間は秒。 */
+export interface PerformanceStatus {
+  /** 予約済み(演奏中を含む)の楽譜があるか。 */
+  playing: boolean;
+  /** 予約の末尾までの残り時間 [秒](なければ 0)。次の楽譜は、これが尽きる前に送る。 */
+  remaining: number;
+  scores: { score_id: number; actor: ActorInfo; starts_in: number; ends_in: number; notes: number }[];
+  /** 人からの指示(新しいものが後)。`acked` は、エージェントがその指示を踏まえた楽譜を送ったか。 */
+  prompts: { id: number; text: string; acked: boolean }[];
+}
+
+/** EVT-07 */
+export interface PerformanceChangedEvent extends EventBase {
+  event: "performance.changed";
+  data: PerformanceStatus & {
+    reason: "score_queued" | "score_replaced" | "stopped" | "finished" | "prompt_sent" | "prompt_acked";
+    /** 演奏が終わった・アプリが止めた(緊急停止、音声の停止)ときは null。 */
+    actor: ActorInfo | null;
+  };
+}
+
+export type SessionEvent = PatchChangedEvent | EngineStateChangedEvent | OutputChangedEvent | EngineDiagnosticEvent | PerformanceChangedEvent;

@@ -26,7 +26,7 @@ export interface CommandRow {
   undoNote?: string;
 }
 
-/** 契約 §6 の表(CMD-01〜25)。「人のみ」の3件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
+/** 契約 §6 の表(CMD-01〜29)。「人のみ」の4件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
 export const TABLE: readonly CommandRow[] = [
   { id: "CMD-01", command: "module.list_types", summary: "モジュール種別の定義を列挙", changes: false, undo: "na" },
   { id: "CMD-02", command: "module.add", summary: "モジュールを追加", changes: true, undo: "yes" },
@@ -53,6 +53,10 @@ export const TABLE: readonly CommandRow[] = [
   { id: "CMD-23", command: "engine.panic", summary: "緊急停止(全消音)", changes: false, undo: "no" },
   { id: "CMD-24", command: "engine.release_panic", summary: "緊急停止の解除", changes: false, undo: "no" },
   { id: "CMD-25", command: "output.set_level", summary: "マスター音量を設定", changes: false, undo: "no", permissionNote: "エージェントは上限内" },
+  { id: "CMD-26", command: "score.play", summary: "楽譜(時刻つきの音符の並び)を予約して演奏する", changes: false, undo: "no" },
+  { id: "CMD-27", command: "score.stop", summary: "予約済みの楽譜をすべて捨て、鳴っている音を止める", changes: false, undo: "no" },
+  { id: "CMD-28", command: "score.get_status", summary: "演奏の状態と、人からの指示を読む", changes: false, undo: "na" },
+  { id: "CMD-29", command: "prompt.send", summary: "演奏への指示(プロンプト)をエージェントへ送る", changes: false, undo: "no" },
 ];
 
 // ---- 引数(契約 §6 の各コマンドの引数表。値の検査はコマンド処理が行う。ここは形を伝えるだけ) ----
@@ -91,6 +95,37 @@ interface ArgSpec {
 export const BATCHABLE: readonly string[] = Object.keys(COMMANDS).filter((c) => COMMANDS[c].batch === true);
 
 export const ARGS: Readonly<Record<string, ArgSpec>> = {
+  "score.play": {
+    properties: {
+      notes: {
+        type: "array",
+        description: "音符の並び(順は問わない)。和音は同じ t の音符を並べる。休みは音符を置かない",
+        maxItems: 2000,
+        items: {
+          type: "object",
+          properties: {
+            t: { type: "number", minimum: 0, description: "楽譜の先頭からの開始時刻(tempo_bpm があれば拍、なければ秒)" },
+            dur: { type: "number", exclusiveMinimum: 0, description: "長さ(単位は t と同じ)" },
+            note: { type: "integer", minimum: 0, maximum: 127, description: "MIDI ノート番号。60 = C4(中央のド)。1 上がるごとに半音" },
+            vel: { type: "integer", minimum: 1, maximum: 127, description: "強さ。既定 100" },
+            ch: { type: "integer", minimum: 1, maximum: 16, description: "MIDI チャンネル。既定 1" },
+          },
+          required: ["t", "dur", "note"],
+          additionalProperties: false,
+        },
+      },
+      length: { type: "number", exclusiveMinimum: 0, description: "楽譜の長さ(単位は t と同じ)。次の楽譜はこの後に続く。省略時は最後の音符の終わり。小節の区切りに合わせると、続きがずれない" },
+      tempo_bpm: { type: "number", minimum: 20, maximum: 1000, description: "指定すると t・dur・length の単位が拍になる。省略時は秒" },
+      mode: str("append(既定): 予約があればその末尾に切れ目なく続け、なければ今から。replace: 予約を捨てて今から", { enum: ["append", "replace"] }),
+      ack_prompt: { type: "integer", minimum: 0, description: "このID以下の、人からの指示を「反映済み」にする(この楽譜がその指示を踏まえたものだと人に示す)" },
+    },
+    required: ["notes"],
+    note:
+      "演奏を続けるには: 応答の remaining(予約の末尾までの秒)が尽きる前に、次の楽譜を送る。送る前に score_get_status(またはこの応答)の prompts で acked:false の指示を読み、踏まえた楽譜に ack_prompt を付ける。音が出るには、パッチに MIDI-CV(MOD-IO-002)があり、人が音声を開始している必要がある。",
+  },
+  "score.stop": { properties: {} },
+  "score.get_status": { properties: {} },
+  "prompt.send": { properties: { text: str("指示の文章", { minLength: 1, maxLength: 500 }) }, required: ["text"] },
   "module.list_types": { properties: { type: str("種別の仕様ID。指定時はその種別だけ返す", { enum: TYPE_IDS }) } },
   "module.add": {
     properties: {

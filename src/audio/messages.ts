@@ -23,6 +23,10 @@ export type ToWorklet =
    * 状態のずれを見つけたときに送る。
    */
   | { type: "sync"; levelDb: number; agentMaxLevelDb: number; panic: boolean; running: boolean }
+  /** 楽譜の予約(サンプル時刻つきの演奏入力。時刻の昇順)。 */
+  | { type: "schedule"; events: { at: number; bytes: number[] }[] }
+  /** 予約をすべて捨て、鳴っている音を止める。 */
+  | { type: "clear_schedule" }
   /** 演奏入力(画面鍵盤・Web MIDI)。全ての MIDI-CV モジュールへ渡す。コマンド・履歴の対象外(DEC-008)。 */
   | { type: "midi"; bytes: number[] };
 

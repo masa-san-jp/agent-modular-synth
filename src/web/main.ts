@@ -556,9 +556,33 @@ function renderStatus(): void {
   const level = $<HTMLInputElement>("level");
   if (!levelDragging && Number(level.value) !== st.levelDb) level.value = String(st.levelDb);
   $("levelLabel").textContent = `${st.levelDb} dB(エージェントが設定できる上限 ${st.agentMaxLevelDb} dB)`;
+  renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
+}
+
+/** エージェントの演奏(予約済みの楽譜と、人からの指示)の表示。 */
+let shownPrompts = "";
+function renderPerformance(): void {
+  const p = session.performance;
+  $("perf-state").textContent = p.playing
+    ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒)`
+    : "演奏していません(エージェントが楽譜を送ると始まります)";
+  $<HTMLButtonElement>("score-stop").disabled = !p.playing;
+  // 指示の一覧は、中身が変わったときだけ作り直す
+  const key = JSON.stringify(p.prompts);
+  if (key === shownPrompts) return;
+  shownPrompts = key;
+  const list = $("prompt-list");
+  list.textContent = "";
+  for (const q of [...p.prompts].reverse()) {
+    const li = document.createElement("li");
+    li.dataset.prompt = String(q.id);
+    li.dataset.acked = String(q.acked);
+    li.textContent = `${q.acked ? "反映済み" : "未反映"}: ${q.text}`;
+    list.appendChild(li);
+  }
 }
 
 function render(force = false): void {
@@ -660,6 +684,18 @@ window.addEventListener("DOMContentLoaded", () => {
       renderStatus();
     });
   }
+
+  // エージェントの演奏: 止める、指示を送る
+  $("score-stop").addEventListener("click", () => void run("score.stop"));
+  $("prompt-form").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const input = $<HTMLInputElement>("prompt-text");
+    const text = input.value.trim();
+    if (!text) return;
+    void run("prompt.send", { text }).then((r) => {
+      if (r.ok) input.value = "";
+    });
+  });
 
   // MIDI 機器。非対応のブラウザでは、その旨を出してボタンを無効にする
   $("midi-connect").addEventListener("click", () => void midi.connect());

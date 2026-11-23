@@ -54,9 +54,9 @@ async function main() {
   try {
     await mcp.connect(transport);
     const { tools } = await mcp.listTools();
-    assert.equal(tools.length, 22);
-    for (const n of ["patch_delete", "engine_start", "engine_release_panic"]) assert.equal(tools.some((t) => t.name === n), false, n);
-    ok("アダプタが stdio で起動し、ツール22個を返す(人のみの3つはない)");
+    assert.equal(tools.length, 25);
+    for (const n of ["patch_delete", "engine_start", "engine_release_panic", "prompt_send"]) assert.equal(tools.some((t) => t.name === n), false, n);
+    ok("アダプタが stdio で起動し、ツール25個を返す(人のみの4つはない)");
 
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -151,6 +151,19 @@ async function main() {
     assert.deepEqual(viaMcp, direct);
     assert.deepEqual(viaMcp.result.patch.modules, (await synth("patch")).modules);
     ok("patch_get の結果が、POST /api/command へ直接送った結果・タブのパッチと一致する");
+
+    // ---- 演奏: MCP のツールで楽譜を送り、状態を読み、止める ----
+    const played = await toolOk("score_play", { notes: [{ t: 0, dur: 30, note: 60 }], length: 30 });
+    assert.equal(played.result.score_id, 1);
+    assert.equal(played.revision, viaMcp.revision, "演奏ではリビジョンが変わらない");
+    const status = await toolOk("score_get_status");
+    assert.equal(status.result.playing, true);
+    assert.ok(status.result.remaining > 25 && status.result.remaining <= 30.1);
+    assert.deepEqual(status.result.prompts, []);
+    assert.equal((await toolOk("score_stop")).result.stopped, true);
+    assert.equal((await toolOk("score_get_status")).result.playing, false);
+    assert.equal((await tool("prompt_send", { text: "x" }).catch(() => ({ isError: true }))).isError, true, "指示の送信はツールにない");
+    ok("MCP のツール(score_play / score_get_status / score_stop)で楽譜を予約・確認・停止できる");
 
     // ---- 4) 緊急停止で無音。解除はできない ----
     const panic = await toolOk("engine_panic");
