@@ -10,7 +10,7 @@
 <body>
 <div id="blocked" role="alert" hidden></div>
 <h1>agent-modular-synth(開発中)</h1>
-<p>画面の操作も、ローカルサーバー経由のエージェントの操作も、同じコマンドでこのタブのパッチを編集します。MIDI 機器の接続は未実装です。</p>
+<p>画面の操作も、ローカルサーバー経由のエージェントの操作も、同じコマンドでこのタブのパッチを編集します。MIDI 機器は「MIDI を接続」でつなげます(対応ブラウザのみ)。</p>
 <p class="note"><strong>注意:</strong> ヘッドホンを使うときは、先に機器側の音量を下げてください。このアプリは低い音量から始まり、出力にはリミッターが入っていますが、機器側の音量は調整できません。</p>
 
 <div id="messages" aria-live="polite">
@@ -38,6 +38,10 @@
     <span id="levelLabel"></span>
   </div>
   <div class="row mono" id="meter"></div>
+  <div class="row">
+    <button id="midi-connect" type="button">MIDI を接続</button>
+    <span id="midi-state"></span>
+  </div>
   <div class="row" id="keys" aria-label="画面鍵盤(押している間だけ鳴ります。MIDI-CV モジュールが必要です)"></div>
 </section>
 

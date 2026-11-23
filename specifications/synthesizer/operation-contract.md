@@ -442,7 +442,7 @@
     - `nonfinite_detail`: `{"modules": 整数, "output_stage": 整数}`。`modules` は各モジュールが COM-12 で置換した回数(各モジュールの置換カウンタ `nonfinite_count` の合計。数え方は COM-12: 置換した値1つ=1ポート・1チャンネル・1サンプルにつき1。パラメータの NaN/∞ は数えない)をエンジンが集計した値、`output_stage` は出力段(product-spec §8.1 の「非有限値の検出と除去」)で置換した回数。MOD-IO-001 の `PRE_L`/`PRE_R` は常に有限なので、通常の動作では `output_stage` は増えない(入力の非有限値は MOD-IO-001 が置換し、`modules` に数えられる)。モジュール別の内訳は初期版では定めない。
     - `clip_count`: 出力保護の**最終クリップ**(リミッターの後の ±1.0。product-spec §8.1)が働いたサンプルの累計。出力保護の段が数える。MOD-IO-001 §5 の `clip_count`(`PRE_L` または `PRE_R` が ±1.0 を超えたサンプル数。マスター音量とリミッターの**前**)とは**別の計数**で、一般には一致しない(例: `PRE` = 2.0 が続いても、マスター音量 −20 dB なら最終クリップは働かず `output.clip_count` は増えないが、MOD-IO-001 の `clip_count` は毎サンプル増える。MOD-IO-001 v0.2 §6)。MOD-IO-001 の `clip_count` はモジュールの内部状態で、本コマンドでは返さない(リミッターより前の過大は MOD-IO-001 の `CLIP` 出力を MOD-IO-003 につないで読める)。
     - [設計判断] 計数は音声の開始からの累計で、緊急停止(全モジュールの `reset()`。各モジュールの `nonfinite_count` と MOD-IO-001 §5 の `clip_count` も 0 になる)で 0 に戻る。`stopped` のときは 0。
-  - `midi`: `{"available": 真偽}`(Web MIDI が使えるか。product-spec §7.3)
+  - `midi`: `{"available": 真偽}`(Web MIDI が使えるか。product-spec §7.3)。真になるのは、対応ブラウザで、人が画面の「MIDI を接続」を押し、ブラウザの許可を得たとき。入力機器が1台もつながっていなくても真。非対応のブラウザ、未接続、不許可では偽。変わると EVT-02 が出る。
   - `history`: `{"can_undo", "can_redo"}`
 - 副作用: なし。セッションがない場合は ERR-006。
 

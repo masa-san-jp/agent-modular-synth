@@ -37,6 +37,8 @@ export class WorkletBackend implements AudioBackend {
   private frames = new Map<string, unknown>();
   /** 写しと実体のずれを見つけて送り直した回数(診断用)。 */
   desyncCount = 0;
+  /** Web MIDI が使えるか(対応ブラウザで、利用者が許可した)。engine.get_status の `midi.available`。 */
+  midiAvailable = false;
   /** 音声を開始できない理由(AudioContext がまだない等)。null なら開始できる。 */
   startBlocker: string | null = NOT_READY;
 
@@ -197,7 +199,7 @@ export class WorkletBackend implements AudioBackend {
       clipCount: w?.clipCount ?? 0,
       nonfiniteModules: w?.nonfiniteModules ?? 0,
       nonfiniteOutputStage: w?.nonfiniteOutputStage ?? 0,
-      midiAvailable: false,
+      midiAvailable: this.midiAvailable,
       engineRevision: this.running ? (w?.engineRevision ?? null) : null,
     };
   }
@@ -215,8 +217,12 @@ export class WorkletBackend implements AudioBackend {
     return { values, sampleTime: w?.sampleTime ?? 0, fs: w?.fs ?? this.fs ?? 0, engineRevision: w?.engineRevision ?? null };
   }
 
-  /** 演奏入力(画面鍵盤)。コマンド・履歴の対象外。 */
+  /**
+   * 演奏入力(画面鍵盤・MIDI 機器)。コマンド・履歴の対象外。
+   * 音声が動作中のときだけ渡す: 止まっている間に届いたメッセージ(MIDI クロックは毎秒数十通)を音声側にためない。
+   */
   midi(bytes: number[]): void {
+    if (!this.running || this.suspended) return;
     this.send({ type: "midi", bytes });
   }
 }

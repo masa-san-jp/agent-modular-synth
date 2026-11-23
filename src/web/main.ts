@@ -10,6 +10,8 @@ import type { PatchStore, StoreResult, StoredPatchInfo } from "../control/store.
 import type { CommandResponse, Patch } from "../control/types.js";
 import { REGISTRY } from "../modules/registry.js";
 import type { ServerToTab, TabToServer } from "../server/protocol.js";
+import { MidiLink } from "./midi.js";
+import type { MidiState } from "./midi.js";
 import { createEditor } from "./ui.js";
 import type { Editor } from "./ui.js";
 
@@ -466,6 +468,36 @@ function demoOps(): { command: string; args: Record<string, unknown> }[] {
 
 let editor: Editor | null = null;
 
+// ---- MIDI 機器(Web MIDI)。画面鍵盤と同じ経路でエンジンへ渡す ----
+let midiMessages = 0;
+const midi = new MidiLink({
+  onMessage: (bytes) => {
+    midiMessages++;
+    backend.midi(bytes);
+  },
+  onChange: (state) => {
+    backend.midiAvailable = state.kind === "ready";
+    session.pollBackend(); // 利用可否の変化を通知にする(EVT-02)
+    renderMidi(state);
+  },
+});
+function renderMidi(state: MidiState): void {
+  if (!domReady) return;
+  const button = $<HTMLButtonElement>("midi-connect");
+  const label = $("midi-state");
+  button.disabled = state.kind === "ready" || state.kind === "unsupported";
+  label.textContent =
+    state.kind === "idle"
+      ? "未接続(「MIDI を接続」を押すと、ブラウザが許可を尋ねます)"
+      : state.kind === "unsupported"
+        ? "このブラウザは MIDI 機器の接続(Web MIDI)に対応していません。画面鍵盤は使えます"
+        : state.kind === "denied"
+          ? `MIDI を使えません(許可されなかった、または取得に失敗: ${state.reason})`
+          : state.inputs.length === 0
+            ? "MIDI は使えます。入力機器がつながっていません(つなぐと自動で使えます)"
+            : `MIDI 入力: ${state.inputs.join("、")}`;
+}
+
 function showError(text: string): void {
   $("error").textContent = text;
 }
@@ -563,6 +595,12 @@ const debug = {
   get autosaveProblem(): string | null {
     return autosaveProblem;
   },
+  get midiState(): MidiState {
+    return midi.current;
+  },
+  get midiMessages(): number {
+    return midiMessages;
+  },
   get tabRole(): string {
     return tabRole;
   },
@@ -622,6 +660,11 @@ window.addEventListener("DOMContentLoaded", () => {
       renderStatus();
     });
   }
+
+  // MIDI 機器。非対応のブラウザでは、その旨を出してボタンを無効にする
+  $("midi-connect").addEventListener("click", () => void midi.connect());
+  if (!MidiLink.supported()) void midi.connect(); // 「非対応」の状態にする(許可は尋ねない)
+  else renderMidi(midi.current);
 
   // 画面鍵盤(C4〜C5)。押している間だけ鳴る。
   const keys = $("keys");

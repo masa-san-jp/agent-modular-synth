@@ -31,7 +31,7 @@
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
 ## 実装(作業中)
-18種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。MIDI 機器の接続、配線を線で描く表示は未実装。
+18種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。MIDI 機器は「MIDI を接続」でつなげる(Web MIDI 対応のブラウザ。Issue #29)。配線を線で描く表示は未実装。
 
 ```
 npm install          # 依存を入れる(Node.js 22 以上)
@@ -41,7 +41,8 @@ npm run test:browser # 実際のブラウザ(ヘッドレスの Chromium。Playw
 npm run test:ui      # 編集画面の操作の確認(同上)
 npm run test:mcp-browser # MCP クライアント → アダプタ → サーバー → タブ の確認(同上)
 npm run test:review-browser # 独立レビュー(#24)で見つかった不具合の再発防止の確認(同上)
-npm run test:e2e     # 上のブラウザ試験4つをまとめて実行
+npm run test:midi-browser # MIDI 機器の接続の確認(試験用の機器を使う。同上)
+npm run test:e2e     # 上のブラウザ試験5つをまとめて実行
 npm run mcp          # MCP アダプタを stdio で起動する(通常は MCP クライアントが起動する)
 npm run check        # npm test に加えて、仕様文書の検査
 ```
@@ -69,7 +70,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 - `src/audio/`: 出力保護(`output-stage.ts`)、AudioWorklet(`worklet.ts`。中身は試験できる形の `worklet-core.ts`)、メインスレッド側の窓口(`worklet-backend.ts`。音量・緊急停止の写しと、ワークレットとの合わせ直し)。
 - `src/server/`: ローカルサーバー(`app.ts`: エージェント用API、認証、タブへの中継。`file-store.ts`: 専用フォルダへの保存)。127.0.0.1 だけで待ち受ける。
 - `src/mcp/`: MCP アダプタ(stdio)。共通コマンドを1対1でツールにする薄い変換層で、ローカルサーバーの `POST /api/command` だけを呼ぶ。
-- `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
+- `src/web/`・`web/`: タブ側の本体と編集画面(`ui.ts`)、MIDI 機器の接続(`midi.ts`)。パッチの正本(Session)はタブにあり、サーバーは中継する。
 - `test/`: 単体試験と、仕様 §10 の検証例(`tv("TV-…")`)、契約の受入例(`AX-…`、`DX-…`)。`test/browser/` は実際のブラウザでの端から端の確認。
 - 第三者ライブラリ: [docs/third-party-licenses.md](docs/third-party-licenses.md)
 
