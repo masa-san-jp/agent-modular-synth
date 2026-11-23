@@ -10,6 +10,8 @@ import type { PatchStore, StoreResult, StoredPatchInfo } from "../control/store.
 import type { CommandResponse, Patch } from "../control/types.js";
 import { REGISTRY } from "../modules/registry.js";
 import type { ServerToTab, TabToServer } from "../server/protocol.js";
+import { MidiLink } from "./midi.js";
+import type { MidiState } from "./midi.js";
 import { createEditor } from "./ui.js";
 import type { Editor } from "./ui.js";
 
@@ -466,6 +468,36 @@ function demoOps(): { command: string; args: Record<string, unknown> }[] {
 
 let editor: Editor | null = null;
 
+// ---- MIDI 機器(Web MIDI)。画面鍵盤と同じ経路でエンジンへ渡す ----
+let midiMessages = 0;
+const midi = new MidiLink({
+  onMessage: (bytes) => {
+    midiMessages++;
+    backend.midi(bytes);
+  },
+  onChange: (state) => {
+    backend.midiAvailable = state.kind === "ready";
+    session.pollBackend(); // 利用可否の変化を通知にする(EVT-02)
+    renderMidi(state);
+  },
+});
+function renderMidi(state: MidiState): void {
+  if (!domReady) return;
+  const button = $<HTMLButtonElement>("midi-connect");
+  const label = $("midi-state");
+  button.disabled = state.kind === "ready" || state.kind === "unsupported";
+  label.textContent =
+    state.kind === "idle"
+      ? "未接続(「MIDI を接続」を押すと、ブラウザが許可を尋ねます)"
+      : state.kind === "unsupported"
+        ? "このブラウザは MIDI 機器の接続(Web MIDI)に対応していません。画面鍵盤は使えます"
+        : state.kind === "denied"
+          ? `MIDI を使えません(許可されなかった、または取得に失敗: ${state.reason})`
+          : state.inputs.length === 0
+            ? "MIDI は使えます。入力機器がつながっていません(つなぐと自動で使えます)"
+            : `MIDI 入力: ${state.inputs.join("、")}`;
+}
+
 function showError(text: string): void {
   $("error").textContent = text;
 }
@@ -524,9 +556,33 @@ function renderStatus(): void {
   const level = $<HTMLInputElement>("level");
   if (!levelDragging && Number(level.value) !== st.levelDb) level.value = String(st.levelDb);
   $("levelLabel").textContent = `${st.levelDb} dB(エージェントが設定できる上限 ${st.agentMaxLevelDb} dB)`;
+  renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
+}
+
+/** エージェントの演奏(予約済みの楽譜と、人からの指示)の表示。 */
+let shownPrompts = "";
+function renderPerformance(): void {
+  const p = session.performance;
+  $("perf-state").textContent = p.playing
+    ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒)`
+    : "演奏していません(エージェントが楽譜を送ると始まります)";
+  $<HTMLButtonElement>("score-stop").disabled = !p.playing;
+  // 指示の一覧は、中身が変わったときだけ作り直す
+  const key = JSON.stringify(p.prompts);
+  if (key === shownPrompts) return;
+  shownPrompts = key;
+  const list = $("prompt-list");
+  list.textContent = "";
+  for (const q of [...p.prompts].reverse()) {
+    const li = document.createElement("li");
+    li.dataset.prompt = String(q.id);
+    li.dataset.acked = String(q.acked);
+    li.textContent = `${q.acked ? "反映済み" : "未反映"}: ${q.text}`;
+    list.appendChild(li);
+  }
 }
 
 function render(force = false): void {
@@ -562,6 +618,12 @@ const debug = {
   },
   get autosaveProblem(): string | null {
     return autosaveProblem;
+  },
+  get midiState(): MidiState {
+    return midi.current;
+  },
+  get midiMessages(): number {
+    return midiMessages;
   },
   get tabRole(): string {
     return tabRole;
@@ -622,6 +684,23 @@ window.addEventListener("DOMContentLoaded", () => {
       renderStatus();
     });
   }
+
+  // エージェントの演奏: 止める、指示を送る
+  $("score-stop").addEventListener("click", () => void run("score.stop"));
+  $("prompt-form").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const input = $<HTMLInputElement>("prompt-text");
+    const text = input.value.trim();
+    if (!text) return;
+    void run("prompt.send", { text }).then((r) => {
+      if (r.ok) input.value = "";
+    });
+  });
+
+  // MIDI 機器。非対応のブラウザでは、その旨を出してボタンを無効にする
+  $("midi-connect").addEventListener("click", () => void midi.connect());
+  if (!MidiLink.supported()) void midi.connect(); // 「非対応」の状態にする(許可は尋ねない)
+  else renderMidi(midi.current);
 
   // 画面鍵盤(C4〜C5)。押している間だけ鳴る。
   const keys = $("keys");

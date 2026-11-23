@@ -373,3 +373,35 @@ test("出力段: 開始・引き下げの直後は無音から始まり、フェ
   for (let i = 0; i < steps / 2; i++) half.step(0.5, 0.5);
   assert.ok(half.outL[0]! < target * 0.6, "半分の時点では、まだ目標の約半分");
 });
+
+// ---- MIDI(Issue #29) ----
+
+test("演奏入力(MIDI)は、音声が動作中のときだけ音声側へ渡す。止まっている間・中断中のメッセージはためない", () => {
+  const r = rig();
+  r.wb.attach(r.fake, FS);
+  for (let i = 0; i < 100; i++) r.wb.midi([0xf8]); // 開始前の MIDI クロック
+  assert.equal(r.fake.received.filter((m) => m.type === "midi").length, 0);
+  r.ok("human", "engine.start");
+  r.wb.midi([0x90, 60, 100]);
+  assert.equal(r.fake.received.filter((m) => m.type === "midi").length, 1);
+  r.wb.setSuspended(true);
+  r.wb.midi([0x90, 62, 100]);
+  assert.equal(r.fake.received.filter((m) => m.type === "midi").length, 1);
+  r.fake.render();
+  assert.equal(r.wb.desyncCount, 0, "渡さなかった分で、送受信の数がずれない");
+});
+
+test("MIDI の利用可否は engine.get_status の midi.available に出て、変わると EVT-02 が出る", () => {
+  const r = rig();
+  const available = () => (r.ok("agent", "engine.get_status").result.midi as { available: boolean }).available;
+  assert.equal(available(), false);
+  r.events.length = 0;
+  r.wb.midiAvailable = true;
+  r.s.pollBackend();
+  assert.equal(available(), true);
+  const ev = r.events.filter((e) => e.event === "engine.state_changed");
+  assert.equal(ev.length, 1);
+  assert.deepEqual((ev[0]!.data as { midi: unknown }).midi, { available: true });
+  r.s.pollBackend();
+  assert.equal(r.events.filter((e) => e.event === "engine.state_changed").length, 1, "変わらなければ出ない");
+});

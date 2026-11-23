@@ -10,6 +10,7 @@
 
 import { TypeCatalog, TypeInfo, ParamInfo, PortInfo } from "./catalog.js";
 import { checkEnvelope, listTypes } from "./envelope.js";
+import { MidiEventAt, Performance, SCORE_LIMITS, parseScore, scoreEvents } from "./performance.js";
 import { CommandError } from "./errors.js";
 import { MAX_UI_DEPTH, depthExceeds } from "./json.js";
 import {
@@ -25,6 +26,8 @@ import {
   Patch,
   PatchMeta,
   PatchModule,
+  PerformanceChangedEvent,
+  PerformanceStatus,
   PortRef,
   SessionEvent,
   Warning,
@@ -110,6 +113,13 @@ export interface AudioBackend {
   status(): BackendStatus;
   /** MOD-IO-003 の読出し値。「ある処理ブロックが終わった直後」の同一時点の組。`fields` にある項目だけを返す。 */
   meterRead(moduleId: string, fields: readonly string[]): MeterReading;
+  // ---- 演奏(楽譜の予約。operation-contract CMD-26〜29)。持たないバックエンドでは score.play は ERR-010 ----
+  /** 音声側の今のサンプル時刻(処理したサンプルの通算)の見積もり。 */
+  sampleNow?(): number;
+  /** サンプル時刻つきの MIDI メッセージを予約する(時刻の昇順)。過ぎた時刻のものは、すぐに処理される。 */
+  scheduleMidi?(events: MidiEventAt[]): void;
+  /** 予約をすべて捨て、鳴っている音を止める(捨てた予約のうちノートオフだけは、その場で処理する)。 */
+  clearSchedule?(): void;
 }
 
 /**
@@ -248,6 +258,15 @@ export class RecordingBackend implements AudioBackend {
     for (const f of fields) values[f] = this.meterValues[f];
     return { values, sampleTime: this.sampleTime, fs: this.fs };
   }
+  sampleNow(): number {
+    return this.sampleTime;
+  }
+  scheduleMidi(events: MidiEventAt[]): void {
+    this.rec("scheduleMidi", events);
+  }
+  clearSchedule(): void {
+    this.rec("clearSchedule");
+  }
 }
 
 // =====================================================================================
@@ -258,6 +277,7 @@ export class RecordingBackend implements AudioBackend {
 export const OUT_ID = "out";
 export const OUT_TYPE = "MOD-IO-001";
 export const METER_TYPE = "MOD-IO-003";
+export const MIDI_TYPE = "MOD-IO-002";
 export const PATCH_FORMAT = "modular-synth-patch";
 export const SCHEMA_VERSION = 1;
 
@@ -347,6 +367,10 @@ export const COMMANDS: Readonly<Record<string, CommandSpec>> = {
   "engine.panic": {},
   "engine.release_panic": { keyed: true, humanOnly: true },
   "output.set_level": { keyed: true },
+  "score.play": { keyed: true },
+  "score.stop": {},
+  "score.get_status": {},
+  "prompt.send": { keyed: true, humanOnly: true },
 };
 
 // =====================================================================================
@@ -632,6 +656,8 @@ export class Session {
   /** 音声側へ最後に渡したリビジョン(バックエンドが engineRevision を返さないときに使う)。 */
   private pushedRevision: number | null = null;
   private backendDirty = false;
+  /** 演奏の状態(予約済みの楽譜、人からの指示)。パッチ・リビジョン・履歴とは別。 */
+  private readonly perf = new Performance();
   /** pollBackend() が変化を見つけるための、最後に見た音声側の状態。 */
   private seen: BackendStatus;
 
@@ -682,6 +708,11 @@ export class Session {
     this.backend.applyPatch(this.exportPatch(), this.rev);
     this.pushedRevision = this.rev;
     this.pollBackend();
+  }
+
+  /** 演奏の状態(予約済みの楽譜と、人からの指示。CMD-28 の返値と同じ)。 */
+  get performance(): PerformanceStatus {
+    return this.performanceStatus();
   }
 
   /** 通知(EVT)を受け取る。戻り値を呼ぶと解除する。 */
@@ -752,6 +783,16 @@ export class Session {
     }
     if (now.levelDb !== before.levelDb || now.agentMaxLevelDb !== before.agentMaxLevelDb || now.panic !== before.panic) {
       events.push(this.outputEvent(now, null, "reset_to_default"));
+    }
+    // 演奏: 音声が動作中でなくなったら予約を捨てる。最後まで演奏し終えたら知らせる
+    if (now.audioState !== "running") {
+      if (this.perf.playing) {
+        this.backend.clearSchedule?.();
+        this.perf.clear();
+        events.push(this.performanceEvent("stopped", null));
+      }
+    } else if (this.perf.prune(this.backend.sampleNow?.() ?? now.sampleTime)) {
+      events.push(this.performanceEvent("finished", null));
     }
     if (
       now.clipCount > before.clipCount ||
@@ -962,6 +1003,15 @@ export class Session {
         return this.cmdReleasePanic(args, ctx);
       case "output.set_level":
         return this.cmdSetLevel(args, ctx);
+      case "score.play":
+        return this.cmdScorePlay(args, ctx);
+      case "score.stop":
+        return this.cmdScoreStop(args, ctx);
+      case "score.get_status":
+        checkKeys(args, []);
+        return { result: { ...this.performanceStatus() }, warnings: [] };
+      case "prompt.send":
+        return this.cmdPromptSend(args, ctx);
       case "patch.save":
       case "patch.load":
       case "patch.list":
@@ -1792,7 +1842,97 @@ export class Session {
     this.backend.panic(); // 緊急停止中でも毎回実行する(§7.1)
     const after = this.backend.status();
     if (!before.panic) ctx.events.push(this.outputEvent(after, ctx.actor, "panic"));
+    // 予約済みの楽譜はすべて捨てる(解除した後に、続きが鳴り出さない)
+    this.backend.clearSchedule?.();
+    if (this.perf.clear()) ctx.events.push(this.performanceEvent("stopped", ctx.actor));
     return { result: { panic: true }, warnings: [] };
+  }
+
+  // ---- 演奏(楽譜の予約と、人からの指示。operation-contract CMD-26〜29。リビジョンと履歴の対象外) ----
+
+  /** 演奏の状態。終わった楽譜は外してから返す。 */
+  private performanceStatus(): PerformanceStatus {
+    const s = this.backend.status();
+    const fs = s.fs ?? 48000;
+    const now = this.backend.sampleNow?.() ?? s.sampleTime;
+    this.perf.prune(now);
+    const sec = (samples: number): number => Math.max(0, Math.round(((samples - now) / fs) * 1000) / 1000);
+    const end = this.perf.endSample;
+    return {
+      playing: this.perf.playing,
+      remaining: end === null ? 0 : sec(end),
+      scores: this.perf.scores.map((q) => ({ score_id: q.id, actor: q.actor, starts_in: sec(q.startSample), ends_in: sec(q.endSample), notes: q.notes })),
+      prompts: this.perf.prompts,
+    };
+  }
+
+  private performanceEvent(reason: PerformanceChangedEvent["data"]["reason"], actor: ActorInfo | null): SessionEvent {
+    return { v: 1, event: "performance.changed", session_id: this.sessionId, data: { ...this.performanceStatus(), reason, actor } };
+  }
+
+  private cmdScorePlay(args: Args, ctx: Ctx): ExecOutput {
+    const score = parseScore(args);
+    const s = this.backend.status();
+    if (s.audioState !== "running") throw new CommandError("ERR-301", "音声が動作中でない", { audio_state: s.audioState });
+    if (s.panic) throw new CommandError("ERR-301", "緊急停止中は演奏できない", { audio_state: s.audioState, panic: true });
+    if (!this.backend.sampleNow || !this.backend.scheduleMidi || !this.backend.clearSchedule || s.fs === null) {
+      throw new Error("この音声側は楽譜の予約に対応していない");
+    }
+    const fs = s.fs;
+    const now = this.backend.sampleNow();
+    this.perf.prune(now);
+    const replace = score.mode === "replace";
+    // 開始: 予約があれば、その末尾に切れ目なく続ける。なければ(または置き換えなら)、少しの余裕を置いて今から
+    const earliest = now + Math.round(SCORE_LIMITS.leadSeconds * fs);
+    const tail = replace ? null : this.perf.endSample;
+    const start = tail !== null && tail > earliest ? tail : earliest;
+    const end = start + Math.max(1, Math.round(score.lengthSeconds * fs));
+    if (!replace && this.perf.queuedNotes + score.notes.length > SCORE_LIMITS.queuedNotes) {
+      throw new CommandError("ERR-106", "予約済みの音符の数の上限", { limit: "queued_notes", max: SCORE_LIMITS.queuedNotes });
+    }
+    if ((end - now) / fs > SCORE_LIMITS.horizonSeconds) {
+      throw new CommandError("ERR-106", "予約できる時間の上限", { limit: "score_horizon_seconds", max: SCORE_LIMITS.horizonSeconds });
+    }
+    // ここから状態を変える
+    if (replace) {
+      this.backend.clearSchedule();
+      this.perf.clear();
+    }
+    this.backend.scheduleMidi(scoreEvents(score.notes, start, fs));
+    const queued = this.perf.add(ctx.actor, start, end, score.notes.length);
+    const acked = score.ackPrompt !== null && this.perf.ack(score.ackPrompt);
+    ctx.events.push(this.performanceEvent(replace ? "score_replaced" : "score_queued", ctx.actor));
+    if (acked) ctx.events.push(this.performanceEvent("prompt_acked", ctx.actor));
+    const warnings: Warning[] = [];
+    if (!this.state.modules.some((m) => m.type === MIDI_TYPE)) {
+      warnings.push({ code: "no_midi_module", message: `パッチに ${MIDI_TYPE}(MIDI-CV)がないので、楽譜は音にならない`, details: {} });
+    }
+    const st = this.performanceStatus();
+    const mine = st.scores.find((q) => q.score_id === queued.id);
+    return {
+      result: { score_id: queued.id, starts_in: mine?.starts_in ?? 0, ends_in: mine?.ends_in ?? 0, remaining: st.remaining, queued_scores: st.scores.length, prompts: st.prompts },
+      warnings,
+    };
+  }
+
+  private cmdScoreStop(args: Args, ctx: Ctx): ExecOutput {
+    checkKeys(args, []);
+    this.backend.clearSchedule?.(); // 予約がなくても毎回実行する(鳴り続けている音を止める)
+    const had = this.perf.clear();
+    if (had) ctx.events.push(this.performanceEvent("stopped", ctx.actor));
+    return { result: { stopped: had }, warnings: [] };
+  }
+
+  private cmdPromptSend(args: Args, ctx: Ctx): ExecOutput {
+    checkKeys(args, ["text"]);
+    if (!("text" in args)) throw bad("text", "missing");
+    const text = args.text;
+    if (typeof text !== "string") throw bad("text", "type");
+    const n = charLen(text.trim());
+    if (n < 1 || n > SCORE_LIMITS.promptChars) throw bad("text", n < 1 ? "empty" : "too_long", `text は 1〜${SCORE_LIMITS.promptChars} 文字`);
+    const p = this.perf.addPrompt(text.trim());
+    ctx.events.push(this.performanceEvent("prompt_sent", ctx.actor));
+    return { result: { prompt: p }, warnings: [] };
   }
 
   private cmdReleasePanic(args: Args, ctx: Ctx): ExecOutput {

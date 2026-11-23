@@ -19,6 +19,8 @@ export interface WorkletPort {
 const NOT_READY = "音声がまだ用意されていない";
 
 export interface WorkletBackendOptions {
+  /** 経過時間を測る時計 [ms](音声側の今のサンプル時刻を、最後に届いた状態から見積もるのに使う)。既定は performance.now()。 */
+  clock?: () => number;
   /** まだ1度も測定値が届いていないメーターの読出し値(初期状態のメーターの値)。 */
   initialMeter?: () => Record<string, unknown>;
 }
@@ -37,6 +39,8 @@ export class WorkletBackend implements AudioBackend {
   private frames = new Map<string, unknown>();
   /** 写しと実体のずれを見つけて送り直した回数(診断用)。 */
   desyncCount = 0;
+  /** Web MIDI が使えるか(対応ブラウザで、利用者が許可した)。engine.get_status の `midi.available`。 */
+  midiAvailable = false;
   /** 音声を開始できない理由(AudioContext がまだない等)。null なら開始できる。 */
   startBlocker: string | null = NOT_READY;
 
@@ -83,6 +87,7 @@ export class WorkletBackend implements AudioBackend {
     if (msg.type !== "status") return;
     const w = msg.status;
     this.last = w;
+    this.lastAt = this.clock();
     for (const [id, m] of Object.entries(w.meters)) {
       if ("frame" in m) this.frames.set(id, m.frame);
     }
@@ -197,7 +202,7 @@ export class WorkletBackend implements AudioBackend {
       clipCount: w?.clipCount ?? 0,
       nonfiniteModules: w?.nonfiniteModules ?? 0,
       nonfiniteOutputStage: w?.nonfiniteOutputStage ?? 0,
-      midiAvailable: false,
+      midiAvailable: this.midiAvailable,
       engineRevision: this.running ? (w?.engineRevision ?? null) : null,
     };
   }
@@ -215,8 +220,40 @@ export class WorkletBackend implements AudioBackend {
     return { values, sampleTime: w?.sampleTime ?? 0, fs: w?.fs ?? this.fs ?? 0, engineRevision: w?.engineRevision ?? null };
   }
 
-  /** 演奏入力(画面鍵盤)。コマンド・履歴の対象外。 */
+  // ---- 演奏(楽譜の予約) ----
+
+  private lastAt = 0;
+  private clock(): number {
+    return this.options.clock ? this.options.clock() : performance.now();
+  }
+
+  /**
+   * 音声側の今のサンプル時刻の見積もり: 最後に届いた状態の時刻に、それからの経過時間を足す。
+   * 状態は約 50 ms ごとに届く。見積もりのずれは、楽譜を始めるまでの余裕(SCORE_LIMITS.leadSeconds)の中に収まる。
+   */
+  sampleNow(): number {
+    const w = this.last;
+    if (!w) return 0;
+    if (!this.running || this.suspended) return w.sampleTime;
+    const elapsed = Math.min(1000, Math.max(0, this.clock() - this.lastAt)); // 状態が途絶えても、見積もりを進めすぎない
+    return w.sampleTime + Math.round((elapsed / 1000) * w.fs);
+  }
+
+  scheduleMidi(events: { at: number; bytes: number[] }[]): void {
+    if (!this.running || this.suspended) return;
+    this.send({ type: "schedule", events });
+  }
+
+  clearSchedule(): void {
+    this.send({ type: "clear_schedule" });
+  }
+
+  /**
+   * 演奏入力(画面鍵盤・MIDI 機器)。コマンド・履歴の対象外。
+   * 音声が動作中のときだけ渡す: 止まっている間に届いたメッセージ(MIDI クロックは毎秒数十通)を音声側にためない。
+   */
   midi(bytes: number[]): void {
+    if (!this.running || this.suspended) return;
     this.send({ type: "midi", bytes });
   }
 }

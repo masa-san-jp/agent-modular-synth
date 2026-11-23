@@ -106,7 +106,7 @@
 
 ## この層で扱っていないもの(次の Issue)
 Web MIDI の可否、タブ接続の生死監視、同時接続数や待ち要求数の上限。(認証、セッションなし、応答待ち、要求の大きさ、通知の連番、EVT-05 / EVT-06、ファイルへの保存と自動保存は Issue #20 で実装した。)
-**→ 未反映(理由: 未達。契約に規定がない実装の範囲)。Web MIDI の可否(`midi.available`)は未実装。タブ接続の生死監視と、同時接続数・待ち要求数の上限は、Issue #24 の修正で実装した(operation-contract §3.4 の8、§16)。**
+**→ 未反映(理由: 未達。契約に規定がない実装の範囲)。Web MIDI の可否(`midi.available`)は 2026-11-23 に実装済み(operation-contract CMD-21、product-spec §7 の3)。タブ接続の生死監視と、同時接続数・待ち要求数の上限は、Issue #24 の修正で実装した(operation-contract §3.4 の8、§16)。**
 
 ## 実装上の整理が残る点
 - パッチの型と定数(format 名、IDの書式、上限)が `src/control/types.ts`・`session.ts` と `src/control/patch-doc.ts` に重複している。ファイル保存の実装時に一本化する。 **→ 反映不要(実装の整理)**

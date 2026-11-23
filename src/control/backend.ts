@@ -3,6 +3,7 @@
 import { OutputStage, OutputStageConfig, PROVISIONAL } from "../audio/output-stage.js";
 import { Engine } from "../engine/engine.js";
 import { ModuleFactory, SynthModule } from "../engine/module.js";
+import type { MidiEventAt } from "./performance.js";
 import { AudioBackend, BackendStatus, MeterReading, SetLevelResult } from "./session.js";
 import { ActorKind, Cable, Patch, PatchModule } from "./types.js";
 
@@ -16,6 +17,9 @@ export class EngineBackend implements AudioBackend {
   private pending: Op[] = [];
   private pendingRevision: number | null = null;
   private engineRevision: number | null = null;
+  /** 予約済みの演奏入力(サンプル時刻の昇順)。`scheduleHead` より前は処理済み。 */
+  private schedule: MidiEventAt[] = [];
+  private scheduleHead = 0;
   /** 差分の適用に失敗して、正本とずれた可能性があるときの理由(takeDesync() で読むと消える)。 */
   private desync: string | null = null;
   /** 処理したサンプルの通算(緊急停止でエンジンを初期化しても戻らない)。 */
@@ -127,13 +131,47 @@ export class EngineBackend implements AudioBackend {
 
   stop(): void {
     this.running = false;
+    this.clearSchedule(); // 止まっている間はサンプル時刻が進まないので、予約は意味を失う
     this.stage.stop();
   }
 
   panic(): void {
     this.flush();
     this.stage.panic();
+    this.clearSchedule(); // 予約済みの楽譜は捨てる(解除の後に続きが鳴り出さない)
     this.engine.reset();
+  }
+
+  // ---- 演奏(楽譜の予約) ----
+
+  sampleNow(): number {
+    return this.sampleTime;
+  }
+
+  /** サンプル時刻つきの演奏入力を予約する。その時刻のサンプルを処理する直前に、全ての MIDI-CV モジュールへ渡す。 */
+  scheduleMidi(events: readonly MidiEventAt[]): void {
+    if (events.length === 0) return;
+    const rest = this.schedule.slice(this.scheduleHead);
+    const add = events.map((e) => ({ at: e.at, bytes: [...e.bytes] }));
+    // 既存の予約の末尾より後なら、後ろへ足すだけ(続きの楽譜はこの形)。そうでなければ並べ直す(同じ時刻は先に予約した方が先)
+    const sorted = rest.length === 0 || add[0]!.at >= rest[rest.length - 1]!.at;
+    this.schedule = sorted ? rest.concat(add) : rest.concat(add).sort((x, y) => x.at - y.at);
+    this.scheduleHead = 0;
+  }
+
+  /** 予約をすべて捨てる。捨てた予約のうちノートオフは、その場で渡す(鳴っている音を止める)。 */
+  clearSchedule(): void {
+    for (let i = this.scheduleHead; i < this.schedule.length; i++) {
+      const b = this.schedule[i]!.bytes;
+      if (((b[0] ?? 0) & 0xf0) === 0x80) this.midi(b);
+    }
+    this.schedule = [];
+    this.scheduleHead = 0;
+  }
+
+  /** 予約済み(未処理)の演奏入力の数。 */
+  get scheduled(): number {
+    return this.schedule.length - this.scheduleHead;
   }
 
   releasePanic(): boolean {
@@ -220,7 +258,17 @@ export class EngineBackend implements AudioBackend {
     const preL = out.output("PRE_L").values;
     const preR = out.output("PRE_R").values;
     const st = this.stage;
+    const sched = this.schedule;
     for (let i = 0; i < left.length; i++) {
+      // 予約済みの演奏入力のうち、このサンプルの時刻になったものを渡す(サンプル単位で正確。ブロック長に依らない)
+      if (this.scheduleHead < sched.length) {
+        const t = this.sampleTime + i;
+        while (this.scheduleHead < sched.length && sched[this.scheduleHead]!.at <= t) this.midi(sched[this.scheduleHead++]!.bytes);
+        if (this.scheduleHead === sched.length) {
+          this.schedule.length = 0;
+          this.scheduleHead = 0;
+        }
+      }
       this.engine.tick();
       st.step(preL[0]!, preR[0]!);
       left[i] = st.outL[0]!;
