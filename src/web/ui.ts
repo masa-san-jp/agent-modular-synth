@@ -35,17 +35,17 @@ const PATCH_NAME = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 
 /** 機能分類(仕様のフロントマター category)の表示名。 */
 const CATEGORY_LABEL: Record<string, string> = {
-  oscillator: "オシレータ",
-  noise: "ノイズ",
-  filter: "フィルタ",
-  waveshaper: "歪み・波形整形",
-  amplifier: "アンプ・ミキサー",
-  modulation: "変調(エンベロープ・LFO)",
-  clock_sequencer: "クロック・シーケンサ",
-  random_logic: "ランダム・ロジック",
-  time_effect: "時間系エフェクト",
-  utility: "ユーティリティ",
-  io_utility: "入出力・計測",
+  oscillator: "OSC",
+  noise: "NOISE",
+  filter: "FILTER",
+  waveshaper: "SHAPER",
+  amplifier: "AMP / MIX",
+  modulation: "ENV / LFO",
+  clock_sequencer: "CLOCK / SEQ",
+  random_logic: "RANDOM / LOGIC",
+  time_effect: "TIME FX",
+  utility: "UTILITY",
+  io_utility: "IO / METER",
 };
 
 const COMMAND_LABEL: Record<string, string> = {
@@ -93,28 +93,28 @@ function formatValue(p: ParamInfo, v: number): string {
 }
 
 function actorLabel(a: ActorInfo | null): string {
-  if (!a) return "アプリ";
-  return a.kind === "agent" ? "エージェント" : "人";
+  if (!a) return "APP";
+  return a.kind === "agent" ? "AGENT" : "HUMAN";
 }
 
 function describeChange(c: Change): string {
   switch (c.kind) {
     case "module_added":
-      return `モジュール ${c.module.id}(${c.module.type})を追加`;
+      return `+ ${c.module.id} ${c.module.type}`;
     case "module_removed":
-      return `モジュール ${c.module_id} を削除`;
+      return `− ${c.module_id}`;
     case "cable_added":
-      return `${c.cable.from.module}.${c.cable.from.port} → ${c.cable.to.module}.${c.cable.to.port} を接続`;
+      return `${c.cable.from.module}.${c.cable.from.port} → ${c.cable.to.module}.${c.cable.to.port}`;
     case "cable_removed":
-      return `ケーブル ${c.cable_id} を切断`;
+      return `− ${c.cable_id}`;
     case "param_changed":
       return `${c.module_id}.${c.param} = ${Number(c.value.toPrecision(7))}`;
     case "module_moved":
-      return `${c.module_id} を移動`;
+      return `${c.module_id} moved`;
     case "meta_changed":
-      return "題名・説明を変更";
+      return "meta";
     case "patch_replaced":
-      return "パッチ全体を置き換え";
+      return "patch replaced";
   }
 }
 
@@ -265,24 +265,24 @@ export function createEditor(deps: EditorDeps): Editor {
     const controls: ParamControl[] = [];
     const head = el("header", {}, el("h3", {}, info?.title ?? m.type), el("code", { class: "module-id" }, m.id), el("span", { class: "type-id" }, m.type));
     if (m.type === OUTPUT_TYPE) {
-      head.append(el("span", { class: "badge", title: "常設のモジュールは削除できません" }, "常設"));
+      head.append(el("span", { class: "badge", title: "常設のモジュールは削除できません" }, "FIXED"));
     } else {
-      const remove = el("button", { type: "button", "data-action": "remove", class: "small danger" }, "削除");
+      const remove = el("button", { type: "button", "data-action": "remove", class: "small danger" }, "DEL");
       remove.addEventListener("click", () => void deps.run("module.remove", { module_id: m.id }));
       head.append(remove);
     }
     const root = el("article", { class: "module", "data-module": m.id, "data-type": m.type }, head);
     let readout: HTMLElement | null = null;
     if (info) {
-      const ports = (list: TypeInfo["inputs"]): string => list.filter((p) => p.connectable).map((p) => p.name).join("、") || "なし";
-      root.append(el("p", { class: "ports" }, `入力: ${ports(info.inputs)} / 出力: ${ports(info.outputs)}`));
+      const ports = (list: TypeInfo["inputs"]): string => list.filter((p) => p.connectable).map((p) => p.name).join(" ") || "–";
+      root.append(el("p", { class: "ports" }, `in ${ports(info.inputs)} / out ${ports(info.outputs)}`));
       if (m.type === "MOD-IO-003" || m.type === "MOD-MIX-002") {
         readout = el("p", { class: "readout" });
         root.append(readout);
       }
       const rows = info.params.map((p) => buildParamRow(m.id, p, controls));
       if (rows.length > FOLD_PARAMS) {
-        root.append(el("details", {}, el("summary", {}, `パラメータ(${rows.length} 個)を表示`), el("div", { class: "params" }, ...rows)));
+        root.append(el("details", {}, el("summary", {}, `params ${rows.length}`), el("div", { class: "params" }, ...rows)));
       } else if (rows.length > 0) {
         root.append(el("div", { class: "params" }, ...rows));
       }
@@ -344,7 +344,7 @@ export function createEditor(deps: EditorDeps): Editor {
       const group = el("optgroup", { label: `${m.id}(${info.title})` });
       for (const p of ports) {
         const value = `${m.id}.${p.name}`;
-        group.append(el("option", { value }, `${value}(${p.type})${occupied.has(value) ? " ※使用中" : ""}`));
+        group.append(el("option", { value }, `${value}(${p.type})${occupied.has(value) ? " *" : ""}`));
       }
       select.append(group);
     }
@@ -372,11 +372,11 @@ export function createEditor(deps: EditorDeps): Editor {
     if (cs === cablesSignature) return;
     cablesSignature = cs;
     cableList.replaceChildren();
-    if (patch.cables.length === 0) cableList.append(el("li", { class: "empty" }, "ケーブルはありません"));
+    if (patch.cables.length === 0) cableList.append(el("li", { class: "empty" }, "–"));
     for (const c of patch.cables) {
       const ft = portType(patch, c.from.module, c.from.port, "out");
       const tt = portType(patch, c.to.module, c.to.port, "in");
-      const disconnect = el("button", { type: "button", "data-action": "disconnect", class: "small" }, "切断");
+      const disconnect = el("button", { type: "button", "data-action": "disconnect", class: "small" }, "DEL");
       disconnect.addEventListener("click", () => void deps.run("cable.disconnect", { cable_id: c.id }));
       cableList.append(
         el(
@@ -384,7 +384,7 @@ export function createEditor(deps: EditorDeps): Editor {
           { "data-cable": c.id },
           el("code", {}, c.id),
           el("span", { class: "route" }, `${c.from.module}.${c.from.port} → ${c.to.module}.${c.to.port}`),
-          el("span", { class: ft === tt ? "types" : "types mismatch" }, ft === tt ? ft : `${ft} → ${tt}(型違い)`),
+          el("span", { class: ft === tt ? "types" : "types mismatch" }, ft === tt ? ft : `${ft} ≠ ${tt}`),
           disconnect,
         ),
       );
@@ -436,10 +436,10 @@ export function createEditor(deps: EditorDeps): Editor {
     const r = await deps.send("patch.save", { name, ...(overwrite ? { overwrite: true } : {}) });
     if (r.ok) {
       deps.showError("");
-      deps.showNotice(`「${name}」を保存しました(${String(r.result.bytes)} バイト${r.result.overwritten ? "、上書き" : ""})`);
+      deps.showNotice(`${r.result.overwritten ? "OVERWRITTEN" : "SAVED"} ${name}`);
       refreshLibrary();
     } else if (r.error.id === "ERR-203" && !overwrite) {
-      ask(`「${name}」は既に保存されています。上書きしますか?`, "上書きする", () => void save(name, true));
+      ask(`OVERWRITE ${name} ?`, "OVERWRITE", () => void save(name, true));
     } else {
       reportFailure(r);
     }
@@ -451,7 +451,7 @@ export function createEditor(deps: EditorDeps): Editor {
     if (!PATCH_NAME.test(name)) {
       // 送っても ERR-201 になる。規則を添えて表示する
       void deps.send("patch.save", { name }).then((r) => {
-        if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}: ${r.error.message}(名前は英小文字・数字・「_」「-」で 64 文字まで)`);
+        if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}: ${r.error.message}`);
       });
       return;
     }
@@ -468,33 +468,33 @@ export function createEditor(deps: EditorDeps): Editor {
       if (token !== libraryToken) return;
       library.replaceChildren();
       if (!r.ok) {
-        libraryState.textContent = `一覧を取得できません(${r.error.id} ${r.error.code}: ${r.error.message})`;
+        libraryState.textContent = `${r.error.id} ${r.error.code}`;
         return;
       }
       const patches = (r.result.patches ?? []) as { name: string; title?: string; bytes?: number; modified_at?: string; saved_by_kind?: string; readable?: boolean }[];
-      libraryState.textContent = `保存済み ${patches.length} 件`;
+      libraryState.textContent = String(patches.length);
       for (const p of patches) {
-        const load = el("button", { type: "button", "data-action": "load", class: "small" }, "読込");
+        const load = el("button", { type: "button", "data-action": "load", class: "small" }, "LOAD");
         load.disabled = p.readable === false;
         load.addEventListener("click", () => {
           void deps.run("patch.load", { name: p.name }).then((res) => {
-            if (res.ok) deps.showNotice(`「${p.name}」を読み込みました(「取り消し」で読込前に戻せます)`);
+            if (res.ok) deps.showNotice(`LOADED ${p.name}`);
           });
         });
         const remove = el("button", { type: "button", "data-action": "delete", class: "small danger" }, "削除");
         remove.addEventListener("click", () => {
-          ask(`保存済みのパッチ「${p.name}」を削除しますか?(取り消せません)`, "削除する", () => {
+          ask(`DELETE ${p.name} ?`, "DELETE", () => {
             void deps.run("patch.delete", { name: p.name }).then((res) => {
-              if (res.ok) deps.showNotice(`「${p.name}」を削除しました`);
+              if (res.ok) deps.showNotice(`DELETED ${p.name}`);
               refreshLibrary();
             });
           });
         });
         const when = p.modified_at ? new Date(p.modified_at) : null;
         const detail = [
-          p.readable === false ? "読めないファイル" : p.title || "",
+          p.readable === false ? "unreadable" : p.title || "",
           when && !Number.isNaN(when.getTime()) ? when.toLocaleString("ja-JP") : "",
-          p.saved_by_kind === "agent" ? "エージェントが保存" : p.saved_by_kind === "human" ? "人が保存" : "",
+          p.saved_by_kind === "agent" ? "AGENT" : p.saved_by_kind === "human" ? "HUMAN" : "",
         ].filter((s) => s !== "");
         library.append(el("li", { "data-patch": p.name }, el("code", {}, p.name), el("span", { class: "detail" }, detail.join(" / ")), load, remove));
       }
@@ -521,23 +521,21 @@ export function createEditor(deps: EditorDeps): Editor {
     if (ev.event === "patch.changed") {
       const d = ev.data;
       const shown = d.changes.slice(0, 3).map(describeChange);
-      if (d.changes.length > 3) shown.push(`ほか ${d.changes.length - 3} 件`);
+      if (d.changes.length > 3) shown.push(`+${d.changes.length - 3}`);
       const first = d.changes[0];
       const mergeKey = d.command === "param.set" && d.changes.length === 1 && first?.kind === "param_changed" ? `${d.actor.kind}|${d.actor.client_id ?? ""}|${first.module_id}|${first.param}` : null;
-      pushLog({ actor: d.actor, text: `r${d.revision} ${COMMAND_LABEL[d.command] ?? d.command}: ${shown.join("、")}`, mergeKey });
+      pushLog({ actor: d.actor, text: `r${d.revision} ${d.command}  ${shown.join("  ")}`, mergeKey });
     } else if (ev.event === "output.changed") {
       const d = ev.data;
       const text =
         d.reason === "panic"
-          ? "緊急停止"
+          ? "panic"
           : d.reason === "release_panic"
-            ? `緊急停止を解除(音量 ${d.level_db} dB)`
-            : d.reason === "set_level"
-              ? `マスター音量 ${d.level_db} dB`
-              : `マスター音量を ${d.level_db} dB に引き下げ`;
+            ? `release  level ${d.level_db} dB`
+            : `level ${d.level_db} dB`;
       pushLog({ actor: d.actor, text, mergeKey: d.reason === "set_level" && d.actor ? `${d.actor.kind}|${d.actor.client_id ?? ""}|level` : null });
     } else if (ev.event === "library.changed") {
-      pushLog({ actor: ev.data.actor, text: `保存済みパッチ「${ev.data.name}」を${ev.data.action === "saved" ? "保存" : "削除"}`, mergeKey: null });
+      pushLog({ actor: ev.data.actor, text: `${ev.data.action === "saved" ? "saved" : "deleted"} ${ev.data.name}`, mergeKey: null });
       refreshLibrary();
     }
   }
@@ -565,8 +563,7 @@ export function createEditor(deps: EditorDeps): Editor {
         const audible = Array.isArray(v.ch_audible) ? (v.ch_audible as unknown[]) : [];
         const out = Array.isArray(v.out_rms) ? (v.out_rms as unknown[]) : [];
         card.readout.textContent =
-          `音量(dB): ${rms.map((x, i) => `${i + 1}:${audible[i] === 0 ? "消" : db(x)}`).join(" ")} / 出力 左 ${db(out[0])} 右 ${db(out[1])}` +
-          ` / 帯域 低 ${db(v.out_low)} 中 ${db(v.out_mid)} 高 ${db(v.out_high)}`;
+          `dB ${rms.map((x, i) => `${i + 1}:${audible[i] === 0 ? "×" : db(x)}`).join(" ")} / L ${db(out[0])} R ${db(out[1])}` + ` / lo ${db(v.out_low)} mid ${db(v.out_mid)} hi ${db(v.out_high)}`;
       } else {
         card.readout.textContent = `level ${num("level")} / peak ${num("peak")} / rms ${num("rms")}`;
       }

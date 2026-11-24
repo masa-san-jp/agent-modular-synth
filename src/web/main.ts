@@ -360,7 +360,7 @@ controller.subscribe((ev) => {
   }
   if ((ev as { event?: string }).event === "performance.saved") {
     const d = (ev as { data: { name: string | null; ok: boolean; entries: number; closed: boolean; reason?: string } }).data;
-    lastSaved = d.ok ? `${d.name} · ${d.entries}` : `保存できません: ${d.reason ?? ""}`;
+    lastSaved = d.ok ? `${d.name} · ${d.entries}` : `save failed: ${d.reason ?? ""}`;
     if (d.ok && d.closed) void refreshPerformances();
   }
   editor?.onEvent(ev); // 誰が何をしたかを変更の履歴に出す
@@ -533,14 +533,14 @@ function renderMidi(state: MidiState): void {
   button.disabled = state.kind === "ready" || state.kind === "unsupported";
   label.textContent =
     state.kind === "idle"
-      ? "未接続"
+      ? "off"
       : state.kind === "unsupported"
-        ? "このブラウザは MIDI に対応していません"
+        ? "unsupported"
         : state.kind === "denied"
-          ? `MIDI を使えません: ${state.reason}`
+          ? `denied: ${state.reason}`
           : state.inputs.length === 0
-            ? "MIDI は使えます。入力機器がつながっていません(つなぐと自動で使えます)"
-            : `MIDI 入力: ${state.inputs.join("、")}`;
+            ? "no device"
+            : state.inputs.join(", ");
 }
 
 function showError(text: string): void {
@@ -555,7 +555,7 @@ async function run(command: string, args?: Record<string, unknown>): Promise<Com
   const r = await human(command, args);
   showError(r.ok ? "" : `${r.error.id} ${r.error.code}: ${r.error.message}`);
   // 成功時の注意(型違いの接続など。状態は変わっている: 契約 §3.2)
-  showNotice(r.ok ? r.warnings.map((w) => `注意(${w.code}): ${w.message}`).join(" / ") : "");
+  showNotice(r.ok ? r.warnings.map((w) => `${w.code}: ${w.message}`).join(" / ") : "");
   autosaveIfChanged();
   render(!r.ok);
   return r;
@@ -579,11 +579,9 @@ function renderStatus(): void {
           : "hold";
   const patch = session.getPatch();
   $("patch").textContent =
-    `リビジョン ${session.revision} / モジュール ${patch.modules.length} / ケーブル ${patch.cables.length}` +
-    ` / サーバー ${link.accepted ? "接続中" : link.rejectedReason === "another_tab" ? "別のタブが使用中" : "未接続"}`;
+    `rev ${session.revision}  mod ${patch.modules.length}  cbl ${patch.cables.length}` + `  srv ${link.accepted ? "on" : link.rejectedReason === "another_tab" ? "other tab" : "off"}`;
   $("meter").textContent = w
-    ? `出力ピーク ${w.peak.toFixed(3)} / リミッター利得 ${w.limiterGain.toFixed(3)}` +
-      ` / サンプルレート ${w.fs} Hz / 非有限値 ${w.nonfiniteModules + w.nonfiniteOutputStage} / 最終クリップ ${w.clipCount}`
+    ? `peak ${w.peak.toFixed(3)}  gr ${w.limiterGain.toFixed(3)}` + `  ${w.fs} hz  nan ${w.nonfiniteModules + w.nonfiniteOutputStage}  clip ${w.clipCount}`
     : "";
   // 最終クリップが新たに起きたら、表示を1秒保持する(DEC-011)
   const clipCount = w ? w.clipCount : 0;
@@ -630,7 +628,7 @@ async function refreshPerformances(): Promise<void> {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "small";
-    b.textContent = "再演奏";
+    b.textContent = "REPLAY";
     b.title = "今のパッチを、この演奏を始めた時点のパッチに置き換えて演奏します(「取り消し」で戻せます)";
     b.addEventListener("click", () => void run("performance.replay", { name: it.name }));
     li.append(b);
@@ -655,7 +653,7 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
     for (;;) {
       const r = await human("performance.render", { name });
       if (!r.ok) {
-        note.textContent = `書き出せません: ${r.error.message}`;
+        note.textContent = `${r.error.id} ${r.error.message}`;
         return;
       }
       const s = r.result as { status: string; progress?: number; path?: string; seconds?: number; peak?: number; clip_count?: number; error?: { message: string } };
@@ -665,7 +663,7 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
         return;
       }
       if (s.status === "failed") {
-        note.textContent = `書き出せません: ${s.error?.message ?? ""}`;
+        note.textContent = `failed: ${s.error?.message ?? ""}`;
         return;
       }
       note.textContent = s.status === "queued" ? "…" : `${Math.round((s.progress ?? 0) * 100)}%`;

@@ -3,23 +3,23 @@
 
 /** 人が選べる色相(資料の単色の回の実測値)。 */
 export const HUE_CHOICES: readonly { hue: number; label: string }[] = [
-  { hue: 196, label: "シアン" },
-  { hue: 173, label: "ティール" },
-  { hue: 141, label: "緑" },
-  { hue: 117, label: "黄緑寄りの緑" },
-  { hue: 227, label: "青" },
-  { hue: 268, label: "紫" },
-  { hue: 297, label: "マゼンタ" },
-  { hue: 345, label: "赤" },
+  { hue: 196, label: "CYAN" },
+  { hue: 173, label: "TEAL" },
+  { hue: 141, label: "GREEN" },
+  { hue: 117, label: "LIME" },
+  { hue: 227, label: "BLUE" },
+  { hue: 268, label: "VIOLET" },
+  { hue: 297, label: "MAGENTA" },
+  { hue: 345, label: "RED" },
 ];
 export const DEFAULT_HUE = 196;
 /** 自動で変わるときの範囲(緑 117° 〜 赤 348°。この外側の黄・橙は使わない)。 */
 export const HUE_SWEEP = { from: 117, to: 348 } as const;
 /** 自動の周期 [秒](範囲を行って戻るまで)。 */
 export const HUE_PERIODS: readonly { seconds: number; label: string }[] = [
-  { seconds: 60, label: "1 分" },
-  { seconds: 300, label: "5 分" },
-  { seconds: 1200, label: "20 分" },
+  { seconds: 60, label: "1 MIN" },
+  { seconds: 300, label: "5 MIN" },
+  { seconds: 1200, label: "20 MIN" },
 ];
 export const DEFAULT_PERIOD = 300;
 

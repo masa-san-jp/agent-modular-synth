@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="synth-tab-token" content="">
-<title>agent-modular-synth(開発中)</title>
+<title>agent-modular-synth</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,123 +16,121 @@
   <div id="confirm" class="row" hidden>
     <span id="confirm-text"></span>
     <button id="confirm-ok" type="button"></button>
-    <button id="confirm-cancel" type="button">やめる</button>
+    <button id="confirm-cancel" type="button">CANCEL</button>
   </div>
 </div>
 
 <section aria-labelledby="h-main" id="main-controls">
-  <h2 id="h-main">音量と演奏</h2>
+  <h2 id="h-main">MAIN</h2>
   <div class="row">
-    <label for="level">マスター音量</label>
+    <label for="level">level</label>
     <input id="level" type="range" min="-60" max="0" step="1" value="-20">
     <span id="levelLabel" class="mono"></span>
-    <button id="start" type="button">音声開始</button>
+    <button id="start" type="button">START</button>
     <span id="state" class="mono"></span>
-    <span id="clip" hidden>クリップ</span>
+    <span id="clip" hidden>CLIP</span>
   </div>
   <form id="prompt-form" class="row">
     <label for="prompt-text">prompt</label>
     <input id="prompt-text" type="text" maxlength="500" autocomplete="off">
-    <button id="prompt-send" type="submit">送る</button>
+    <button id="prompt-send" type="submit">SEND</button>
   </form>
   <ul id="prompt-list" aria-label="送った指示"></ul>
   <div class="row">
     <span id="perf-state" class="mono"></span>
-    <button id="score-stop" type="button">停止</button>
+    <button id="score-stop" type="button">STOP</button>
   </div>
 </section>
 
 <section aria-labelledby="h-rack" id="rack-section">
-  <h2 id="h-rack">ラック</h2>
+  <h2 id="h-rack">RACK</h2>
   <canvas id="rack" role="img" aria-label="ラックの表示"></canvas>
   <div id="rack-hud" class="hud" aria-hidden="true"></div>
 </section>
 
 <section aria-labelledby="h-perf">
-  <h2 id="h-perf">演奏の記録</h2>
+  <h2 id="h-perf">PERFORMANCES</h2>
   <form id="plan-form" class="row">
-    <label for="plan-minutes">演奏の長さ(分)</label>
+    <label for="plan-minutes">length min</label>
     <input id="plan-minutes" type="number" min="1" max="1440" step="1" size="5">
-    <button id="plan-set" type="submit">決める</button>
+    <button id="plan-set" type="submit">SET</button>
   </form>
   <div class="row mono" id="perf-saved"></div>
   <div class="row">
-    <span>保存された演奏</span>
-    <button id="performance-refresh" type="button">更新</button>
+    <button id="performance-refresh" type="button" class="small">REFRESH</button>
   </div>
   <ul id="performance-list" aria-label="保存された演奏"></ul>
 </section>
 
 <section aria-labelledby="h-patch">
-  <h2 id="h-patch">パッチ</h2>
+  <h2 id="h-patch">PATCH</h2>
   <div class="row mono" id="patch"></div>
   <div class="row">
-    <button id="undo" type="button">取り消し</button>
-    <button id="redo" type="button">やり直し</button>
-    <button id="new" type="button">新規作成</button>
-    <button id="demo" type="button">デモ用パッチ</button>
+    <button id="undo" type="button">UNDO</button>
+    <button id="redo" type="button">REDO</button>
+    <button id="new" type="button">NEW</button>
+    <button id="demo" type="button">DEMO</button>
   </div>
   <div class="row">
-    <label for="save-name">名前</label>
+    <label for="save-name">name</label>
     <input id="save-name" type="text" maxlength="64" autocomplete="off" spellcheck="false">
-    <button id="save" type="button">保存</button>
+    <button id="save" type="button">SAVE</button>
   </div>
   <div class="row">
     <span id="library-state" class="muted"></span>
-    <button id="library-refresh" type="button" class="small">更新</button>
+    <button id="library-refresh" type="button" class="small">REFRESH</button>
   </div>
   <ul id="library" class="list"></ul>
 </section>
 
 <section aria-labelledby="h-modules">
-  <h2 id="h-modules">モジュール</h2>
+  <h2 id="h-modules">MODULES</h2>
   <div class="row">
-    <label for="add-type">種別</label>
+    <label for="add-type">type</label>
     <select id="add-type"></select>
-    <label for="add-id">ID</label>
+    <label for="add-id">id</label>
     <input id="add-id" type="text" maxlength="32" size="10" autocomplete="off" spellcheck="false">
-    <button id="add-module" type="button">追加</button>
+    <button id="add-module" type="button">ADD</button>
   </div>
   <div id="module-list"></div>
 </section>
 
 <section aria-labelledby="h-cables">
-  <h2 id="h-cables">ケーブル</h2>
+  <h2 id="h-cables">CABLES</h2>
   <div class="row">
-    <label for="cable-from">出力</label>
+    <label for="cable-from">out</label>
     <select id="cable-from"></select>
     <span aria-hidden="true">→</span>
-    <label for="cable-to">入力</label>
+    <label for="cable-to">in</label>
     <select id="cable-to"></select>
-    <button id="cable-connect" type="button">接続</button>
+    <button id="cable-connect" type="button">CONNECT</button>
   </div>
   <ul id="cable-list" class="list"></ul>
 </section>
 
 <section aria-labelledby="h-history">
-  <h2 id="h-history">変更の履歴</h2>
+  <h2 id="h-history">HISTORY</h2>
   <ol id="history" class="list"></ol>
 </section>
 
 <section aria-labelledby="h-util" id="utility">
-  <h2 id="h-util">ユーティリティ</h2>
+  <h2 id="h-util">UTILITY</h2>
   <div class="row">
-    <button id="panic" type="button" title="Esc">緊急停止</button>
-    <button id="release" type="button">緊急停止を解除</button>
+    <button id="panic" type="button" title="Esc">PANIC</button>
+    <button id="release" type="button">RELEASE</button>
   </div>
   <div class="row mono" id="meter"></div>
   <div class="row">
-    <button id="midi-connect" type="button">MIDI を接続</button>
+    <button id="midi-connect" type="button">MIDI</button>
     <span id="midi-state"></span>
   </div>
-  <div class="row"><span class="muted">鍵盤</span><div class="row" id="keys" aria-label="画面鍵盤"></div></div>
+  <div class="row"><label>keys</label><div class="row" id="keys" aria-label="画面鍵盤"></div></div>
   <div class="row">
-    <label for="hue">画面の色</label>
+    <label for="hue">hue</label>
     <select id="hue"></select>
-    <label for="hue-period">自動の周期</label>
+    <label for="hue-period">cycle</label>
     <select id="hue-period"></select>
   </div>
-  <p class="note">ヘッドホン: 先に機器の音量を下げる</p>
 </section>
 
 <script type="module" src="dist/main.js"></script>

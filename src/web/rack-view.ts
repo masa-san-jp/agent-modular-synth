@@ -70,8 +70,8 @@ export function createRackView(d: RackViewDeps): RackView {
   };
 
   // 色相の選択: 固定の色相、または「自動」
-  for (const c of HUE_CHOICES) d.hueSelect.append(new Option(`${c.label}(${c.hue}°)`, String(c.hue)));
-  d.hueSelect.append(new Option("自動(周期的に変わる)", "cycle"));
+  for (const c of HUE_CHOICES) d.hueSelect.append(new Option(`${c.label} ${c.hue}`, String(c.hue)));
+  d.hueSelect.append(new Option("AUTO", "cycle"));
   for (const p of HUE_PERIODS) d.periodSelect.append(new Option(p.label, String(p.seconds)));
   const showSetting = (): void => {
     d.hueSelect.value = setting.mode === "cycle" ? "cycle" : String(setting.hue);

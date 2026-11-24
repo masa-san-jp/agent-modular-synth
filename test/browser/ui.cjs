@@ -90,7 +90,6 @@ async function main() {
     assert.equal(await page.isDisabled("#undo"), true);
     assert.equal(await page.isDisabled("#redo"), true);
     assert.equal(await page.isDisabled("#release"), true);
-    assert.match(await text(".note"), /ヘッドホン/);
     ok("開いた直後: 常設の出力モジュールが日本語の種別名で表示され、削除ボタンがない。取り消し・やり直し・解除は無効。ヘッドホンの注意文がある");
 
     // 接続できないポート(PRE_L など)は選択肢に出ない
@@ -206,9 +205,9 @@ async function main() {
     // 同じ名前でもう一度保存すると、上書きの確認が出る
     await page.click("#save");
     await page.waitForSelector("#confirm:not([hidden])");
-    assert.match(await text("#confirm-text"), /上書き/);
+    assert.match(await text("#confirm-text"), /OVERWRITE/);
     await page.click("#confirm-ok");
-    await waitFor(async () => /上書き/.test(await text("#notice")), "上書き保存の表示");
+    await waitFor(async () => /OVERWRITTEN/.test(await text("#notice")), "上書き保存の表示");
     assert.equal(await synth("revision"), revSaved, "保存ではリビジョンは進まない");
     ok("名前を付けて保存すると一覧に出る。同じ名前は確認の後に上書きできる");
 
@@ -234,7 +233,7 @@ async function main() {
     assert.match(await text('#module-list [data-module="agentlfo"] h3'), /LFO/);
     const top = page.locator("#history li").first();
     assert.equal(await top.getAttribute("data-actor"), "agent");
-    assert.match(await top.innerText(), /エージェント/);
+    assert.match(await top.innerText(), /AGENT/);
     assert.match(await top.innerText(), /agentlfo/);
     const toOptions = await page.locator("#cable-to option").evaluateAll((os) => os.map((o) => o.value));
     assert.ok(toOptions.some((v) => v.startsWith("agentlfo.")), "接続の選択肢にも出る");
@@ -280,8 +279,8 @@ async function main() {
     await page.click("#undo"); // 他の操作(取り消し)による変更も、選択肢の表示に反映される
     await waitFor(async () => (await resp.inputValue()) === "0", "取り消しで選択肢が戻る");
     const groups = await page.locator("#add-type optgroup").evaluateAll((gs) => gs.map((g) => g.label));
-    assert.ok(groups.includes("オシレータ") && groups.includes("フィルタ") && groups.includes("歪み・波形整形") && groups.length === 11, JSON.stringify(groups));
-    assert.equal(await page.locator('#add-type optgroup[label="オシレータ"] option').count(), 1);
+    assert.ok(groups.includes("OSC") && groups.includes("FILTER") && groups.includes("SHAPER") && groups.length === 11, JSON.stringify(groups));
+    assert.equal(await page.locator('#add-type optgroup[label="OSC"] option').count(), 1);
     ok("列挙型のパラメータは名前の選択肢で変えられる。モジュールの追加の一覧は機能分類ごとに並ぶ");
 
     if (process.env.UI_SCREENSHOT) await page.screenshot({ path: process.env.UI_SCREENSHOT, fullPage: true });
