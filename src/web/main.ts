@@ -360,7 +360,7 @@ controller.subscribe((ev) => {
   }
   if ((ev as { event?: string }).event === "performance.saved") {
     const d = (ev as { data: { name: string | null; ok: boolean; entries: number; closed: boolean; reason?: string } }).data;
-    lastSaved = d.ok ? `演奏データ: ${d.name}(楽譜 ${d.entries} 個${d.closed ? "、保存済み" : "、演奏中"})` : `演奏データを保存できませんでした(${d.reason ?? "不明"})`;
+    lastSaved = d.ok ? `${d.name} · ${d.entries}` : `保存できません: ${d.reason ?? ""}`;
     if (d.ok && d.closed) void refreshPerformances();
   }
   editor?.onEvent(ev); // 誰が何をしたかを変更の履歴に出す
@@ -571,12 +571,12 @@ function renderStatus(): void {
   const w = backend.lastStatus;
   $("state").textContent =
     st.audioState === "stopped"
-      ? "停止中"
+      ? "off"
       : st.panic
-        ? "緊急停止中"
+        ? "panic"
         : st.audioState === "running"
-          ? "動作中"
-          : "中断中";
+          ? "run"
+          : "hold";
   const patch = session.getPatch();
   $("patch").textContent =
     `リビジョン ${session.revision} / モジュール ${patch.modules.length} / ケーブル ${patch.cables.length}` +
@@ -618,11 +618,11 @@ async function refreshPerformances(): Promise<void> {
   const r = await human("performance.list");
   list.textContent = "";
   if (!r.ok) {
-    list.appendChild(Object.assign(document.createElement("li"), { textContent: "読めません" }));
+    list.appendChild(Object.assign(document.createElement("li"), { textContent: "–" }));
     return;
   }
   const items = (r.result.performances as { name: string; bytes: number }[]).slice(0, 30);
-  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "なし" }));
+  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "–" }));
   for (const it of items) {
     const li = document.createElement("li");
     li.dataset.performance = it.name;
@@ -638,7 +638,7 @@ async function refreshPerformances(): Promise<void> {
     const w = document.createElement("button");
     w.type = "button";
     w.className = "small";
-    w.textContent = "音声ファイルに書き出す";
+    w.textContent = "WAV";
     w.title = "演奏せずに、この演奏の音声ファイル(WAV)を作ります。保存先は、演奏データと同じフォルダです";
     const note = document.createElement("span");
     note.className = "render-state";
@@ -660,15 +660,15 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
       }
       const s = r.result as { status: string; progress?: number; path?: string; seconds?: number; peak?: number; clip_count?: number; error?: { message: string } };
       if (s.status === "done") {
-        const loud = (s.clip_count ?? 0) > 0 ? `。音が大きすぎて ${s.clip_count} サンプルが頭打ち` : "";
-        note.textContent = `書き出しました: ${s.path}(${Math.round(s.seconds ?? 0)} 秒${loud})`;
+        const loud = (s.clip_count ?? 0) > 0 ? ` clip ${s.clip_count}` : "";
+        note.textContent = `${s.path}${loud}`;
         return;
       }
       if (s.status === "failed") {
         note.textContent = `書き出せません: ${s.error?.message ?? ""}`;
         return;
       }
-      note.textContent = s.status === "queued" ? "順番待ち…" : `書き出し中… ${Math.round((s.progress ?? 0) * 100)}%`;
+      note.textContent = s.status === "queued" ? "…" : `${Math.round((s.progress ?? 0) * 100)}%`;
       await new Promise((ok) => setTimeout(ok, 700));
     }
   } finally {
@@ -682,7 +682,8 @@ function renderPerformance(): void {
   const p = session.performance;
   // 経過 / 予定(予定がなければ、経過だけ)
   const clock = p.plan.duration_seconds === null ? formatClock(p.plan.elapsed_seconds) : `${formatClock(p.plan.elapsed_seconds)} / ${formatClock(p.plan.duration_seconds)}`;
-  $("perf-state").textContent = p.playing ? `演奏中 予約 ${p.scores.length} 件 残り ${p.remaining.toFixed(1)} 秒 ${clock}` : p.plan.duration_seconds === null ? "演奏していません" : `演奏していません ${clock}`;
+  // 演奏中だけ、時計を出す(経過 / 予定、残りの秒)。演奏していないときは、何も書かない
+  $("perf-state").textContent = p.playing ? `▶ ${clock}  +${p.remaining.toFixed(1)}s` : "";
   $("perf-saved").textContent = lastSaved;
   $<HTMLButtonElement>("score-stop").disabled = !p.playing;
   // 指示の一覧は、中身が変わったときだけ作り直す
@@ -695,7 +696,7 @@ function renderPerformance(): void {
     const li = document.createElement("li");
     li.dataset.prompt = String(q.id);
     li.dataset.acked = String(q.acked);
-    li.textContent = `${q.acked ? "反映済み" : "未反映"}: ${q.text}`;
+    li.textContent = `${q.acked ? "✓" : "·"} ${q.text}`;
     list.appendChild(li);
   }
 }

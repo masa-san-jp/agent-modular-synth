@@ -27,7 +27,7 @@
     <input id="level" type="range" min="-60" max="0" step="1" value="-20">
     <span id="levelLabel" class="mono"></span>
     <button id="start" type="button">音声開始</button>
-    <span id="state"></span>
+    <span id="state" class="mono"></span>
     <span id="clip" hidden>クリップ</span>
   </div>
   <form id="prompt-form" class="row">
@@ -37,8 +37,8 @@
   </form>
   <ul id="prompt-list" aria-label="送った指示"></ul>
   <div class="row">
-    <span id="perf-state"></span>
-    <button id="score-stop" type="button">演奏を止める</button>
+    <span id="perf-state" class="mono"></span>
+    <button id="score-stop" type="button">停止</button>
   </div>
 </section>
 
@@ -58,7 +58,7 @@
   <div class="row mono" id="perf-saved"></div>
   <div class="row">
     <span>保存された演奏</span>
-    <button id="performance-refresh" type="button">一覧を更新</button>
+    <button id="performance-refresh" type="button">更新</button>
   </div>
   <ul id="performance-list" aria-label="保存された演奏"></ul>
 </section>
@@ -79,7 +79,7 @@
   </div>
   <div class="row">
     <span id="library-state" class="muted"></span>
-    <button id="library-refresh" type="button" class="small">一覧を更新</button>
+    <button id="library-refresh" type="button" class="small">更新</button>
   </div>
   <ul id="library" class="list"></ul>
 </section>

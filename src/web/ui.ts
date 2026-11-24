@@ -557,7 +557,7 @@ export function createEditor(deps: EditorDeps): Editor {
       const v = meters?.[id];
       const num = (k: string): string => (typeof v?.[k] === "number" ? (v[k] as number).toFixed(3) : "—");
       if (!v) {
-        card.readout.textContent = "読出し値: –";
+        card.readout.textContent = "–";
       } else if (card.type === "MOD-MIX-002") {
         // ミキサー卓: チャンネルごとの音量(dB。±5 V を 0 dB とする)。消えているチャンネルは「消」
         const db = (x: unknown): string => (typeof x === "number" && x > 0 ? (20 * Math.log10(x / 5)).toFixed(0) : "−∞");
@@ -568,7 +568,7 @@ export function createEditor(deps: EditorDeps): Editor {
           `音量(dB): ${rms.map((x, i) => `${i + 1}:${audible[i] === 0 ? "消" : db(x)}`).join(" ")} / 出力 左 ${db(out[0])} 右 ${db(out[1])}` +
           ` / 帯域 低 ${db(v.out_low)} 中 ${db(v.out_mid)} 高 ${db(v.out_high)}`;
       } else {
-        card.readout.textContent = `読出し値: level ${num("level")} / peak ${num("peak")} / rms ${num("rms")}`;
+        card.readout.textContent = `level ${num("level")} / peak ${num("peak")} / rms ${num("rms")}`;
       }
     }
   }

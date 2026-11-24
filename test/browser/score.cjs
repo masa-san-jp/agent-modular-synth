@@ -80,7 +80,7 @@ async function main() {
     const early = await agent("score.play", { notes: [{ t: 0, dur: 1, note: 60 }] });
     assert.equal(early.ok, false);
     assert.equal(early.error.id, "ERR-301");
-    assert.match(await page.textContent("#perf-state"), /演奏していません/);
+    assert.equal(await page.textContent("#perf-state"), "");
     ok("人が音声を開始する前は、エージェントは演奏できない(ERR-301)");
 
     // ---- 2) エージェントが楽譜を送ると鳴る ----
@@ -97,7 +97,7 @@ async function main() {
     await waitFor(async () => (await peak()) > 0.01, "楽譜の音が出る");
     assert.equal(await pitch(), 0, "1 つ目の音符(60)で PITCH は 0 V");
     await waitFor(async () => (await pitch()) === 1, "2 つ目の音符(72)で PITCH は 1 V", 3000);
-    assert.match(await page.textContent("#perf-state"), /演奏中.予約 1 件/);
+    assert.match(await page.textContent("#perf-state"), /^▶ \d+:\d\d {2}\+\d+\.\ds$/);
     assert.equal(await synth("revision"), rev, "演奏ではリビジョンが変わらない");
     ok("エージェントが楽譜を送ると、楽譜どおりの音程で鳴る(60 → 0 V、72 → 1 V)。画面に「演奏中」と出る");
 
@@ -116,7 +116,7 @@ async function main() {
     // ---- 4) 演奏し終えると、無音に戻り、通知が届く ----
     await waitFor(() => events.some((e) => e.reason === "finished"), "EVT-07(finished)", 8000);
     await waitFor(async () => (await peak()) === 0, "演奏の後は無音");
-    assert.match(await page.textContent("#perf-state"), /演奏していません/);
+    assert.equal(await page.textContent("#perf-state"), "");
     assert.equal((await agentOk("score.get_status")).result.playing, false);
     assert.deepEqual(events.map((e) => e.reason), ["score_queued", "score_queued", "finished"]);
     ok("演奏し終えると無音に戻り、エージェントへ通知(EVT-07 finished)が届く");
@@ -126,14 +126,14 @@ async function main() {
     await page.click("#prompt-send");
     await waitFor(async () => (await page.locator("#prompt-list li").count()) === 1, "指示の一覧");
     assert.equal(await page.inputValue("#prompt-text"), "", "送ったら欄が空になる");
-    assert.equal(await page.textContent("#prompt-list li"), "未反映: もっと高い音で");
+    assert.equal(await page.textContent("#prompt-list li"), "· もっと高い音で");
     const withPrompt = (await agentOk("score.get_status")).result;
     assert.deepEqual(withPrompt.prompts, [{ id: 1, text: "もっと高い音で", acked: false }]);
     await waitFor(() => events.some((e) => e.reason === "prompt_sent" && e.prompts.length === 1), "EVT-07(prompt_sent)");
     const fromAgent = await agent("prompt.send", { text: "x" });
     assert.equal(fromAgent.error.id, "ERR-005");
     await agentOk("score.play", { notes: [{ t: 0, dur: 20, note: 84 }], ack_prompt: 1 });
-    await waitFor(async () => (await page.textContent("#prompt-list li")) === "反映済み: もっと高い音で", "反映済みの表示");
+    await waitFor(async () => (await page.textContent("#prompt-list li")) === "✓ もっと高い音で", "反映済みの表示");
     await waitFor(async () => (await pitch()) === 2, "指示を踏まえた楽譜(84)が鳴る");
     ok("人が書いた指示がエージェントに届き、エージェントが踏まえた楽譜を送ると画面に「反映済み」と出る");
 
@@ -172,7 +172,7 @@ async function main() {
     assert.deepEqual(doc.prompts.map((p) => p.text), ["もっと高い音で"]);
     assert.deepEqual(doc.entries[0].score.notes.map((n) => n.note), [60, 72]);
     assert.ok(doc.patch.modules.some((m) => m.id === "mt"), "演奏を始めた時点のパッチ");
-    assert.match(await page.textContent("#perf-saved"), /保存/);
+    assert.match(await page.textContent("#perf-saved"), /^\d{8}-\d{6}(-\d)? · \d+$/);
     ok("演奏した楽譜が、日時つきの名前で専用フォルダに保存され、エージェントが一覧・中身を読める", files.join(", "));
 
     // 再演奏(エージェント): 保存した楽譜のとおりに鳴る(60 → 72 → 67)
@@ -194,8 +194,8 @@ async function main() {
 
     // ---- 8) 演奏せずに、音声ファイルに書き出す(画面のボタンと、エージェント) ----
     await waitFor(async () => (await peak()) === 0, "止めた後の無音");
-    await page.click(`#performance-list li[data-performance="${oldest}"] button:has-text("音声ファイルに書き出す")`);
-    await waitFor(async () => /書き出しました/.test(await page.textContent(`#performance-list li[data-performance="${oldest}"] .render-state`)), "画面からの書き出し");
+    await page.click(`#performance-list li[data-performance="${oldest}"] button:has-text("WAV")`);
+    await waitFor(async () => (await page.textContent(`#performance-list li[data-performance="${oldest}"] .render-state`)).endsWith(".wav"), "画面からの書き出し");
     const wavPath = path.join(perfDir, `${oldest}.wav`);
     assert.ok(fs.existsSync(wavPath), "演奏データと同じフォルダに <名前>.wav");
     assert.ok((await page.textContent(`#performance-list li[data-performance="${oldest}"] .render-state`)).includes(wavPath), "画面に場所が出る");
