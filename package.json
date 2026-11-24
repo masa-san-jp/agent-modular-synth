@@ -22,6 +22,7 @@
     "test:score-browser": "npm run build && node test/browser/score.cjs",
     "bench": "npm run build && mkdir -p bench/results && node dist/src/perf/offline.js --json bench/results/offline.json",
     "bench:browser": "npm run build && node test/browser/bench.cjs",
+    "bench:render": "npm run build && mkdir -p bench/results && node demo/make-performance.mjs demo/techno.mjs bench/results/techno.performance.json && node test/browser/bench-render.cjs bench/results/techno.performance.json --json bench/results/render.json",
     "dev": "npm run build && node dist/src/server/main.js",
     "render": "node dist/src/server/render-cli.js",
     "mcp": "node dist/src/mcp/main.js",
