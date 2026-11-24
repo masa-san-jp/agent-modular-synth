@@ -12,6 +12,8 @@ import { REGISTRY } from "../modules/registry.js";
 import type { ServerToTab, TabToServer } from "../server/protocol.js";
 import { MidiLink } from "./midi.js";
 import type { MidiState } from "./midi.js";
+import { createRackView } from "./rack-view.js";
+import type { RackView } from "./rack-view.js";
 import { createEditor } from "./ui.js";
 import type { Editor } from "./ui.js";
 
@@ -346,6 +348,16 @@ controller.subscribe((ev) => {
   if (recentEvents.length > 200) recentEvents.shift();
   link.send({ t: "evt", event: ev });
   if ((ev as { event?: string }).event === "patch.changed" || (ev as { type?: string }).type === "patch.changed") scheduleAutosave();
+  if ((ev as { event?: string }).event === "patch.changed") {
+    // 変わったモジュールを、ラックの上で短く明滅させる(誰の操作でも同じ)
+    const ids: string[] = [];
+    for (const c of ((ev as { data?: { changes?: Record<string, any>[] } }).data?.changes ?? [])) {
+      if (c.kind === "module_added") ids.push(c.module.id);
+      else if (c.kind === "param_changed" || c.kind === "module_moved") ids.push(c.module_id);
+      else if (c.kind === "cable_added") ids.push(c.cable.from.module, c.cable.to.module);
+    }
+    rack?.markChanged(ids);
+  }
   if ((ev as { event?: string }).event === "performance.saved") {
     const d = (ev as { data: { name: string | null; ok: boolean; entries: number; closed: boolean; reason?: string } }).data;
     lastSaved = d.ok ? `演奏データ: ${d.name}(楽譜 ${d.entries} 個${d.closed ? "、保存済み" : "、演奏中"})` : `演奏データを保存できませんでした(${d.reason ?? "不明"})`;
@@ -593,6 +605,7 @@ function renderStatus(): void {
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
+  rack?.update({ activity: st.audioState === "running" && w && !st.panic ? (w.activity ?? null) : null, peak: w ? w.peak : 0, panic: st.panic });
 }
 
 const formatClock = (sec: number): string => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
@@ -688,6 +701,21 @@ function renderPerformance(): void {
   }
 }
 
+let rack: RackView | null = null;
+/** ラックの下の帯に出す、短い状態(等幅・大文字)。 */
+function hudItems(): string[] {
+  const st = backend.status();
+  const patch = session.getPatch();
+  const p = session.performance;
+  return [
+    st.panic ? "panic" : st.audioState === "running" ? "audio run" : st.audioState === "stopped" ? "audio off" : "audio hold",
+    `rev ${session.revision}`,
+    `mod ${patch.modules.length} · cbl ${patch.cables.length}`,
+    p.playing ? `play ${Math.ceil(p.remaining)}s` : "idle",
+    `out ${st.levelDb}db`,
+  ];
+}
+
 function render(force = false): void {
   renderStatus();
   editor?.render(force);
@@ -703,6 +731,14 @@ const debug = {
   },
   get audioState(): string {
     return backend.status().audioState;
+  },
+  /** ラックの表示(色相、配置、倍率)。 */
+  get rack() {
+    return rack;
+  },
+  /** 人の操作としてコマンドを送る(自動試験用)。 */
+  human(command: string, args?: Record<string, unknown>) {
+    return human(command, args);
   },
   get revision(): number {
     return session.revision;
@@ -760,6 +796,23 @@ const debug = {
 (window as unknown as { __synth: typeof debug }).__synth = debug;
 
 window.addEventListener("DOMContentLoaded", () => {
+  rack = createRackView({
+    canvas: $<HTMLCanvasElement>("rack"),
+    hud: $("rack-hud"),
+    hueSelect: $<HTMLSelectElement>("hue"),
+    periodSelect: $<HTMLSelectElement>("hue-period"),
+    catalog,
+    getPatch: () => session.getPatch(),
+    hudItems,
+    onPick: (id) => {
+      const card = document.querySelector<HTMLElement>(`#module-list [data-module="${CSS.escape(id)}"]`);
+      if (!card) return;
+      card.scrollIntoView({ block: "center" });
+      card.classList.add("picked");
+      window.setTimeout(() => card.classList.remove("picked"), 1000);
+      card.querySelector<HTMLElement>("input, select, button")?.focus({ preventScroll: true });
+    },
+  });
   editor = createEditor({
     catalog,
     getPatch: () => session.getPatch(),

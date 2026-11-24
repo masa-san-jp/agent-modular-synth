@@ -299,6 +299,25 @@ export class EngineBackend implements AudioBackend {
     return out;
   }
 
+  /**
+   * 各モジュールの、いまの出力の大きさ(全出力ポート・全チャンネルの絶対値の最大。その瞬間の値)。画面の LED 用。
+   * 1 サンプルごとの処理には何も足さない(呼ばれたときに、出力の値を見るだけ)。
+   */
+  activity(): Record<string, number> {
+    const out: Record<string, number> = {};
+    for (const id of this.engine.ids()) {
+      let max = 0;
+      for (const p of this.engine.get(id).outputs) {
+        for (let c = 0; c < p.channels; c++) {
+          const a = Math.abs(p.values[c]!);
+          if (a > max) max = a;
+        }
+      }
+      out[id] = Number.isFinite(max) ? max : 0;
+    }
+    return out;
+  }
+
   /** 状態(音量・上限・緊急停止・動作中か)を、メインスレッド側の写しの値に合わせる(OutputStage.adopt)。コマンドの処理ではない。 */
   sync(state: { levelDb: number; agentMaxLevelDb: number; panic: boolean; running: boolean }): void {
     this.running = state.running === true;
