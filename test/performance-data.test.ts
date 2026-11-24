@@ -194,6 +194,33 @@ test("VER-A-010b 演奏し終えて 30 秒以内の続きは同じ演奏デー�
   assert.equal((await r.names()).length, 2, "次の楽譜は新しい演奏データ");
 });
 
+test("VER-A-010h タブを閉じるときに記録中の演奏データを閉じる: 続きを待っている間なら finished、演奏中なら audio_stopped", async () => {
+  const r = rig();
+  await voice(r);
+  // 演奏し終えて、続きを待っている間(30 秒以内)に閉じる
+  await r.ok("agent", "score.play", SCORE_B); // 0.5 秒
+  await r.run(5);
+  assert.equal((await r.file(NAME)).ended_by, null, "まだ閉じていない");
+  assert.equal(r.session.closePerformanceOnExit(), true);
+  await r.c.savePerformances();
+  let f = await r.file(NAME);
+  assert.equal(f.ended_by, "finished");
+  assert.equal(typeof f.ended_at, "string");
+  assert.ok(Math.abs(f.length_seconds - 0.5) < 1e-9, `長さは演奏した分のまま: ${f.length_seconds}`);
+  assert.equal(r.saved().at(-1)!.closed, true);
+  assert.equal(r.session.closePerformanceOnExit(), false, "記録中の演奏がなければ何もしない");
+  // 演奏中に閉じる: 長さは閉じた時点まで
+  r.tick(60_000);
+  await r.ok("agent", "score.play", { notes: [{ t: 0, dur: 4, note: 60 }], length: 4 });
+  await r.run(1);
+  assert.equal(r.session.closePerformanceOnExit(), true);
+  await r.c.savePerformances();
+  const second = (await r.names())[0]!;
+  f = await r.file(second);
+  assert.equal(f.ended_by, "audio_stopped");
+  assert.ok(f.length_seconds > 0 && f.length_seconds < 4, `長さは閉じた時点まで: ${f.length_seconds}`);
+});
+
 // ---- VER-A-010c 再演奏 ----
 
 test("VER-A-010c 再演奏: パッチが演奏データのものに置き換わり、元の演奏と同じ音がビット同一で出る。置き換えは取り消せる", async () => {

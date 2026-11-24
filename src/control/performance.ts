@@ -434,6 +434,16 @@ export class Performance {
     return true;
   }
 
+  /**
+   * タブを閉じる・再読込するときに、記録中の演奏を閉じる(DEC-024)。演奏し終えて続きを待っている間なら `finished`、
+   * 演奏中なら `audio_stopped`(タブを閉じると音声も止まる)。閉じたら true。
+   */
+  closeOnExit(now: number): boolean {
+    if (!this.rec) return false;
+    this.closeRecord(this.queue.length > 0 ? "audio_stopped" : "finished", now);
+    return true;
+  }
+
   /** 前回から変わった演奏データ(閉じたものを含む)を取り出す。 */
   takeRecordUpdates(): PerformanceUpdate[] {
     const out = this.closedRecs;

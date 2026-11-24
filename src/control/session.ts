@@ -734,6 +734,14 @@ export class Session {
     return this.perf.takeRecordUpdates().map((u) => ({ id: u.id, closed: u.closed, record: clone(u.record) }));
   }
 
+  /**
+   * タブを閉じる・再読込するときに、記録中の演奏データを閉じる(DEC-024、operation-contract §6.3)。
+   * 閉じたものは takePerformanceUpdates で取り出せる。閉じたら true。
+   */
+  closePerformanceOnExit(): boolean {
+    return this.perf.closeOnExit(this.backend.sampleNow?.() ?? this.backend.status().sampleTime);
+  }
+
   /** 演奏の状態(予約済みの楽譜と、人からの指示。CMD-28 の返値と同じ)。 */
   get performance(): PerformanceStatus {
     return this.performanceStatus();
