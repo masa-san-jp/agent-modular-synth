@@ -2,7 +2,7 @@
 // ブラウザのAPIに依存しない(同じコードをオフラインで実行できる)。
 
 import { EncNum, decInto, decNum, encArr, encNum } from "./codec.js";
-import { ModuleFactory, ModuleState, SynthModule } from "./module.js";
+import { InPort, ModuleFactory, ModuleState, OutPort, SynthModule } from "./module.js";
 import { MAX_CHANNELS } from "./util.js";
 
 interface Cable {
@@ -16,6 +16,22 @@ interface Cable {
 interface Latch {
   channels: number;
   values: Float32Array;
+  /** 最後のステップの出力を写していない(ケーブルがつながっていない出力)。読む前に写し直す。 */
+  stale: boolean;
+}
+interface Link {
+  port: InPort;
+  latch: Latch;
+}
+/** 1 サンプルの処理の手順。 */
+interface Plan {
+  modules: SynthModule[];
+  /** ケーブル 1 本ごと: 入力ポートと、それが読む控え。 */
+  links: Link[];
+  /** ケーブルがつながっている出力と、その控え(毎サンプル写す)。 */
+  kept: { out: OutPort; latch: Latch }[];
+  /** ケーブルがつながっていない出力の控え(写さない)。 */
+  skipped: Latch[];
 }
 
 export interface EngineSnapshot {
@@ -44,7 +60,9 @@ export class Engine {
    * 1サンプルの処理の手順(モジュールの並びと、各入力がどの出力の遅延値を読むか)。
    * 構成(モジュール・ケーブル)が変わったら null にし、次の tick で作り直す。毎サンプル名前で引き直さない。
    */
-  private plan: { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] | null = null;
+  private plan: Plan | null = null;
+  /** 次の tick で、写していない出力の控えに「古い」印を付ける(手順を作り直した後と、リセットの後)。 */
+  private markPending = true;
 
   constructor(readonly fs: number) {
     if (!(fs > 0) || !Number.isFinite(fs)) throw new Error("fs は正の有限値");
@@ -61,7 +79,7 @@ export class Engine {
     this.plan = null;
     this.latches.set(
       id,
-      module.outputs.map(() => ({ channels: 1, values: new Float32Array(MAX_CHANNELS) })),
+      module.outputs.map(() => ({ channels: 1, values: new Float32Array(MAX_CHANNELS), stale: false })),
     );
     return module;
   }
@@ -110,63 +128,102 @@ export class Engine {
     this.plan = null;
   }
 
-  private buildPlan(): { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] {
-    const plan: { module: SynthModule; sources: (Latch | null)[]; latches: Latch[] }[] = [];
+  /**
+   * 手順を作る。写すのは、ケーブルがつながっている出力と入力だけ(つながっていない出力の控えは、誰も読まないので毎サンプル写さない)。
+   * 写していない控えには「古い」印を付け、必要になったとき(ケーブルをつないだ、スナップショットを取る)に出力から写し直す。
+   * 出力は最後のステップの値を持ち続けているので、毎サンプル写した場合と同じ値になる。
+   */
+  private buildPlan(): Plan {
+    this.syncStale();
+    const links: Link[] = [];
+    const used = new Set<Latch>();
+    const modules: SynthModule[] = [];
     for (const [id, m] of this.modules) {
-      const sources: (Latch | null)[] = [];
+      modules.push(m);
       for (let i = 0; i < m.inputs.length; i++) {
         const cable = this.cables.get(`${id}\u0000${i}`);
-        sources.push(cable ? this.latches.get(cable.fromModule)![cable.fromPort]! : null);
+        const port = m.inputs[i]!;
+        if (!cable) {
+          // ケーブルのない入力は、未接続にする(手順を作るときに 1 回だけ)
+          if (port.connected) port.disconnect();
+          continue;
+        }
+        const latch = this.latches.get(cable.fromModule)![cable.fromPort]!;
+        links.push({ port, latch });
+        used.add(latch);
       }
-      plan.push({ module: m, sources, latches: this.latches.get(id)! });
     }
-    return plan;
+    const kept: { out: OutPort; latch: Latch }[] = [];
+    const skipped: Latch[] = [];
+    for (const [id, m] of this.modules) {
+      const ls = this.latches.get(id)!;
+      for (let o = 0; o < ls.length; o++) {
+        if (used.has(ls[o]!)) kept.push({ out: m.outputs[o]!, latch: ls[o]! });
+        else skipped.push(ls[o]!);
+      }
+    }
+    this.markPending = true;
+    return { modules, links, kept, skipped };
+  }
+
+  /** 「古い」印の付いた控えを、出力から写し直す(毎サンプル写した場合と同じ値にする)。 */
+  private syncStale(): void {
+    for (const [id, m] of this.modules) {
+      const ls = this.latches.get(id)!;
+      for (let o = 0; o < ls.length; o++) {
+        const l = ls[o]!;
+        if (!l.stale) continue;
+        const out = m.outputs[o]!;
+        const n = out.channels;
+        const upto = l.channels > n ? l.channels : n;
+        l.channels = n;
+        for (let c = 0; c < upto; c++) l.values[c] = out.values[c]!;
+        l.stale = false;
+      }
+    }
+    this.markPending = true;
   }
 
   /** 1サンプル進める。全モジュールが前のステップの出力を読み、同時に出力を書く。 */
   tick(): void {
     const plan = this.plan ?? (this.plan = this.buildPlan());
-    const count = plan.length;
     // 1) 入力を読む(ケーブルの1サンプル遅延値)
-    for (let k = 0; k < count; k++) {
-      const entry = plan[k]!;
-      const inputs = entry.module.inputs;
-      const sources = entry.sources;
-      for (let i = 0; i < sources.length; i++) {
-        const port = inputs[i]!;
-        const latch = sources[i]!;
-        if (latch === null) {
-          if (port.connected) port.disconnect();
-          continue;
-        }
-        // 写すのは、使われるチャンネルの分だけ(単音なら 1 個)。チャンネル数が減った直後の 1 回は、前の数の分まで写して
-        // 以前の値を残さない。チャンネル数より後ろの値は、どのモジュールも読まない(COM-08)
-        const n = latch.channels;
-        const upto = port.connected && port.channels > n ? port.channels : n;
-        port.connected = true;
-        port.channels = n;
-        const src = latch.values;
-        const dst = port.values;
-        for (let c = 0; c < upto; c++) dst[c] = src[c]!;
-      }
+    const links = plan.links;
+    for (let k = 0; k < links.length; k++) {
+      const link = links[k]!;
+      const port = link.port;
+      const latch = link.latch;
+      // 写すのは、使われるチャンネルの分だけ(単音なら 1 個)。チャンネル数が減った直後の 1 回は、前の数の分まで写して
+      // 以前の値を残さない。チャンネル数より後ろの値は、どのモジュールも読まない(COM-08)
+      const n = latch.channels;
+      const upto = port.connected && port.channels > n ? port.channels : n;
+      port.connected = true;
+      port.channels = n;
+      const src = latch.values;
+      const dst = port.values;
+      if (upto === 1) dst[0] = src[0]!; // 単音(ほとんどのケーブル)
+      else for (let c = 0; c < upto; c++) dst[c] = src[c]!;
     }
     // 2) 状態を更新し、出力を書く
-    for (let k = 0; k < count; k++) plan[k]!.module.step();
-    // 3) 出力を次のステップ用に保持する
-    for (let k = 0; k < count; k++) {
-      const entry = plan[k]!;
-      const outputs = entry.module.outputs;
-      const ls = entry.latches;
-      for (let o = 0; o < ls.length; o++) {
-        const out = outputs[o]!;
-        const l = ls[o]!;
-        const n = out.channels;
-        const upto = l.channels > n ? l.channels : n;
-        l.channels = n;
-        const src = out.values;
-        const dst = l.values;
-        for (let c = 0; c < upto; c++) dst[c] = src[c]!;
-      }
+    const modules = plan.modules;
+    for (let k = 0; k < modules.length; k++) modules[k]!.step();
+    // 3) 出力を次のステップ用に保持する(ケーブルがつながっている出力だけ)
+    const kept = plan.kept;
+    for (let k = 0; k < kept.length; k++) {
+      const out = kept[k]!.out;
+      const l = kept[k]!.latch;
+      const n = out.channels;
+      const upto = l.channels > n ? l.channels : n;
+      l.channels = n;
+      const src = out.values;
+      const dst = l.values;
+      if (upto === 1) dst[0] = src[0]!;
+      else for (let c = 0; c < upto; c++) dst[c] = src[c]!;
+    }
+    if (this.markPending) {
+      // 写さなかった控えは、このステップから「古い」
+      for (const l of plan.skipped) l.stale = true;
+      this.markPending = false;
     }
     this.stepCount++;
   }
@@ -197,13 +254,16 @@ export class Engine {
       for (const l of ls) {
         l.channels = 1;
         l.values.fill(0);
+        l.stale = false;
       }
     }
+    this.markPending = true;
     this.stepCount = 0;
   }
 
   /** COM-14: スナップショット(内部状態・PRNG・ケーブル遅延値を含む検証用の完全保存)。 */
   snapshot(): EngineSnapshot {
+    this.syncStale();
     const modules: EngineSnapshot["modules"] = [];
     for (const [id, m] of this.modules) {
       const params: Record<string, EncNum> = {};

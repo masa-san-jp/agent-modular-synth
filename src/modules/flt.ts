@@ -35,6 +35,9 @@ export class FltModule extends SynthModule {
 
   // エンジンごとの状態(§5)。s[c*4 + i]。先頭 n 組が有効。
   private n = 1;
+  // カットオフ → 係数 g の控え(同じカットオフが続く間は、べき乗と tan を計算し直さない。結果は同じ)
+  private readonly lastV = new Float64Array(MAX_CHANNELS).fill(NaN);
+  private readonly lastG = new Float64Array(MAX_CHANNELS);
   private readonly s = new Float64Array(MAX_CHANNELS * STAGES);
 
   constructor(fs: number) {
@@ -89,8 +92,11 @@ export class FltModule extends SynthModule {
 
       // 2) 係数
       const V = clamp(cutoff + v1 + l2 * v2 + l3 * v3, -10, 10);
-      const fc = clamp(F_C4 * Math.pow(2, V), 8, fcMax);
-      const g = Math.tan((Math.PI * fc) / fs);
+      if (V !== this.lastV[c]) {
+        this.lastV[c] = V;
+        this.lastG[c] = Math.tan((Math.PI * clamp(F_C4 * Math.pow(2, V), 8, fcMax)) / fs);
+      }
+      const g = this.lastG[c]!;
       const G = g / (1 + g);
       const r = clamp(res + 0.1 * vr, 0, 1);
       const k = 5.0 * r;

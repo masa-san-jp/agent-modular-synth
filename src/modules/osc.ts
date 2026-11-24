@@ -43,6 +43,9 @@ export class OscModule extends SynthModule {
   private readonly syncState = new Uint8Array(MAX_CHANNELS);
   /** 現在のエンジン数。 */
   private n = 1;
+  // 音程 → 周波数の控え(同じ音程が続く間は、2 のべき乗を計算し直さない。結果は同じ)
+  private readonly lastV = new Float64Array(MAX_CHANNELS).fill(NaN);
+  private readonly lastF = new Float64Array(MAX_CHANNELS);
 
   constructor(fs: number) {
     super(fs);
@@ -113,7 +116,11 @@ export class OscModule extends SynthModule {
 
       // 2. 周波数
       const v = clamp(xPitch + range + tune + fmAmt * xFm, -10, 10);
-      const f = F0 * Math.pow(2, v);
+      if (v !== this.lastV[c]) {
+        this.lastV[c] = v;
+        this.lastF[c] = F0 * Math.pow(2, v);
+      }
+      const f = this.lastF[c]!;
       const dphi = Math.min(f / this.fs, 0.5);
 
       // 3. パルス幅

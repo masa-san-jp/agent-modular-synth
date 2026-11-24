@@ -191,6 +191,9 @@ export class IoMidiModule extends SynthModule {
     }
   }
 
+  /** 使わない声の出力を 0 にしたときの、声の数(-1 は「まだ」)。 */
+  private zeroedFor = -1;
+
   step(): void {
     const nt = triggerSamples(this.fs);
     // 0. パラメータの整形
@@ -207,9 +210,11 @@ export class IoMidiModule extends SynthModule {
       this.lastChannel = channelE;
     }
     // 1. メッセージを到着順に処理
+    // メッセージがないサンプル(ほとんど)では、配列を作り直さない
     const msgs = this.queue;
-    this.queue = [];
-    for (const m of msgs) {
+    if (msgs.length > 0) this.queue = [];
+    for (let mi = 0; mi < msgs.length; mi++) {
+      const m = msgs[mi]!;
       if (m.type === "clock") {
         this.clkCnt = nt;
         continue;
@@ -240,23 +245,30 @@ export class IoMidiModule extends SynthModule {
       const note = this.vNote[c]!;
       if (note !== NONE) {
         this.pNote[c] = note;
-        const e = this.held.find((h) => h.note === note);
-        if (e) this.velV[c] = (10 * e.vel) / 127;
+        const held = this.held;
+        for (let i = 0; i < held.length; i++) {
+          if (held[i]!.note === note) {
+            this.velV[c] = (10 * held[i]!.vel) / 127;
+            break;
+          }
+        }
       }
     }
     // 3. 出力
-    const [pitch, gate, velO, pw, mod, rtrg, clk] = this.outputs as [
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-      (typeof this.outputs)[number],
-    ];
+    const o = this.outputs;
+    const pitch = o[0]!;
+    const gate = o[1]!;
+    const velO = o[2]!;
+    const pw = o[3]!;
+    const mod = o[4]!;
+    const rtrg = o[5]!;
+    const clk = o[6]!;
     pitch.channels = gate.channels = velO.channels = rtrg.channels = V;
     pw.channels = mod.channels = clk.channels = 1;
-    for (let c = 0; c < MAX_CHANNELS; c++) {
+    // 使わない声の出力は 0。声の数が変わっていなければ、前のステップで 0 にしてある(書き直さない)
+    const upto = V === this.zeroedFor ? V : MAX_CHANNELS;
+    this.zeroedFor = V;
+    for (let c = 0; c < upto; c++) {
       if (c >= V) {
         pitch.values[c] = gate.values[c] = velO.values[c] = rtrg.values[c] = 0;
         continue;
