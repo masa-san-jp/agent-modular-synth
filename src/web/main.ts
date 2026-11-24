@@ -533,11 +533,11 @@ function renderMidi(state: MidiState): void {
   button.disabled = state.kind === "ready" || state.kind === "unsupported";
   label.textContent =
     state.kind === "idle"
-      ? "未接続(「MIDI を接続」を押すと、ブラウザが許可を尋ねます)"
+      ? "未接続"
       : state.kind === "unsupported"
-        ? "このブラウザは MIDI 機器の接続(Web MIDI)に対応していません。画面鍵盤は使えます"
+        ? "このブラウザは MIDI に対応していません"
         : state.kind === "denied"
-          ? `MIDI を使えません(許可されなかった、または取得に失敗: ${state.reason})`
+          ? `MIDI を使えません: ${state.reason}`
           : state.inputs.length === 0
             ? "MIDI は使えます。入力機器がつながっていません(つなぐと自動で使えます)"
             : `MIDI 入力: ${state.inputs.join("、")}`;
@@ -600,7 +600,7 @@ function renderStatus(): void {
   // 引き下げの後に矢印キーを押したとき、古い位置から計算した値で音量が跳ね上がらないようにする)
   const level = $<HTMLInputElement>("level");
   if (!levelDragging && Number(level.value) !== st.levelDb) level.value = String(st.levelDb);
-  $("levelLabel").textContent = `${st.levelDb} dB(エージェントの上限 ${st.agentMaxLevelDb} dB)`;
+  $("levelLabel").textContent = `${st.levelDb} dB`;
   renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
@@ -618,11 +618,11 @@ async function refreshPerformances(): Promise<void> {
   const r = await human("performance.list");
   list.textContent = "";
   if (!r.ok) {
-    list.appendChild(Object.assign(document.createElement("li"), { textContent: "(保存された演奏を読めません。サーバーに接続していない可能性があります)" }));
+    list.appendChild(Object.assign(document.createElement("li"), { textContent: "読めません" }));
     return;
   }
   const items = (r.result.performances as { name: string; bytes: number }[]).slice(0, 30);
-  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "(まだありません)" }));
+  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "なし" }));
   for (const it of items) {
     const li = document.createElement("li");
     li.dataset.performance = it.name;
@@ -680,10 +680,9 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
 let shownPrompts = "";
 function renderPerformance(): void {
   const p = session.performance;
-  const plan = p.plan.duration_seconds === null ? "止めるまで続ける" : `予定 ${Math.round(p.plan.duration_seconds / 60)} 分`;
-  const elapsed = p.plan.elapsed_seconds > 0 ? `、経過 ${formatClock(p.plan.elapsed_seconds)}` : "";
-  $("perf-state").textContent =
-    (p.playing ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒${elapsed})` : "演奏していません") + (p.plan.duration_seconds === null ? "" : ` / ${plan}`);
+  // 経過 / 予定(予定がなければ、経過だけ)
+  const clock = p.plan.duration_seconds === null ? formatClock(p.plan.elapsed_seconds) : `${formatClock(p.plan.elapsed_seconds)} / ${formatClock(p.plan.duration_seconds)}`;
+  $("perf-state").textContent = p.playing ? `演奏中 予約 ${p.scores.length} 件 残り ${p.remaining.toFixed(1)} 秒 ${clock}` : p.plan.duration_seconds === null ? "演奏していません" : `演奏していません ${clock}`;
   $("perf-saved").textContent = lastSaved;
   $<HTMLButtonElement>("score-stop").disabled = !p.playing;
   // 指示の一覧は、中身が変わったときだけ作り直す

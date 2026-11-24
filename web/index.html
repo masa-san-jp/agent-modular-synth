@@ -51,13 +51,13 @@
 <section aria-labelledby="h-perf">
   <h2 id="h-perf">演奏の記録</h2>
   <form id="plan-form" class="row">
-    <label for="plan-minutes">演奏の長さ(分。空なら止めるまで)</label>
+    <label for="plan-minutes">演奏の長さ(分)</label>
     <input id="plan-minutes" type="number" min="1" max="1440" step="1" size="5">
     <button id="plan-set" type="submit">決める</button>
   </form>
   <div class="row mono" id="perf-saved"></div>
   <div class="row">
-    <span>保存された演奏(新しい順)</span>
+    <span>保存された演奏</span>
     <button id="performance-refresh" type="button">一覧を更新</button>
   </div>
   <ul id="performance-list" aria-label="保存された演奏"></ul>
@@ -70,11 +70,11 @@
     <button id="undo" type="button">取り消し</button>
     <button id="redo" type="button">やり直し</button>
     <button id="new" type="button">新規作成</button>
-    <button id="demo" type="button">デモ用パッチを組む</button>
+    <button id="demo" type="button">デモ用パッチ</button>
   </div>
   <div class="row">
-    <label for="save-name">保存する名前</label>
-    <input id="save-name" type="text" maxlength="64" placeholder="例: bass-01" autocomplete="off" spellcheck="false">
+    <label for="save-name">名前</label>
+    <input id="save-name" type="text" maxlength="64" autocomplete="off" spellcheck="false">
     <button id="save" type="button">保存</button>
   </div>
   <div class="row">
@@ -89,8 +89,8 @@
   <div class="row">
     <label for="add-type">種別</label>
     <select id="add-type"></select>
-    <label for="add-id">ID(省略可)</label>
-    <input id="add-id" type="text" maxlength="32" size="10" placeholder="自動" autocomplete="off" spellcheck="false">
+    <label for="add-id">ID</label>
+    <input id="add-id" type="text" maxlength="32" size="10" autocomplete="off" spellcheck="false">
     <button id="add-module" type="button">追加</button>
   </div>
   <div id="module-list"></div>
@@ -110,34 +110,29 @@
 </section>
 
 <section aria-labelledby="h-history">
-  <h2 id="h-history">変更の履歴(直近10件)</h2>
-  <p class="muted">新しい順。人の操作とエージェントの操作が同じ1本の履歴に並びます。</p>
+  <h2 id="h-history">変更の履歴</h2>
   <ol id="history" class="list"></ol>
 </section>
 
 <section aria-labelledby="h-util" id="utility">
   <h2 id="h-util">ユーティリティ</h2>
   <div class="row">
-    <button id="panic" type="button">緊急停止</button>
+    <button id="panic" type="button" title="Esc">緊急停止</button>
     <button id="release" type="button">緊急停止を解除</button>
-    <span class="muted">Esc キーでも緊急停止できます。</span>
   </div>
   <div class="row mono" id="meter"></div>
   <div class="row">
     <button id="midi-connect" type="button">MIDI を接続</button>
     <span id="midi-state"></span>
   </div>
-  <div class="row">
-    <span class="muted">画面鍵盤(押している間、その音が鳴ります。MIDI-CV モジュールが要ります)</span>
-  </div>
-  <div class="row" id="keys" aria-label="画面鍵盤"></div>
+  <div class="row"><span class="muted">鍵盤</span><div class="row" id="keys" aria-label="画面鍵盤"></div></div>
   <div class="row">
     <label for="hue">画面の色</label>
     <select id="hue"></select>
     <label for="hue-period">自動の周期</label>
     <select id="hue-period"></select>
   </div>
-  <p class="note">ヘッドホンを使うときは、先に機器側の音量を下げてください。</p>
+  <p class="note">ヘッドホン: 先に機器の音量を下げる</p>
 </section>
 
 <script type="module" src="dist/main.js"></script>

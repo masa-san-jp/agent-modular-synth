@@ -472,7 +472,7 @@ export function createEditor(deps: EditorDeps): Editor {
         return;
       }
       const patches = (r.result.patches ?? []) as { name: string; title?: string; bytes?: number; modified_at?: string; saved_by_kind?: string; readable?: boolean }[];
-      libraryState.textContent = patches.length === 0 ? "保存済みのパッチはありません" : `保存済み ${patches.length} 件`;
+      libraryState.textContent = `保存済み ${patches.length} 件`;
       for (const p of patches) {
         const load = el("button", { type: "button", "data-action": "load", class: "small" }, "読込");
         load.disabled = p.readable === false;
@@ -557,7 +557,7 @@ export function createEditor(deps: EditorDeps): Editor {
       const v = meters?.[id];
       const num = (k: string): string => (typeof v?.[k] === "number" ? (v[k] as number).toFixed(3) : "—");
       if (!v) {
-        card.readout.textContent = "読出し値: 音声が動作中のときに表示されます";
+        card.readout.textContent = "読出し値: –";
       } else if (card.type === "MOD-MIX-002") {
         // ミキサー卓: チャンネルごとの音量(dB。±5 V を 0 dB とする)。消えているチャンネルは「消」
         const db = (x: unknown): string => (typeof x === "number" && x > 0 ? (20 * Math.log10(x / 5)).toFixed(0) : "−∞");
