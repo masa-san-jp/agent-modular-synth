@@ -339,7 +339,11 @@ function scheduleAutosave(): void {
 function flushAutosave(): void {
   if (autosaveTimer !== null || session.revision !== autosavedRevision) autosaveNow();
 }
-window.addEventListener("pagehide", flushAutosave);
+window.addEventListener("pagehide", () => {
+  flushAutosave();
+  // 記録中の演奏データを閉じて保存する(演奏し終えて続きを待っている間に閉じても、終わりの印が残るように。DEC-024)
+  if (tabRole === "owner" && session.closePerformanceOnExit()) void controller.savePerformances();
+});
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") flushAutosave();
 });

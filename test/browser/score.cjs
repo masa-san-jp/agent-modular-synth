@@ -1,5 +1,5 @@
 // エージェントの演奏(楽譜と指示)の、実際のブラウザ(ヘッドレスの Chromium)での確認。npm run test:score-browser で実行する。
-// verification-plan VER-A-009g。
+// verification-plan VER-A-009g、VER-A-010h。
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
@@ -221,6 +221,23 @@ async function main() {
     assert.equal(await synth("desyncCount"), 0);
     assert.deepEqual(pageErrors, [], "ページのエラー");
     ok("ページとワークレットにエラーなし");
+
+    // ---- 9) 演奏し終えて続きを待っている間にタブを閉じても、演奏データに終わりの印が付く(DEC-024、VER-A-010h) ----
+    const beforeClose = new Set(fs.readdirSync(perfDir));
+    const finishedBefore = events.filter((e) => e.reason === "finished").length;
+    await agentOk("score.play", { notes: [{ t: 0, dur: 0.3, note: 60 }], length: 0.5 });
+    await waitFor(() => events.filter((e) => e.reason === "finished").length > finishedBefore, "演奏し終える", 5000);
+    const newFile = await waitFor(() => fs.readdirSync(perfDir).find((f) => f.endsWith(".performance.json") && !beforeClose.has(f)), "新しい演奏データ");
+    const readNew = () => JSON.parse(fs.readFileSync(path.join(perfDir, newFile), "utf8"));
+    assert.equal(readNew().ended_by, null, "閉じる前は、続きを待っている(30 秒以内)");
+    await page.close();
+    const t0 = Date.now();
+    while (readNew().ended_by === null && Date.now() - t0 < 5000) await new Promise((res) => setTimeout(res, 50));
+    const closedDoc = readNew();
+    assert.equal(closedDoc.ended_by, "finished", "タブを閉じたときに、演奏し終えた印で閉じる");
+    assert.equal(typeof closedDoc.ended_at, "string");
+    assert.equal(closedDoc.entries.length, 1);
+    ok("演奏し終えて続きを待っている間にタブを閉じても、演奏データに終わりの印(finished)が付く", newFile);
     ws.close();
   } finally {
     await browser.close();
