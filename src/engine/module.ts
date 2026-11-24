@@ -90,7 +90,10 @@ export abstract class SynthModule {
   /** 設定されたパラメータ値(正規化前)。 */
   protected readonly rawParams = new Map<string, number>();
   /** 正規化後の有効値の控え(名前 → 値)。setParam で消す。param() は毎サンプル呼ばれるので、定義の検索と正規化を繰り返さない。 */
-  private readonly effective = new Map<string, number>();
+  // 名前 → 値の、ふつうのオブジェクト(Map より読むのが速い)。未計算は undefined。キーは init() で先に全部作る(形を変えない)
+  private readonly effective: Record<string, number | undefined> = Object.create(null) as Record<string, number | undefined>;
+  /** rawParams の写し(毎サンプル読む getRawParam 用。Map より速い)。 */
+  private readonly rawFast: Record<string, number | undefined> = Object.create(null) as Record<string, number | undefined>;
   /** COM-12: 置換カウンタ(診断値。出力には影響しない)。 */
   nonfiniteCount = 0;
   protected fs: number;
@@ -103,7 +106,11 @@ export abstract class SynthModule {
   protected init(): void {
     for (const p of this.def.inputs) this.inputs.push(new InPort(p));
     for (const p of this.def.outputs) this.outputs.push(new OutPort(p));
-    for (const p of this.def.params) this.rawParams.set(p.name, p.default);
+    for (const p of this.def.params) {
+      this.rawParams.set(p.name, p.default);
+      this.effective[p.name] = undefined;
+      this.rawFast[p.name] = p.default;
+    }
     this.resetState();
   }
 
@@ -127,24 +134,25 @@ export abstract class SynthModule {
   setParam(name: string, value: number): void {
     if (!this.rawParams.has(name)) throw new Error(`${this.def.specId}: パラメータ '${name}' はない`);
     this.rawParams.set(name, value);
-    this.effective.delete(name);
+    this.rawFast[name] = value;
+    this.effective[name] = undefined;
   }
 
   /** 設定されたままの値(正規化前)。 */
   getRawParam(name: string): number {
-    const v = this.rawParams.get(name);
+    const v = this.rawFast[name];
     if (v === undefined) throw new Error(`${this.def.specId}: パラメータ '${name}' はない`);
     return v;
   }
 
   /** 正規化後の有効値(COM-12/13)。 */
   param(name: string): number {
-    const cached = this.effective.get(name);
+    const cached = this.effective[name];
     if (cached !== undefined) return cached;
     const def = this.def.params.find((p) => p.name === name);
     if (!def) throw new Error(`${this.def.specId}: パラメータ '${name}' はない`);
     const v = normalizeParam(def, this.rawParams.get(name)!);
-    this.effective.set(name, v);
+    this.effective[name] = v;
     return v;
   }
 
