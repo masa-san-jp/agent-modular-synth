@@ -195,7 +195,7 @@ export function createEditor(deps: EditorDeps): Editor {
 
   function buildParamRow(moduleId: string, p: ParamInfo, controls: ParamControl[]): HTMLElement {
     const inputId = `p-${moduleId}-${p.name}`;
-    const label = el("label", { for: inputId, class: "param-name" }, p.name, ...(p.unit ? [el("span", { class: "unit" }, ` ${p.unit}`)] : []));
+    const label = el("label", { for: inputId, class: "param-name", ...(p.unit ? { title: p.unit } : {}) }, p.name); // 単位は、マウスを載せると出る(パネルには書かない)
     const row = el("div", { class: "param", "data-param": p.name }, label);
     const set = (value: number, coalesceKey?: string): void => {
       void deps.run("param.set", { module_id: moduleId, param: p.name, value, ...(coalesceKey ? { coalesce_key: coalesceKey } : {}) });
@@ -263,7 +263,7 @@ export function createEditor(deps: EditorDeps): Editor {
 
   function buildCard(m: PatchModule, info: TypeInfo | undefined): Card {
     const controls: ParamControl[] = [];
-    const head = el("header", {}, el("h3", {}, info?.title ?? m.type), el("code", { class: "module-id" }, m.id), el("span", { class: "type-id" }, m.type));
+    const head = el("header", {}, el("h3", { title: info?.title ?? "" }, m.id.toUpperCase()), el("span", { class: "type-id" }, m.type)); // 板の印字と同じく、名前だけ(種別の日本語名は、マウスを載せると出る)
     if (m.type === OUTPUT_TYPE) {
       head.append(el("span", { class: "badge", title: "常設のモジュールは削除できません" }, "FIXED"));
     } else {
@@ -412,7 +412,7 @@ export function createEditor(deps: EditorDeps): Editor {
       groups.set(info.category, group);
       addType.append(group);
     }
-    group.append(el("option", { value: info.type }, `${info.title}(${info.type})`));
+    group.append(el("option", { value: info.type, title: info.title }, info.type.replace(/^MOD-/, "")));
   }
   addButton.addEventListener("click", () => {
     const id = addId.value.trim();

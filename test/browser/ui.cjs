@@ -86,7 +86,7 @@ async function main() {
     await waitFor(() => synth("serverAccepted"), "タブがサーバーに受け付けられる");
     await page.waitForSelector('#module-list [data-module="out"]');
     assert.equal(await page.locator('#module-list [data-module="out"] button[data-action="remove"]').count(), 0);
-    assert.match(await text('#module-list [data-module="out"]'), /オーディオ出力/);
+    assert.match(await text('#module-list [data-module="out"] h3'), /^OUT$/);
     assert.equal(await page.isDisabled("#undo"), true);
     assert.equal(await page.isDisabled("#redo"), true);
     assert.equal(await page.isDisabled("#release"), true);
