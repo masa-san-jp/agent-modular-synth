@@ -52,6 +52,8 @@ export interface WorkletStatus {
    * 波形フレーム(`frame`)は、前回送ったときから `frame_seq` が変わったモジュールだけに含める。
    */
   meters: Record<string, Record<string, unknown>>;
+  /** 各モジュールの、いまの出力の大きさ [V](画面の LED 用。その瞬間の値)。 */
+  activity: Record<string, number>;
   /** 性能の測定の集計(測定中だけ)。 */
   perf?: PerfStats;
   /** これまでに受け取って処理したメッセージの数(メインスレッドが、送った分がすべて反映された状態かを見分けるのに使う)。 */

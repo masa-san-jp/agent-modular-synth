@@ -188,6 +188,7 @@ export class WorkletCore {
       engineRevision: s.engineRevision ?? null,
       limiterGain: st.limiterGain,
       peak: this.be.takePeak(),
+      activity: this.be.activity(),
       meters,
       ...(this.perfOn ? { perf: this.perfStats() } : {}),
       received: this.received,
