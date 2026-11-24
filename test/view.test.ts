@@ -5,7 +5,7 @@ import { test } from "node:test";
 import { buildCatalog } from "../src/control/catalog.js";
 import { REGISTRY } from "../src/modules/registry.js";
 import { DEFAULT_HUE_SETTING, HUE_CHOICES, HUE_PERIODS, HUE_SWEEP, hueAt, parseHueSetting } from "../src/view/hue.js";
-import { RACK, cableEnds, layoutRack, panelAt } from "../src/view/rack-layout.js";
+import { RACK, cableEnds, formatParam, layoutRack, panelAt, paramRows } from "../src/view/rack-layout.js";
 
 test("色相: 固定のときは選んだ値のまま。候補に黄・橙(20〜100°)はない", () => {
   for (const c of HUE_CHOICES) {
@@ -50,37 +50,77 @@ test("色相の設定の読み込み: 壊れた値・知らない値は既定値
 const CATALOG = buildCatalog(REGISTRY);
 const mod = (id: string, type: string) => {
   const t = CATALOG.get(type)!;
-  return { id, type, inputs: t.inputs.map((p) => p.name), outputs: t.outputs.map((p) => p.name), lcd: type === "MOD-IO-001" };
+  return { id, type, inputs: t.inputs.map((p) => p.name), outputs: t.outputs.map((p) => p.name), params: t.params.map((p) => ({ name: p.name, kind: p.kind, values: p.values, unit: p.unit })), lcd: type === "MOD-IO-001" };
 };
 
-test("ラックの配置: 全 20 種のモジュールが、重ならず、幅に収まり、すべてのポートがジャックとして板の中にある", () => {
+test("ラックの配置: 全 20 種のモジュールが、重ならず、幅に収まり、すべてのパラメータとポートが板の中にある", () => {
   const mods = [...CATALOG.keys()].map((type, i) => mod(`m${i}`, type));
   for (const width of [320, 700, 1200]) {
     const l = layoutRack(mods, width);
     assert.equal(l.panels.length, 20);
-    const h = l.panels[0]!.h;
     for (const [i, p] of l.panels.entries()) {
-      assert.equal(p.h, h, "板の高さは揃える");
-      assert.ok(p.x >= 0 && (p.x + p.w <= width || p.x === RACK.gap), `${p.type}: 幅 ${width} に収まる(板 1 枚が幅より広い場合を除く)`);
-      assert.ok(p.y + p.h <= l.height);
       const m = mods[i]!;
+      assert.equal(p.w, RACK.panelW, "板の幅は一定");
+      assert.ok(p.x >= 0 && (p.x + p.w <= width || p.x === RACK.gap), `${p.type}: 幅 ${width} に収まる`);
+      assert.ok(p.y + p.h <= l.height);
+      // すべてのパラメータが、どこかの行に 1 回ずつ出る
+      assert.deepEqual(p.rows.flatMap((r) => r.params).sort(), m.params.map((x) => x.name).sort(), `${p.type} のパラメータ`);
+      for (const [k, r] of p.rows.entries()) {
+        assert.ok(r.params.length <= RACK.perRow);
+        assert.ok(r.y - RACK.row / 2 >= p.y + RACK.title && r.y + RACK.row / 2 <= p.y + p.h, "行が板の中");
+        if (k > 0) assert.equal(r.y - p.rows[k - 1]!.y, RACK.row, "行は詰めて並ぶ");
+      }
       assert.deepEqual(p.jacks.filter((j) => j.dir === "in").map((j) => j.port), m.inputs);
       assert.deepEqual(p.jacks.filter((j) => j.dir === "out").map((j) => j.port), m.outputs);
-      for (const j of p.jacks) assert.ok(j.x - 3.5 >= p.x && j.x + 3.5 <= p.x + p.w && j.y - 3.5 >= p.y + RACK.title && j.y + 3.5 <= p.y + p.h, `${p.type}.${j.port} が板の中`);
-      // ジャック同士は重ならない(間隔 14px)
-      for (const a of p.jacks) for (const b of p.jacks) if (a !== b) assert.ok(Math.hypot(a.x - b.x, a.y - b.y) >= RACK.jack - 1e-9);
-      // LCD は出力モジュールにだけあり、ジャックと重ならない
+      const lastRow = p.rows.at(-1);
+      for (const j of p.jacks) {
+        assert.ok(j.x - 2.4 >= p.x && j.x + 2.4 <= p.x + p.w && j.y + 2.4 <= p.y + p.h, `${p.type}.${j.port} が板の中`);
+        if (lastRow) assert.ok(j.y - 2.4 >= lastRow.y + RACK.row / 2, "ジャックの帯は、パラメータの下");
+        if (p.lcd) assert.ok(j.y - 2.4 >= p.lcd.y + p.lcd.h, "ジャックの帯は、LCD の下");
+      }
       assert.equal(p.lcd !== null, p.type === "MOD-IO-001");
-      if (p.lcd) for (const j of p.jacks) assert.ok(j.y + 3.5 <= p.lcd.y, "LCD はジャックの下");
+      if (p.lcd && lastRow) assert.ok(p.lcd.y >= lastRow.y + RACK.row / 2, "LCD はパラメータの下");
       for (const q of l.panels.slice(0, i)) {
         const apart = p.x >= q.x + q.w + RACK.gap - 1e-9 || q.x >= p.x + p.w + RACK.gap - 1e-9 || p.y >= q.y + q.h + RACK.gap - 1e-9 || q.y >= p.y + p.h + RACK.gap - 1e-9;
         assert.ok(apart, `${p.id} と ${q.id} が重ならない`);
       }
     }
-    assert.ok(l.height - (l.panels.at(-1)!.y + h) >= RACK.sag, "いちばん下の段のケーブルが垂れる余白");
   }
   assert.ok(layoutRack(mods, 320).height > layoutRack(mods, 1200).height, "狭いと段が増える");
   assert.deepEqual(layoutRack([], 500), { width: 500, height: 0, panels: [] });
+});
+
+test("パラメータの行: ふつうは 1 行に 1 つ。配列(名前[番号])は、名前の行の下に 4 個ずつ並べる", () => {
+  const p = (name: string) => ({ name, kind: "float" });
+  assert.deepEqual(paramRows([p("cutoff"), p("res")]), [{ label: "cutoff", params: ["cutoff"] }, { label: "res", params: ["res"] }]);
+  const rows = paramRows([p("length"), ...[1, 2, 3, 4, 5, 6].map((i) => p(`cv[${i}]`)), p("glide"), ...[1, 2].map((i) => p(`gate[${i}]`))]);
+  assert.deepEqual(rows, [
+    { label: "length", params: ["length"] },
+    { label: "cv", params: [] },
+    { label: "", params: ["cv[1]", "cv[2]", "cv[3]", "cv[4]"] },
+    { label: "", params: ["cv[5]", "cv[6]"] },
+    { label: "glide", params: ["glide"] },
+    { label: "gate", params: [] },
+    { label: "", params: ["gate[1]", "gate[2]"] },
+  ]);
+  // ミキサー卓(42 個)も、すべて出る
+  const desk = mod("d", "MOD-MIX-002");
+  assert.equal(paramRows(desk.params).flatMap((r) => r.params).length, 42);
+});
+
+test("値の書式: 数値は 4 桁前後、列挙は名前、真偽は on/off", () => {
+  const f = { name: "x", kind: "float" };
+  assert.equal(formatParam(f, 0.8), "0.800");
+  assert.equal(formatParam(f, -1.5), "-1.500");
+  assert.equal(formatParam(f, 12.3456), "12.35");
+  assert.equal(formatParam(f, 440), "440.0");
+  assert.equal(formatParam(f, 12000), "12000");
+  assert.equal(formatParam({ name: "n", kind: "int" }, 16), "16");
+  assert.equal(formatParam({ name: "b", kind: "bool" }, 1), "on");
+  assert.equal(formatParam({ name: "b", kind: "bool" }, 0), "off");
+  assert.equal(formatParam({ name: "m", kind: "int", values: [{ value: 0, label: "soft" }, { value: 1, label: "hard" }] }, 1), "hard");
+  assert.equal(formatParam(f, undefined), "–");
+  assert.equal(formatParam(undefined, 3), "3");
 });
 
 test("ラックの配置: 板の当たり判定と、ケーブルの両端(出力のジャック → 入力のジャック)", () => {
@@ -115,4 +155,11 @@ test("EngineBackend.activity: 各モジュールの、いまの出力の大き�
   assert.deepEqual(Object.keys(a).sort(), ["out", "vca", "vco"]);
   assert.ok(peak > 1 && peak <= 12, `発振器は出力がある: ${peak}`);
   assert.equal(a.vca, 0, "入力のないアンプは 0");
+  // 楽譜が動かしているパラメータの、音声側のいまの値
+  assert.deepEqual(be.overrideValues(), {});
+  be.scheduleMidi([{ at: be.sampleNow() + 10, param: { module: "vco", name: "tune", value: 0.25, ramp: 0 } }]);
+  be.processBlock(L, new Float32Array(128));
+  assert.deepEqual(be.overrideValues(), { vco: { tune: 0.25 } });
+  be.clearSchedule();
+  assert.deepEqual(be.overrideValues(), {}, "演奏が終われば、なくなる(パッチの値へ戻る)");
 });

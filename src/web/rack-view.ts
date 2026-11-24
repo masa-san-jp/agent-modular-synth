@@ -2,7 +2,7 @@
 import type { TypeCatalog } from "../control/catalog.js";
 import type { Patch } from "../control/types.js";
 import { DEFAULT_HUE_SETTING, HUE_CHOICES, HUE_PERIODS, HueSetting, hueAt, parseHueSetting } from "../view/hue.js";
-import { RackLayout, layoutRack, panelAt } from "../view/rack-layout.js";
+import { RackLayout, RackParam, layoutRack, panelAt } from "../view/rack-layout.js";
 import { drawRack } from "./rack.js";
 
 const HUE_KEY = "agent-modular-synth.hue";
@@ -10,8 +10,8 @@ const OUT_TYPE = "MOD-IO-001";
 /** LCD に出す履歴の数(1 件 = 状態の通知 1 回 = 約 50 ms)。 */
 const LEVEL_HISTORY = 48;
 /** 描く倍率の候補(大きい順)と、その倍率を選ぶ高さの上限 [px]。 */
-const SCALES = [2.5, 2, 1.5, 1.25, 1];
-const MAX_HEIGHT = 460;
+const SCALES = [1.75, 1.5, 1.25, 1];
+const MAX_HEIGHT = 900;
 
 export interface RackViewDeps {
   canvas: HTMLCanvasElement;
@@ -20,6 +20,8 @@ export interface RackViewDeps {
   periodSelect: HTMLSelectElement;
   catalog: TypeCatalog;
   getPatch: () => Patch;
+  /** パッチのリビジョン(変わったときだけ、パッチを読み直す)。 */
+  getRevision: () => number;
   /** 状態の帯に出す項目(短い文字。等幅・大文字で出す)。 */
   hudItems: () => string[];
   /** 板を押したとき(そのモジュールのフォームへ移る)。 */
@@ -27,7 +29,7 @@ export interface RackViewDeps {
 }
 export interface RackView {
   /** 状態が変わったら呼ぶ(音声の状態の通知ごと)。 */
-  update(status: { activity: Record<string, number> | null; peak: number; panic: boolean }): void;
+  update(status: { activity: Record<string, number> | null; overrides: Record<string, Record<string, number>>; peak: number; panic: boolean }): void;
   /** 変わったモジュールを短く明滅させる。 */
   markChanged(ids: readonly string[]): void;
   /** いまの色相(自動試験用)。 */
@@ -52,7 +54,20 @@ export function createRackView(d: RackViewDeps): RackView {
   let scale = 1;
   const changed = new Map<string, number>();
   const levels: number[] = [];
-  let last = { activity: null as Record<string, number> | null, peak: 0, panic: false };
+  let last = { activity: null as Record<string, number> | null, overrides: {} as Record<string, Record<string, number>>, peak: 0, panic: false };
+  // 種別 → パラメータの定義(値の書式のため)
+  const defs = new Map<string, Map<string, RackParam>>();
+  for (const [type, info] of d.catalog) defs.set(type, new Map(info.params.map((p) => [p.name, { name: p.name, kind: p.kind, ...(p.values ? { values: p.values } : {}), ...(p.unit ? { unit: p.unit } : {}) }])));
+  let patch = d.getPatch();
+  let patchRev = d.getRevision();
+  const currentPatch = (): Patch => {
+    const rev = d.getRevision();
+    if (rev !== patchRev) {
+      patchRev = rev;
+      patch = d.getPatch();
+    }
+    return patch;
+  };
 
   // 色相の選択: 固定の色相、または「自動」
   for (const c of HUE_CHOICES) d.hueSelect.append(new Option(`${c.label}(${c.hue}°)`, String(c.hue)));
@@ -93,14 +108,14 @@ export function createRackView(d: RackViewDeps): RackView {
   showSetting();
 
   const relayout = (): void => {
-    const patch = d.getPatch();
+    const patch = currentPatch();
     const width = Math.max(120, Math.floor(d.canvas.clientWidth));
     const key = `${width}|${patch.modules.map((m) => `${m.id}:${m.type}`).join(",")}`;
     if (key === layoutKey) return;
     layoutKey = key;
     const mods = patch.modules.map((m) => {
       const t = d.catalog.get(m.type);
-      return { id: m.id, type: m.type, inputs: t ? t.inputs.map((p) => p.name) : [], outputs: t ? t.outputs.map((p) => p.name) : [], lcd: m.type === OUT_TYPE };
+      return { id: m.id, type: m.type, inputs: t ? t.inputs.map((p) => p.name) : [], outputs: t ? t.outputs.map((p) => p.name) : [], params: [...(defs.get(m.type)?.values() ?? [])], lcd: m.type === OUT_TYPE };
     });
     // 板が少ないときは大きく描く(画面を埋める密度に近づける)。高さが MAX_HEIGHT を超えない、いちばん大きい倍率
     scale = 1;
@@ -129,7 +144,16 @@ export function createRackView(d: RackViewDeps): RackView {
     if (ctx && layout.height > 0) {
       const ratio = (d.canvas.width / Math.max(1, d.canvas.clientWidth)) * scale;
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      drawRack(ctx, layout, { hue, cables: d.getPatch().cables, activity: last.activity, changed, levels, panic: last.panic, now });
+      // 値: パッチの値。楽譜が動かしているパラメータは、音声側のいまの値
+      const p = currentPatch();
+      const values = new Map<string, Record<string, number>>();
+      const moving = new Map<string, Set<string>>();
+      for (const m of p.modules) {
+        const o = last.overrides[m.id];
+        values.set(m.id, o ? { ...m.params, ...o } : m.params);
+        if (o) moving.set(m.id, new Set(Object.keys(o)));
+      }
+      drawRack(ctx, layout, { hue, cables: p.cables, values, moving, params: defs, activity: last.activity, changed, levels, panic: last.panic, now });
     }
     const items = [...d.hudItems(), `hue ${Math.round(hue)}°${setting.mode === "cycle" ? " auto" : ""}`];
     if (d.hud.children.length !== items.length) d.hud.replaceChildren(...items.map(() => document.createElement("div")));

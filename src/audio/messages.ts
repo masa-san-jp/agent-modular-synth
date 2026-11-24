@@ -54,6 +54,8 @@ export interface WorkletStatus {
   meters: Record<string, Record<string, unknown>>;
   /** 各モジュールの、いまの出力の大きさ [V](画面の LED 用。その瞬間の値)。 */
   activity: Record<string, number>;
+  /** 楽譜が今動かしているパラメータの、音声側のいまの値(モジュールID → パラメータ名 → 値。画面の表示用)。 */
+  overrides: Record<string, Record<string, number>>;
   /** 性能の測定の集計(測定中だけ)。 */
   perf?: PerfStats;
   /** これまでに受け取って処理したメッセージの数(メインスレッドが、送った分がすべて反映された状態かを見分けるのに使う)。 */

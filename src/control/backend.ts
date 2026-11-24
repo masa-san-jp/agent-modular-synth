@@ -237,6 +237,22 @@ export class EngineBackend implements AudioBackend {
     }
   }
 
+  /**
+   * 楽譜が今動かしているパラメータの、音声側のいまの値(モジュールID → パラメータ名 → 値)。画面の表示用。
+   * パッチの値とは別(演奏が終われば、パッチの値へ戻る)。
+   */
+  overrideValues(): Record<string, Record<string, number>> {
+    const out: Record<string, Record<string, number>> = {};
+    for (const o of this.overrides.values()) {
+      try {
+        (out[o.id] ??= {})[o.name] = this.engine.get(o.id).getRawParam(o.name);
+      } catch {
+        // モジュールがもうない
+      }
+    }
+    return out;
+  }
+
   /** 楽譜が今動かしているパラメータの数(診断用)。 */
   get overridden(): number {
     return this.overrides.size;

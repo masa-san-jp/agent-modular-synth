@@ -571,12 +571,12 @@ function renderStatus(): void {
   const w = backend.lastStatus;
   $("state").textContent =
     st.audioState === "stopped"
-      ? "停止中(音声は始まっていません。「音声開始」を押すと始まります)"
+      ? "停止中"
       : st.panic
-        ? "緊急停止中(音は出ません)"
+        ? "緊急停止中"
         : st.audioState === "running"
           ? "動作中"
-          : "中断中(「音声開始」で再開します)";
+          : "中断中";
   const patch = session.getPatch();
   $("patch").textContent =
     `リビジョン ${session.revision} / モジュール ${patch.modules.length} / ケーブル ${patch.cables.length}` +
@@ -600,12 +600,12 @@ function renderStatus(): void {
   // 引き下げの後に矢印キーを押したとき、古い位置から計算した値で音量が跳ね上がらないようにする)
   const level = $<HTMLInputElement>("level");
   if (!levelDragging && Number(level.value) !== st.levelDb) level.value = String(st.levelDb);
-  $("levelLabel").textContent = `${st.levelDb} dB(エージェントが設定できる上限 ${st.agentMaxLevelDb} dB)`;
+  $("levelLabel").textContent = `${st.levelDb} dB(エージェントの上限 ${st.agentMaxLevelDb} dB)`;
   renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
-  rack?.update({ activity: st.audioState === "running" && w && !st.panic ? (w.activity ?? null) : null, peak: w ? w.peak : 0, panic: st.panic });
+  rack?.update({ activity: st.audioState === "running" && w && !st.panic ? (w.activity ?? null) : null, overrides: w?.overrides ?? {}, peak: w ? w.peak : 0, panic: st.panic });
 }
 
 const formatClock = (sec: number): string => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
@@ -683,7 +683,7 @@ function renderPerformance(): void {
   const plan = p.plan.duration_seconds === null ? "止めるまで続ける" : `予定 ${Math.round(p.plan.duration_seconds / 60)} 分`;
   const elapsed = p.plan.elapsed_seconds > 0 ? `、経過 ${formatClock(p.plan.elapsed_seconds)}` : "";
   $("perf-state").textContent =
-    (p.playing ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒${elapsed})` : "演奏していません(エージェントが楽譜を送ると始まります)") + ` / 演奏の長さ: ${plan}`;
+    (p.playing ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒${elapsed})` : "演奏していません") + (p.plan.duration_seconds === null ? "" : ` / ${plan}`);
   $("perf-saved").textContent = lastSaved;
   $<HTMLButtonElement>("score-stop").disabled = !p.playing;
   // 指示の一覧は、中身が変わったときだけ作り直す
@@ -803,6 +803,7 @@ window.addEventListener("DOMContentLoaded", () => {
     periodSelect: $<HTMLSelectElement>("hue-period"),
     catalog,
     getPatch: () => session.getPatch(),
+    getRevision: () => session.revision,
     hudItems,
     onPick: (id) => {
       const card = document.querySelector<HTMLElement>(`#module-list [data-module="${CSS.escape(id)}"]`);
@@ -839,6 +840,10 @@ window.addEventListener("DOMContentLoaded", () => {
     })();
   });
   $("panic").addEventListener("click", () => void run("engine.panic"));
+  // 緊急停止のボタンは画面の下にあるので、どこからでも Esc キーで止められるようにする(REQ-S-002: 即時に実行できる)
+  window.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && !ev.repeat) void run("engine.panic");
+  });
   $("release").addEventListener("click", () => void run("engine.release_panic"));
   $("undo").addEventListener("click", () => void run("history.undo"));
   $("redo").addEventListener("click", () => void run("history.redo"));

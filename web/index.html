@@ -9,10 +9,7 @@
 </head>
 <body>
 <div id="blocked" role="alert" hidden></div>
-<h1>agent-modular-synth(開発中)</h1>
-<p>画面の操作も、ローカルサーバー経由のエージェントの操作も、同じコマンドでこのタブのパッチを編集します。MIDI 機器は「MIDI を接続」でつなげます(対応ブラウザのみ)。</p>
-<p class="note"><strong>注意:</strong> ヘッドホンを使うときは、先に機器側の音量を下げてください。このアプリは低い音量から始まり、出力にはリミッターが入っていますが、機器側の音量は調整できません。</p>
-
+<h1>agent-modular-synth</h1>
 <div id="messages" aria-live="polite">
   <div id="error" role="alert"></div>
   <div id="notice"></div>
@@ -23,54 +20,36 @@
   </div>
 </div>
 
-<section aria-labelledby="h-rack" id="rack-section">
-  <h2 id="h-rack">ラック</h2>
-  <canvas id="rack" role="img" aria-label="ラックの表示"></canvas>
-  <div id="rack-hud" class="hud" aria-hidden="true"></div>
-  <div class="row">
-    <label for="hue">色</label>
-    <select id="hue"></select>
-    <label for="hue-period">自動の周期</label>
-    <select id="hue-period"></select>
-    <span class="muted">板を押すと、そのモジュールの欄へ移ります。</span>
-  </div>
-</section>
-
-<section aria-labelledby="h-audio">
-  <h2 id="h-audio">音声</h2>
-  <div class="row">
-    <button id="start" type="button">音声開始</button>
-    <button id="panic" type="button">緊急停止</button>
-    <button id="release" type="button">緊急停止を解除</button>
-    <span id="state"></span>
-    <span id="clip" hidden>クリップ</span>
-  </div>
+<section aria-labelledby="h-main" id="main-controls">
+  <h2 id="h-main">音量と演奏</h2>
   <div class="row">
     <label for="level">マスター音量</label>
     <input id="level" type="range" min="-60" max="0" step="1" value="-20">
-    <span id="levelLabel"></span>
+    <span id="levelLabel" class="mono"></span>
+    <button id="start" type="button">音声開始</button>
+    <span id="state"></span>
+    <span id="clip" hidden>クリップ</span>
   </div>
-  <div class="row mono" id="meter"></div>
-  <div class="row">
-    <button id="midi-connect" type="button">MIDI を接続</button>
-    <span id="midi-state"></span>
-  </div>
-  <div class="row" id="keys" aria-label="画面鍵盤(押している間だけ鳴ります。MIDI-CV モジュールが必要です)"></div>
-</section>
-
-<section aria-labelledby="h-perf">
-  <h2 id="h-perf">エージェントの演奏</h2>
-  <p>つないだエージェント(Claude Code、Codex など)が楽譜を書いて演奏します。下の欄に指示を書くと、エージェントは次の楽譜を書くときにそれを読みます。</p>
+  <form id="prompt-form" class="row">
+    <label for="prompt-text">prompt</label>
+    <input id="prompt-text" type="text" maxlength="500" autocomplete="off">
+    <button id="prompt-send" type="submit">送る</button>
+  </form>
+  <ul id="prompt-list" aria-label="送った指示"></ul>
   <div class="row">
     <span id="perf-state"></span>
     <button id="score-stop" type="button">演奏を止める</button>
   </div>
-  <form id="prompt-form" class="row">
-    <label for="prompt-text">演奏への指示</label>
-    <input id="prompt-text" type="text" maxlength="500" size="40" autocomplete="off" placeholder="例: もっと静かに、テンポを落として">
-    <button id="prompt-send" type="submit">送る</button>
-  </form>
-  <ul id="prompt-list" aria-label="送った指示"></ul>
+</section>
+
+<section aria-labelledby="h-rack" id="rack-section">
+  <h2 id="h-rack">ラック</h2>
+  <canvas id="rack" role="img" aria-label="ラックの表示"></canvas>
+  <div id="rack-hud" class="hud" aria-hidden="true"></div>
+</section>
+
+<section aria-labelledby="h-perf">
+  <h2 id="h-perf">演奏の記録</h2>
   <form id="plan-form" class="row">
     <label for="plan-minutes">演奏の長さ(分。空なら止めるまで)</label>
     <input id="plan-minutes" type="number" min="1" max="1440" step="1" size="5">
@@ -134,6 +113,31 @@
   <h2 id="h-history">変更の履歴(直近10件)</h2>
   <p class="muted">新しい順。人の操作とエージェントの操作が同じ1本の履歴に並びます。</p>
   <ol id="history" class="list"></ol>
+</section>
+
+<section aria-labelledby="h-util" id="utility">
+  <h2 id="h-util">ユーティリティ</h2>
+  <div class="row">
+    <button id="panic" type="button">緊急停止</button>
+    <button id="release" type="button">緊急停止を解除</button>
+    <span class="muted">Esc キーでも緊急停止できます。</span>
+  </div>
+  <div class="row mono" id="meter"></div>
+  <div class="row">
+    <button id="midi-connect" type="button">MIDI を接続</button>
+    <span id="midi-state"></span>
+  </div>
+  <div class="row">
+    <span class="muted">画面鍵盤(押している間、その音が鳴ります。MIDI-CV モジュールが要ります)</span>
+  </div>
+  <div class="row" id="keys" aria-label="画面鍵盤"></div>
+  <div class="row">
+    <label for="hue">画面の色</label>
+    <select id="hue"></select>
+    <label for="hue-period">自動の周期</label>
+    <select id="hue-period"></select>
+  </div>
+  <p class="note">ヘッドホンを使うときは、先に機器側の音量を下げてください。</p>
 </section>
 
 <script type="module" src="dist/main.js"></script>

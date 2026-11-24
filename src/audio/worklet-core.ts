@@ -189,6 +189,7 @@ export class WorkletCore {
       limiterGain: st.limiterGain,
       peak: this.be.takePeak(),
       activity: this.be.activity(),
+      overrides: this.be.overrideValues(),
       meters,
       ...(this.perfOn ? { perf: this.perfStats() } : {}),
       received: this.received,
