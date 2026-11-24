@@ -103,9 +103,24 @@ async function main() {
       const r = document.getElementById("rack").getBoundingClientRect();
       return { w: r.width, h: r.height };
     });
-    assert.ok(size.w > 1000 && size.h > 200 && size.h <= 470, `ラックの大きさ ${size.w}×${size.h}`);
+    assert.ok(size.w > 1000 && size.h > 400 && size.h <= 950, `ラックの大きさ ${size.w}×${size.h}`);
+    // 板には、すべてのパラメータの行がある(値は数字で描かれる)
+    for (const p of layout.panels) {
+      const m = patch.modules.find((x) => x.id === p.id);
+      assert.deepEqual(p.rows.flatMap((r) => r.params).sort(), Object.keys(m.params).sort(), `${p.id} のパラメータ`);
+    }
+    // 画面の並び: 音量と prompt が上、ラックが広く、ユーティリティ(緊急停止・MIDI・画面鍵盤・色)はいちばん下
+    const order = await page.evaluate(() => {
+      const top = (sel) => document.querySelector(sel).getBoundingClientRect().top + scrollY;
+      return { level: top("#level"), prompt: top("#prompt-text"), rack: top("#rack"), modules: top("#module-list"), util: top("#utility"), panic: top("#panic"), midi: top("#midi-connect"), keys: top("#keys"), hue: top("#hue"), bottom: document.documentElement.scrollHeight };
+    });
+    assert.ok(order.level < order.prompt && order.prompt < order.rack && order.rack < order.modules && order.modules < order.util, JSON.stringify(order));
+    for (const k of ["panic", "midi", "keys", "hue"]) assert.ok(order[k] > order.util, `${k} はユーティリティの中`);
+    assert.ok(order.rack < 400, "ラックは、最初の画面に見えている");
+    assert.equal((await page.textContent('label[for="prompt-text"]')).trim(), "prompt");
+    assert.equal(await page.getAttribute("#prompt-text", "placeholder"), null, "prompt の欄に説明を書かない");
     assert.match(await page.getAttribute("#rack", "aria-label"), /41 個のモジュールと 56 本のケーブル/);
-    ok("ラックに、パッチのモジュールが板として並ぶ(エージェントが組んだパッチがそのまま見える)", `板 ${layout.panels.length} 枚、${Math.round(size.w)}×${Math.round(size.h)}px`);
+    ok("ラックに、パッチのモジュールが板として並び、板に全パラメータの行がある。音量と prompt が上、ユーティリティが下", `板 ${layout.panels.length} 枚、${Math.round(size.w)}×${Math.round(size.h)}px`);
 
     // ---- 2) 見た目の数値(資料の測り方): 暗部 10% 以上、白飛び 2.4% 以下、色相の幅 31° 以内 ----
     await page.click("#start");
@@ -128,6 +143,18 @@ async function main() {
     assert.deepEqual(hud.slice(0, 1).concat(hud.slice(2)), ["audio run", "mod 41 · cbl 56", "idle", "out -20db", "hue 196°"]);
     assert.match(hud[1], /^rev \d+$/);
     ok("LED は出力のあるモジュールで点き、状態は下の帯に等幅でまとまる", hud.join(" | "));
+
+    // 楽譜がパラメータを動かしている間は、音声側のいまの値が届く(板の数字が動く)
+    await agent("score.play", { notes: [], length: 3, params: [{ t: 0, dur: 2, module_id: "r_vcf", param: "cutoff", value: 2 }] });
+    await waitFor(async () => (await synth("status")).overrides.r_vcf?.cutoff !== undefined, "動いている値が届く");
+    const v1 = (await synth("status")).overrides.r_vcf.cutoff;
+    await page.waitForTimeout(400);
+    const v2 = (await synth("status")).overrides.r_vcf.cutoff;
+    assert.ok(v2 > v1 && v2 <= 2, `値が動いている: ${v1} → ${v2}`);
+    assert.equal((await synth("patch")).modules.find((x) => x.id === "r_vcf").params.cutoff, patch.modules.find((x) => x.id === "r_vcf").params.cutoff, "パッチの値は変わらない");
+    await agent("score.stop");
+    await waitFor(async () => Object.keys((await synth("status")).overrides).length === 0, "演奏が止まれば、パッチの値へ戻る");
+    ok("楽譜がパラメータを動かしている間は、板の数字が音声側のいまの値で動く", `cutoff ${v1.toFixed(3)} → ${v2.toFixed(3)}`);
 
     // ---- 4) 色相を選べる。ページ全体が同じ色相になる。選んだ色は再読込の後も残る ----
     await page.selectOption("#hue", "297");
@@ -180,7 +207,7 @@ async function main() {
 
     // ---- 7) 緊急停止は、色相の規則の例外で赤い枠が出る。LED は消える ----
     await page.evaluate(() => scrollTo(0, 0));
-    await page.click("#panic");
+    await page.keyboard.press("Escape"); // 緊急停止のボタンは下にあるので、Esc キーでも止められる
     await waitFor(async () => (await page.$$eval("#rack-hud div", (els) => els[0].textContent)) === "panic", "帯に panic");
     await page.waitForTimeout(300);
     const red = await page.evaluate(() => {
@@ -190,7 +217,7 @@ async function main() {
     });
     assert.ok(red[0] > 180 && red[1] < 90 && red[2] < 130, `枠が赤い: ${red}`);
     await page.click("#release");
-    ok("緊急停止の間は、ラックに赤い枠が出る(見落とせない表示は、色相の規則より優先)");
+    ok("Esc キーで緊急停止できる。その間は、ラックに赤い枠が出る(見落とせない表示は、色相の規則より優先)");
 
     // ---- 8) 文字の読みやすさ(地との明るさの比)と、狭い画面 ----
     const contrast = await page.evaluate(() => {

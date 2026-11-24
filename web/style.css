@@ -21,7 +21,7 @@
 }
 * { box-sizing: border-box; }
 html { background: var(--wash-0); }
-body { font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; max-width: 72rem; margin: 0 auto; padding: 1rem; line-height: 1.6; color: var(--fg);
+body { font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; max-width: 100rem; margin: 0 auto; padding: 1rem; line-height: 1.6; color: var(--fg);
   background: radial-gradient(120% 60rem at 50% 30rem, hsl(var(--h) 85% 9%) 0%, var(--wash-0) 70%) no-repeat var(--wash-0); min-height: 100vh; }
 h1 { font-family: var(--mono); font-size: .95rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; margin: .2rem 0 .6rem; color: var(--wash-4); }
 h2 { font-family: var(--mono); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; margin: 0 0 .6rem; color: var(--muted); }
@@ -60,14 +60,16 @@ input[type="range"], input[type="checkbox"] { accent-color: var(--wash-4); }
 /* ラック: 眺めるための絵。下の帯に、短い状態を等幅でまとめる(絵の上には文字を重ねない) */
 #rack-section { padding: 0; overflow: hidden; }
 #rack-section > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-#rack-section > .row { padding: 0 .8rem; }
 #rack { display: block; width: 100%; min-height: 3rem; cursor: pointer; background: var(--wash-0); }
-.hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 4px; padding: .4rem .8rem 0; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--wash-4); font-variant-numeric: tabular-nums; }
+.hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 4px; padding: .4rem .8rem .6rem; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--wash-4); font-variant-numeric: tabular-nums; }
 .hud div { border-top: 1px solid hsl(var(--h) 90% 45% / .6); padding-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 #keys { gap: .2rem; }
 #keys button { min-width: 2.6rem; padding: 1.4rem .4rem .5rem; touch-action: none; }
-#level { flex: 1 1 10rem; max-width: 20rem; }
+#level { flex: 1 1 12rem; max-width: 28rem; }
+#main-controls label { font-family: var(--mono); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--wash-4); }
+#prompt-text { flex: 1 1 16rem; padding: .5rem .6rem; }
+#main-controls > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
 #module-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr)); gap: 3px; align-items: start; }
 .module { border: 1px solid var(--line); border-radius: 2px; padding: .6rem; background: var(--bg); min-width: 0; }
