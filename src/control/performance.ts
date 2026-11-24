@@ -3,7 +3,7 @@
 // 演奏中に次の楽譜を送ると、前の楽譜の終わりに切れ目なくつながる。演奏はパッチの編集ではない(リビジョン・履歴の対象外)。
 // ここは状態と検査だけを持つ(音声側への予約は Session が行う)。
 import { CommandError } from "./errors.js";
-import type { ActorInfo } from "./types.js";
+import type { ActorInfo, Patch } from "./types.js";
 
 /** 上限と時間(いずれも暫定値)。 */
 export const SCORE_LIMITS = {
@@ -23,6 +23,10 @@ export const SCORE_LIMITS = {
   promptChars: 500,
   /** 保持する指示の数(古いものから捨てる)。 */
   prompts: 20,
+  /** 演奏し終えてから、この時間 [秒] 次の楽譜が来なければ、演奏データを閉じる(少し遅れて届いた続きは、同じ演奏として残す)。 */
+  idleCloseSeconds: 30,
+  /** あらかじめ決める演奏の長さの上限 [秒]。 */
+  planMaxSeconds: 24 * 3600,
   tempoMin: 20,
   tempoMax: 1000,
 } as const;
@@ -241,6 +245,50 @@ export interface Prompt {
   acked: boolean;
 }
 
+/** 演奏データ(data-contract §15)。演奏した楽譜を、再演奏できる形で残す。時刻(started_at など)と名前は、保存する側が付ける。 */
+export const PERFORMANCE_FORMAT = "modular-synth-performance";
+export const PERFORMANCE_SCHEMA_VERSION = 1;
+export type PerformanceEnd = "finished" | "stopped" | "panic" | "audio_stopped" | "replaced";
+
+export interface PerformanceEntry {
+  /** 演奏の先頭(最初の楽譜の開始)から数えた、この楽譜の開始位置 [秒]。 */
+  at: number;
+  actor: ActorInfo;
+  /** score.play に渡された楽譜(notes、params、length、tempo_bpm)。mode と ack_prompt は含めない。 */
+  score: Record<string, unknown>;
+  /** 前の楽譜の後に、パッチが変わっていたか(再演奏は、演奏を始めた時点のパッチで行う)。 */
+  patch_changed?: true;
+}
+
+export interface PerformanceRecord {
+  format: typeof PERFORMANCE_FORMAT;
+  schema_version: typeof PERFORMANCE_SCHEMA_VERSION;
+  /** 演奏の始まり・終わりの時刻(RFC 3339、UTC)。保存する側が付ける。 */
+  started_at?: string;
+  ended_at?: string | null;
+  /** 終わり方。演奏中は null。 */
+  ended_by: PerformanceEnd | null;
+  fs: number;
+  /** 最後の楽譜の終わりまでの長さ [秒]。 */
+  length_seconds: number;
+  /** あらかじめ決めた演奏の長さ [秒]。決めていなければ null(止めるまで続ける)。 */
+  plan: { duration_seconds: number | null };
+  /** 再演奏のとき、元の演奏データの名前。 */
+  replay_of?: string;
+  /** 演奏を始めた時点のパッチ。 */
+  patch: Patch;
+  entries: PerformanceEntry[];
+  /** 演奏中に人が送った指示。 */
+  prompts: { at: number; id: number; text: string }[];
+}
+
+/** 保存する側へ渡す、演奏データの更新。`id` は、この Session の中での演奏の通し番号。 */
+export interface PerformanceUpdate {
+  id: number;
+  record: PerformanceRecord;
+  closed: boolean;
+}
+
 /** 演奏の状態(予約済みの楽譜と、人からの指示)。 */
 export class Performance {
   private queue: QueuedScore[] = [];
@@ -308,5 +356,92 @@ export class Performance {
 
   get prompts(): Prompt[] {
     return this.promptList.map((p) => ({ ...p }));
+  }
+
+  // ---- 演奏データ(演奏した楽譜の記録) ----
+
+  private rec: { id: number; record: PerformanceRecord; base: number; revision: number; dirty: boolean; end: number } | null = null;
+  private recId = 0;
+  private closedRecs: PerformanceUpdate[] = [];
+  /** あらかじめ決めた演奏の長さ [秒]。null は「止めるまで続ける」。 */
+  planSeconds: number | null = null;
+
+  /** 記録中の演奏の、先頭のサンプル時刻(なければ null)。 */
+  get recordBase(): number | null {
+    return this.rec ? this.rec.base : null;
+  }
+
+  /** 楽譜を記録する。記録中の演奏がなければ、ここから新しい演奏が始まる。 */
+  recordScore(actor: ActorInfo, score: Record<string, unknown>, start: number, end: number, fs: number, patch: Patch, revision: number, replayOf?: string): void {
+    if (!this.rec) {
+      this.rec = {
+        id: ++this.recId,
+        base: start,
+        revision,
+        dirty: true,
+        end,
+        record: {
+          format: PERFORMANCE_FORMAT,
+          schema_version: PERFORMANCE_SCHEMA_VERSION,
+          ended_by: null,
+          fs,
+          length_seconds: 0,
+          plan: { duration_seconds: this.planSeconds },
+          ...(replayOf !== undefined ? { replay_of: replayOf } : {}),
+          patch,
+          entries: [],
+          prompts: [],
+        },
+      };
+    }
+    const r = this.rec;
+    const entry: PerformanceEntry = { at: (start - r.base) / fs, actor, score };
+    if (revision !== r.revision) {
+      entry.patch_changed = true;
+      r.revision = revision;
+    }
+    r.record.entries.push(entry);
+    r.end = Math.max(r.end, end);
+    r.record.length_seconds = (r.end - r.base) / fs;
+    r.record.plan = { duration_seconds: this.planSeconds };
+    r.dirty = true;
+  }
+
+  recordPrompt(id: number, text: string, now: number): void {
+    const r = this.rec;
+    if (!r) return;
+    r.record.prompts.push({ at: Math.max(0, (now - r.base) / r.record.fs), id, text });
+    r.dirty = true;
+  }
+
+  /** 記録中の演奏を閉じる(止めた、緊急停止、置き換え、演奏し終えて次が来なかった)。 */
+  closeRecord(reason: PerformanceEnd, now: number): void {
+    const r = this.rec;
+    if (!r) return;
+    r.record.ended_by = reason;
+    // 途中で止めた場合の長さは、止めた時点まで
+    if (reason !== "finished") r.record.length_seconds = Math.max(0, Math.min(r.record.length_seconds, (now - r.base) / r.record.fs));
+    this.closedRecs.push({ id: r.id, record: r.record, closed: true });
+    this.rec = null;
+  }
+
+  /** 演奏し終えた後、次の楽譜が来ないまま時間が過ぎたら閉じる。閉じたら true。 */
+  closeIfIdle(now: number): boolean {
+    const r = this.rec;
+    if (!r || this.queue.length > 0) return false;
+    if ((now - r.end) / r.record.fs < SCORE_LIMITS.idleCloseSeconds) return false;
+    this.closeRecord("finished", now);
+    return true;
+  }
+
+  /** 前回から変わった演奏データ(閉じたものを含む)を取り出す。 */
+  takeRecordUpdates(): PerformanceUpdate[] {
+    const out = this.closedRecs;
+    this.closedRecs = [];
+    if (this.rec && this.rec.dirty) {
+      this.rec.dirty = false;
+      out.push({ id: this.rec.id, record: this.rec.record, closed: false });
+    }
+    return out;
   }
 }

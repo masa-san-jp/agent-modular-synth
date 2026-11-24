@@ -54,9 +54,9 @@ async function main() {
   try {
     await mcp.connect(transport);
     const { tools } = await mcp.listTools();
-    assert.equal(tools.length, 25);
+    assert.equal(tools.length, 30);
     for (const n of ["patch_delete", "engine_start", "engine_release_panic", "prompt_send"]) assert.equal(tools.some((t) => t.name === n), false, n);
-    ok("アダプタが stdio で起動し、ツール25個を返す(人のみの4つはない)");
+    ok("アダプタが stdio で起動し、ツール30個を返す(人のみの4つはない)");
 
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -183,6 +183,7 @@ async function main() {
     await browser.close();
     await app.close();
     fs.rmSync(patchDir, { recursive: true, force: true });
+    fs.rmSync(`${patchDir}-performances`, { recursive: true, force: true });
   }
   console.log(`MCP ブラウザ試験: ${results.length} 項目すべて合格(Chromium ヘッドレス、MCP クライアント → アダプタ → サーバー → タブ)`);
 }

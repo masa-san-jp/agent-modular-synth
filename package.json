@@ -22,6 +22,7 @@
     "bench": "npm run build && mkdir -p bench/results && node dist/src/perf/offline.js --json bench/results/offline.json",
     "bench:browser": "npm run build && node test/browser/bench.cjs",
     "dev": "npm run build && node dist/src/server/main.js",
+    "render": "node dist/src/server/render-cli.js",
     "mcp": "node dist/src/mcp/main.js",
     "check": "npm test && python3 tools/build_module_meta.py --check && python3 tools/validate_specs.py && python3 tools/validate_product_spec.py"
   },

@@ -26,7 +26,7 @@ export interface CommandRow {
   undoNote?: string;
 }
 
-/** 契約 §6 の表(CMD-01〜29)。「人のみ」の4件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
+/** 契約 §6 の表(CMD-01〜34)。「人のみ」の4件は載せるが、ツールにはしない(COMMANDS の humanOnly で除く)。 */
 export const TABLE: readonly CommandRow[] = [
   { id: "CMD-01", command: "module.list_types", summary: "モジュール種別の定義を列挙", changes: false, undo: "na" },
   { id: "CMD-02", command: "module.add", summary: "モジュールを追加", changes: true, undo: "yes" },
@@ -57,6 +57,11 @@ export const TABLE: readonly CommandRow[] = [
   { id: "CMD-27", command: "score.stop", summary: "予約済みの楽譜をすべて捨て、鳴っている音を止める", changes: false, undo: "no" },
   { id: "CMD-28", command: "score.get_status", summary: "演奏の状態と、人からの指示を読む", changes: false, undo: "na" },
   { id: "CMD-29", command: "prompt.send", summary: "演奏への指示(プロンプト)をエージェントへ送る", changes: false, undo: "no" },
+  { id: "CMD-30", command: "performance.list", summary: "保存された演奏データ(演奏した楽譜の記録)の一覧", changes: false, undo: "na" },
+  { id: "CMD-31", command: "performance.read", summary: "保存された演奏データの中身を読む", changes: false, undo: "na" },
+  { id: "CMD-32", command: "performance.replay", summary: "保存された演奏データを再演奏する(パッチを置き換える)", changes: true, undo: "yes" },
+  { id: "CMD-33", command: "performance.set_plan", summary: "演奏の長さの予定を決める(決めなければ、止めるまで続く)", changes: false, undo: "no" },
+  { id: "CMD-34", command: "performance.render", summary: "保存された演奏データを、演奏せずに音声ファイル(WAV)へ書き出す", changes: false, undo: "no" },
 ];
 
 // ---- 引数(契約 §6 の各コマンドの引数表。値の検査はコマンド処理が行う。ここは形を伝えるだけ) ----
@@ -140,6 +145,31 @@ export const ARGS: Readonly<Record<string, ArgSpec>> = {
     required: ["notes"],
     note:
       "演奏を続けるには: 応答の remaining(予約の末尾までの秒)が尽きる前に、次の楽譜を送る。送る前に score_get_status(またはこの応答)の prompts で acked:false の指示を読み、踏まえた楽譜に ack_prompt を付ける。音が出るには、パッチに MIDI-CV(MOD-IO-002)があり、人が音声を開始している必要がある。",
+  },
+  "performance.list": { properties: {} },
+  "performance.read": {
+    properties: { name: str("演奏データの名前(performance_list で分かる。頭が日時: yyyymmdd-hhmmss)", { pattern: PATCH_NAME }) },
+    required: ["name"],
+    note: "自分や他のエージェントが過去に何を演奏したかを読み返すのに使う。演奏中の演奏データも読める(そこまでの楽譜が入っている)。",
+  },
+  "performance.replay": {
+    properties: { name: str("演奏データの名前", { pattern: PATCH_NAME }) },
+    required: ["name"],
+    note: "今のパッチは、演奏データが持つパッチ(演奏を始めた時点のもの)に置き換わる。予約済みの楽譜は捨てる。音声が動作中のときだけ。",
+  },
+  "performance.render": {
+    properties: {
+      name: str("演奏データの名前", { pattern: PATCH_NAME }),
+      level_db: { type: "number", minimum: -60, maximum: 0, description: "書き出しのマスター音量(dB)。既定 -6" },
+      tail_seconds: { type: "number", minimum: 0, maximum: 30, description: "演奏の終わりの後に足す時間(秒。残響のため)。既定 2" },
+    },
+    required: ["name"],
+    note: "実際には演奏しない(音は出ない。音声の開始も、タブも要らない)。1回目の呼び出しで書き出しが始まり、status が queued / rendering で返る。同じ引数でもう一度呼ぶと進み具合が返り、done になったら path(音声ファイルの場所)、peak、clip_count が入る。clip_count が 0 でなければ、level_db を下げて書き出し直す。",
+  },
+  "performance.set_plan": {
+    properties: { duration_seconds: { type: ["number", "null"], minimum: 1, maximum: 86400, description: "演奏の長さの予定(秒)。null は「止めるまで続ける」" } },
+    required: ["duration_seconds"],
+    note: "予定は情報で、この長さで自動的に止まりはしない。score_get_status の plan(予定と経過)を見て、終わりに向けた楽譜を書く。",
   },
   "score.stop": { properties: {} },
   "score.get_status": { properties: {} },

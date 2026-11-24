@@ -58,6 +58,17 @@
     <button id="prompt-send" type="submit">送る</button>
   </form>
   <ul id="prompt-list" aria-label="送った指示"></ul>
+  <form id="plan-form" class="row">
+    <label for="plan-minutes">演奏の長さ(分。空なら止めるまで)</label>
+    <input id="plan-minutes" type="number" min="1" max="1440" step="1" size="5">
+    <button id="plan-set" type="submit">決める</button>
+  </form>
+  <div class="row mono" id="perf-saved"></div>
+  <div class="row">
+    <span>保存された演奏(新しい順)</span>
+    <button id="performance-refresh" type="button">一覧を更新</button>
+  </div>
+  <ul id="performance-list" aria-label="保存された演奏"></ul>
 </section>
 
 <section aria-labelledby="h-patch">
