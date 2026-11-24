@@ -30,6 +30,8 @@
   - [要求一覧](specifications/synthesizer/requirements.md) / [製品仕様](specifications/synthesizer/product-spec.md) / [操作契約](specifications/synthesizer/operation-contract.md) / [データ契約](specifications/synthesizer/data-contract.md) / [検証計画](specifications/synthesizer/verification-plan.md) / [検査結果](specifications/synthesizer/validation.md)
   - [実装計画](plans/implementation-plan.md) / [判断記録と未決事項](plans/decisions.md) / [#2からの引継ぎの処置表](plans/handoff-from-modules.md)
 
+**作業を引き継ぐ人・エージェントへ**: まず [AGENTS.md](AGENTS.md) と [docs/handoff/20261124-handoff-remaining-work.md](docs/handoff/20261124-handoff-remaining-work.md) を読む。
+
 ## 実装(作業中)
 20種のモジュール、音声エンジン、出力保護、共通コマンド処理、ローカルサーバーまで実装済み。**ブラウザの編集画面でパッチを組んで鳴らしながら、エージェントがローカルサーバー経由(HTTP・WebSocket・MCP)で同じパッチを操作できる**(Issue #11、#14、#16、#18、#20、#22)。**エージェントは楽譜を書いて演奏でき、人は画面から演奏への指示を送れる**(Issue #29、DEC-018)。MIDI 機器は「MIDI を接続」でつなげる(Web MIDI 対応のブラウザ)。配線を線で描く表示は未実装。
 
@@ -52,7 +54,7 @@ npm run check        # npm test に加えて、仕様文書の検査
 ```
 ### 使い方
 1. `npm run dev` を実行すると、URL と**エージェント用トークン**が表示される。
-2. ブラウザで URL を開き、「音声開始」を押す(押すまで音は出ない)。「デモ用パッチを組む」を押し、画面の鍵盤を押すと鳴る。画面で、モジュールの追加・削除、パラメータの変更、ケーブルの接続・切断、取り消し、保存・読込ができる。
+2. ブラウザで URL を開き、`START` を押す(押すまで音は出ない)。`PATCH` の `DEMO` を押し、`UTILITY` の `KEYS`(画面鍵盤)を押すと鳴る。画面のラベルは短い英語の語だけ(文章は書かない: DEC-023)。画面で、モジュールの追加・削除、パラメータの変更、ケーブルの接続・切断、取り消し、保存・読込ができる。
 3. エージェント(または手元の道具)から、同じパッチを操作できる。待受は 127.0.0.1 だけで、トークンが要る。
    ```
    curl -s http://127.0.0.1:47800/api/command \
@@ -61,7 +63,7 @@ npm run check        # npm test に加えて、仕様文書の検査
    ```
    コマンドの一覧と引数は [操作契約](specifications/synthesizer/operation-contract.md)。通知を受けるには WebSocket(`ws://127.0.0.1:47800/api/ws`、同じトークン)で接続する。
 4. **MCP 対応のクライアント**から使う場合は、MCP アダプタを登録する。手順は [docs/mcp-setup.md](docs/mcp-setup.md)。サーバーは起動時にエージェント用トークンを利用者のデータ用フォルダのファイル(既定 `~/.agent-modular-synth/agent-token`、本人だけが読める権限、終了時に削除)へ書き、アダプタがそれを読む。
-- 低い音量から始まり、出力には常時リミッターが入る。「緊急停止」で即時に無音になる(エージェントも実行できる。解除は人だけ)。
+- 低い音量から始まり、出力には常時リミッターが入る。`PANIC`(または Esc キー)で即時に無音になる(エージェントも実行できる。解除は人だけ)。
 - エージェントは、音声の開始、緊急停止の解除、パッチファイルの削除、人が決めた上限を超える音量の設定ができない。
 - **演奏**: このシンセは器で、楽譜を考える機能は持たない。つないだエージェント(Claude Code、Codex など)が楽譜(どの音を、何拍目から、何拍のばすかの並び)を送って演奏する。演奏中に次の楽譜を送ると切れ目なく続く。楽譜には、音符のほかにパラメータの変化(フィルタを開く、など)も書ける。画面の「演奏への指示」に書いた内容を、エージェントは次の楽譜を書くときに読む。手順は [docs/mcp-setup.md](docs/mcp-setup.md) の「演奏のしかた」。
 - **ヘッドホンを使うときは、先に機器側の音量を下げる。** アプリは低い音量から始まり、出力にリミッターが入っているが、機器側の音量は調整できない(この注意は画面には出ない)。
