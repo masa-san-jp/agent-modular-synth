@@ -3,6 +3,7 @@ import type { TypeCatalog } from "../control/catalog.js";
 import type { Patch } from "../control/types.js";
 import { DEFAULT_HUE_SETTING, HUE_CHOICES, HUE_PERIODS, HueSetting, hueAt, parseHueSetting } from "../view/hue.js";
 import { RackLayout, RackParam, layoutRack, panelAt } from "../view/rack-layout.js";
+import { valueLabel } from "../view/labels.js";
 import { drawRack } from "./rack.js";
 
 const HUE_KEY = "agent-modular-synth.hue";
@@ -57,7 +58,7 @@ export function createRackView(d: RackViewDeps): RackView {
   let last = { activity: null as Record<string, number> | null, overrides: {} as Record<string, Record<string, number>>, peak: 0, panic: false };
   // 種別 → パラメータの定義(値の書式のため)
   const defs = new Map<string, Map<string, RackParam>>();
-  for (const [type, info] of d.catalog) defs.set(type, new Map(info.params.map((p) => [p.name, { name: p.name, kind: p.kind, ...(p.values ? { values: p.values } : {}), ...(p.unit ? { unit: p.unit } : {}) }])));
+  for (const [type, info] of d.catalog) defs.set(type, new Map(info.params.map((p) => [p.name, { name: p.name, kind: p.kind, ...(p.values ? { values: p.values.map((v) => ({ value: v.value, label: valueLabel(v.label) })) } : {}), ...(p.unit ? { unit: p.unit } : {}) }])));
   let patch = d.getPatch();
   let patchRev = d.getRevision();
   const currentPatch = (): Patch => {
@@ -70,8 +71,8 @@ export function createRackView(d: RackViewDeps): RackView {
   };
 
   // 色相の選択: 固定の色相、または「自動」
-  for (const c of HUE_CHOICES) d.hueSelect.append(new Option(`${c.label}(${c.hue}°)`, String(c.hue)));
-  d.hueSelect.append(new Option("自動(周期的に変わる)", "cycle"));
+  for (const c of HUE_CHOICES) d.hueSelect.append(new Option(`${c.label} ${c.hue}`, String(c.hue)));
+  d.hueSelect.append(new Option("AUTO", "cycle"));
   for (const p of HUE_PERIODS) d.periodSelect.append(new Option(p.label, String(p.seconds)));
   const showSetting = (): void => {
     d.hueSelect.value = setting.mode === "cycle" ? "cycle" : String(setting.hue);

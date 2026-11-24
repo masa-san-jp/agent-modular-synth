@@ -1899,13 +1899,15 @@ export class Session {
     const s = this.backend.status();
     const fs = s.fs ?? 48000;
     const now = this.backend.sampleNow?.() ?? s.sampleTime;
-    this.perf.prune(now);
+    // 読むだけ(予約は捨てない)。終わった楽譜を捨てて「演奏し終えた」を知らせるのは、状態の確認(pollBackend)と score.play だけ。
+    // ここで捨てると、通知(EVT-07 finished)と、楽譜が動かしたパラメータの戻しが抜ける
+    const live = this.perf.scores.filter((q) => q.endSample > now);
     const sec = (samples: number): number => Math.max(0, Math.round(((samples - now) / fs) * 1000) / 1000);
-    const end = this.perf.endSample;
+    const end = live.length > 0 ? live[live.length - 1]!.endSample : null;
     return {
-      playing: this.perf.playing,
+      playing: live.length > 0,
       remaining: end === null ? 0 : sec(end),
-      scores: this.perf.scores.map((q) => ({ score_id: q.id, actor: q.actor, starts_in: sec(q.startSample), ends_in: sec(q.endSample), notes: q.notes })),
+      scores: live.map((q) => ({ score_id: q.id, actor: q.actor, starts_in: sec(q.startSample), ends_in: sec(q.endSample), notes: q.notes })),
       prompts: this.perf.prompts,
       plan: {
         duration_seconds: this.perf.planSeconds,
@@ -1956,7 +1958,11 @@ export class Session {
     const score = parseScore(args);
     const { fs, now } = this.performable();
     const checked = this.checkScoreParams(score);
-    this.perf.prune(now);
+    if (this.perf.prune(now)) {
+      // 前の演奏は、状態の確認より先に終わっていた: ここで「演奏し終えた」を済ませる(パラメータを戻し、知らせる)
+      this.backend.clearSchedule!();
+      ctx.events.push(this.performanceEvent("finished", null));
+    }
     const replace = score.mode === "replace";
     // 開始: 予約があれば、その末尾に切れ目なく続ける。なければ(または置き換えなら)、少しの余裕を置いて今から
     const earliest = now + Math.round(SCORE_LIMITS.leadSeconds * fs);

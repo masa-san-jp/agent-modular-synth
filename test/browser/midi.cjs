@@ -91,7 +91,7 @@ async function main() {
     const fake = (expr) => a.page.evaluate(`window.__fakeMidi.${expr}`);
     assert.equal(await midiAvailable(), false);
     assert.equal(await fake("asked"), 0, "ページを開いただけでは許可を尋ねない");
-    assert.match(await a.page.textContent("#midi-state"), /未接続/);
+    assert.match(await a.page.textContent("#midi-state"), /^off$/);
     assert.equal(await a.page.isEnabled("#midi-connect"), true);
     ok("接続の前は midi.available が偽。ページを開いただけでは MIDI の許可を尋ねない");
 
@@ -156,7 +156,7 @@ async function main() {
     // ---- 4) 抜き差し ----
     await fake('add("k2", "Second Pad")');
     await a.waitFor(async () => (await a.synth("midiState")).inputs.length === 2, "2台目");
-    assert.match(await a.page.textContent("#midi-state"), /Fake Keys、Second Pad/);
+    assert.match(await a.page.textContent("#midi-state"), /Fake Keys, Second Pad/);
     await fake("send('k2', [0x90, 67, 100])");
     await a.waitFor(async () => (await a.synth("status")).peak > 0.01, "2台目で鳴る");
     await fake("send('k2', [0x80, 67, 0])");
@@ -166,7 +166,7 @@ async function main() {
     assert.equal(await midiAvailable(), true, "機器が減っても、MIDI 自体は使える");
     await fake('unplug("k2")');
     await a.waitFor(async () => (await a.synth("midiState")).inputs.length === 0, "全部抜く");
-    assert.match(await a.page.textContent("#midi-state"), /つながっていません/);
+    assert.match(await a.page.textContent("#midi-state"), /^no device$/);
     ok("機器を後からつなぐと自動で使え、抜くと受信をやめる。表示が追従する");
     assert.deepEqual(await a.synth("errors"), [], "ワークレットと画面が記録したエラー");
     ws.close();
@@ -178,7 +178,7 @@ async function main() {
     await b.page.click("#midi-connect");
     await b.waitFor(async () => (await b.synth("midiState")).kind === "denied", "拒否");
     assert.equal(await midiAvailable(), false);
-    assert.match(await b.page.textContent("#midi-state"), /使えません/);
+    assert.match(await b.page.textContent("#midi-state"), /^denied/);
     assert.equal(await b.page.isEnabled("#midi-connect"), true, "もう一度試せる");
     ok("許可されなかったときは、その旨を表示し、midi.available は偽のまま");
     await b.context.close();
@@ -188,7 +188,7 @@ async function main() {
     const c = await open("delete Navigator.prototype.requestMIDIAccess; delete navigator.requestMIDIAccess;");
     await c.waitFor(async () => (await c.synth("midiState")).kind === "unsupported", "非対応");
     assert.equal(await midiAvailable(), false);
-    assert.match(await c.page.textContent("#midi-state"), /対応していません/);
+    assert.match(await c.page.textContent("#midi-state"), /^unsupported$/);
     assert.equal(await c.page.isEnabled("#midi-connect"), false);
     // 画面鍵盤は使える
     await c.page.click("#demo");

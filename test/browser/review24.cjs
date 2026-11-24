@@ -162,7 +162,8 @@ async function main() {
     assert.equal((await synth("patch")).modules.length, 1, "空のパッチで始まる");
     assert.match(await synth("autosaveProblem"), /読めなかった/);
     assert.equal(await page.evaluate((k) => localStorage.getItem(k), BROKEN_KEY), '{"revision":3,"text":"{ 壊れた"}');
-    assert.match(await page.textContent("#notice"), /退避しました/);
+    assert.equal(await page.textContent("#notice"), "AUTOSAVE MOVED");
+    assert.match(await page.getAttribute("#notice", "title"), /退避しました/);
     ok("読めない自動保存は黙って捨てず、退避して画面に知らせる");
 
     // ---- 7) サーバーが再起動しても、タブはつなぎ直す ----

@@ -270,7 +270,9 @@ function applyBlocked(reason: string): void {
   if (!domReady) return;
   const box = document.getElementById("blocked");
   if (box) {
-    box.textContent = reason;
+    // 画面には短い語だけ。理由の文は、マウスを載せると出る
+    box.textContent = "OTHER TAB";
+    box.title = reason;
     box.hidden = false;
   }
   // 画面の操作を受け付けない(キーボードの操作も含む)
@@ -324,7 +326,7 @@ function autosaveNow(): void {
   } catch (e) {
     const msg = `自動保存に失敗: ${e instanceof Error ? e.message : String(e)}`;
     debug.errors.push(msg);
-    showError(`${msg}(このままタブを閉じると、作業中のパッチが失われます。「保存」でファイルに保存してください)`);
+    showError("AUTOSAVE FAILED", msg);
   }
 }
 /** 最後に自動保存できたリビジョン(まだなら −1)。 */
@@ -360,7 +362,7 @@ controller.subscribe((ev) => {
   }
   if ((ev as { event?: string }).event === "performance.saved") {
     const d = (ev as { data: { name: string | null; ok: boolean; entries: number; closed: boolean; reason?: string } }).data;
-    lastSaved = d.ok ? `演奏データ: ${d.name}(楽譜 ${d.entries} 個${d.closed ? "、保存済み" : "、演奏中"})` : `演奏データを保存できませんでした(${d.reason ?? "不明"})`;
+    lastSaved = d.ok ? `${d.name} · ${d.entries}` : `save failed: ${d.reason ?? ""}`;
     if (d.ok && d.closed) void refreshPerformances();
   }
   editor?.onEvent(ev); // 誰が何をしたかを変更の履歴に出す
@@ -417,7 +419,7 @@ function teardownAudio(reason: string): void {
   }
   session.pollBackend();
   debug.errors.push(reason);
-  showError(`${reason}。音声を止めました。「音声開始」でやり直せます。`);
+  showError("AUDIO STOPPED", reason);
   render();
 }
 
@@ -436,7 +438,7 @@ async function ensureAudio(): Promise<void> {
         renderStatus();
       } else if (m.type === "error") {
         debug.errors.push(m.message);
-        showError(m.message);
+        showError("AUDIO ERROR", m.message);
         if (m.resync) {
           // 音声側がパッチの正本とずれた: 全体を渡し直す。短い間に繰り返すなら、音声を止める
           const now = Date.now();
@@ -479,7 +481,7 @@ async function startAudio(): Promise<void> {
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     debug.errors.push(msg);
-    showError(`音声を開始できませんでした: ${msg}`);
+    showError("START FAILED", msg);
   }
   render();
 }
@@ -533,29 +535,32 @@ function renderMidi(state: MidiState): void {
   button.disabled = state.kind === "ready" || state.kind === "unsupported";
   label.textContent =
     state.kind === "idle"
-      ? "未接続(「MIDI を接続」を押すと、ブラウザが許可を尋ねます)"
+      ? "off"
       : state.kind === "unsupported"
-        ? "このブラウザは MIDI 機器の接続(Web MIDI)に対応していません。画面鍵盤は使えます"
+        ? "unsupported"
         : state.kind === "denied"
-          ? `MIDI を使えません(許可されなかった、または取得に失敗: ${state.reason})`
+          ? `denied: ${state.reason}`
           : state.inputs.length === 0
-            ? "MIDI は使えます。入力機器がつながっていません(つなぐと自動で使えます)"
-            : `MIDI 入力: ${state.inputs.join("、")}`;
+            ? "no device"
+            : state.inputs.join(", ");
 }
 
-function showError(text: string): void {
+/** エラーと知らせ: 画面には短い語(エラーの ID とコードなど)だけを出す。説明の文は、マウスを載せると出る(title)。 */
+function showError(text: string, detail = ""): void {
   $("error").textContent = text;
+  $("error").title = detail;
 }
-function showNotice(text: string): void {
+function showNotice(text: string, detail = ""): void {
   $("notice").textContent = text;
+  $("notice").title = detail;
 }
 
 /** 人の操作を送り、結果を画面に出す。失敗したらエラーID・コード・メッセージを表示し、入力欄を実際の値に戻す。 */
 async function run(command: string, args?: Record<string, unknown>): Promise<CommandResponse> {
   const r = await human(command, args);
-  showError(r.ok ? "" : `${r.error.id} ${r.error.code}: ${r.error.message}`);
+  showError(r.ok ? "" : `${r.error.id} ${r.error.code}`, r.ok ? "" : r.error.message);
   // 成功時の注意(型違いの接続など。状態は変わっている: 契約 §3.2)
-  showNotice(r.ok ? r.warnings.map((w) => `注意(${w.code}): ${w.message}`).join(" / ") : "");
+  showNotice(r.ok ? r.warnings.map((w) => w.code).join(" / ") : "", r.ok ? r.warnings.map((w) => w.message).join(" / ") : "");
   autosaveIfChanged();
   render(!r.ok);
   return r;
@@ -571,19 +576,17 @@ function renderStatus(): void {
   const w = backend.lastStatus;
   $("state").textContent =
     st.audioState === "stopped"
-      ? "停止中"
+      ? "off"
       : st.panic
-        ? "緊急停止中"
+        ? "panic"
         : st.audioState === "running"
-          ? "動作中"
-          : "中断中";
+          ? "run"
+          : "hold";
   const patch = session.getPatch();
   $("patch").textContent =
-    `リビジョン ${session.revision} / モジュール ${patch.modules.length} / ケーブル ${patch.cables.length}` +
-    ` / サーバー ${link.accepted ? "接続中" : link.rejectedReason === "another_tab" ? "別のタブが使用中" : "未接続"}`;
+    `rev ${session.revision}  mod ${patch.modules.length}  cbl ${patch.cables.length}` + `  srv ${link.accepted ? "on" : link.rejectedReason === "another_tab" ? "other tab" : "off"}`;
   $("meter").textContent = w
-    ? `出力ピーク ${w.peak.toFixed(3)} / リミッター利得 ${w.limiterGain.toFixed(3)}` +
-      ` / サンプルレート ${w.fs} Hz / 非有限値 ${w.nonfiniteModules + w.nonfiniteOutputStage} / 最終クリップ ${w.clipCount}`
+    ? `peak ${w.peak.toFixed(3)}  gr ${w.limiterGain.toFixed(3)}` + `  ${w.fs} hz  nan ${w.nonfiniteModules + w.nonfiniteOutputStage}  clip ${w.clipCount}`
     : "";
   // 最終クリップが新たに起きたら、表示を1秒保持する(DEC-011)
   const clipCount = w ? w.clipCount : 0;
@@ -600,7 +603,7 @@ function renderStatus(): void {
   // 引き下げの後に矢印キーを押したとき、古い位置から計算した値で音量が跳ね上がらないようにする)
   const level = $<HTMLInputElement>("level");
   if (!levelDragging && Number(level.value) !== st.levelDb) level.value = String(st.levelDb);
-  $("levelLabel").textContent = `${st.levelDb} dB(エージェントの上限 ${st.agentMaxLevelDb} dB)`;
+  $("levelLabel").textContent = `${st.levelDb} dB`;
   renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
@@ -618,11 +621,11 @@ async function refreshPerformances(): Promise<void> {
   const r = await human("performance.list");
   list.textContent = "";
   if (!r.ok) {
-    list.appendChild(Object.assign(document.createElement("li"), { textContent: "(保存された演奏を読めません。サーバーに接続していない可能性があります)" }));
+    list.appendChild(Object.assign(document.createElement("li"), { textContent: "–" }));
     return;
   }
   const items = (r.result.performances as { name: string; bytes: number }[]).slice(0, 30);
-  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "(まだありません)" }));
+  if (items.length === 0) list.appendChild(Object.assign(document.createElement("li"), { textContent: "–" }));
   for (const it of items) {
     const li = document.createElement("li");
     li.dataset.performance = it.name;
@@ -630,7 +633,7 @@ async function refreshPerformances(): Promise<void> {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "small";
-    b.textContent = "再演奏";
+    b.textContent = "REPLAY";
     b.title = "今のパッチを、この演奏を始めた時点のパッチに置き換えて演奏します(「取り消し」で戻せます)";
     b.addEventListener("click", () => void run("performance.replay", { name: it.name }));
     li.append(b);
@@ -638,7 +641,7 @@ async function refreshPerformances(): Promise<void> {
     const w = document.createElement("button");
     w.type = "button";
     w.className = "small";
-    w.textContent = "音声ファイルに書き出す";
+    w.textContent = "WAV";
     w.title = "演奏せずに、この演奏の音声ファイル(WAV)を作ります。保存先は、演奏データと同じフォルダです";
     const note = document.createElement("span");
     note.className = "render-state";
@@ -655,20 +658,21 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
     for (;;) {
       const r = await human("performance.render", { name });
       if (!r.ok) {
-        note.textContent = `書き出せません: ${r.error.message}`;
+        note.textContent = `${r.error.id} ${r.error.code}`;
         return;
       }
       const s = r.result as { status: string; progress?: number; path?: string; seconds?: number; peak?: number; clip_count?: number; error?: { message: string } };
       if (s.status === "done") {
-        const loud = (s.clip_count ?? 0) > 0 ? `。音が大きすぎて ${s.clip_count} サンプルが頭打ち` : "";
-        note.textContent = `書き出しました: ${s.path}(${Math.round(s.seconds ?? 0)} 秒${loud})`;
+        const loud = (s.clip_count ?? 0) > 0 ? ` clip ${s.clip_count}` : "";
+        note.textContent = `${s.path}${loud}`;
         return;
       }
       if (s.status === "failed") {
-        note.textContent = `書き出せません: ${s.error?.message ?? ""}`;
+        note.textContent = "failed";
+        note.title = s.error?.message ?? "";
         return;
       }
-      note.textContent = s.status === "queued" ? "順番待ち…" : `書き出し中… ${Math.round((s.progress ?? 0) * 100)}%`;
+      note.textContent = s.status === "queued" ? "…" : `${Math.round((s.progress ?? 0) * 100)}%`;
       await new Promise((ok) => setTimeout(ok, 700));
     }
   } finally {
@@ -680,10 +684,10 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
 let shownPrompts = "";
 function renderPerformance(): void {
   const p = session.performance;
-  const plan = p.plan.duration_seconds === null ? "止めるまで続ける" : `予定 ${Math.round(p.plan.duration_seconds / 60)} 分`;
-  const elapsed = p.plan.elapsed_seconds > 0 ? `、経過 ${formatClock(p.plan.elapsed_seconds)}` : "";
-  $("perf-state").textContent =
-    (p.playing ? `演奏中(予約 ${p.scores.length} 件、残り ${p.remaining.toFixed(1)} 秒${elapsed})` : "演奏していません") + (p.plan.duration_seconds === null ? "" : ` / ${plan}`);
+  // 経過 / 予定(予定がなければ、経過だけ)
+  const clock = p.plan.duration_seconds === null ? formatClock(p.plan.elapsed_seconds) : `${formatClock(p.plan.elapsed_seconds)} / ${formatClock(p.plan.duration_seconds)}`;
+  // 演奏中だけ、時計を出す(経過 / 予定、残りの秒)。演奏していないときは、何も書かない
+  $("perf-state").textContent = p.playing ? `▶ ${clock}  +${p.remaining.toFixed(1)}s` : "";
   $("perf-saved").textContent = lastSaved;
   $<HTMLButtonElement>("score-stop").disabled = !p.playing;
   // 指示の一覧は、中身が変わったときだけ作り直す
@@ -696,7 +700,7 @@ function renderPerformance(): void {
     const li = document.createElement("li");
     li.dataset.prompt = String(q.id);
     li.dataset.acked = String(q.acked);
-    li.textContent = `${q.acked ? "反映済み" : "未反映"}: ${q.text}`;
+    li.textContent = `${q.acked ? "✓" : "·"} ${q.text}`;
     list.appendChild(li);
   }
 }
@@ -830,7 +834,7 @@ window.addEventListener("DOMContentLoaded", () => {
   domReady = true;
   if (blockedReason !== null) applyBlocked(blockedReason);
   maybeConnect();
-  if (autosaveProblem !== null) showNotice(autosaveProblem);
+  if (autosaveProblem !== null) showNotice("AUTOSAVE MOVED", autosaveProblem);
 
   $("start").addEventListener("click", () => void startAudio());
   $("demo").addEventListener("click", () => {

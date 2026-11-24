@@ -283,6 +283,29 @@ test("VER-A-009g 演奏し終えると、状態の確認(pollBackend)で EVT-07(
 
 // ---- VER-A-009f 入力の検査 ----
 
+test("VER-A-009g 演奏し終えた後に状態を読んでも(score.get_status、画面の表示)、finished の通知とパラメータの戻しは抜けない", () => {
+  const r = rig();
+  r.ok("agent", "module.add", { id: "vcf", type: "MOD-FLT-001" });
+  r.ok("agent", "score.play", { notes: [{ t: 0, dur: 0.1, note: 60 }], length: 0.2, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: 3 }] });
+  const be = r.be as EngineBackend;
+  gateTrace(be, LEAD + Math.round(0.2 * FS) + 10);
+  assert.equal(be.overridden, 1, "楽譜が動かしたパラメータは、まだ音声側に残っている");
+  // 状態の確認(pollBackend)より先に、状態を何度か読む
+  assert.equal(r.ok("agent", "score.get_status").result.playing, false);
+  assert.equal(r.s.performance.playing, false);
+  assert.equal(r.s.performance.remaining, 0);
+  assert.equal(r.perf("finished").length, 0);
+  r.s.pollBackend();
+  assert.equal(r.perf("finished").length, 1, "finished が出る");
+  assert.equal(be.overridden, 0, "パラメータがパッチの値へ戻る");
+  // 状態の確認より先に、次の楽譜が来た場合も同じ(先に finished、続けて score_queued)
+  r.ok("agent", "score.play", { notes: [{ t: 0, dur: 0.1, note: 60 }], length: 0.2, params: [{ t: 0, module_id: "vcf", param: "cutoff", value: 3 }] });
+  gateTrace(be, LEAD + Math.round(0.2 * FS) + 10);
+  r.ok("agent", "score.play", { notes: [{ t: 0, dur: 0.1, note: 62 }], length: 0.2 });
+  assert.deepEqual(r.perf().slice(-2).map((e) => (e.data as { reason: string }).reason), ["finished", "score_queued"]);
+  assert.equal(be.overridden, 0);
+});
+
 test("VER-A-009f score.play の検証エラーと、その順。失敗では何も予約しない", () => {
   const r = rig();
   const be = r.be as EngineBackend;

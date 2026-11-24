@@ -246,6 +246,38 @@ async function main() {
     assert.equal(await synth("rack.layout.panels.length"), 41);
     ok("文字は地との明るさの比を保つ(本文 7:1 以上、補助 4.5:1 以上)。幅 340px でもはみ出さない", `本文 ${contrast.body.toFixed(1)}:1、補助 ${contrast.muted.toFixed(1)}:1`);
 
+    // ---- 画面に文章を書かない(DEC-023): 全 20 種のモジュール、エラー、知らせ、確認を出した状態で、見える文字に日本語が 1 文字もない ----
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.selectOption("#hue", "196");
+    const types = (await agent("module.list_types")).result.types.map((x) => x.type).filter((x) => x !== "MOD-IO-001");
+    await agent("patch.new");
+    await agent("batch", { ops: types.map((type, i) => ({ command: "module.add", args: { type, id: `m${i}` } })) });
+    await waitFor(async () => (await page.locator("#module-list [data-module]").count()) === 20, "全 20 種の欄");
+    await page.evaluate(() => { for (const d of document.querySelectorAll("#module-list details")) d.open = true; });
+    await page.evaluate(() => window.__synth.human("score.play", { notes: [{ t: 0, dur: 1, note: 60 }], length: 2 }));
+    await page.fill("#prompt-text", "x");
+    await page.click("#prompt-send");
+    await page.fill("#save-name", "t1");
+    await page.click("#save");
+    await page.click("#save"); // 同じ名前: 上書きの確認が出る
+    await page.waitForSelector("#confirm:not([hidden])");
+    const japanese = /[\u3040-\u30ff\u3400-\u9fff\uff00-\uffef]/;
+    const visible = async () => page.evaluate(() => [document.body.innerText, ...[...document.querySelectorAll("option, optgroup")].map((o) => o.label || o.textContent), ...[...document.querySelectorAll("input[placeholder]")].map((i) => i.placeholder)].join("\n"));
+    let shown = await visible();
+    assert.equal(japanese.test(shown), false, `見える文字に日本語がある: ${JSON.stringify(shown.split("\n").filter((l) => japanese.test(l)).slice(0, 8))}`);
+    await page.click("#confirm-cancel");
+    await page.evaluate(() => window.__synth.human("score.stop"));
+    // エラー(範囲外の値)と、注意(型違いの接続)
+    await page.fill('#module-list [data-module="out"] input[type="number"]', "999");
+    await page.keyboard.press("Enter");
+    await waitFor(async () => /^ERR-\d{3} [a-z_]+$/.test(await page.textContent("#error")), "エラーは ID とコードだけ");
+    assert.ok((await page.getAttribute("#error", "title")).length > 0, "説明の文は title にある");
+    shown = await visible();
+    assert.equal(japanese.test(shown), false, `エラーの表示に日本語がある: ${JSON.stringify(shown.split("\n").filter((l) => japanese.test(l)).slice(0, 8))}`);
+    const longest = shown.split("\n").map((l) => l.trim()).filter((l) => l && !/→|=|\d| \/ /.test(l)).reduce((a, l) => (l.split(/\s+/).length > a.split(/\s+/).length ? l : a), "");
+    assert.ok(longest.split(/\s+/).length <= 4, `ラベルは短い語だけ(いちばん長いもの: ${longest})`);
+    ok("画面の見える文字に、日本語(文章)が 1 文字もない(全 20 種のモジュール、演奏中、確認、エラーを出した状態)", `いちばん長いラベル: ${longest}`);
+
     assert.deepEqual(await synth("errors"), [], "アプリのエラー");
     assert.deepEqual(pageErrors, [], "ページのエラー");
     ok("ページとワークレットにエラーなし");
