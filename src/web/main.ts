@@ -270,7 +270,9 @@ function applyBlocked(reason: string): void {
   if (!domReady) return;
   const box = document.getElementById("blocked");
   if (box) {
-    box.textContent = reason;
+    // 画面には短い語だけ。理由の文は、マウスを載せると出る
+    box.textContent = "OTHER TAB";
+    box.title = reason;
     box.hidden = false;
   }
   // 画面の操作を受け付けない(キーボードの操作も含む)
@@ -324,7 +326,7 @@ function autosaveNow(): void {
   } catch (e) {
     const msg = `自動保存に失敗: ${e instanceof Error ? e.message : String(e)}`;
     debug.errors.push(msg);
-    showError(`${msg}(このままタブを閉じると、作業中のパッチが失われます。「保存」でファイルに保存してください)`);
+    showError("AUTOSAVE FAILED", msg);
   }
 }
 /** 最後に自動保存できたリビジョン(まだなら −1)。 */
@@ -417,7 +419,7 @@ function teardownAudio(reason: string): void {
   }
   session.pollBackend();
   debug.errors.push(reason);
-  showError(`${reason}。音声を止めました。「音声開始」でやり直せます。`);
+  showError("AUDIO STOPPED", reason);
   render();
 }
 
@@ -436,7 +438,7 @@ async function ensureAudio(): Promise<void> {
         renderStatus();
       } else if (m.type === "error") {
         debug.errors.push(m.message);
-        showError(m.message);
+        showError("AUDIO ERROR", m.message);
         if (m.resync) {
           // 音声側がパッチの正本とずれた: 全体を渡し直す。短い間に繰り返すなら、音声を止める
           const now = Date.now();
@@ -479,7 +481,7 @@ async function startAudio(): Promise<void> {
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     debug.errors.push(msg);
-    showError(`音声を開始できませんでした: ${msg}`);
+    showError("START FAILED", msg);
   }
   render();
 }
@@ -543,19 +545,22 @@ function renderMidi(state: MidiState): void {
             : state.inputs.join(", ");
 }
 
-function showError(text: string): void {
+/** エラーと知らせ: 画面には短い語(エラーの ID とコードなど)だけを出す。説明の文は、マウスを載せると出る(title)。 */
+function showError(text: string, detail = ""): void {
   $("error").textContent = text;
+  $("error").title = detail;
 }
-function showNotice(text: string): void {
+function showNotice(text: string, detail = ""): void {
   $("notice").textContent = text;
+  $("notice").title = detail;
 }
 
 /** 人の操作を送り、結果を画面に出す。失敗したらエラーID・コード・メッセージを表示し、入力欄を実際の値に戻す。 */
 async function run(command: string, args?: Record<string, unknown>): Promise<CommandResponse> {
   const r = await human(command, args);
-  showError(r.ok ? "" : `${r.error.id} ${r.error.code}: ${r.error.message}`);
+  showError(r.ok ? "" : `${r.error.id} ${r.error.code}`, r.ok ? "" : r.error.message);
   // 成功時の注意(型違いの接続など。状態は変わっている: 契約 §3.2)
-  showNotice(r.ok ? r.warnings.map((w) => `${w.code}: ${w.message}`).join(" / ") : "");
+  showNotice(r.ok ? r.warnings.map((w) => w.code).join(" / ") : "", r.ok ? r.warnings.map((w) => w.message).join(" / ") : "");
   autosaveIfChanged();
   render(!r.ok);
   return r;
@@ -653,7 +658,7 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
     for (;;) {
       const r = await human("performance.render", { name });
       if (!r.ok) {
-        note.textContent = `${r.error.id} ${r.error.message}`;
+        note.textContent = `${r.error.id} ${r.error.code}`;
         return;
       }
       const s = r.result as { status: string; progress?: number; path?: string; seconds?: number; peak?: number; clip_count?: number; error?: { message: string } };
@@ -663,7 +668,8 @@ async function renderToFile(name: string, button: HTMLButtonElement, note: HTMLE
         return;
       }
       if (s.status === "failed") {
-        note.textContent = `failed: ${s.error?.message ?? ""}`;
+        note.textContent = "failed";
+        note.title = s.error?.message ?? "";
         return;
       }
       note.textContent = s.status === "queued" ? "…" : `${Math.round((s.progress ?? 0) * 100)}%`;
@@ -828,7 +834,7 @@ window.addEventListener("DOMContentLoaded", () => {
   domReady = true;
   if (blockedReason !== null) applyBlocked(blockedReason);
   maybeConnect();
-  if (autosaveProblem !== null) showNotice(autosaveProblem);
+  if (autosaveProblem !== null) showNotice("AUTOSAVE MOVED", autosaveProblem);
 
   $("start").addEventListener("click", () => void startAudio());
   $("demo").addEventListener("click", () => {

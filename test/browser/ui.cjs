@@ -272,9 +272,9 @@ async function main() {
     await page.click("#add-module");
     const resp = page.locator('#module-list [data-module="amp"] select[data-param="response"]');
     await resp.waitFor();
-    assert.deepEqual(await resp.locator("option").allTextContents(), ["線形(0)", "指数(1)"]);
+    assert.deepEqual(await resp.locator("option").allTextContents(), ["LIN", "EXP"]);
     assert.equal(await resp.inputValue(), "0");
-    await resp.selectOption({ label: "指数(1)" });
+    await resp.selectOption({ label: "EXP" });
     await waitFor(async () => (await moduleOf("amp")).params.response === 1, "列挙型のパラメータ");
     await page.click("#undo"); // 他の操作(取り消し)による変更も、選択肢の表示に反映される
     await waitFor(async () => (await resp.inputValue()) === "0", "取り消しで選択肢が戻る");

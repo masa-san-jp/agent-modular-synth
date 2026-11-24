@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { buildCatalog } from "../src/control/catalog.js";
 import { REGISTRY } from "../src/modules/registry.js";
 import { DEFAULT_HUE_SETTING, HUE_CHOICES, HUE_PERIODS, HUE_SWEEP, hueAt, parseHueSetting } from "../src/view/hue.js";
+import { VALUE_LABEL, valueLabel } from "../src/view/labels.js";
 import { RACK, cableEnds, formatParam, layoutRack, panelAt, paramRows } from "../src/view/rack-layout.js";
 
 test("色相: 固定のときは選んだ値のまま。候補に黄・橙(20〜100°)はない", () => {
@@ -162,4 +163,15 @@ test("EngineBackend.activity: 各モジュールの、いまの出力の大き�
   assert.deepEqual(be.overrideValues(), { vco: { tune: 0.25 } });
   be.clearSchedule();
   assert.deepEqual(be.overrideValues(), {}, "演奏が終われば、なくなる(パッチの値へ戻る)");
+});
+
+test("画面に出す値の名前: 仕様の列挙型の値の名前は、すべて画面用の短い語(英数字)に対応している", () => {
+  const labels = new Set<string>();
+  for (const t of CATALOG.values()) for (const p of t.params) for (const v of p.values ?? []) labels.add(v.label);
+  assert.ok(labels.size >= 8);
+  for (const l of labels) {
+    assert.ok(l in VALUE_LABEL, `「${l}」の画面用の名前がない(src/view/labels.ts に足す)`);
+    assert.match(valueLabel(l), /^[A-Z0-9]{1,8}$/, l);
+  }
+  assert.equal(valueLabel("未知"), "未知");
 });

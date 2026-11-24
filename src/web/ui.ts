@@ -1,6 +1,7 @@
 // パッチの編集画面(Issue #22)。素の DOM。
 // 画面は状態を直接書き換えない: 操作はすべて共通コマンド(deps.run / deps.send)で送り、
 // 表示は通知とコマンドの応答の後に、Session のパッチから描き直す(operation-contract §1)。
+import { valueLabel } from "../view/labels.js";
 import type { ParamInfo, TypeCatalog, TypeInfo } from "../control/catalog.js";
 import type { ControllerEvent } from "../control/controller.js";
 import type { ActorInfo, Change, CommandResponse, HistoryFlags, Patch, PatchModule } from "../control/types.js";
@@ -13,8 +14,8 @@ export interface EditorDeps {
   run(command: string, args?: Record<string, unknown>): Promise<CommandResponse>;
   /** コマンドを送るだけ(エラー表示は呼び出し側で行う)。 */
   send(command: string, args?: Record<string, unknown>): Promise<CommandResponse>;
-  showError(text: string): void;
-  showNotice(text: string): void;
+  showError(text: string, detail?: string): void;
+  showNotice(text: string, detail?: string): void;
 }
 
 export interface Editor {
@@ -210,7 +211,7 @@ export function createEditor(deps: EditorDeps): Editor {
     } else if (p.values && p.values.length > 0) {
       // 列挙型: 選択肢を名前で出す(送るのは数値)
       const select = el("select", { id: inputId, "data-param": p.name });
-      for (const v of p.values) select.append(el("option", { value: String(v.value) }, `${v.label}(${v.value})`));
+      for (const v of p.values) select.append(el("option", { value: String(v.value), title: v.label }, valueLabel(v.label)));
       select.addEventListener("change", () => set(Number(select.value)));
       control.select = select;
       row.append(select);
@@ -246,7 +247,7 @@ export function createEditor(deps: EditorDeps): Editor {
         const text = number.value.trim();
         const v = Number(text);
         if (text === "" || !Number.isFinite(v)) {
-          deps.showError(`${moduleId}.${p.name}: 数値を入力してください(${p.min} 〜 ${p.max})`);
+          deps.showError(`${moduleId}.${p.name} ${p.min}..${p.max}`);
           render(true);
           return;
         }
@@ -341,7 +342,7 @@ export function createEditor(deps: EditorDeps): Editor {
       if (!info) continue;
       const ports = (direction === "out" ? info.outputs : info.inputs).filter((p) => p.connectable); // 接続できないポートは出さない(契約 §13.6)
       if (ports.length === 0) continue;
-      const group = el("optgroup", { label: `${m.id}(${info.title})` });
+      const group = el("optgroup", { label: m.id });
       for (const p of ports) {
         const value = `${m.id}.${p.name}`;
         group.append(el("option", { value }, `${value}(${p.type})${occupied.has(value) ? " *" : ""}`));
@@ -429,7 +430,7 @@ export function createEditor(deps: EditorDeps): Editor {
   updateSaveButton();
 
   function reportFailure(r: CommandResponse): void {
-    if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}: ${r.error.message}`);
+    if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}`, r.error.message);
   }
 
   async function save(name: string, overwrite: boolean): Promise<void> {
@@ -451,7 +452,7 @@ export function createEditor(deps: EditorDeps): Editor {
     if (!PATCH_NAME.test(name)) {
       // 送っても ERR-201 になる。規則を添えて表示する
       void deps.send("patch.save", { name }).then((r) => {
-        if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}: ${r.error.message}`);
+        if (!r.ok) deps.showError(`${r.error.id} ${r.error.code}`, r.error.message);
       });
       return;
     }
@@ -481,7 +482,7 @@ export function createEditor(deps: EditorDeps): Editor {
             if (res.ok) deps.showNotice(`LOADED ${p.name}`);
           });
         });
-        const remove = el("button", { type: "button", "data-action": "delete", class: "small danger" }, "削除");
+        const remove = el("button", { type: "button", "data-action": "delete", class: "small danger" }, "DEL");
         remove.addEventListener("click", () => {
           ask(`DELETE ${p.name} ?`, "DELETE", () => {
             void deps.run("patch.delete", { name: p.name }).then((res) => {
