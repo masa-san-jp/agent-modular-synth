@@ -9,13 +9,16 @@
 //   --model <名前>          LLM_MODEL      既定 gpt-oss:20b
 //   --num-ctx <数>          LLM_NUM_CTX    Ollama の文脈長。既定 16384
 //   --temperature <数>      LLM_TEMPERATURE
-//   --tools compact|full    LLM_TOOLS      ツールの説明の詳しさ。既定 compact(約 4 千トークン。full は MCP と同じで約 1.1 万)
+//   --style <曲調>          LLM_STYLE      音作りの目安: ambient / minimal / vaporwave / chiptune / techno / none。既定は目標の文から読み取る
+//   --tools compact|full    LLM_TOOLS      ツールの説明の詳しさ。既定 compact(英語、約 3 千トークン。full は MCP と同じ日本語で約 1.1 万)
 //   LLM_API_KEY             OpenAI 互換の API の鍵(要るときだけ)
 //   SYNTH_URL、SYNTH_AGENT_TOKEN、SYNTH_TOKEN_FILE: シンセの接続先とトークン(MCP アダプタと同じ。既定はサーバーが書くトークンのファイル)
 //   SYNTH_CLIENT_ID         既定 local-llm(画面の変更の履歴に出る名前)
 import { ConfigError, resolveConfig } from "../../src/mcp/adapter.js";
 import { contextBudget, createLlmClient, httpSender, run } from "./runner.js";
 import type { ApiKind, ToolDetail } from "./runner.js";
+import { STYLE_HINTS } from "./style-hints.js";
+import type { StyleName } from "./style-hints.js";
 
 function parseArgv(argv: string[]): { flags: Record<string, string>; rest: string[] } {
   const flags: Record<string, string> = {};
@@ -39,7 +42,8 @@ const HELP = `使い方: npm run agent:local -- [オプション] "演奏の目�
   --model <名前>        モデル(既定 gpt-oss:20b)
   --num-ctx <数>        Ollama の文脈長(既定 16384)
   --temperature <数>    温度
-  --tools compact|full  ツールの説明の詳しさ(既定 compact: 約 4 千トークン。full は MCP と同じで約 1.1 万トークン)
+  --style <曲調>        音作りの目安(ambient / minimal / vaporwave / chiptune / techno / none。既定は目標の文から読み取る)
+  --tools compact|full  ツールの説明の詳しさ(既定 compact: 英語、約 3 千トークン。full は MCP と同じ日本語で約 1.1 万トークン)
 
 先に npm run dev でシンセを起動し、ブラウザで開いて START を押しておく(音声を始められるのは人だけ)。
 終了は Ctrl+C(予約済みの楽譜は最後まで鳴る)。`;
@@ -60,6 +64,12 @@ async function main(): Promise<void> {
   const model = flags.model ?? env.LLM_MODEL ?? "gpt-oss:20b";
   const numCtx = Number(flags["num-ctx"] ?? env.LLM_NUM_CTX ?? 16384);
   const toolDetail = (flags.tools ?? env.LLM_TOOLS ?? "compact") as ToolDetail;
+  const styleRaw = flags.style ?? env.LLM_STYLE;
+  if (styleRaw !== undefined && styleRaw !== "none" && !(styleRaw in STYLE_HINTS)) {
+    console.error(`--style は ${Object.keys(STYLE_HINTS).join(" / ")} / none のどれか: ${styleRaw}`);
+    process.exit(2);
+  }
+  const style = styleRaw === undefined ? undefined : styleRaw === "none" ? null : (styleRaw as StyleName);
   if (toolDetail !== "compact" && toolDetail !== "full") {
     console.error(`--tools は compact か full: ${toolDetail}`);
     process.exit(2);
@@ -96,7 +106,7 @@ async function main(): Promise<void> {
   console.log(`シンセ: ${synth.endpoint}(名前 ${synth.clientId})`);
   console.log(`文脈: ${numCtx} トークン(ツールの説明 ${toolDetail} と指示文で約 ${budget.fixedTokens}、会話の履歴は ${budget.historyChars} 文字まで)`);
   if (budget.tight) console.log(`[注意] 文脈長 ${numCtx} では、会話の履歴をほとんど残せない。--num-ctx を ${budget.fixedTokens + 2048 + 8192} 以上にすることを勧める`);
-  const r = await run({ llm, send: httpSender(synth), goal, toolDetail, maxHistoryChars: budget.historyChars, maxToolResultChars: budget.toolResultChars, signal: ac.signal });
+  const r = await run({ llm, send: httpSender(synth), goal, toolDetail, ...(style !== undefined ? { style } : {}), maxHistoryChars: budget.historyChars, maxToolResultChars: budget.toolResultChars, signal: ac.signal });
   console.log(`[結果] 起こした回数 ${r.wakes}、ツール呼出し ${r.toolCalls}、終わり方 ${r.stoppedBy}`);
 }
 

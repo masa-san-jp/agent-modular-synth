@@ -11,6 +11,8 @@ import { ARGS, TABLE, TOOLS } from "../../src/mcp/tools.js";
 import { buildCatalog } from "../../src/control/catalog.js";
 import { REGISTRY } from "../../src/modules/registry.js";
 import { englishizeResponse, moduleCatalogText, TOOL_TEXT_EN } from "./english.js";
+import { detectStyle, STYLE_HINTS, styleSection } from "./style-hints.js";
+import type { StyleName } from "./style-hints.js";
 import type { ToolDef } from "../../src/mcp/tools.js";
 
 type Obj = Record<string, unknown>;
@@ -277,7 +279,7 @@ export async function runToolCall(call: ToolCall, send: CommandSender, maxChars:
  */
 export function contextBudget(numCtx: number, detail: ToolDetail = "compact"): { fixedTokens: number; historyChars: number; toolResultChars: number; tight: boolean } {
   const toolsChars = JSON.stringify(toolSpecs(detail).map((t) => ({ type: "function", function: t }))).length;
-  const fixedTokens = Math.ceil(systemPrompt().length / 2.4 + toolsChars / (detail === "compact" ? 3.8 : 2.1));
+  const fixedTokens = Math.ceil(longestPrompt() / 2.4 + toolsChars / (detail === "compact" ? 3.8 : 2.1));
   const available = numCtx - fixedTokens - 2048;
   const historyChars = Math.max(4000, Math.floor(available * 2));
   return { fixedTokens, historyChars, toolResultChars: Math.min(6000, Math.floor(historyChars / 3)), tight: available * 2 < 8000 };
@@ -378,7 +380,8 @@ export function moduleCatalog(): string {
   return catalogCache;
 }
 
-export function systemPrompt(): string {
+/** 指示文。style があれば、その曲調の音作りの目安を足す(style-hints.ts)。 */
+export function systemPrompt(style: StyleName | null = null): string {
   return [
     "You are a performer on a modular synthesizer. You operate it with tools and play it by writing scores. The synth runs in a browser tab.",
     "",
@@ -402,7 +405,14 @@ export function systemPrompt(): string {
     "",
     "# Module types (type ID, name | connectable inputs | outputs | params: name min..max def default unit)",
     moduleCatalog(),
+    "",
+    styleSection(style),
   ].join("\n");
+}
+
+/** 指示文のいちばん長い場合の文字数(文脈の見積もり用)。 */
+function longestPrompt(): number {
+  return Math.max(...(Object.keys(STYLE_HINTS) as StyleName[]).map((st) => systemPrompt(st).length));
 }
 
 export function firstUserMessage(goal: string, st: PerfStatus | null): string {
@@ -428,6 +438,8 @@ export interface RunOptions {
   pollMs?: number;
   /** ツールの説明の詳しさ(既定 compact)。 */
   toolDetail?: ToolDetail;
+  /** 曲調(音作りの目安を指示文に足す)。省略時は目標の文から読み取る。null なら足さない(共通の目安だけ)。 */
+  style?: StyleName | null;
   /** 起こす回数の上限(試験用。既定は無制限)。 */
   maxWakes?: number;
   log?: (line: string) => void;
@@ -452,11 +464,12 @@ export async function run(o: RunOptions): Promise<RunResult> {
   const lead = o.leadSeconds ?? 8;
   const pollMs = o.pollMs ?? 1000;
   const tools = toolSpecs(o.toolDetail ?? "compact");
+  const style = o.style === undefined ? detectStyle(o.goal) : o.style;
   const status = async (): Promise<PerfStatus | null> => readStatus(await o.send("score.get_status", {}));
 
   const st0 = await status();
   const messages: ChatMessage[] = [
-    { role: "system", content: systemPrompt() },
+    { role: "system", content: systemPrompt(style) },
     { role: "user", content: firstUserMessage(o.goal, st0) },
   ];
   const state = { audioRunning: st0?.audioState === "running", seenPromptIds: new Set<number>(), ended: false, wokeWhileIdle: false };
@@ -489,7 +502,7 @@ export async function run(o: RunOptions): Promise<RunResult> {
     messages.push({ role: "user", content: "Too many tool calls in a row. Stop, look at the current state and decide the next step." });
   };
 
-  log(`[開始] ${o.llm.describe}。目標: ${o.goal}`);
+  log(`[開始] ${o.llm.describe}。目標: ${o.goal}。曲調: ${style ?? "指定なし(共通の目安だけ)"}`);
   if (!state.audioRunning) log("[待ち] 音声が止まっている。ブラウザで START を押すと演奏を始められる(それまでにパッチを組む)");
   await think();
   wakes++;

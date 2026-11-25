@@ -8,6 +8,7 @@ import { englishizeResponse, hasJapanese, moduleCatalogText, TOOL_TEXT_EN } from
 import { buildCatalog } from "../src/control/catalog.js";
 import { REGISTRY } from "../src/modules/registry.js";
 import { firstUserMessage, moduleCatalog, systemPrompt, wakeMessage } from "../agents/local-llm/runner.js";
+import { detectStyle, STYLE_HINTS } from "../agents/local-llm/style-hints.js";
 
 type Obj = Record<string, any>;
 
@@ -118,6 +119,7 @@ test("LLM とのやりとりは英語: ツールの説明・指示文・一覧�
   assert.deepEqual(ja, [], "訳のない説明(english.ts の TOOL_TEXT_EN に足す)");
   assert.ok(!hasJapanese(text));
   assert.ok(!hasJapanese(systemPrompt()), "指示文");
+  for (const st of Object.keys(STYLE_HINTS) as (keyof typeof STYLE_HINTS)[]) assert.ok(!hasJapanese(systemPrompt(st)), `指示文(${st})`);
   assert.ok(!hasJapanese(moduleCatalog()), "一覧表(単位・選択肢の名前の訳が足りなければ english.ts に足す)");
   const st = { audioState: "running", playing: true, remaining: 3, unackedPrompts: [], plan: null };
   for (const r of ["remaining_low", "new_prompt", "audio_started", "stopped"] as const) assert.ok(!hasJapanese(wakeMessage(r, st)));
@@ -187,6 +189,25 @@ test("モジュールの一覧表: 全種別を 1 行ずつ、つなげる端子
   assert.match(lines.find((l) => l.startsWith("MOD-MIX-002"))!, /level\[1\.\.8\] 0\.\.1 def 0\.7/);
   assert.match(lines.find((l) => l.startsWith("MOD-SAT-001"))!, /mode \{0=soft,1=hard,2=fold\}/);
   assert.ok(!hasJapanese(text));
+});
+
+test("曲調の音作りの目安: 目標の文から曲調を読み取り、指示文に足す。分からなければ共通の目安だけ", () => {
+  assert.equal(detectStyle("静かなアンビエントを 3 分"), "ambient");
+  assert.equal(detectStyle("dark ambient drone"), "ambient");
+  assert.equal(detectStyle("ファミコン風の明るい曲"), "chiptune");
+  assert.equal(detectStyle("8-bit boss battle"), "chiptune");
+  assert.equal(detectStyle("Vaporwave at 3am"), "vaporwave");
+  assert.equal(detectStyle("ミニマルな反復"), "minimal");
+  assert.equal(detectStyle("暗いテクノ"), "techno");
+  assert.equal(detectStyle("自由に"), null);
+  const amb = systemPrompt("ambient");
+  assert.match(amb, /# Sound design/);
+  assert.match(amb, /# Style: ambient/);
+  assert.match(amb, /within about one octave above the pad/);
+  const none = systemPrompt(null);
+  assert.match(none, /# Sound design/, "共通の目安はいつも入る");
+  assert.ok(!/# Style:/.test(none));
+  assert.match(systemPrompt("chiptune"), /MOD-RND-001/, "チップチューンは粗さの作り方を含む");
 });
 
 test("引数の読み方と、ツール呼出しの実行(未知のツール、読めない引数、封筒の項目、長い結果の切り詰め)", async () => {
