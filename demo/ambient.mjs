@@ -16,7 +16,7 @@ export const HUE = 268;
 
 export const PATCH = [
   // --- 和音(ch 1): 少しずらした 2 つのノコギリ波を、ゆっくり開閉するフィルタで丸める。立ち上がり 4 秒、余韻 7 秒 ---
-  add("p_midi", "MOD-IO-002", { channel: 1, voices: 5 }),
+  add("p_midi", "MOD-IO-002", { channel: 1, voices: 10 }), // 前の和音の余韻(7 秒)が、次の和音に声を奪われないよう、和音 2 つ分
   add("p_osc", "MOD-OSC-001"),
   add("p_osc2", "MOD-OSC-001", { tune: 0.009 }),
   add("p_osc3", "MOD-OSC-001", { range: -1, tune: -0.006 }),
@@ -40,8 +40,8 @@ export const PATCH = [
   // --- 鐘(ch 2): 正弦波に、少し高い三角波を FM で混ぜて金属的な倍音を足す。すぐ減衰し、強さで音量が変わる ---
   add("b_midi", "MOD-IO-002", { channel: 2, voices: 3 }),
   add("b_mod", "MOD-OSC-001", { range: 1, tune: 0.807 }), // 約 3.5 倍の周波数(整数倍でない比で鐘らしく)
-  add("b_osc", "MOD-OSC-001", { fm_amt: 0.18 }),
-  add("b_env", "MOD-ENV-001", { attack: 0.004, decay: 1.6, sustain: 0, release: 2.2 }),
+  add("b_osc", "MOD-OSC-001", { fm_amt: 0.12 }),
+  add("b_env", "MOD-ENV-001", { attack: 0.012, decay: 1.6, sustain: 0, release: 2.2 }),
   add("b_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
   add("b_vel", "MOD-AMP-001", { cv2_level: 0.5 }),
   con("b_midi.PITCH", "b_mod.pitch"),
@@ -52,9 +52,9 @@ export const PATCH = [
   con("b_env.env", "b_vca.cv2"),
   con("b_vca.out", "b_vel.in1"),
   con("b_midi.VEL", "b_vel.cv2"),
-  // ディレイ: 付点 4 分(1.5 秒)。卓のセンドから入れ、戻りを別のチャンネルで右へ
+  // ディレイ: 付点 4 分(1.5 秒)。鐘を卓の前から直接入れ(鐘の音量を下げても、響きの量は変わらない)、戻りを別のチャンネルで右へ
   add("dly", "MOD-DLY-001", { time: 1.5, feedback: 0.62, mix: 1 }),
-  add("dly_vcf", "MOD-FLT-001", { cutoff: 1.2, res: 0.1 }), // 繰り返すほど丸くなるよう、戻りを少し削る
+  add("dly_vcf", "MOD-FLT-001", { cutoff: 3, res: 0.1 }), // 繰り返すほど丸くなるよう、戻りの高い方を削る(約 2 kHz から上)
   // --- 低い持続音(ch 3): 正弦波 1 つ。ゆっくり立ち上がる ---
   add("s_midi", "MOD-IO-002", { channel: 3, voices: 1 }),
   add("s_osc", "MOD-OSC-001"),
@@ -74,8 +74,8 @@ export const PATCH = [
   con("w_vcf.out", "w_vca.in1"),
   // --- まとめ: 卓。1 和音(中央)/ 2 鐘(左寄り、ディレイへ)/ 3 ディレイの戻り(右寄り)/ 4 風(少し右)/ 5 低い持続音 ---
   add("desk", "MOD-MIX-002", {
-    "level[1]": 0.6, "level[2]": 0.65, "level[3]": 1, "level[4]": 1, "level[5]": 0.17,
-    "pan[2]": -0.4, "send[2]": 1, "pan[3]": 0.55, "pan[4]": 0.25, "send[1]": 0.15, window_ms: 400,
+    "level[1]": 0.6, "level[2]": 0.37, "level[3]": 0.42, "level[4]": 0.7, "level[5]": 0.12,
+    "pan[2]": -0.4, "pan[3]": 0.55, "pan[4]": 0.25, window_ms: 400,
   }),
   con("p_vca.out", "desk.in1"),
   con("b_vel.out", "desk.in2"),
@@ -83,7 +83,7 @@ export const PATCH = [
   con("dly_vcf.out", "desk.in3"),
   con("w_vca.out", "desk.in4"),
   con("s_vca.out", "desk.in5"),
-  con("desk.SEND", "dly.in"),
+  con("b_vel.out", "dly.in"),
   con("desk.L", "out.IN_L"),
   con("desk.R", "out.IN_R"),
   { command: "param.set", args: { module_id: "out", param: "level", value: 1.6 } },
@@ -125,25 +125,25 @@ const bells = (seed, from, to, count, velFrom = 70, velTo = 100) => {
 /** 1. 夜明け: 和音がゆっくり立ち上がり、下で低い音が鳴り始める。風が遠くで吹き、フィルタが少しずつ開く。 */
 const S1 = {
   tempo_bpm: 60, length: 24,
-  notes: [...pad(0, 12.5, DMAJ9, 70), ...pad(12, 12.5, BM11, 72), ...sub(2, 22, 38), ...bells(3, 16, 24, 2, 55, 70)],
+  notes: [...pad(0, 12.5, DMAJ9, 70), ...pad(12, 12.5, BM11, 72), ...sub(2, 22, 38), ...bells(3, 16, 24, 2, 60, 72)],
   params: [par(0, 0, "p_vcf", "cutoff", -2.2), par(0, 24, "p_vcf", "cutoff", -0.8), par(0, 0, "w_vca", "gain", 0), par(0, 16, "w_vca", "gain", 0.7), par(0, 0, "dly", "feedback", 0.55)],
 };
 /** 2. 鐘: 鐘がまばらに鳴り、ディレイが左右に散らす。和音は G と D。 */
 const S2 = {
   tempo_bpm: 60, length: 24,
-  notes: [...pad(0, 12.5, GMAJ7, 76), ...pad(12, 12.5, DMAJ9, 78), ...sub(0, 12.5, 31), ...sub(12, 12.5, 38), ...bells(17, 0, 24, 9, 60, 100)],
+  notes: [...pad(0, 12.5, GMAJ7, 76), ...pad(12, 12.5, DMAJ9, 78), ...sub(0, 12.5, 31), ...sub(12, 12.5, 38), ...bells(17, 0, 24, 9, 66, 86)],
   params: [par(0, 12, "p_vcf", "cutoff", -0.3), par(0, 0, "dly", "feedback", 0.62), par(12, 12, "w_vca", "gain", 0.5)],
 };
 /** 3. 満ち潮: 鐘が増え、フィルタが開いて和音が明るくなる。LFO が速くなり、和音が揺れる。 */
 const S3 = {
   tempo_bpm: 60, length: 24,
-  notes: [...pad(0, 12.5, BM11, 84), ...pad(12, 12.5, EM9, 86), ...sub(0, 12.5, 35), ...sub(12, 12.5, 40), ...bells(29, 0, 24, 16, 65, 110)],
+  notes: [...pad(0, 12.5, BM11, 84), ...pad(12, 12.5, EM9, 86), ...sub(0, 12.5, 35), ...sub(12, 12.5, 40), ...bells(29, 0, 24, 16, 70, 92)],
   params: [par(0, 10, "p_vcf", "cutoff", 0.4), par(0, 0, "p_lfo", "freq", 0.18), par(0, 0, "p_vcf", "res", 0.35), par(0, 0, "dly", "feedback", 0.7), par(0, 12, "w_vca", "gain", 0.85), par(16, 8, "p_vcf", "cutoff", -0.2)],
 };
 /** 4. 引き潮: D の和音に戻り、鐘が減り、フィルタが閉じて、風と一緒に遠ざかる。最後の鐘の尾をディレイが運ぶ。 */
 const S4 = {
   tempo_bpm: 60, length: 24,
-  notes: [...pad(0, 14, DMAJ9, 74), ...sub(0, 14, 38), ...bells(41, 0, 12, 4, 60, 85), { t: 15, dur: 0.3, note: 86, vel: 80, ch: 2 }],
+  notes: [...pad(0, 14, DMAJ9, 74), ...sub(0, 14, 38), ...bells(41, 0, 12, 4, 64, 80), { t: 15, dur: 0.3, note: 86, vel: 80, ch: 2 }],
   params: [par(0, 0, "p_lfo", "freq", 0.07), par(0, 0, "p_vcf", "res", 0.25), par(0, 20, "p_vcf", "cutoff", -2.6), par(4, 16, "w_vca", "gain", 0), par(12, 0, "dly", "feedback", 0.72)],
 };
 
