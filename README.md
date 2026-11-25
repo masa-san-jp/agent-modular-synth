@@ -47,7 +47,9 @@ npm run test:midi-browser # MIDI 機器の接続の確認(試験用の機器を�
 npm run test:rack-browser  # ラックの表示と配色の確認(同上)
 npm run test:score-browser # エージェントの演奏(楽譜と指示)の確認(同上)
 npm run test:reconnect-browser # サーバーを再起動したときの演奏データの保存の確認(同上)
-npm run test:e2e     # 上のブラウザ試験 8 つをまとめて実行
+npm run test:local-llm-browser # 手元の LLM に演奏させるプログラムの確認(偽の LLM を使う。同上)
+npm run test:e2e     # 上のブラウザ試験 9 つをまとめて実行
+npm run agent:local -- "演奏の目標" # 手元の LLM(Ollama の gpt-oss:20b など)に演奏させる。手順は docs/local-llm-agent.md
 npm run bench        # 性能の測定(エンジン単体。約 5 分)。結果は bench/results/
 npm run bench:browser # 性能の測定(ブラウザ。約 3 分)。読み方は docs/perf/
 npm run mcp          # MCP アダプタを stdio で起動する(通常は MCP クライアントが起動する)

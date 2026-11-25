@@ -22,7 +22,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "agents/**/*.ts"
   ],
   "exclude": [
     "src/web/**/*.ts"
