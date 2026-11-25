@@ -95,12 +95,14 @@ export const PATCH = [
   con("s_env.env", "s_vca.cv2"),
   // --- ハイハット(ch 6) ---
   add("h_midi", "MOD-IO-002", { channel: 6, voices: 1 }),
-  add("h_nse", "MOD-NSE-001", { level: 8, seed: 9 }),
+  add("h_nse", "MOD-NSE-001", { level: 10, seed: 9 }),
   add("h_env", "MOD-ENV-001", { attack: 0.001, decay: 0.035, sustain: 0, release: 0.03 }),
   add("h_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
   add("h_vel", "MOD-AMP-001", { cv2_level: 0.5 }),
   con("h_midi.GATE", "h_env.gate"),
-  con("h_nse.out", "h_vca.in1"),
+  add("h_vcf", "MOD-FLT-001", { cutoff: 5, res: 0.15 }), // 白色ノイズのままは鋭すぎる(重心 12 kHz)。約 8.4 kHz から上を削る
+  con("h_nse.out", "h_vcf.in"),
+  con("h_vcf.out", "h_vca.in1"),
   con("h_env.env", "h_vca.cv2"),
   con("h_vca.out", "h_vel.in1"),
   con("h_midi.VEL", "h_vel.cv2"),
@@ -130,9 +132,9 @@ export const PATCH = [
   add("dly_vcf", "MOD-FLT-001", { cutoff: 1, res: 0.1 }),
   // --- まとめ: 卓 ---
   add("desk", "MOD-MIX-002", {
-    "level[1]": 0.35, "level[2]": 0.38, "level[3]": 0.29, "level[4]": 0.6, "level[5]": 1, "level[6]": 0.6, "level[7]": 0.8, "level[8]": 1,
+    "level[1]": 0.3, "level[2]": 0.28, "level[3]": 0.24, "level[4]": 1, "level[5]": 1, "level[6]": 1, "level[7]": 0.8, "level[8]": 1,
     "pan[1]": -0.1, "pan[2]": 0.25, "pan[5]": 0.05, "pan[6]": 0.3, "pan[7]": -0.15, "pan[8]": 0.35,
-    "send[5]": 0.8, "send[7]": 0.6, "send[2]": 0.25, window_ms: 400,
+    "send[5]": 0.8, "send[7]": 0.85, "send[2]": 0.25, window_ms: 400,
   }),
   con("p_vca.out", "desk.in1"),
   con("e_vel.out", "desk.in2"),
@@ -235,3 +237,6 @@ export const SECTIONS = [
   { name: "旋律", score: S3, params: [] },
   { name: "テープが止まる", score: S4, params: [] },
 ];
+
+/** 音像の確かめ(demo/mixcheck.mjs): 曲調と、卓のチャンネルの役割(demo/styles.mjs)。 */
+export const MIX = { style: "vaporwave", desk: "desk", channels: { 1: "pad", 2: "keys", 3: "bass", 4: "kick", 5: "snare", 6: "hats", 7: "lead", 8: "fx" } };

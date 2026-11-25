@@ -293,3 +293,6 @@ export const SECTIONS = [
   { name: "山場", score: S5, params: [] },
   { name: "終わり", score: S6, params: [] },
 ];
+
+/** 音像の確かめ(demo/mixcheck.mjs): 曲調と、卓のチャンネルの役割(demo/styles.mjs)。 */
+export const MIX = { style: "techno", desk: "desk", channels: { 1: "kick", 2: "rumble", 3: "bass", 4: "hats", 5: "stab", 6: "fx", 7: "drone" } };

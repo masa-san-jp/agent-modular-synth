@@ -37,16 +37,17 @@ export const PATCH = [
   con("p_lfo.sine", "p_vcf.cv3"),
   con("p_vcf.out", "p_vca.in1"),
   con("p_env.env", "p_vca.cv2"),
-  // --- 鐘(ch 2): 正弦波に、少し高い三角波を FM で混ぜて金属的な倍音を足す。すぐ減衰し、強さで音量が変わる ---
+  // --- 鐘(ch 2): ガラスの柔らかい鐘。正弦波を、1 オクターブ上の正弦波で浅く FM する(整数倍の比なので、金属的にならない)。
+  //     角を落とした立ち上がりで、長く余韻を残す。音域は背景の和音から 1 オクターブ程度に留める(docs/sound-design-by-style.md)
   add("b_midi", "MOD-IO-002", { channel: 2, voices: 3 }),
-  add("b_mod", "MOD-OSC-001", { range: 1, tune: 0.807 }), // 約 3.5 倍の周波数(整数倍でない比で鐘らしく)
-  add("b_osc", "MOD-OSC-001", { fm_amt: 0.12 }),
-  add("b_env", "MOD-ENV-001", { attack: 0.012, decay: 1.6, sustain: 0, release: 2.2 }),
+  add("b_mod", "MOD-OSC-001", { range: 1 }), // 2 倍の周波数(整数倍)
+  add("b_osc", "MOD-OSC-001", { fm_amt: 0.05 }),
+  add("b_env", "MOD-ENV-001", { attack: 0.03, decay: 2.4, sustain: 0, release: 3 }),
   add("b_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
   add("b_vel", "MOD-AMP-001", { cv2_level: 0.5 }),
   con("b_midi.PITCH", "b_mod.pitch"),
   con("b_midi.PITCH", "b_osc.pitch"),
-  con("b_mod.tri", "b_osc.fm"),
+  con("b_mod.sine", "b_osc.fm"),
   con("b_midi.GATE", "b_env.gate"),
   con("b_osc.sine", "b_vca.in1"),
   con("b_env.env", "b_vca.cv2"),
@@ -54,7 +55,7 @@ export const PATCH = [
   con("b_midi.VEL", "b_vel.cv2"),
   // ディレイ: 付点 4 分(1.5 秒)。鐘を卓の前から直接入れ(鐘の音量を下げても、響きの量は変わらない)、戻りを別のチャンネルで右へ
   add("dly", "MOD-DLY-001", { time: 1.5, feedback: 0.62, mix: 1 }),
-  add("dly_vcf", "MOD-FLT-001", { cutoff: 3, res: 0.1 }), // 繰り返すほど丸くなるよう、戻りの高い方を削る(約 2 kHz から上)
+  add("dly_vcf", "MOD-FLT-001", { cutoff: 0.8, res: 0.1 }), // 響きは暗く: 戻りを約 450 Hz から上で削る(元の鐘より下)
   // --- 低い持続音(ch 3): 正弦波 1 つ。ゆっくり立ち上がる ---
   add("s_midi", "MOD-IO-002", { channel: 3, voices: 1 }),
   add("s_osc", "MOD-OSC-001"),
@@ -74,7 +75,7 @@ export const PATCH = [
   con("w_vcf.out", "w_vca.in1"),
   // --- まとめ: 卓。1 和音(中央)/ 2 鐘(左寄り、ディレイへ)/ 3 ディレイの戻り(右寄り)/ 4 風(少し右)/ 5 低い持続音 ---
   add("desk", "MOD-MIX-002", {
-    "level[1]": 0.6, "level[2]": 0.37, "level[3]": 0.42, "level[4]": 0.7, "level[5]": 0.12,
+    "level[1]": 0.6, "level[2]": 0.37, "level[3]": 0.67, "level[4]": 0.7, "level[5]": 0.12,
     "pan[2]": -0.4, "pan[3]": 0.55, "pan[4]": 0.25, window_ms: 400,
   }),
   con("p_vca.out", "desk.in1"),
@@ -108,8 +109,8 @@ const EM9 = [52, 59, 62, 66, 67];
 const pad = (t, dur, chord, vel = 80) => chord.map((note) => ({ t, dur, note, vel, ch: 1 }));
 /** 低い持続音。 */
 const sub = (t, dur, note) => [{ t, dur, note, vel: 100, ch: 3 }];
-// 鐘に使う音(ニ長調の五音音階、上の 2 オクターブ)
-const BELL = [74, 76, 78, 81, 83, 86, 88, 90, 93];
+// 鐘に使う音(ニ長調の五音音階)
+const BELL = [62, 64, 66, 69, 71, 74, 76, 78, 81]; // D4〜A5(背景より 1 オクターブ程度上まで)
 /** 鐘: from〜to 拍の間に count 個、ばらばらの位置に置く。 */
 const bells = (seed, from, to, count, velFrom = 70, velTo = 100) => {
   const r = rng(seed);
@@ -143,7 +144,7 @@ const S3 = {
 /** 4. 引き潮: D の和音に戻り、鐘が減り、フィルタが閉じて、風と一緒に遠ざかる。最後の鐘の尾をディレイが運ぶ。 */
 const S4 = {
   tempo_bpm: 60, length: 24,
-  notes: [...pad(0, 14, DMAJ9, 74), ...sub(0, 14, 38), ...bells(41, 0, 12, 4, 64, 80), { t: 15, dur: 0.3, note: 86, vel: 80, ch: 2 }],
+  notes: [...pad(0, 14, DMAJ9, 74), ...sub(0, 14, 38), ...bells(41, 0, 12, 4, 64, 80), { t: 15, dur: 0.3, note: 74, vel: 80, ch: 2 }],
   params: [par(0, 0, "p_lfo", "freq", 0.07), par(0, 0, "p_vcf", "res", 0.25), par(0, 20, "p_vcf", "cutoff", -2.6), par(4, 16, "w_vca", "gain", 0), par(12, 0, "dly", "feedback", 0.72)],
 };
 
@@ -157,3 +158,6 @@ export const SECTIONS = [
 
 /** 録画のとき、2 つ目の楽譜の途中で人が書く指示。 */
 export const PROMPT = "もっと遠くへ、静かに";
+
+/** 音像の確かめ(demo/mixcheck.mjs): 曲調と、卓のチャンネルの役割(demo/styles.mjs)。 */
+export const MIX = { style: "ambient", desk: "desk", channels: { 1: "pad", 2: "lead", 3: "fx", 4: "texture", 5: "sub" } };

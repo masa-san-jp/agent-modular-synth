@@ -1,5 +1,6 @@
 // エージェント(Claude Code)が書いたチップチューン。1 分 150 拍、ハ長調(C → Am → F → G)。
 // 昔のゲーム機の音源の作り: 細いパルス波 2 つ(旋律と分散和音)、三角波の低音、ノイズの打楽器。フィルタは使わず、生の波形のまま鳴らす。
+// 全体をサンプル&ホールドに通して、サンプリング周波数を約 9 kHz に落とす(粗い、安っぽい音)。
 // 8 小節(12.8 秒)の楽譜 × 6 と、終わりの 4 小節: 入り → 主題 → 主題(打楽器) → 間奏(短調) → 主題(高く) → 転調して主題 → 終わり。
 // チャンネル: 1 = 旋律(パルス、ビブラート)、2 = 分散和音(パルス)、3 = 低音(三角波)、4 = キック、5 = ノイズ(スネアとハイハット)。
 
@@ -77,16 +78,23 @@ export const PATCH = [
   con("n_midi.VEL", "n_vel.cv2"),
   // --- まとめ: 卓。昔の音源らしく、ほぼ中央。分散和音だけ少し右 ---
   add("desk", "MOD-MIX-002", {
-    "level[1]": 0.32, "level[2]": 0.4, "level[3]": 0.24, "level[4]": 0.8, "level[5]": 0.44,
-    "pan[1]": -0.1, "pan[2]": 0.3, window_ms: 400,
+    "level[1]": 0.24, "level[2]": 0.3, "level[3]": 0.175, "level[4]": 1, "level[5]": 0.22,
+    window_ms: 400,
   }),
   con("m_vel.out", "desk.in1"),
   con("a_vel.out", "desk.in2"),
   con("l_vca.out", "desk.in3"),
   con("k_vca.out", "desk.in4"),
   con("n_vel.out", "desk.in5"),
-  con("desk.L", "out.IN_L"),
-  con("desk.R", "out.IN_R"),
+  // --- 粗さ: 卓の出力をサンプル&ホールドに通し、約 9 kHz ごとに値を取り込んで保持する(サンプリング周波数を落とすのと同じ)。
+  //     折り返しの雑音と段々が乗り、昔の音源の安っぽい音になる。叩く信号は、固定の電圧(5.1 V = C4 の 2^5.1 倍 ≒ 9 kHz)で鳴らす発振器のパルス波
+  add("crush_v", "MOD-UTL-001", { gain: 0, offset: 5.1 }),
+  add("crush_clk", "MOD-OSC-001"),
+  add("crush", "MOD-RND-001"),
+  con("crush_v.out", "crush_clk.pitch"),
+  con("crush_clk.pulse", "crush.TRIG"),
+  con("desk.L", "crush.IN"),
+  con("crush.OUT", "out.IN_L"), // IN_R は未接続なので IN_L と同じ(昔の音源と同じく、中央にまとめる)
   { command: "param.set", args: { module_id: "out", param: "level", value: 1.2 } },
 ];
 
@@ -192,3 +200,6 @@ export const SECTIONS = [
   { name: "転調", score: S6, params: [] },
   { name: "終わり", score: S7, params: [] },
 ];
+
+/** 音像の確かめ(demo/mixcheck.mjs): 曲調と、卓のチャンネルの役割(demo/styles.mjs)。 */
+export const MIX = { style: "chiptune", desk: "desk", channels: { 1: "lead", 2: "arp", 3: "bass", 4: "kick", 5: "perc" } };

@@ -86,13 +86,15 @@ export const PATCH = [
   add("h_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
   add("h_vel", "MOD-AMP-001", { cv2_level: 0.5 }),
   con("h_midi.GATE", "h_env.gate"),
-  con("h_nse.out", "h_vca.in1"),
+  add("h_vcf", "MOD-FLT-001", { cutoff: 5.5, res: 0.15 }), // 白色ノイズのままは鋭すぎる(重心 12 kHz)。約 11.8 kHz から上を削る
+  con("h_nse.out", "h_vcf.in"),
+  con("h_vcf.out", "h_vca.in1"),
   con("h_env.env", "h_vca.cv2"),
   con("h_vca.out", "h_vel.in1"),
   con("h_midi.VEL", "h_vel.cv2"),
   // --- まとめ: 卓。1 型 A(左)/ 2 型 B(右、ディレイへ)/ 3 ディレイの戻り(左寄り)/ 4 低音 / 5 キック / 6 ハイハット(少し右) ---
   add("desk", "MOD-MIX-002", {
-    "level[1]": 1, "level[2]": 1, "level[3]": 1, "level[4]": 0.7, "level[5]": 0.4, "level[6]": 1,
+    "level[1]": 1, "level[2]": 0.8, "level[3]": 0.75, "level[4]": 0.5, "level[5]": 0.49, "level[6]": 0.6,
     "pan[1]": -0.35, "pan[2]": 0.4, "send[2]": 1, "pan[3]": -0.5, "pan[6]": 0.2, window_ms: 400,
   }),
   con("a_vel.out", "desk.in1"),
@@ -199,3 +201,6 @@ export const SECTIONS = [
 
 /** 録画のとき、2 つ目の楽譜の途中で人が書く指示。 */
 export const PROMPT = "少しずつ明るく";
+
+/** 音像の確かめ(demo/mixcheck.mjs): 曲調と、卓のチャンネルの役割(demo/styles.mjs)。 */
+export const MIX = { style: "minimal", desk: "desk", channels: { 1: "lead", 2: "counter", 3: "fx", 4: "bass", 5: "kick", 6: "hats" } };
