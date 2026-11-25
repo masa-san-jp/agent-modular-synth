@@ -25,7 +25,7 @@
 ```
 npm install
 npm run check        # ビルド、型検査、単体試験、検証例 288 件、仕様文書の検査(約 3 分)
-npm run test:e2e     # ブラウザ試験 8 種(Playwright と Chromium が要る。約 5 分)
+npm run test:e2e     # ブラウザ試験 9 種(Playwright と Chromium が要る。約 5 分)
 npm run dev          # 起動(http://127.0.0.1:47800/)
 ```
 - 変更したら、`npm run check` と、関係するブラウザ試験を通してから PR にする。
