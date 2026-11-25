@@ -4,6 +4,7 @@ import type { FromWorklet } from "../audio/messages.js";
 import { WorkletBackend } from "../audio/worklet-backend.js";
 import { buildCatalog } from "../control/catalog.js";
 import { Controller } from "../control/controller.js";
+import type { PerformanceJournal, PerformanceJournalEntry } from "../control/controller.js";
 import { parsePatchText, serializePatchDocument } from "../control/patch-doc.js";
 import { Session } from "../control/session.js";
 import type { PatchStore, StoreResult, StoredPatchInfo } from "../control/store.js";
@@ -20,6 +21,11 @@ import type { Editor } from "./ui.js";
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 
 const AUTOSAVE_KEY = "modular-synth.autosave.v1";
+/** 演奏データの控え(書けていない・閉じていない演奏。DEC-026)と、タブが最後に動いていた時刻。 */
+const PERF_JOURNAL_KEY = "modular-synth.performance-journal.v1";
+const PERF_SEEN_KEY = "modular-synth.performance-seen.v1";
+/** 書けていない演奏データを書き直す間隔(応答の時間切れの後など)。 */
+const PERF_RETRY_MS = 5000;
 /** 読めなかった自動保存の退避先(1件だけ。新しい退避で上書きする)。 */
 const AUTOSAVE_BROKEN_KEY = "modular-synth.autosave.broken.v1";
 /** 編集するタブを1つにするための鍵の名前(Web Locks。同じブラウザ・同じ保存領域の中で1つ)。 */
@@ -290,6 +296,7 @@ function maybeConnect(): void {
 function becomeOwner(): void {
   if (tabRole !== "pending") return;
   tabRole = "owner";
+  controller.attachPerformanceJournal(perfJournal); // 前のタブが書けなかった演奏データを引き継ぐ(DEC-026)
   maybeConnect();
   if (session.revision !== initialRevision) autosaveNow(); // 鍵を待つ間に行われた変更
 }
@@ -339,10 +346,48 @@ function scheduleAutosave(): void {
 function flushAutosave(): void {
   if (autosaveTimer !== null || session.revision !== autosavedRevision) autosaveNow();
 }
+// 演奏データの控え(DEC-026)。この保存領域の持ち主のタブ(owner)だけが使う
+const perfJournal: PerformanceJournal = {
+  load() {
+    const raw = localStorage.getItem(PERF_JOURNAL_KEY);
+    if (!raw) return [];
+    const v = JSON.parse(raw) as unknown;
+    return Array.isArray(v) ? (v as PerformanceJournalEntry[]) : [];
+  },
+  save(entries) {
+    if (entries.length === 0) localStorage.removeItem(PERF_JOURNAL_KEY);
+    else localStorage.setItem(PERF_JOURNAL_KEY, JSON.stringify(entries));
+  },
+  lastSeen() {
+    const v = Number(localStorage.getItem(PERF_SEEN_KEY));
+    return Number.isFinite(v) && v > 0 ? v : null;
+  },
+};
+let lastSeenWritten = 0;
+/** タブが動いている時刻を残す(タブが落ちたとき、閉じていない演奏の長さを見積もるため)。1 秒に 1 回まで。 */
+function markSeen(): void {
+  if (tabRole !== "owner") return;
+  const now = Date.now();
+  if (now - lastSeenWritten < 1000) return;
+  lastSeenWritten = now;
+  try {
+    localStorage.setItem(PERF_SEEN_KEY, String(now));
+  } catch {
+    // 書けなくても続ける
+  }
+}
+window.setInterval(() => {
+  markSeen();
+  if (tabRole === "owner" && link.accepted && controller.performancesPending) void controller.retryPerformances();
+}, PERF_RETRY_MS);
+
 window.addEventListener("pagehide", () => {
   flushAutosave();
   // 記録中の演奏データを閉じて保存する(演奏し終えて続きを待っている間に閉じても、終わりの印が残るように。DEC-024)
-  if (tabRole === "owner" && session.closePerformanceOnExit()) void controller.savePerformances();
+  if (tabRole === "owner") {
+    markSeen();
+    if (session.closePerformanceOnExit()) void controller.savePerformances();
+  }
 });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") flushAutosave();
@@ -370,7 +415,7 @@ controller.subscribe((ev) => {
     if (d.ok && d.closed) void refreshPerformances();
   }
   editor?.onEvent(ev); // 誰が何をしたかを変更の履歴に出す
-  render();
+  scheduleRender(); // 描き直しは、要求への応答を返した後(画面の描き直しの分だけ、エージェントへの応答が遅れないように)
 });
 // 通知の種類の名前に依存しないよう、リビジョンが進んだら必ず自動保存する
 let savedRevision = session.revision;
@@ -386,7 +431,7 @@ link.onRequest = (id, request) => {
   void controller.handle(request, "agent").then((response) => {
     link.send({ t: "res", id, response });
     autosaveIfChanged();
-    render();
+    scheduleRender();
   });
 };
 let wasAccepted = false;
@@ -440,6 +485,7 @@ async function ensureAudio(): Promise<void> {
         backend.onMessage(m);
         session.pollBackend(); // 音声状態・診断の変化を通知にする
         void controller.savePerformances(); // 演奏し終えた後に閉じた演奏データを保存する
+        markSeen();
         renderStatus();
       } else if (m.type === "error") {
         debug.errors.push(m.message);
@@ -726,8 +772,23 @@ function hudItems(): string[] {
 }
 
 function render(force = false): void {
+  renderQueued = false;
   renderStatus();
   editor?.render(force);
+}
+let renderQueued = false;
+/**
+ * 次の画面の更新で 1 回だけ描き直す(続けて来た通知と要求をまとめる)。裏に回ったタブは画面の更新が止まるので、
+ * そのときは時間で描く。
+ */
+function scheduleRender(): void {
+  if (renderQueued) return;
+  renderQueued = true;
+  const run = (): void => {
+    if (renderQueued) render();
+  };
+  if (document.visibilityState === "visible") window.requestAnimationFrame(run);
+  else window.setTimeout(run, 250);
 }
 
 // 自動試験と状態確認のために公開する(読み取り専用の情報)

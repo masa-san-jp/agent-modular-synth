@@ -41,7 +41,7 @@ export async function callStore<T>(fn: () => Promise<StoreResult<T>>, timeoutMs 
   try {
     if (timeoutMs <= 0) return await fn();
     const late = new Promise<StoreResult<T>>((resolve) => {
-      timer = setTimeout(() => resolve({ ok: false, error: "failed", message: "保存先が時間内に応答しなかった(書き込みが行われたかは不明)" }), timeoutMs);
+      timer = setTimeout(() => resolve({ ok: false, error: "unavailable", message: "保存先が時間内に応答しなかった(書き込みが行われたかは不明)" }), timeoutMs);
     });
     return await Promise.race([fn(), late]);
   } catch (e) {

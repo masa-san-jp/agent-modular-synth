@@ -121,14 +121,22 @@ function utcTimestamp(t: Date | number): string {
 
 /** 演奏データのファイル 1 つの保存の状態。 */
 interface PerformanceFile {
+  /** 控え(PerformanceJournal)の中で、このファイルを指す鍵。 */
+  key: string;
   name: string;
   startedAt: string;
+  /** 始まりの時刻 [ms](控えから閉じるときの、長さの見積もりに使う)。 */
+  startedMs: number;
   /** 保存をやめた(保存先のエラー、大きすぎる)。 */
   failed: boolean;
   /** ファイルを 1 度でも書けた。 */
   written: boolean;
-  /** つながっていなかったために書けなかった、最新の状態。 */
-  held: HeldPerformance | null;
+  /** 最初の書き込みの結果が分からない(応答の前に接続が切れた、時間切れ)。書けていたかもしれない。 */
+  maybeWritten: boolean;
+  /** 最新の状態。 */
+  last: HeldPerformance;
+  /** まだ書けていない最新の状態(書けたら null)。 */
+  pending: HeldPerformance | null;
 }
 
 interface HeldPerformance {
@@ -136,6 +144,31 @@ interface HeldPerformance {
   entries: number;
   length_seconds: number;
   closed: boolean;
+}
+
+/** 演奏データの控えの 1 件(書けていない、または閉じていない演奏の、最新の状態。DEC-026)。 */
+export interface PerformanceJournalEntry {
+  key: string;
+  name: string;
+  startedAt: string;
+  startedMs: number;
+  written: boolean;
+  maybeWritten: boolean;
+  text: string;
+  entries: number;
+  length_seconds: number;
+  closed: boolean;
+}
+
+/**
+ * 演奏データの控え(タブの保存領域。DEC-026)。タブが閉じる・落ちるまでに書けなかった演奏データを、次にタブを開いたときに書く。
+ * 書けなくても(容量など)演奏は止めない。
+ */
+export interface PerformanceJournal {
+  load(): PerformanceJournalEntry[];
+  save(entries: PerformanceJournalEntry[]): void;
+  /** このタブ(前のタブを含む)が最後に動いていた時刻 [ms]。なければ null。 */
+  lastSeen(): number | null;
 }
 
 export class Controller {
@@ -149,6 +182,9 @@ export class Controller {
   private readonly renderer: ControllerOptions["renderer"] | null;
   /** 演奏の通し番号 → 保存した名前と、始まりの時刻。 */
   private readonly perfNames = new Map<number, PerformanceFile>();
+  /** 前のタブの控えから引き継いだ演奏データ(DEC-026)。 */
+  private readonly recovered: PerformanceFile[] = [];
+  private journal: PerformanceJournal | null = null;
   private perfTail: Promise<void> = Promise.resolve();
   private readonly listeners = new Set<(ev: ControllerEvent) => void>();
   /** 待ち行列の末尾(前の要求の処理の完了)。 */
@@ -229,60 +265,148 @@ export class Controller {
     const updates = this.session.takePerformanceUpdates();
     if (updates.length === 0 || !this.performances) return this.perfTail;
     for (const u of updates) {
-      this.perfTail = this.perfTail.then(async () => {
-        let entry = this.perfNames.get(u.id);
-        if (entry?.failed) return;
-        if (!entry) {
-          entry = { name: localStamp(this.now()), startedAt: utcTimestamp(this.now()), failed: false, written: false, held: null };
-          this.perfNames.set(u.id, entry);
-        }
-        const record = { ...u.record, started_at: entry.startedAt, ended_at: u.closed ? utcTimestamp(this.now()) : null };
-        const text = JSON.stringify(record) + "\n";
-        await this.writePerformance(entry, { text, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed });
-      });
+      let entry = this.perfNames.get(u.id);
+      if (entry?.failed) continue;
+      const now = this.now();
+      const ms = now instanceof Date ? now.getTime() : now;
+      if (!entry) {
+        const empty: HeldPerformance = { text: "", entries: 0, length_seconds: 0, closed: false };
+        entry = { key: `${ms}-${u.id}-${Math.random().toString(36).slice(2, 8)}`, name: localStamp(now), startedAt: utcTimestamp(now), startedMs: ms, failed: false, written: false, maybeWritten: false, last: empty, pending: null };
+        this.perfNames.set(u.id, entry);
+      }
+      const record = { ...u.record, started_at: entry.startedAt, ended_at: u.closed ? utcTimestamp(now) : null };
+      const w: HeldPerformance = { text: JSON.stringify(record) + "\n", entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed };
+      entry.last = w;
+      entry.pending = w;
+      const e = entry;
+      this.perfTail = this.perfTail.then(() => this.writePerformance(e, w));
     }
+    this.syncJournal(); // 書く前に控える(タブがこのまま閉じても、次に開いたときに書ける)
     return this.perfTail;
   }
 
   /**
-   * サーバーにつながっていなかったために保存できなかった演奏データを、書き直す(DEC-025)。
-   * 保存先とつながり直したときに呼ぶ。書くのは、それぞれの演奏の最新の状態(閉じた印を含む)。
+   * まだ書けていない演奏データを書き直す(DEC-025、DEC-026)。保存先とつながり直したとき、
+   * 応答が時間切れになった後、前のタブの控えを引き継いだときに呼ぶ。書くのは、それぞれの演奏の最新の状態(閉じた印を含む)。
    */
   retryPerformances(): Promise<void> {
     if (!this.performances) return this.perfTail;
-    for (const entry of this.perfNames.values()) {
-      if (!entry.held || entry.failed) continue;
+    for (const entry of [...this.perfNames.values(), ...this.recovered]) {
+      if (!entry.pending || entry.failed) continue;
       this.perfTail = this.perfTail.then(async () => {
-        const held = entry.held;
-        if (held && !entry.failed) await this.writePerformance(entry, held);
+        if (entry.pending && !entry.failed) await this.writePerformance(entry, entry.pending);
       });
     }
     return this.perfTail;
   }
 
-  /** 演奏データを 1 回書く。つながっていなければ控えておき(retryPerformances で書き直す)、それ以外の失敗では、その演奏の保存をやめる。 */
+  /** まだ書けていない演奏データがあるか。 */
+  get performancesPending(): boolean {
+    return [...this.perfNames.values(), ...this.recovered].some((e) => e.pending !== null && !e.failed);
+  }
+
+  /**
+   * 前のタブの控えを引き継ぎ、以後この控えを使う(DEC-026)。タブがこの保存領域の持ち主になったときに 1 回呼ぶ。
+   * 閉じていない演奏は、前のタブが閉じる処理をせずに終わった(強制終了など)ものとして、最後に動いていた時刻で閉じる:
+   * それまでに演奏し終えていれば `finished`、演奏の途中なら `audio_stopped`(長さは、その時刻まで)。書くのは retryPerformances。
+   */
+  attachPerformanceJournal(journal: PerformanceJournal): void {
+    if (this.journal) return;
+    this.journal = journal;
+    let loaded: PerformanceJournalEntry[] = [];
+    try {
+      loaded = journal.load();
+    } catch {
+      loaded = []; // 読めない控えは使わない
+    }
+    let seen: number | null = null;
+    try {
+      seen = journal.lastSeen();
+    } catch {
+      seen = null;
+    }
+    for (const j of loaded) {
+      let w: HeldPerformance = { text: j.text, entries: j.entries, length_seconds: j.length_seconds, closed: j.closed };
+      if (!j.closed) {
+        try {
+          const rec = JSON.parse(j.text) as PerformanceRecord & { ended_at?: string | null };
+          const at = Math.max(j.startedMs, seen ?? j.startedMs);
+          const elapsed = (at - j.startedMs) / 1000;
+          if (elapsed >= rec.length_seconds) rec.ended_by = "finished";
+          else {
+            rec.ended_by = "audio_stopped";
+            rec.length_seconds = Math.max(0, elapsed);
+          }
+          rec.ended_at = utcTimestamp(at);
+          w = { text: JSON.stringify(rec) + "\n", entries: rec.entries.length, length_seconds: rec.length_seconds, closed: true };
+        } catch {
+          continue; // 壊れた控えは捨てる
+        }
+      }
+      this.recovered.push({ key: j.key, name: j.name, startedAt: j.startedAt, startedMs: j.startedMs, failed: false, written: j.written, maybeWritten: j.maybeWritten, last: w, pending: w });
+    }
+    this.syncJournal();
+  }
+
+  /** 控えを、今の状態に合わせる。控えるのは、書けていない、または閉じていない演奏だけ。 */
+  private syncJournal(): void {
+    if (!this.journal) return;
+    const out: PerformanceJournalEntry[] = [];
+    for (const e of [...this.perfNames.values(), ...this.recovered]) {
+      if (e.failed || (e.pending === null && e.last.closed)) continue;
+      out.push({ key: e.key, name: e.name, startedAt: e.startedAt, startedMs: e.startedMs, written: e.written, maybeWritten: e.maybeWritten, text: e.last.text, entries: e.last.entries, length_seconds: e.last.length_seconds, closed: e.last.closed });
+    }
+    try {
+      this.journal.save(out);
+    } catch {
+      // 控えられなくても(容量など)、演奏と保存は続ける
+    }
+  }
+
+  /**
+   * 演奏データを 1 回書く。つながっていない・応答が時間切れのときは控えておき(retryPerformances で書き直す)、
+   * それ以外の失敗では、その演奏の保存をやめる。
+   */
   private async writePerformance(entry: PerformanceFile, w: HeldPerformance): Promise<void> {
+    if (entry.failed) return;
     const store = this.performances!;
     const fail = (reason: string): void => {
       entry.failed = true;
-      entry.held = null;
+      entry.pending = null;
+      this.syncJournal();
       this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: null, ok: false, entries: w.entries, length_seconds: w.length_seconds, closed: w.closed, reason } });
     };
     if (utf8ByteLength(w.text) > MAX_PERFORMANCE_BYTES) return fail("too_large");
     const first = !entry.written;
     let r = await this.call(() => store.write(entry.name, w.text, !first));
+    // 前の書き込みの結果が分からないとき: 同じ名前のファイルが、この演奏のもの(始まりの時刻が同じ)なら、書き直す
+    if (first && !r.ok && r.error === "exists" && entry.maybeWritten) {
+      const cur = await this.call(() => store.read(entry.name));
+      let same = false;
+      if (cur.ok) {
+        try {
+          same = (JSON.parse(cur.value.text) as { started_at?: unknown }).started_at === entry.startedAt;
+        } catch {
+          same = false;
+        }
+      }
+      if (same) r = await this.call(() => store.write(entry.name, w.text, true));
+    }
     // 同じ秒に始まった別の演奏のファイルがあれば、名前に連番を付ける(上書きしない)
     for (let n = 2; first && !r.ok && r.error === "exists" && n <= 9; n++) {
       entry.name = `${entry.name.replace(/-[2-9]$/, "")}-${n}`;
       r = await this.call(() => store.write(entry.name, w.text, false));
     }
     if (!r.ok && r.error === "unavailable") {
-      entry.held = w; // つながり直したら書く(より新しい状態が来たら、そちらに替わる)
+      // つながり直したら書く(より新しい状態が来ていれば、そちらを書く)。最初の書き込みは、届いていたかもしれない
+      if (first) entry.maybeWritten = true;
+      this.syncJournal();
       return;
     }
     if (!r.ok) return fail(r.error);
     entry.written = true;
-    entry.held = null;
+    if (entry.pending === w) entry.pending = null;
+    this.syncJournal();
     this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: entry.name, ok: true, entries: w.entries, length_seconds: w.length_seconds, closed: w.closed } });
   }
 

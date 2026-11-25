@@ -1,0 +1,25 @@
+{
+  "measured_at": "2026-11-25T01:30:07.906Z",
+  "node": "v22.23.5",
+  "cpus": 4,
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "source": "techno.performance.json",
+  "no_tab": {
+    "wall_seconds": 41.264737432000004,
+    "audio_seconds": 93.38460416666666,
+    "speed": 2.263060665793761,
+    "md5": "c463729cc42c273cbaf81eab0ce77ae2"
+  },
+  "tab_running": {
+    "wall_seconds": 40.592216482999994,
+    "audio_seconds": 93.38460416666666,
+    "speed": 2.3005544475694277,
+    "md5": "c463729cc42c273cbaf81eab0ce77ae2",
+    "tab_modules": 41,
+    "tab_clock_ratio": 1.0002132860822628
+  },
+  "two_at_once": {
+    "first_done_seconds": 41.098241467,
+    "second_done_seconds": 81.77662849000002
+  }
+}

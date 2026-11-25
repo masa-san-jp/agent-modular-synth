@@ -81,6 +81,25 @@ async function main() {
     results.tab_running.tab_clock_ratio = clock;
     console.log(`タブで音声を動かしたまま(${modules} モジュール): ${results.tab_running.wall_seconds.toFixed(1)} 秒(実時間の ${results.tab_running.speed.toFixed(2)} 倍)、タブの音声の時計の比 ${clock.toFixed(3)}`);
     assert.equal(results.tab_running.md5, results.no_tab.md5, "条件が違っても、書き出したファイルは同じ");
+    // (3) 2 件を同時に頼む(書き出しは 1 件ずつ順に行う)。タブは動かしたまま
+    {
+      const names = ["20260101-000003", "20260101-000004"];
+      for (const n of names) fs.copyFileSync(src, path.join(perfDir, `${n}.performance.json`));
+      const t0 = performance.now();
+      const done = {};
+      for (const n of names) await agent("performance.render", { name: n });
+      while (Object.keys(done).length < names.length) {
+        for (const n of names) {
+          if (done[n]) continue;
+          const r = await agent("performance.render", { name: n });
+          if (r.status === "done") done[n] = (performance.now() - t0) / 1000;
+          else assert.ok(r.status === "queued" || r.status === "rendering", JSON.stringify(r));
+        }
+        await new Promise((res) => setTimeout(res, 250));
+      }
+      results.two_at_once = { first_done_seconds: done[names[0]], second_done_seconds: done[names[1]] };
+      console.log(`2 件を同時に頼む(タブあり): 1 件目 ${done[names[0]].toFixed(1)} 秒、2 件目 ${done[names[1]].toFixed(1)} 秒で終わる`);
+    }
     console.log(`書き出したファイルは 2 回とも同じ(MD5 ${results.no_tab.md5})`);
   } finally {
     await browser.close();

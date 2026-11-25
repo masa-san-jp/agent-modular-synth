@@ -1,5 +1,5 @@
 // サーバーにつながっていない間の演奏データの保存の、実際のブラウザ(ヘッドレスの Chromium)での確認。
-// npm run test:reconnect-browser で実行する。verification-plan VER-A-010i(DEC-025)。
+// npm run test:reconnect-browser で実行する。verification-plan VER-A-010i・VER-A-010j(DEC-025、DEC-026)。
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
@@ -52,7 +52,7 @@ async function main() {
       while (Date.now() - t0 < timeout) {
         last = await fn();
         if (last) return last;
-        await page.waitForTimeout(50);
+        await new Promise((res) => setTimeout(res, 50));
       }
       throw new Error(`${what} を待ったが満たされなかった(最後の値: ${JSON.stringify(last)})`);
     };
@@ -93,6 +93,63 @@ async function main() {
     assert.deepEqual(await synth("errors"), []);
     assert.deepEqual(pageErrors, []);
     ok("ページとワークレットにエラーなし");
+
+    // 新しいタブを開き、編集に使えるようになるまで待つ(同じブラウザの保存領域)
+    const context = page.context();
+    const openTab = async () => {
+      const p = await context.newPage();
+      await p.goto(`${base}/`);
+      for (let t = 0; !(await p.evaluate("window.__synth.serverAccepted")); t++) {
+        if (t > 400) throw new Error("新しいタブの接続");
+        await p.waitForTimeout(50);
+      }
+      return p;
+    };
+    const startAudio = async (p) => {
+      await p.click("#start");
+      for (let t = 0; (await p.evaluate("window.__synth.audioState")) !== "running"; t++) {
+        if (t > 200) throw new Error("音声の開始");
+        await p.waitForTimeout(50);
+      }
+    };
+
+    // ---- 3) サーバーが止まったまま、演奏中のタブを閉じる。サーバーとタブを開き直したら、印が付く(VER-A-010j) ----
+    await agentOk("score.stop"); // 2) の演奏を閉じる(続きを待つ 30 秒の間は、次の楽譜が同じ演奏に入るため)
+    await waitFor(() => perfFiles().every((f) => readPerf(f).ended_by !== null), "前の演奏が閉じる");
+    let before = new Set(perfFiles());
+    await agentOk("score.play", { notes: [{ t: 0, dur: 20, note: 60 }], length: 20 });
+    const third = await waitFor(() => perfFiles().find((f) => !before.has(f)), "演奏データ");
+    await page.waitForTimeout(1500);
+    await app.close();
+    await waitFor(async () => !(await synth("serverAccepted")), "接続が切れる");
+    await page.close();
+    assert.equal(readPerf(third).ended_by, null, "サーバーが止まっていたので、閉じた印は書けていない");
+    app = make();
+    await app.listen(port);
+    const tab2 = await openTab();
+    await waitFor(() => readPerf(third).ended_by !== null, "開き直したタブが、控えから書く");
+    const d3 = readPerf(third);
+    assert.equal(d3.ended_by, "audio_stopped", "演奏の途中で閉じた");
+    assert.ok(d3.length_seconds > 1 && d3.length_seconds < 20, `長さは閉じた時刻まで: ${d3.length_seconds}`);
+    ok("サーバーが止まったまま演奏中のタブを閉じても、サーバーとタブを開き直したら、演奏データに印が付く", `${third}、${d3.length_seconds.toFixed(1)} 秒`);
+
+    // ---- 4) 演奏中にタブが落ちる(強制終了)。次に開いたタブが、控えから閉じて書く(VER-A-010j) ----
+    await startAudio(tab2);
+    before = new Set(perfFiles());
+    await agentOk("score.play", { notes: [{ t: 0, dur: 20, note: 60 }], length: 20 });
+    const fourth = await waitFor(() => perfFiles().find((f) => !before.has(f)), "演奏データ");
+    await tab2.waitForTimeout(2500);
+    await tab2.goto("chrome://crash").catch(() => undefined); // タブの処理を落とす(閉じる処理は走らない)
+    await new Promise((res) => setTimeout(res, 1000));
+    assert.equal(readPerf(fourth).ended_by, null, "落ちたタブは閉じた印を書けない");
+    const tab3 = await openTab();
+    await waitFor(() => readPerf(fourth).ended_by !== null, "次に開いたタブが、控えから書く");
+    const d4 = readPerf(fourth);
+    assert.equal(d4.ended_by, "audio_stopped");
+    assert.ok(d4.length_seconds > 1 && d4.length_seconds < 20, `長さは落ちた時刻まで: ${d4.length_seconds}`);
+    ok("演奏中にタブが落ちても、次に開いたタブが演奏データに印を付ける", `${fourth}、${d4.length_seconds.toFixed(1)} 秒`);
+    assert.equal(await tab3.evaluate("localStorage.getItem('modular-synth.performance-journal.v1')"), null, "書けたら控えは空");
+    await tab3.close();
   } finally {
     await browser.close();
     await app.close();

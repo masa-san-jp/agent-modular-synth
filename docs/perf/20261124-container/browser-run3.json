@@ -1,0 +1,190 @@
+{
+  "kind": "browser",
+  "at": "2026-11-25T01:05:53.077Z",
+  "seconds": 10,
+  "env": {
+    "browser": "chromium 158.0.8127.36(ヘッドレス)",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.36 Safari/537.36",
+    "platform": "linux x64 6.18.44-fc-v880",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cores": 4,
+    "memoryGiB": 16,
+    "sampleRate": 48000,
+    "baseLatencyMs": 10.020833333333332,
+    "outputLatencyMs": 32
+  },
+  "load": {
+    "BP-0": {
+      "modules": 1,
+      "clock": "Date.now",
+      "blocks": 3748,
+      "meanLoad": 0.00720384204909285,
+      "p50": 0.05,
+      "p95": 0.05,
+      "p99": 0.4,
+      "maxLoad": 0.375,
+      "over": 0,
+      "audioClockRatio": 0.9992006394884093,
+      "peak": 0
+    },
+    "BP-1": {
+      "modules": 6,
+      "clock": "Date.now",
+      "blocks": 3745,
+      "meanLoad": 0.04395861148197597,
+      "p50": 0.05,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 0.75,
+      "over": 0,
+      "audioClockRatio": 1.0001665168015452,
+      "peak": 0.04730911254882813
+    },
+    "BP-POLY": {
+      "modules": 6,
+      "clock": "Date.now",
+      "blocks": 3743,
+      "meanLoad": 0.199672722415175,
+      "p50": 0.4,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 0.75,
+      "over": 0,
+      "audioClockRatio": 1.0007323081019903,
+      "peak": 0.20997416973114014
+    },
+    "BP-ALL": {
+      "modules": 20,
+      "clock": "Date.now",
+      "blocks": 3749,
+      "meanLoad": 0.16464390504134435,
+      "p50": 0.05,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 4.125,
+      "over": 9,
+      "audioClockRatio": 0.9999001697114903,
+      "peak": 0.04585880339145661
+    },
+    "BP-N N=1": {
+      "modules": 4,
+      "clock": "Date.now",
+      "blocks": 3750,
+      "meanLoad": 0.0343,
+      "p50": 0.05,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 1.125,
+      "over": 1,
+      "audioClockRatio": 0.9995002498750624,
+      "peak": 0.06869536638259888
+    },
+    "BP-N N=2": {
+      "modules": 8,
+      "clock": "Date.now",
+      "blocks": 3740,
+      "meanLoad": 0.06316844919786097,
+      "p50": 0.05,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 0.375,
+      "over": 0,
+      "audioClockRatio": 0.9999667032930443,
+      "peak": 0.031610655784606936
+    },
+    "BP-N N=4": {
+      "modules": 14,
+      "clock": "Date.now",
+      "blocks": 3734,
+      "meanLoad": 0.11328334226031066,
+      "p50": 0.05,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 1.125,
+      "over": 1,
+      "audioClockRatio": 0.9998001998001994,
+      "peak": 0.05445711016654969
+    },
+    "BP-N N=8": {
+      "modules": 28,
+      "clock": "Date.now",
+      "blocks": 3739,
+      "meanLoad": 0.20319604172238567,
+      "p50": 0.4,
+      "p95": 0.4,
+      "p99": 0.4,
+      "maxLoad": 4.875,
+      "over": 2,
+      "audioClockRatio": 1.0000332900562605,
+      "peak": 0.014056006073951723
+    },
+    "BP-N N=16": {
+      "modules": 54,
+      "clock": "Date.now",
+      "blocks": 3733,
+      "meanLoad": 0.37620546477364053,
+      "p50": 0.4,
+      "p95": 0.8,
+      "p99": 0.8,
+      "maxLoad": 1.875,
+      "over": 6,
+      "audioClockRatio": 0.9989350372736947,
+      "peak": 0.024778577685356143
+    },
+    "BP-N N=32": {
+      "modules": 108,
+      "clock": "Date.now",
+      "blocks": 3735,
+      "meanLoad": 0.7809236947791165,
+      "p50": 0.8,
+      "p95": 1.1500000000000001,
+      "p99": 1.55,
+      "maxLoad": 3,
+      "over": 546,
+      "audioClockRatio": 0.9997335464961372,
+      "peak": 0.009366584569215774
+    },
+    "BP-N N=64": {
+      "modules": 214,
+      "clock": "Date.now",
+      "blocks": 2552,
+      "meanLoad": 1.4287323667711598,
+      "p50": 1.55,
+      "p95": 1.55,
+      "p99": 2.3000000000000003,
+      "maxLoad": 18,
+      "over": 2552,
+      "audioClockRatio": 0.6826538768984807,
+      "peak": 0.01328878104686737
+    }
+  },
+  "latency": {
+    "L4_http_ms": {
+      "count": 100,
+      "min": 2.4167560000205413,
+      "median": 3.0299379999923985,
+      "p95": 5.603768999979366,
+      "max": 8.03695300000254
+    },
+    "L2_apply_ms": {
+      "count": 100,
+      "mean": 4.69,
+      "max": 10,
+      "note": "時計は 1 ms 刻み(Date.now)。ブロック境界の待ち(最大 2.7 ms)を含む"
+    },
+    "L4_mcp_ms": {
+      "count": 100,
+      "min": 4.54289099999005,
+      "median": 7.11147199998959,
+      "p95": 8.953892999998061,
+      "max": 38.79953200000455
+    },
+    "L3_output_ms": {
+      "baseLatency": 10.020833333333332,
+      "outputLatency": 32,
+      "note": "ブラウザが報告する計算値。実際の機材の遅延は含まない場合がある"
+    },
+    "L5": "未測定(録音の機材がない)"
+  },
+  "errors": []
+}
