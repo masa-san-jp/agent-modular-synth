@@ -39,12 +39,14 @@ export const PATCH = [
   con("r_dly.out", "r_vcf.in"),
   // --- ハイハット(ch 2): ノイズを短く切る。音符が長いとオープン。強さ(ベロシティ)で音量が変わる ---
   add("h_midi", "MOD-IO-002", { channel: 2 }),
-  add("h_nse", "MOD-NSE-001", { level: 5, seed: 7 }),
+  add("h_nse", "MOD-NSE-001", { level: 9, seed: 7 }),
   add("h_env", "MOD-ENV-001", { attack: 0.001, decay: 0.035, sustain: 0.22, release: 0.06 }),
   add("h_vca", "MOD-AMP-001", { cv2_level: 0.5 }),
   add("h_vel", "MOD-AMP-001", { cv2_level: 0.5 }),
   con("h_midi.GATE", "h_env.gate"),
-  con("h_nse.out", "h_vca.in1"),
+  add("h_vcf", "MOD-FLT-001", { cutoff: 5.5, res: 0.15 }), // 白色ノイズのままは鋭すぎる(重心 12 kHz)。約 11.8 kHz から上を削る
+  con("h_nse.out", "h_vcf.in"),
+  con("h_vcf.out", "h_vca.in1"),
   con("h_env.env", "h_vca.cv2"),
   con("h_vca.out", "h_vel.in1"),
   con("h_midi.VEL", "h_vel.cv2"),
@@ -278,7 +280,7 @@ const S6 = {
 export const SOUNDCHECK = {
   desk: "desk",
   score: S5,
-  targets: { 1: 1.0, 2: 0.3, 3: 0.75, 4: 0.24, 5: 0.26, 6: 0.18, 7: 0.24 },
+  targets: { 1: 1.0, 2: 0.3, 3: 0.75, 4: 0.3, 5: 0.26, 6: 0.18, 7: 0.3 },
   names: { 1: "キック", 2: "ランブル", 3: "低音", 4: "ハット", 5: "スタブ", 6: "ディレイ", 7: "ドローン" },
   outPeak: 4.6,
   settleSeconds: 6, // ドローンがゆっくり立ち上がる(2.5 秒)のを待つ

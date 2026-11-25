@@ -4,6 +4,7 @@
 //   MIX = { style: "ambient", desk: "desk", channels: { 1: "pad", 2: "lead", ... } }
 // チャンネルの音は「全体 − そのチャンネルを消した全体」で取り出す(エンジンは毎回同じ計算をするので、引き算で正確に取れる)。
 // センドの響きは元のチャンネルの音に含まれる。書き出しは出力の保護が効かない小さな音量(−20 dB)で行う。
+// 曲がサウンドチェック(SOUNDCHECK)を持っていれば、実際の演奏と同じく、先に済ませてから書き出す。
 import { execFileSync, spawn } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -31,14 +32,15 @@ async function render(piecePath, muteCh, outPath) {
     return r.result;
   };
   send("agent", "batch", { ops: piece.PATCH });
-  if (muteCh) send("agent", "param.set", { module_id: piece.MIX.desk ?? "desk", param: `mute[${muteCh}]`, value: 1 });
   send("human", "engine.start");
   send("human", "output.set_level", { level_db: -20 });
   const chunks = [];
   const L = new Float32Array(128), R = new Float32Array(128);
+  let recording = false;
   const run = (sec) => {
     for (let i = 0; i < Math.round((sec * FS) / 128); i++) {
       be.processBlock(L, R);
+      if (!recording) continue;
       const c = new Float32Array(256);
       c.set(L, 0);
       c.set(R, 128);
@@ -47,6 +49,16 @@ async function render(piecePath, muteCh, outPath) {
     s.pollBackend();
   };
   run(0.3);
+  // 曲がサウンドチェック(演奏の前に、エージェントが卓のメーターを読んで配分を決める)を持っていれば、先に済ませる。
+  // チャンネルを消すのはその後(消したまま配分を決めると、全体の音量が変わり、引き算が合わない)
+  if (piece.SOUNDCHECK) {
+    const { soundcheck } = await import(pathToFileURL(join(root, "demo", "soundcheck.mjs")).href);
+    await soundcheck({ send: async (command, args) => send("agent", command, args), advance: (sec) => run(sec) }, piece.SOUNDCHECK, () => undefined);
+    send("agent", "score.stop");
+    run(1);
+  }
+  if (muteCh) send("agent", "param.set", { module_id: piece.MIX.desk ?? "desk", param: `mute[${muteCh}]`, value: 1 });
+  recording = true;
   for (let i = 0; i < piece.SECTIONS.length; i++) {
     const r = send("agent", "score.play", piece.SECTIONS[i].score);
     run(r.starts_in);
