@@ -7,7 +7,7 @@ import { TOOLS } from "../src/mcp/tools.js";
 import { englishizeResponse, hasJapanese, moduleCatalogText, TOOL_TEXT_EN } from "../agents/local-llm/english.js";
 import { buildCatalog } from "../src/control/catalog.js";
 import { REGISTRY } from "../src/modules/registry.js";
-import { firstUserMessage, moduleCatalog, systemPrompt, wakeMessage } from "../agents/local-llm/runner.js";
+import { adaptiveLead, BASIC_VOICE_BATCH, firstUserMessage, minScoreSeconds, moduleCatalog, systemPrompt, wakeMessage } from "../agents/local-llm/runner.js";
 import { detectStyle, STYLE_HINTS } from "../agents/local-llm/style-hints.js";
 
 type Obj = Record<string, any>;
@@ -102,8 +102,8 @@ test("ツールの説明を縮める(compact、既定): 封筒の項目と検査
 
 test("文脈長から、履歴とツールの結果に使える長さを見積もる。足りなければ知らせる", () => {
   const b16 = contextBudget(16384);
-  assert.ok(b16.fixedTokens > 4000 && b16.fixedTokens < 7000, `ツールの説明と指示文: ${b16.fixedTokens}`);
-  assert.ok(b16.historyChars > 15000 && b16.historyChars < 20000, `履歴: ${b16.historyChars}`);
+  assert.ok(b16.fixedTokens > 4000 && b16.fixedTokens < 8000, `ツールの説明と指示文: ${b16.fixedTokens}`);
+  assert.ok(b16.historyChars > 12000 && b16.historyChars < 20000, `履歴: ${b16.historyChars}`);
   assert.equal(b16.tight, false);
   assert.ok(contextBudget(32768).historyChars > b16.historyChars * 2);
   assert.ok(contextBudget(16384, "full").historyChars < b16.historyChars, "full は説明が長い分、履歴が短い");
@@ -208,6 +208,30 @@ test("曲調の音作りの目安: 目標の文から曲調を読み取り、指
   assert.match(none, /# Sound design/, "共通の目安はいつも入る");
   assert.ok(!/# Style:/.test(none));
   assert.match(systemPrompt("chiptune"), /MOD-RND-001/, "チップチューンは粗さの作り方を含む");
+});
+
+test("遅いモデルに合わせる: 考える時間から起こす時機と楽譜の長さの目安を決める。指示文に音が出る最小の形の見本がある", () => {
+  assert.equal(adaptiveLead(8, undefined), 8);
+  assert.equal(adaptiveLead(8, 2), 8, "速いモデルは既定のまま");
+  assert.equal(adaptiveLead(8, 40), 65, "40 秒かかるなら、残り 65 秒で起こす");
+  assert.equal(minScoreSeconds(5), 16);
+  assert.equal(minScoreSeconds(40), 80);
+  const st = { audioState: "running", playing: true, remaining: 30, unackedPrompts: [], plan: null };
+  assert.match(wakeMessage("remaining_low", st, 40), /took 40 s\. Make the next score at least 80 s long/);
+  assert.ok(!/took/.test(wakeMessage("remaining_low", st)));
+  assert.ok(systemPrompt().includes(BASIC_VOICE_BATCH), "見本の batch");
+  const ops = JSON.parse(BASIC_VOICE_BATCH).ops;
+  assert.ok(ops.some((o: Obj) => o.command === "cable.connect" && o.args.to.module === "out"), "出力までつながる");
+});
+
+test("空の返事には一度だけ促す(小さいモデルが黙って止まらないように)", async () => {
+  const replies: ChatReply[] = [{ content: "", toolCalls: [] }, { content: "", toolCalls: [{ id: "x", name: "patch_get", arguments: {} }] }, { content: "ok", toolCalls: [] }];
+  const seen: ChatMessage[][] = [];
+  const llm: LlmClient = { describe: "fake", async chat(m) { seen.push(m.map((x) => ({ ...x }))); return replies.shift() ?? { content: "[END]", toolCalls: [] }; } };
+  const send: CommandSender = async (c) => (c === "score.get_status" ? { ok: true, audio_state: "running", result: { playing: false, remaining: 0, prompts: [] } } : { ok: true, result: {} });
+  const r = await run({ llm, send, goal: "g", log: () => undefined, sleep: async () => undefined, maxWakes: 1 });
+  assert.equal(r.toolCalls, 1);
+  assert.match(seen[1]!.at(-1)!.content, /Your reply was empty/);
 });
 
 test("引数の読み方と、ツール呼出しの実行(未知のツール、読めない引数、封筒の項目、長い結果の切り詰め)", async () => {

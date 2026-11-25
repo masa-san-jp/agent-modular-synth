@@ -153,7 +153,7 @@ export const ERROR_TEXT_EN: Readonly<Record<string, string>> = {
   adapter_server_unreachable: "Cannot reach the synth server. It is unknown whether the request was applied if it was sent.",
   adapter_bad_response: "The synth server returned an unexpected response.",
   // 成功時の注意
-  no_midi_module: "The patch has no MIDI-CV (MOD-IO-002), so the score will not make sound.",
+  no_midi_module: "The patch has no MIDI-CV (MOD-IO-002), so the score will not make sound. A MIDI-CV alone is not enough: build a whole voice (MIDI-CV, VCO, envelope, VCA and cables to out IN_L). Copy the example batch from the instructions.",
 };
 
 const JAPANESE = /[぀-ヿ㐀-鿿＀-￯]/;

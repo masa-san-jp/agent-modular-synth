@@ -363,8 +363,23 @@ const REASON_TEXT: Record<Exclude<WakeReason, null>, string> = {
   stopped: "Playback has stopped (nothing queued). Send a score to continue, or reply only [END] to finish.",
 };
 
-export function wakeMessage(reason: Exclude<WakeReason, null>, st: PerfStatus): string {
-  return `${REASON_TEXT[reason]}\nStatus: ${JSON.stringify({ playing: st.playing, remaining: Math.round(st.remaining * 10) / 10, unacked_prompts: st.unackedPrompts, plan: st.plan })}`;
+/**
+ * 起こす知らせ。thinkSeconds(直前に考えるのにかかった秒)が分かれば、次の楽譜の長さの目安を添える
+ * (考えている間に予約が尽きて、音が途切れないように)。
+ */
+export function wakeMessage(reason: Exclude<WakeReason, null>, st: PerfStatus, thinkSeconds?: number): string {
+  const hint = thinkSeconds !== undefined && thinkSeconds > 0 ? `\nYour last turn took ${Math.round(thinkSeconds)} s. Make the next score at least ${minScoreSeconds(thinkSeconds)} s long so the music does not stop while you think.` : "";
+  return `${REASON_TEXT[reason]}\nStatus: ${JSON.stringify({ playing: st.playing, remaining: Math.round(st.remaining * 10) / 10, unacked_prompts: st.unackedPrompts, plan: st.plan })}${hint}`;
+}
+
+/** 次の楽譜の長さの目安 [秒]: 考える時間の 2 倍(最低 16 秒)。 */
+export function minScoreSeconds(thinkSeconds: number): number {
+  return Math.max(16, Math.ceil(thinkSeconds * 2));
+}
+
+/** 予約の残りがこの秒数を切ったら起こす: 考える時間の 1.5 倍 + 5 秒(最低 base)。モデルが遅いほど早く起こす。 */
+export function adaptiveLead(base: number, thinkSeconds: number | undefined): number {
+  return thinkSeconds === undefined ? base : Math.max(base, thinkSeconds * 1.5 + 5);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -372,6 +387,23 @@ export function wakeMessage(reason: Exclude<WakeReason, null>, st: PerfStatus): 
 // ---------------------------------------------------------------------------------------
 
 export const END_MARK = "[END]";
+
+/** 音が出る最小の形の見本(batch の引数)。小さいモデルは、文章より見本をまねる方が確実。 */
+export const BASIC_VOICE_BATCH = JSON.stringify({
+  ops: [
+    { command: "module.add", args: { id: "midi", type: "MOD-IO-002", params: { voices: 4 } } },
+    { command: "module.add", args: { id: "vco", type: "MOD-OSC-001" } },
+    { command: "module.add", args: { id: "env", type: "MOD-ENV-001", params: { attack: 0.3, decay: 1, sustain: 0.6, release: 2 } } },
+    { command: "module.add", args: { id: "vcf", type: "MOD-FLT-001", params: { cutoff: 0, res: 0.2 } } },
+    { command: "module.add", args: { id: "vca", type: "MOD-AMP-001", params: { cv2_level: 0.5 } } },
+    { command: "cable.connect", args: { from: { module: "midi", port: "PITCH" }, to: { module: "vco", port: "pitch" } } },
+    { command: "cable.connect", args: { from: { module: "midi", port: "GATE" }, to: { module: "env", port: "gate" } } },
+    { command: "cable.connect", args: { from: { module: "vco", port: "saw" }, to: { module: "vcf", port: "in" } } },
+    { command: "cable.connect", args: { from: { module: "vcf", port: "out" }, to: { module: "vca", port: "in1" } } },
+    { command: "cable.connect", args: { from: { module: "env", port: "env" }, to: { module: "vca", port: "cv2" } } },
+    { command: "cable.connect", args: { from: { module: "vca", port: "out" }, to: { module: "out", port: "IN_L" } } },
+  ],
+});
 
 let catalogCache: string | null = null;
 /** モジュールの一覧表(実装のカタログから作る)。 */
@@ -388,6 +420,8 @@ export function systemPrompt(style: StyleName | null = null): string {
     "# Steps",
     "1. Read the current patch with patch_get. Add modules and cables with batch (several operations in one call).",
     "   - Minimal voice: MOD-IO-002 (MIDI-CV, receives the score) PITCH -> MOD-OSC-001 (VCO) pitch; VCO saw -> MOD-AMP-001 (VCA) in1; MIDI-CV GATE -> VCA cv1; VCA out -> output `out` IN_L. The output module `out` (MOD-IO-001) always exists. IN_R follows IN_L if left unconnected.",
+    "   - Without these modules AND cables there is no sound. Copy this batch to build a soft voice, then extend it:",
+    `     ${BASIC_VOICE_BATCH}`,
     "   - Signals are voltages. Pitch is 1 V/oct (0 V = C4). Gates are 0/10 V. Use an envelope (MOD-ENV-001, gate -> env) on VCA cv or filter cv for shape.",
     "2. Play with score_play. A note is {t: start, dur: length, note: MIDI number (60 = middle C), vel: 1-127}. With tempo_bpm, t/dur/length are in beats. length = score length.",
     '   Example: {"tempo_bpm": 120, "notes": [{"t": 0, "dur": 0.9, "note": 57}, {"t": 1, "dur": 0.9, "note": 60}, {"t": 2, "dur": 0.9, "note": 64}, {"t": 3, "dur": 0.9, "note": 67}], "length": 4}',
@@ -395,7 +429,8 @@ export function systemPrompt(style: StyleName | null = null): string {
     "   - For several voices, give each MIDI-CV its own channel param and set ch on the notes.",
     "3. Send the next score before `remaining` (seconds left in the queue) runs out. Make each score about 8-30 s.",
     "4. Prompts from the human arrive in prompts. When a score follows a prompt with acked:false, set ack_prompt to its id.",
-    "5. After sending, reply briefly without calling tools and wait. You will be woken up with the status when the next score is needed.",
+    "5. After sending, reply in one short sentence without calling tools, and wait. You will be woken up with the status when the next score is needed.",
+    "   - Keep replies short: every word you write delays the music.",
     `6. To finish, send the last score, then reply only ${END_MARK}.`,
     "",
     "# Rules",
@@ -478,13 +513,30 @@ export async function run(o: RunOptions): Promise<RunResult> {
   let toolCalls = 0;
 
   /** モデルに考えさせる(ツールを呼ばなくなるまで)。 */
+  let lastThink: number | undefined;
   const think = async (): Promise<void> => {
+    const started = Date.now();
+    try {
+      await thinkInner();
+    } finally {
+      lastThink = (Date.now() - started) / 1000;
+    }
+  };
+  const thinkInner = async (): Promise<void> => {
+    let emptyRetries = 0;
     for (let round = 0; round < maxRounds; round++) {
       if (o.signal?.aborted) return;
       const reply = await o.llm.chat(trimHistory(messages, 2, maxHistory), tools);
       messages.push({ role: "assistant", content: reply.content, ...(reply.toolCalls.length ? { toolCalls: reply.toolCalls } : {}) });
       if (reply.content.trim()) log(`[モデル] ${reply.content.trim()}`);
       if (reply.toolCalls.length === 0) {
+        // 空の返事(小さいモデルで起きる): 一度だけ促す。黙ったまま待つと、起こす時機がなく止まってしまう
+        if (!reply.content.trim() && emptyRetries < 1) {
+          emptyRetries++;
+          log("[注意] モデルの返事が空だったので、もう一度促す");
+          messages.push({ role: "user", content: `Your reply was empty. Call a tool (for example score_play), or reply ${END_MARK} to finish.` });
+          continue;
+        }
         if (reply.content.includes(END_MARK)) {
           state.ended = true;
           log("[終わり] モデルが演奏の終わりを宣言した。予約が鳴り終わったら終了する");
@@ -517,7 +569,7 @@ export async function run(o: RunOptions): Promise<RunResult> {
       log("[終了] 演奏が終わった");
       return { wakes, toolCalls, ended: true, stoppedBy: "end" };
     }
-    const reason = wakeReason(st, state, lead);
+    const reason = wakeReason(st, state, adaptiveLead(lead, lastThink));
     state.audioRunning = st.audioState === "running";
     if (st.playing) state.wokeWhileIdle = false;
     if (!reason) continue;
@@ -525,7 +577,7 @@ export async function run(o: RunOptions): Promise<RunResult> {
     if (reason === "new_prompt") state.ended = false; // 終わった後でも、人の指示が来たら続ける
     if (reason === "stopped") state.wokeWhileIdle = true;
     log(`[起こす] ${reason}`);
-    messages.push({ role: "user", content: wakeMessage(reason, st) });
+    messages.push({ role: "user", content: wakeMessage(reason, st, lastThink) });
     await think();
     wakes++;
   }
