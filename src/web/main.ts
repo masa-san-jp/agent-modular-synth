@@ -76,7 +76,7 @@ class ServerLink implements PatchStore {
       if (this.ws !== ws) return;
       this.accepted = false;
       this.ws = null;
-      for (const w of this.waiting.values()) w({ ok: false, error: "failed", message: "サーバーとの接続が切れた" });
+      for (const w of this.waiting.values()) w({ ok: false, error: "unavailable", message: "サーバーとの接続が切れた" });
       this.waiting.clear();
       this.onChange?.();
       // 別のタブが使用中で断られたときは、つなぎ直さない(このタブは編集しない)。それ以外は、間隔を延ばしながらつなぎ直す
@@ -139,7 +139,7 @@ class ServerLink implements PatchStore {
       this.waiting.set(id, resolve as (r: StoreResult<unknown>) => void);
       if (!this.send(make(id))) {
         this.waiting.delete(id);
-        resolve({ ok: false, error: "failed", message: "サーバーに接続していない" });
+        resolve({ ok: false, error: "unavailable", message: "サーバーに接続していない" });
       }
     });
   }
@@ -398,6 +398,7 @@ link.onChange = () => {
   if (link.accepted !== wasAccepted) {
     wasAccepted = link.accepted;
     editor?.refreshLibrary(); // 保存済みパッチの一覧はサーバーにある
+    if (link.accepted) void controller.retryPerformances(); // つながっていない間に書けなかった演奏データを書き直す(DEC-025)
   }
   render();
 };

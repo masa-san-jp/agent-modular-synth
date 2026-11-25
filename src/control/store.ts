@@ -18,6 +18,7 @@ export type StoreError =
   | "invalid_name" // 名前が書式に合わない(フォルダの外を指す名前を含む)
   | "too_many" // フォルダ内のファイル数が上限
   | "too_large" // 大きさが上限を超える
+  | "unavailable" // 保存先につながっていない(タブとサーバーの接続が切れている。DEC-025)
   | "failed"; // その他の失敗(読み書きのエラー)
 
 export type StoreResult<T> = { ok: true; value: T } | { ok: false; error: StoreError; message?: string };

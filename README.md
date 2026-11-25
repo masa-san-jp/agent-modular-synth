@@ -46,7 +46,8 @@ npm run test:review-browser # 独立レビュー(#24)で見つかった不具合
 npm run test:midi-browser # MIDI 機器の接続の確認(試験用の機器を使う。同上)
 npm run test:rack-browser  # ラックの表示と配色の確認(同上)
 npm run test:score-browser # エージェントの演奏(楽譜と指示)の確認(同上)
-npm run test:e2e     # 上のブラウザ試験6つをまとめて実行
+npm run test:reconnect-browser # サーバーを再起動したときの演奏データの保存の確認(同上)
+npm run test:e2e     # 上のブラウザ試験 8 つをまとめて実行
 npm run bench        # 性能の測定(エンジン単体。約 5 分)。結果は bench/results/
 npm run bench:browser # 性能の測定(ブラウザ。約 3 分)。読み方は docs/perf/
 npm run mcp          # MCP アダプタを stdio で起動する(通常は MCP クライアントが起動する)

@@ -221,6 +221,85 @@ test("VER-A-010h タブを閉じるときに記録中の演奏データを閉じ
   assert.ok(f.length_seconds > 0 && f.length_seconds < 4, `長さは閉じた時点まで: ${f.length_seconds}`);
 });
 
+test("VER-A-010i サーバーにつながっていない間の保存は控えておき、つながり直したら最新の状態を書く(閉じた印を含む)", async () => {
+  const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+  let online = true;
+  const writes: string[] = [];
+  const store = {
+    list: () => inner.list(),
+    read: (name: string) => inner.read(name),
+    remove: (name: string) => inner.remove(name),
+    write: (name: string, text: string, overwrite: boolean) => {
+      if (!online) return Promise.resolve({ ok: false as const, error: "unavailable" as const, message: "サーバーに接続していない" });
+      writes.push(name);
+      return inner.write(name, text, overwrite);
+    },
+  } as unknown as MemoryPatchStore;
+  const r = rig({ store });
+  await voice(r);
+  // (1) 演奏中に切れる: 続きの楽譜は書けないが、保存はやめない。つながり直したら、続きまで入った状態を書く
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.file(NAME)).entries.length, 1);
+  online = false;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal(r.saved().filter((d) => !d.ok).length, 0, "つながっていないための失敗は、知らせない");
+  assert.equal((await r.file(NAME)).entries.length, 1, "切れている間は書けていない");
+  online = true;
+  await r.c.retryPerformances();
+  assert.equal((await r.file(NAME)).entries.length, 2, "つながり直したら、続きまで入る");
+  // (2) 演奏し終えて続きを待っている間に切れ、その間に閉じる: つながり直したら、閉じた印が付く
+  online = false;
+  await r.run(2 + SCORE_LIMITS.idleCloseSeconds); // 2 つの楽譜は約 1.1 秒で終わる。その 30 秒後に閉じる
+  assert.equal((await r.file(NAME)).ended_by, null, "切れている間は閉じた印が書けていない");
+  online = true;
+  await r.c.retryPerformances();
+  const f = await r.file(NAME);
+  assert.equal(f.ended_by, "finished");
+  assert.equal(typeof f.ended_at, "string");
+  assert.equal(r.saved().at(-1)!.closed, true);
+  // (3) 書くものがなければ、つながり直しても書かない
+  const n = writes.length;
+  await r.c.retryPerformances();
+  assert.equal(writes.length, n);
+  // (4) 最初の保存から切れていても、つながり直したら日時つきの名前で新しく書く
+  r.tick(60_000);
+  online = false;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.names()).length, 1);
+  online = true;
+  await r.c.retryPerformances();
+  assert.equal((await r.names()).length, 2);
+});
+
+test("VER-A-010i つながっていない以外の失敗(保存先のエラー)では、今までどおり、その演奏の保存をやめる", async () => {
+  const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+  let broken = false;
+  const store = {
+    list: () => inner.list(),
+    read: (name: string) => inner.read(name),
+    remove: (name: string) => inner.remove(name),
+    write: (name: string, text: string, overwrite: boolean) =>
+      broken ? Promise.resolve({ ok: false as const, error: "failed" as const, message: "書けない" }) : inner.write(name, text, overwrite),
+  } as unknown as MemoryPatchStore;
+  const r = rig({ store });
+  await voice(r);
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  broken = true;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal(r.saved().at(-1)!.ok, false);
+  assert.equal(r.saved().at(-1)!.reason, "failed");
+  broken = false;
+  await r.c.retryPerformances();
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.file(NAME)).entries.length, 1, "保存をやめた演奏は、直っても書かない");
+});
+
 // ---- VER-A-010c 再演奏 ----
 
 test("VER-A-010c 再演奏: パッチが演奏データのものに置き換わり、元の演奏と同じ音がビット同一で出る。置き換えは取り消せる", async () => {

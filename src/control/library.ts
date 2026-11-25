@@ -65,7 +65,8 @@ export function storeError(operation: string, name: string | null, error: StoreE
     case "too_large":
       return new CommandError("ERR-206", "パッチの大きさが上限を超える", { limit_bytes: MAX_PATCH_BYTES });
     default:
-      return new CommandError("ERR-207", message ?? `保存先の ${operation} に失敗`, { reason: error, operation });
+      // つながっていない(unavailable)は、コマンドの返値では今までどおり failed として返す
+      return new CommandError("ERR-207", message ?? `保存先の ${operation} に失敗`, { reason: error === "unavailable" ? "failed" : error, operation });
   }
 }
 

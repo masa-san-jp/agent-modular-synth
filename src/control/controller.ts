@@ -119,6 +119,25 @@ function utcTimestamp(t: Date | number): string {
   return d.toISOString().replace(/\.\d+Z$/, "Z");
 }
 
+/** 演奏データのファイル 1 つの保存の状態。 */
+interface PerformanceFile {
+  name: string;
+  startedAt: string;
+  /** 保存をやめた(保存先のエラー、大きすぎる)。 */
+  failed: boolean;
+  /** ファイルを 1 度でも書けた。 */
+  written: boolean;
+  /** つながっていなかったために書けなかった、最新の状態。 */
+  held: HeldPerformance | null;
+}
+
+interface HeldPerformance {
+  text: string;
+  entries: number;
+  length_seconds: number;
+  closed: boolean;
+}
+
 export class Controller {
   readonly session: Session;
   private readonly store: PatchStore;
@@ -129,7 +148,7 @@ export class Controller {
   private readonly performances: PatchStore | null;
   private readonly renderer: ControllerOptions["renderer"] | null;
   /** 演奏の通し番号 → 保存した名前と、始まりの時刻。 */
-  private readonly perfNames = new Map<number, { name: string; startedAt: string; failed: boolean }>();
+  private readonly perfNames = new Map<number, PerformanceFile>();
   private perfTail: Promise<void> = Promise.resolve();
   private readonly listeners = new Set<(ev: ControllerEvent) => void>();
   /** 待ち行列の末尾(前の要求の処理の完了)。 */
@@ -209,34 +228,62 @@ export class Controller {
   savePerformances(): Promise<void> {
     const updates = this.session.takePerformanceUpdates();
     if (updates.length === 0 || !this.performances) return this.perfTail;
-    const store = this.performances;
     for (const u of updates) {
       this.perfTail = this.perfTail.then(async () => {
         let entry = this.perfNames.get(u.id);
         if (entry?.failed) return;
-        const first = !entry;
         if (!entry) {
-          entry = { name: localStamp(this.now()), startedAt: utcTimestamp(this.now()), failed: false };
+          entry = { name: localStamp(this.now()), startedAt: utcTimestamp(this.now()), failed: false, written: false, held: null };
           this.perfNames.set(u.id, entry);
         }
         const record = { ...u.record, started_at: entry.startedAt, ended_at: u.closed ? utcTimestamp(this.now()) : null };
         const text = JSON.stringify(record) + "\n";
-        const fail = (reason: string): void => {
-          entry!.failed = true;
-          this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: null, ok: false, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed, reason } });
-        };
-        if (utf8ByteLength(text) > MAX_PERFORMANCE_BYTES) return fail("too_large");
-        let r = await this.call(() => store.write(entry!.name, text, !first));
-        // 同じ秒に始まった別の演奏のファイルがあれば、名前に連番を付ける(上書きしない)
-        for (let n = 2; first && !r.ok && r.error === "exists" && n <= 9; n++) {
-          entry.name = `${entry.name.replace(/-[2-9]$/, "")}-${n}`;
-          r = await this.call(() => store.write(entry!.name, text, false));
-        }
-        if (!r.ok) return fail(r.error);
-        this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: entry.name, ok: true, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed } });
+        await this.writePerformance(entry, { text, entries: record.entries.length, length_seconds: record.length_seconds, closed: u.closed });
       });
     }
     return this.perfTail;
+  }
+
+  /**
+   * サーバーにつながっていなかったために保存できなかった演奏データを、書き直す(DEC-025)。
+   * 保存先とつながり直したときに呼ぶ。書くのは、それぞれの演奏の最新の状態(閉じた印を含む)。
+   */
+  retryPerformances(): Promise<void> {
+    if (!this.performances) return this.perfTail;
+    for (const entry of this.perfNames.values()) {
+      if (!entry.held || entry.failed) continue;
+      this.perfTail = this.perfTail.then(async () => {
+        const held = entry.held;
+        if (held && !entry.failed) await this.writePerformance(entry, held);
+      });
+    }
+    return this.perfTail;
+  }
+
+  /** 演奏データを 1 回書く。つながっていなければ控えておき(retryPerformances で書き直す)、それ以外の失敗では、その演奏の保存をやめる。 */
+  private async writePerformance(entry: PerformanceFile, w: HeldPerformance): Promise<void> {
+    const store = this.performances!;
+    const fail = (reason: string): void => {
+      entry.failed = true;
+      entry.held = null;
+      this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: null, ok: false, entries: w.entries, length_seconds: w.length_seconds, closed: w.closed, reason } });
+    };
+    if (utf8ByteLength(w.text) > MAX_PERFORMANCE_BYTES) return fail("too_large");
+    const first = !entry.written;
+    let r = await this.call(() => store.write(entry.name, w.text, !first));
+    // 同じ秒に始まった別の演奏のファイルがあれば、名前に連番を付ける(上書きしない)
+    for (let n = 2; first && !r.ok && r.error === "exists" && n <= 9; n++) {
+      entry.name = `${entry.name.replace(/-[2-9]$/, "")}-${n}`;
+      r = await this.call(() => store.write(entry.name, w.text, false));
+    }
+    if (!r.ok && r.error === "unavailable") {
+      entry.held = w; // つながり直したら書く(より新しい状態が来たら、そちらに替わる)
+      return;
+    }
+    if (!r.ok) return fail(r.error);
+    entry.written = true;
+    entry.held = null;
+    this.emit({ v: 1, event: "performance.saved", session_id: this.session.sessionId, data: { name: entry.name, ok: true, entries: w.entries, length_seconds: w.length_seconds, closed: w.closed } });
   }
 
   /** 待ち行列が空になる(今までに受けた要求がすべて処理される)まで待つ。 */
