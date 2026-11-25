@@ -8,6 +8,9 @@
 import { buildRequest, sendCommand } from "../../src/mcp/adapter.js";
 import type { AdapterConfig } from "../../src/mcp/adapter.js";
 import { ARGS, TABLE, TOOLS } from "../../src/mcp/tools.js";
+import { buildCatalog } from "../../src/control/catalog.js";
+import { REGISTRY } from "../../src/modules/registry.js";
+import { englishizeResponse, moduleCatalogText, TOOL_TEXT_EN } from "./english.js";
 import type { ToolDef } from "../../src/mcp/tools.js";
 
 type Obj = Record<string, unknown>;
@@ -158,13 +161,13 @@ export function parseArgs(raw: unknown): { value: Obj | null; error?: string } {
   if (typeof raw === "string") {
     try {
       const v = JSON.parse(raw) as unknown;
-      return typeof v === "object" && v !== null && !Array.isArray(v) ? { value: v as Obj } : { value: null, error: "引数が JSON のオブジェクトでない" };
+      return typeof v === "object" && v !== null && !Array.isArray(v) ? { value: v as Obj } : { value: null, error: "arguments are not a JSON object" };
     } catch {
-      return { value: null, error: "引数が JSON として読めない" };
+      return { value: null, error: "arguments are not valid JSON" };
     }
   }
   if (typeof raw === "object" && !Array.isArray(raw)) return { value: raw as Obj };
-  return { value: null, error: "引数がオブジェクトでない" };
+  return { value: null, error: "arguments are not an object" };
 }
 
 // ---------------------------------------------------------------------------------------
@@ -178,9 +181,10 @@ const ENVELOPE_KEYS = ["expected_revision", "idempotency_key"];
 
 /**
  * LLM に渡すツールの一覧(MCP と同じ 30 個。エージェントに許されたコマンドだけ)。
- * - full: MCP アダプタと同じ説明と引数。
- * - compact(既定): 文脈を節約する。説明は「何をするか」と、そのコマンドの使い方の注意だけ(定型句を除く)。
- *   封筒の項目(expected_revision、idempotency_key)を除く。引数の形と、引数ごとの説明はそのまま。
+ * - compact(既定): 英語で、文脈を節約する。説明は「何をするか」と使い方の注意だけ(english.ts の訳)。
+ *   封筒の項目(expected_revision、idempotency_key)と検査だけの項目を除く。引数の形・値の範囲・選択肢はそのまま。
+ *   訳のない説明は日本語のまま残る(試験で見つける)。
+ * - full: MCP アダプタと同じ説明と引数(日本語。比べるため)。
  */
 export function toolSpecs(detail: ToolDetail = "compact", defs: readonly ToolDef[] = TOOLS): ToolSpec[] {
   if (detail === "full") return defs.map((t) => ({ name: t.name, description: t.description, parameters: t.inputSchema }));
@@ -188,11 +192,25 @@ export function toolSpecs(detail: ToolDetail = "compact", defs: readonly ToolDef
     const row = TABLE.find((r) => r.command === t.command);
     const note = ARGS[t.command]?.note;
     const readOnly = row ? !row.changes && row.undo === "na" : false;
-    const description = [`${row?.summary ?? t.command}。`, readOnly ? "読むだけ。" : "", note ?? ""].filter(Boolean).join(" ");
+    const ja = [`${row?.summary ?? t.command}。`, readOnly ? "読むだけ。" : "", note ?? ""].filter(Boolean).join(" ");
     const props = { ...((t.inputSchema.properties ?? {}) as Obj) };
     for (const k of ENVELOPE_KEYS) delete props[k];
-    return { name: t.name, description, parameters: slimSchema({ ...t.inputSchema, properties: props }) as Obj };
+    const parameters = translateSchema(slimSchema({ ...t.inputSchema, properties: props }), t.name) as Obj;
+    return { name: t.name, description: TOOL_TEXT_EN[t.name] ?? ja, parameters };
   });
+}
+
+/** 引数の説明を英訳に置き換える(場所は「ツール名.properties.…」)。 */
+function translateSchema(v: unknown, path: string): unknown {
+  if (Array.isArray(v)) return v.map((x) => translateSchema(x, path));
+  if (typeof v !== "object" || v === null) return v;
+  const out: Obj = {};
+  for (const [k, x] of Object.entries(v as Obj)) {
+    if (k === "description" && typeof x === "string") out[k] = TOOL_TEXT_EN[path] ?? x;
+    else if (k === "properties" && typeof x === "object" && x !== null) out[k] = Object.fromEntries(Object.entries(x as Obj).map(([pk, pv]) => [pk, translateSchema(pv, `${path}.properties.${pk}`)]));
+    else out[k] = translateSchema(x, k === "items" ? `${path}.items` : path);
+  }
+  return out;
 }
 
 /** 検査だけに使う項目(数の上限、文字数、書式、余分な項目の禁止)。検査はサーバーが行うので、compact では渡さない。値の範囲と選択肢は残す。 */
@@ -226,37 +244,40 @@ export function httpSender(config: AdapterConfig): CommandSender {
 /** 長い文字列を切る(小さいモデルの文脈を使い切らないように)。 */
 export function clip(text: string, max: number): string {
   if (text.length <= max) return text;
-  return `${text.slice(0, max)}…(以下 ${text.length - max} 文字を省略。必要なら、引数で範囲を絞って呼び直す)`;
+  return `${text.slice(0, max)}... (${text.length - max} more characters omitted; narrow the request if you need them)`;
 }
 
-/** ツール呼出し 1 件を実行し、モデルに返す文字列を作る。 */
-export async function runToolCall(call: ToolCall, send: CommandSender, maxChars: number): Promise<{ text: string; ok: boolean; command: string | null }> {
+/**
+ * ツール呼出し 1 件を実行し、モデルに返す文字列を作る。english なら、シンセの応答のエラーと注意の文を英語にする
+ * (english.ts。人が書いた中身は変えない)。
+ */
+export async function runToolCall(call: ToolCall, send: CommandSender, maxChars: number, english = true): Promise<{ text: string; ok: boolean; command: string | null }> {
   const tool = TOOLS.find((t) => t.name === call.name);
   if (!tool) {
     const names = TOOLS.map((t) => t.name).join(", ");
-    return { text: JSON.stringify({ ok: false, error: { code: "unknown_tool", message: `ツール ${call.name} はない(使えるのは: ${names})` } }), ok: false, command: null };
+    return { text: JSON.stringify({ ok: false, error: { code: "unknown_tool", message: `No tool named ${call.name}. Available: ${names}` } }), ok: false, command: null };
   }
   const parsed = parseArgs(call.arguments);
   if (!parsed.value) {
-    return { text: JSON.stringify({ ok: false, error: { code: "bad_arguments", message: `${parsed.error}。引数は JSON のオブジェクトで渡す` } }), ok: false, command: tool.command };
+    return { text: JSON.stringify({ ok: false, error: { code: "bad_arguments", message: `${parsed.error}. Pass the arguments as a JSON object` } }), ok: false, command: tool.command };
   }
   const { expected_revision, idempotency_key, ...args } = parsed.value;
   const envelope: Obj = {};
   if (expected_revision !== undefined) envelope.expected_revision = expected_revision;
   if (idempotency_key !== undefined) envelope.idempotency_key = idempotency_key;
   const res = await send(tool.command, args, envelope);
-  return { text: clip(JSON.stringify(res), maxChars), ok: res.ok === true, command: tool.command };
+  return { text: clip(JSON.stringify(english ? englishizeResponse(res) : res), maxChars), ok: res.ok === true, command: tool.command };
 }
 
 /**
  * 文脈長(トークン)から、会話の履歴とツールの結果に使える長さ(文字)を見積もる。
  * 文字とトークンの比は o200k(gpt-oss のトークナイザー)で測った値より少なめに取る:
- * 指示文(日本語の文)は 1.64 文字/トークン → 1.5、ツールの説明(JSON)は compact 2.75・full 2.33 → 2.3、
+ * 指示文(英語の文と一覧表)は 2.64 文字/トークン → 2.4、ツールの説明は compact(英語)4.22 → 3.8・full(日本語)2.33 → 2.1、
  * 会話の中身(ツールの結果と楽譜。2.07〜3.36)→ 2。モデルの返事のために 2048 トークンを空けておく。
  */
 export function contextBudget(numCtx: number, detail: ToolDetail = "compact"): { fixedTokens: number; historyChars: number; toolResultChars: number; tight: boolean } {
   const toolsChars = JSON.stringify(toolSpecs(detail).map((t) => ({ type: "function", function: t }))).length;
-  const fixedTokens = Math.ceil(systemPrompt().length / 1.5 + toolsChars / 2.3);
+  const fixedTokens = Math.ceil(systemPrompt().length / 2.4 + toolsChars / (detail === "compact" ? 3.8 : 2.1));
   const available = numCtx - fixedTokens - 2048;
   const historyChars = Math.max(4000, Math.floor(available * 2));
   return { fixedTokens, historyChars, toolResultChars: Math.min(6000, Math.floor(historyChars / 3)), tight: available * 2 < 8000 };
@@ -334,47 +355,58 @@ export function wakeReason(st: PerfStatus, prev: { audioRunning: boolean; seenPr
 }
 
 const REASON_TEXT: Record<Exclude<WakeReason, null>, string> = {
-  remaining_low: "予約の残りが少なくなった。続きの楽譜を score_play(mode は append)で送る。",
-  new_prompt: "人から新しい指示が来た。指示を踏まえた楽譜を送り、ack_prompt にその指示の id を付ける。",
-  audio_started: "人が音声を開始した。演奏を始められる。",
-  stopped: "演奏が止まっている(予約がない)。続けるなら楽譜を送る。終えるなら [END] とだけ書く。",
+  remaining_low: "The queue is running low. Send the next score with score_play (mode append).",
+  new_prompt: "A new prompt arrived from the human. Send a score that follows it, with ack_prompt set to its id.",
+  audio_started: "The human started audio. You can start playing.",
+  stopped: "Playback has stopped (nothing queued). Send a score to continue, or reply only [END] to finish.",
 };
 
 export function wakeMessage(reason: Exclude<WakeReason, null>, st: PerfStatus): string {
-  return `${REASON_TEXT[reason]}\n状態: ${JSON.stringify({ playing: st.playing, remaining: Math.round(st.remaining * 10) / 10, unacked_prompts: st.unackedPrompts, plan: st.plan })}`;
+  return `${REASON_TEXT[reason]}\nStatus: ${JSON.stringify({ playing: st.playing, remaining: Math.round(st.remaining * 10) / 10, unacked_prompts: st.unackedPrompts, plan: st.plan })}`;
 }
 
 // ---------------------------------------------------------------------------------------
-// 指示文
+// 指示文(英語。LLM とシンセのやりとりは英語: オーナーの指示 2026-11-25)
 // ---------------------------------------------------------------------------------------
 
 export const END_MARK = "[END]";
 
+let catalogCache: string | null = null;
+/** モジュールの一覧表(実装のカタログから作る)。 */
+export function moduleCatalog(): string {
+  catalogCache ??= moduleCatalogText(buildCatalog(REGISTRY));
+  return catalogCache;
+}
+
 export function systemPrompt(): string {
   return [
-    "あなたはモジュラーシンセの演奏者。ツールでシンセを操作し、楽譜を書いて演奏する。シンセはブラウザのタブの中で動いている。",
+    "You are a performer on a modular synthesizer. You operate it with tools and play it by writing scores. The synth runs in a browser tab.",
     "",
-    "# 手順",
-    "1. patch_get で今のパッチを見る。足りなければ batch でまとめてモジュールを足し、ケーブルでつなぐ。",
-    "   - 音が出る最小の形: MOD-IO-002(MIDI-CV。楽譜を受ける)の PITCH → MOD-OSC-001(VCO)の pitch、VCO の saw → MOD-AMP-001(VCA)の in1、MIDI-CV の GATE → VCA の cv1、VCA の out → 出力 out の IN_L。出力モジュール out(MOD-IO-001)は最初からある。",
-    "   - 種別の詳しい中身は module_list_types に type を付けて 1 種ずつ読む(全部を一度に読むと長い)。",
-    "2. score_play で楽譜を送る。音符は {t: 開始, dur: 長さ, note: MIDI ノート番号(60 が真ん中のド), vel: 1〜127}。tempo_bpm を付けると t・dur・length の単位が拍になる。length は楽譜の長さ。",
-    "   例: {\"tempo_bpm\": 120, \"notes\": [{\"t\": 0, \"dur\": 0.9, \"note\": 57}, {\"t\": 1, \"dur\": 0.9, \"note\": 60}, {\"t\": 2, \"dur\": 0.9, \"note\": 64}, {\"t\": 3, \"dur\": 0.9, \"note\": 67}], \"length\": 4}",
-    "   - パラメータを楽譜の中で動かすには params: [{t, dur, module_id, param, value}] を使う。",
-    "3. 応答の remaining(予約の末尾までの秒)が尽きる前に、次の楽譜を送る。1 つの楽譜は 8〜30 秒くらいにする。",
-    "4. 人からの指示は prompts に届く。acked が false の指示を踏まえた楽譜を送るときは、ack_prompt にその id を付ける。",
-    "5. 楽譜を送り終えたら、ツールを呼ばずに、短く何をしたかを書いて待つ。続きが要る時機に、こちらから状態を知らせて起こす。",
-    `6. 演奏を終えるときは、最後の楽譜を送った後に ${END_MARK} とだけ書く。`,
+    "# Steps",
+    "1. Read the current patch with patch_get. Add modules and cables with batch (several operations in one call).",
+    "   - Minimal voice: MOD-IO-002 (MIDI-CV, receives the score) PITCH -> MOD-OSC-001 (VCO) pitch; VCO saw -> MOD-AMP-001 (VCA) in1; MIDI-CV GATE -> VCA cv1; VCA out -> output `out` IN_L. The output module `out` (MOD-IO-001) always exists. IN_R follows IN_L if left unconnected.",
+    "   - Signals are voltages. Pitch is 1 V/oct (0 V = C4). Gates are 0/10 V. Use an envelope (MOD-ENV-001, gate -> env) on VCA cv or filter cv for shape.",
+    "2. Play with score_play. A note is {t: start, dur: length, note: MIDI number (60 = middle C), vel: 1-127}. With tempo_bpm, t/dur/length are in beats. length = score length.",
+    '   Example: {"tempo_bpm": 120, "notes": [{"t": 0, "dur": 0.9, "note": 57}, {"t": 1, "dur": 0.9, "note": 60}, {"t": 2, "dur": 0.9, "note": 64}, {"t": 3, "dur": 0.9, "note": 67}], "length": 4}',
+    "   - To move a parameter during the score, use params: [{t, dur, module_id, param, value}].",
+    "   - For several voices, give each MIDI-CV its own channel param and set ch on the notes.",
+    "3. Send the next score before `remaining` (seconds left in the queue) runs out. Make each score about 8-30 s.",
+    "4. Prompts from the human arrive in prompts. When a score follows a prompt with acked:false, set ack_prompt to its id.",
+    "5. After sending, reply briefly without calling tools and wait. You will be woken up with the status when the next score is needed.",
+    `6. To finish, send the last score, then reply only ${END_MARK}.`,
     "",
-    "# 決まり",
-    "- 音声の開始、緊急停止の解除はできない(人だけができる)。audio_state が running でないときは、パッチを組んで待つ。",
-    "- ツールの結果は JSON。ok が false なら error.message を読んで直し、もう一度呼ぶ。同じ誤りを 3 回くり返したら、別のやり方にする。",
-    "- 音量(output_set_level)は上げすぎない。",
+    "# Rules",
+    "- You cannot start audio or release an emergency stop (humans only). If audio_state is not running, build the patch and wait.",
+    "- Tool results are JSON. If ok is false, read error.code/message/details, fix the call and retry. After 3 identical failures, try another approach.",
+    "- Do not raise the output level too much.",
+    "",
+    "# Module types (type ID, name | connectable inputs | outputs | params: name min..max def default unit)",
+    moduleCatalog(),
   ].join("\n");
 }
 
 export function firstUserMessage(goal: string, st: PerfStatus | null): string {
-  return [`演奏の目標: ${goal}`, `今の状態: ${st ? JSON.stringify({ audio_state: st.audioState, playing: st.playing, remaining: st.remaining, plan: st.plan }) : "読めなかった"}`, "まずパッチを確かめて、演奏を始める。"].join("\n");
+  return [`Goal of the performance: ${goal}`, `Current status: ${st ? JSON.stringify({ audio_state: st.audioState, playing: st.playing, remaining: st.remaining, plan: st.plan }) : "unavailable"}`, "Check the patch first, then start playing."].join("\n");
 }
 
 // ---------------------------------------------------------------------------------------
@@ -448,13 +480,13 @@ export async function run(o: RunOptions): Promise<RunResult> {
       }
       for (const call of reply.toolCalls) {
         toolCalls++;
-        const r = await runToolCall(call, o.send, maxResult);
+        const r = await runToolCall(call, o.send, maxResult, (o.toolDetail ?? "compact") === "compact");
         log(`[ツール] ${call.name} ${clip(typeof call.arguments === "string" ? call.arguments : JSON.stringify(call.arguments ?? {}), 160)} → ${r.ok ? "ok" : `失敗 ${clip(r.text, 200)}`}`);
         messages.push({ role: "tool", content: r.text, toolCallId: call.id, toolName: call.name });
       }
     }
     log(`[注意] 1 回の起こしでツールを ${maxRounds} 回呼んだので、いったん止めて状態を見る`);
-    messages.push({ role: "user", content: "ツールの呼出しが多すぎる。いったん止めて、今の状態から次の一手を考える。" });
+    messages.push({ role: "user", content: "Too many tool calls in a row. Stop, look at the current state and decide the next step." });
   };
 
   log(`[開始] ${o.llm.describe}。目標: ${o.goal}`);

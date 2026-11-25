@@ -4,6 +4,10 @@ import { test } from "node:test";
 import { clip, contextBudget, createLlmClient, END_MARK, parseArgs, readStatus, run, runToolCall, toolSpecs, trimHistory, wakeReason } from "../agents/local-llm/runner.js";
 import type { ChatMessage, ChatReply, CommandSender, LlmClient, PerfStatus, ToolSpec } from "../agents/local-llm/runner.js";
 import { TOOLS } from "../src/mcp/tools.js";
+import { englishizeResponse, hasJapanese, moduleCatalogText, TOOL_TEXT_EN } from "../agents/local-llm/english.js";
+import { buildCatalog } from "../src/control/catalog.js";
+import { REGISTRY } from "../src/modules/registry.js";
+import { firstUserMessage, moduleCatalog, systemPrompt, wakeMessage } from "../agents/local-llm/runner.js";
 
 type Obj = Record<string, any>;
 
@@ -86,13 +90,13 @@ test("ツールの説明を縮める(compact、既定): 封筒の項目と検査
   const note = (play.parameters as Obj).properties.notes.items.properties.note;
   assert.equal(note.minimum, 0);
   assert.equal(note.maximum, 127, "値の範囲は残す");
-  assert.match(note.description, /MIDI ノート番号/, "引数の説明は残す");
+  assert.match(note.description, /MIDI note number/, "引数の説明は残す(英語)");
   assert.match(play.description, /remaining/, "使い方の注意は残す");
   assert.deepEqual((play.parameters as Obj).required, ["notes"]);
   const add = compact.find((t) => t.name === "module_add")!;
   assert.ok((add.parameters as Obj).properties.type.enum.includes("MOD-OSC-001"), "選択肢は残す");
   assert.ok((add.parameters as Obj).properties.params.additionalProperties, "additionalProperties の型の指定は残す");
-  assert.match(compact.find((t) => t.name === "patch_get")!.description, /読むだけ/);
+  assert.match(compact.find((t) => t.name === "patch_get")!.description, /Read-only/);
 });
 
 test("文脈長から、履歴とツールの結果に使える長さを見積もる。足りなければ知らせる", () => {
@@ -106,6 +110,83 @@ test("文脈長から、履歴とツールの結果に使える長さを見積�
   assert.equal(small.tight, true);
   assert.equal(small.historyChars, 4000, "下限");
   assert.ok(b16.toolResultChars <= 6000);
+});
+
+test("LLM とのやりとりは英語: ツールの説明・指示文・一覧表・起こす知らせ・誤りの知らせに日本語がない。訳は余らない", async () => {
+  const text = JSON.stringify(toolSpecs());
+  const ja = [...text.matchAll(/"description":"([^"]*)"/g)].map((m) => m[1]!).filter(hasJapanese);
+  assert.deepEqual(ja, [], "訳のない説明(english.ts の TOOL_TEXT_EN に足す)");
+  assert.ok(!hasJapanese(text));
+  assert.ok(!hasJapanese(systemPrompt()), "指示文");
+  assert.ok(!hasJapanese(moduleCatalog()), "一覧表(単位・選択肢の名前の訳が足りなければ english.ts に足す)");
+  const st = { audioState: "running", playing: true, remaining: 3, unackedPrompts: [], plan: null };
+  for (const r of ["remaining_low", "new_prompt", "audio_started", "stopped"] as const) assert.ok(!hasJapanese(wakeMessage(r, st)));
+  assert.ok(!hasJapanese(firstUserMessage("goal", st)));
+  // 使われない訳がない(MCP 側のツールや引数が消えたら、訳も消す)
+  const used = new Set<string>();
+  const walk = (v: unknown, path: string): void => {
+    if (Array.isArray(v)) return v.forEach((x) => walk(x, path));
+    if (typeof v !== "object" || v === null) return;
+    for (const [k, x] of Object.entries(v as Obj)) {
+      if (k === "properties") for (const [pk, pv] of Object.entries(x as Obj)) { used.add(`${path}.properties.${pk}`); walk(pv, `${path}.properties.${pk}`); }
+      else walk(x, k === "items" ? `${path}.items` : path);
+    }
+  };
+  for (const t of toolSpecs()) { used.add(t.name); walk(t.parameters, t.name); }
+  assert.deepEqual(Object.keys(TOOL_TEXT_EN).filter((k) => !used.has(k)), [], "使われない訳");
+  // 誤りの知らせ(プログラム自身が作るもの)
+  const send: CommandSender = async () => ({ ok: true, result: {} });
+  assert.ok(!hasJapanese((await runToolCall({ id: "1", name: "nope", arguments: {} }, send, 99999)).text));
+  assert.ok(!hasJapanese((await runToolCall({ id: "2", name: "patch_get", arguments: "{" }, send, 99999)).text));
+  assert.ok(!hasJapanese(clip("x".repeat(20), 5)));
+});
+
+test("シンセの応答の英語化: エラーと注意の日本語の message を code ごとの英語に置き換える。人が書いた中身は変えない", () => {
+  const res = {
+    ok: false,
+    error: { id: "ERR-131", code: "batch_failed", message: "batch の操作が失敗", details: { failed_index: 2, cause: { id: "ERR-111", code: "port_not_found", message: "ポートがない", details: { port: "x" } } } },
+    warnings: [{ code: "no_midi_module", message: "MIDI-CV がない" }, { code: "something_new", message: "新しい注意" }],
+    result: { prompts: [{ id: 1, text: "もっと高い音で", acked: false }] },
+  };
+  const en = englishizeResponse(res) as Obj;
+  assert.match(en.error.message, /operation in the batch failed/);
+  assert.match(en.error.details.cause.message, /no port/);
+  assert.equal(en.error.details.cause.details.port, "x");
+  assert.match(en.warnings[0].message, /no MIDI-CV/);
+  assert.equal(en.warnings[1].message, undefined, "訳のない日本語の文は外す(code は残る)");
+  assert.equal(en.warnings[1].code, "something_new");
+  assert.equal(en.result.prompts[0].text, "もっと高い音で", "人が書いた指示は変えない");
+  assert.equal(res.error.message, "batch の操作が失敗", "元の応答は変えない");
+});
+
+test("シンセの応答の英語化: 種別の一覧(module.list_types)の名前・単位・選択肢の名前を英語にする。全種別で日本語が残らない", () => {
+  const types = [...buildCatalog(REGISTRY).values()].map((t) => ({
+    type: t.type,
+    title: t.title,
+    inputs: t.inputs.map((p) => ({ name: p.name, unit: p.unit })),
+    outputs: t.outputs.map((p) => ({ name: p.name, unit: p.unit })),
+    params: t.params.map((p) => ({ name: p.name, ...(p.unit !== undefined ? { unit: p.unit } : {}), ...(p.values ? { values: p.values } : {}) })),
+  }));
+  const en = JSON.stringify(englishizeResponse({ ok: true, result: { types } }));
+  const left = en.match(/[^"]{0,30}[\u3040-\u30ff\u3400-\u9fff][^"]{0,30}/g);
+  assert.equal(left, null, `訳の足りない語(english.ts に足す): ${left?.join(" | ")}`);
+  assert.match(en, /"title":"VCO"/);
+});
+
+test("モジュールの一覧表: 全種別を 1 行ずつ、つなげる端子と、パラメータの範囲・既定値を英語で載せる。番号つきのパラメータはまとめる", () => {
+  const catalog = buildCatalog(REGISTRY);
+  const text = moduleCatalogText(catalog);
+  const lines = text.split("\n");
+  assert.equal(lines.length, catalog.size);
+  for (const t of catalog.values()) assert.ok(lines.some((l) => l.startsWith(`${t.type} `)), t.type);
+  const vco = lines.find((l) => l.startsWith("MOD-OSC-001"))!;
+  assert.match(vco, /in: pitch,fm,pwm,sync \| out: saw,pulse,tri,sine/);
+  assert.match(vco, /tune -1\.\.1 def 0 oct/);
+  const midi = lines.find((l) => l.startsWith("MOD-IO-002"))!;
+  assert.match(midi, /in: - \| out: PITCH,GATE/, "MIDI の入力(つなげない)は載せない");
+  assert.match(lines.find((l) => l.startsWith("MOD-MIX-002"))!, /level\[1\.\.8\] 0\.\.1 def 0\.7/);
+  assert.match(lines.find((l) => l.startsWith("MOD-SAT-001"))!, /mode \{0=soft,1=hard,2=fold\}/);
+  assert.ok(!hasJapanese(text));
 });
 
 test("引数の読み方と、ツール呼出しの実行(未知のツール、読めない引数、封筒の項目、長い結果の切り詰め)", async () => {
@@ -127,7 +208,7 @@ test("引数の読み方と、ツール呼出しの実行(未知のツール、�
   const r = await runToolCall({ id: "3", name: "param_set", arguments: { module_id: "v", param: "tune", value: 0, expected_revision: 3, idempotency_key: "k" } }, send, 100);
   assert.deepEqual(calls[0], { command: "param.set", args: { module_id: "v", param: "tune", value: 0 }, envelope: { expected_revision: 3, idempotency_key: "k" } });
   assert.equal(r.ok, true);
-  assert.ok(r.text.length < 200 && r.text.includes("省略"), "長い結果は切る");
+  assert.ok(r.text.length < 220 && r.text.includes("omitted"), "長い結果は切る");
   assert.equal(clip("abc", 5), "abc");
 });
 
@@ -222,7 +303,7 @@ test("全体の流れ: 楽譜を送る → 残りが少なくなったら起こ�
   assert.deepEqual(sent.filter((c) => c !== "score.get_status"), ["patch.get", "score.play", "score.play"]);
   const wake = seenByLlm[3]!.at(-1)!;
   assert.equal(wake.role, "user");
-  assert.match(wake.content, /予約の残りが少なくなった/);
+  assert.match(wake.content, /queue is running low/);
   assert.ok(seenByLlm[1]!.some((m) => m.role === "tool" && m.toolCallId === "a"), "ツールの結果がモデルに返る");
   assert.ok(logs.some((l) => l.startsWith("[終了]")));
 });
@@ -245,7 +326,7 @@ test("全体の流れ: 止める合図で止まる。音声が止まっている
     async chat(messages) {
       chats++;
       if (chats === 2) {
-        assert.match(messages.at(-1)!.content, /人が音声を開始した/);
+        assert.match(messages.at(-1)!.content, /human started audio/);
         ac.abort();
       }
       return { content: "待つ", toolCalls: [] };

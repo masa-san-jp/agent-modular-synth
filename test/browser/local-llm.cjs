@@ -119,7 +119,11 @@ async function main() {
     assert.equal(first.tools.length, 30, "MCP と同じツール");
     assert.ok(!first.tools.some((t) => t.function.name === "engine_start"), "人のみのコマンドは渡さない");
     assert.ok(!JSON.stringify(first.tools).includes("\"expected_revision\":"), "既定では縮めた説明を渡す(compact)");
-    assert.match(first.messages[1].content, /演奏の目標: 短い テスト/);
+    assert.match(first.messages[1].content, /Goal of the performance: 短い テスト/, "目標は書かれたまま渡す");
+    const JA = /[\u3040-\u30ff\u3400-\u9fff]/;
+    assert.ok(!JA.test(first.messages[0].content), "指示文は英語");
+    assert.match(first.messages[0].content, /MOD-OSC-001 VCO \| in: pitch/, "指示文にモジュールの一覧表がある");
+    assert.ok(!JA.test(JSON.stringify(first.tools)), "ツールの説明は英語");
     ok("プログラムが LLM にツールを渡し、LLM の呼出しどおりにパッチを組む。音声が止まっている間は待つ");
 
     // ---- 人が音声を開始すると、モデルが起こされて演奏する ----
@@ -137,7 +141,10 @@ async function main() {
     assert.match(log, /\[終了\] 演奏が終わった/);
     assert.equal(await synth("audioState"), "running");
     const wake = llm.requests[3].messages.at(-1);
-    assert.match(wake.content, /人が音声を開始した/);
+    assert.match(wake.content, /human started audio/);
+    const toolMsgs = llm.requests.flatMap((r) => r.messages.filter((m) => m.role === "tool").map((m) => m.content));
+    assert.ok(toolMsgs.length > 0);
+    assert.ok(toolMsgs.every((c) => !JA.test(c)), `シンセの応答も英語: ${toolMsgs.find((c) => JA.test(c))}`);
     ok("残りが少なくなると起こされて続きを送り、終わりを宣言したら、鳴り終わってから終了する");
 
     // ---- 演奏データに、このプログラムの名前で残る ----
