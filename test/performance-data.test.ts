@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { EngineBackend } from "../src/control/backend.js";
 import { buildCatalog } from "../src/control/catalog.js";
 import { Controller, ControllerEvent, MAX_PERFORMANCE_BYTES, PerformanceSavedEvent } from "../src/control/controller.js";
+import type { PerformanceJournal, PerformanceJournalEntry } from "../src/control/controller.js";
 import { MemoryPatchStore } from "../src/control/memory-store.js";
 import { PERFORMANCE_FORMAT, SCORE_LIMITS } from "../src/control/performance.js";
 import { Session } from "../src/control/session.js";
@@ -219,6 +220,205 @@ test("VER-A-010h タブを閉じるときに記録中の演奏データを閉じ
   f = await r.file(second);
   assert.equal(f.ended_by, "audio_stopped");
   assert.ok(f.length_seconds > 0 && f.length_seconds < 4, `長さは閉じた時点まで: ${f.length_seconds}`);
+});
+
+test("VER-A-010i サーバーにつながっていない間の保存は控えておき、つながり直したら最新の状態を書く(閉じた印を含む)", async () => {
+  const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+  let online = true;
+  const writes: string[] = [];
+  const store = {
+    list: () => inner.list(),
+    read: (name: string) => inner.read(name),
+    remove: (name: string) => inner.remove(name),
+    write: (name: string, text: string, overwrite: boolean) => {
+      if (!online) return Promise.resolve({ ok: false as const, error: "unavailable" as const, message: "サーバーに接続していない" });
+      writes.push(name);
+      return inner.write(name, text, overwrite);
+    },
+  } as unknown as MemoryPatchStore;
+  const r = rig({ store });
+  await voice(r);
+  // (1) 演奏中に切れる: 続きの楽譜は書けないが、保存はやめない。つながり直したら、続きまで入った状態を書く
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.file(NAME)).entries.length, 1);
+  online = false;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal(r.saved().filter((d) => !d.ok).length, 0, "つながっていないための失敗は、知らせない");
+  assert.equal((await r.file(NAME)).entries.length, 1, "切れている間は書けていない");
+  online = true;
+  await r.c.retryPerformances();
+  assert.equal((await r.file(NAME)).entries.length, 2, "つながり直したら、続きまで入る");
+  // (2) 演奏し終えて続きを待っている間に切れ、その間に閉じる: つながり直したら、閉じた印が付く
+  online = false;
+  await r.run(2 + SCORE_LIMITS.idleCloseSeconds); // 2 つの楽譜は約 1.1 秒で終わる。その 30 秒後に閉じる
+  assert.equal((await r.file(NAME)).ended_by, null, "切れている間は閉じた印が書けていない");
+  online = true;
+  await r.c.retryPerformances();
+  const f = await r.file(NAME);
+  assert.equal(f.ended_by, "finished");
+  assert.equal(typeof f.ended_at, "string");
+  assert.equal(r.saved().at(-1)!.closed, true);
+  // (3) 書くものがなければ、つながり直しても書かない
+  const n = writes.length;
+  await r.c.retryPerformances();
+  assert.equal(writes.length, n);
+  // (4) 最初の保存から切れていても、つながり直したら日時つきの名前で新しく書く
+  r.tick(60_000);
+  online = false;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.names()).length, 1);
+  online = true;
+  await r.c.retryPerformances();
+  assert.equal((await r.names()).length, 2);
+});
+
+test("VER-A-010i つながっていない以外の失敗(保存先のエラー)では、今までどおり、その演奏の保存をやめる", async () => {
+  const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+  let broken = false;
+  const store = {
+    list: () => inner.list(),
+    read: (name: string) => inner.read(name),
+    remove: (name: string) => inner.remove(name),
+    write: (name: string, text: string, overwrite: boolean) =>
+      broken ? Promise.resolve({ ok: false as const, error: "failed" as const, message: "書けない" }) : inner.write(name, text, overwrite),
+  } as unknown as MemoryPatchStore;
+  const r = rig({ store });
+  await voice(r);
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  broken = true;
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal(r.saved().at(-1)!.ok, false);
+  assert.equal(r.saved().at(-1)!.reason, "failed");
+  broken = false;
+  await r.c.retryPerformances();
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal((await r.file(NAME)).entries.length, 1, "保存をやめた演奏は、直っても書かない");
+});
+
+test("VER-A-010i 応答が時間切れでも保存をやめず、後で書き直す。最初の書き込みが届いていたら、連番を付けずに同じファイルを書き直す", async () => {
+  const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+  let hang = false;
+  const store = {
+    list: () => inner.list(),
+    read: (name: string) => inner.read(name),
+    remove: (name: string) => inner.remove(name),
+    // 時間切れ: 書き込みは届くが、応答が返らない
+    write: (name: string, text: string, overwrite: boolean) => {
+      const p = inner.write(name, text, overwrite);
+      return hang ? new Promise(() => undefined) : p;
+    },
+  } as unknown as MemoryPatchStore;
+  const be = new EngineBackend(FS, REGISTRY);
+  const session = new Session({ catalog: CATALOG, backend: be, sessionId: "s-to" });
+  const c = new Controller({ session, store: new MemoryPatchStore(), performanceStore: store, now: () => T0, storeTimeoutMs: 20 });
+  const events: ControllerEvent[] = [];
+  c.subscribe((e) => events.push(e));
+  const send = (actor: ActorKind, command: string, args?: Args) => c.handle({ v: 1, request_id: `to-${++n}`, command, ...(args ? { args } : {}) }, actor);
+  await send("agent", "batch", { ops: [{ command: "module.add", args: { id: "midi", type: "MOD-IO-002" } }] });
+  await send("human", "engine.start");
+  hang = true;
+  await send("agent", "score.play", SCORE_B);
+  await c.savePerformances();
+  assert.equal(events.filter((e) => e.event === "performance.saved").length, 0, "時間切れは知らせない");
+  assert.equal(c.performancesPending, true);
+  hang = false;
+  await c.retryPerformances();
+  assert.equal(c.performancesPending, false);
+  const names = ((await inner.list()) as { ok: true; value: { name: string }[] }).value.map((x) => x.name);
+  assert.deepEqual(names, [NAME], "連番の付いたファイルを作らない");
+  const ok = events.filter((e): e is PerformanceSavedEvent => e.event === "performance.saved").map((e) => e.data);
+  assert.equal(ok.length, 1);
+  assert.equal(ok[0]!.ok, true);
+});
+
+/** タブの保存領域の代わり(試験用)。 */
+function memoryJournal(seen: number | null = null) {
+  let saved: PerformanceJournalEntry[] = [];
+  const j: PerformanceJournal & { entries: () => PerformanceJournalEntry[]; seen: number | null } = {
+    seen,
+    load: () => JSON.parse(JSON.stringify(saved)) as PerformanceJournalEntry[],
+    save: (e) => {
+      saved = JSON.parse(JSON.stringify(e)) as PerformanceJournalEntry[];
+    },
+    lastSeen: () => j.seen,
+    entries: () => saved,
+  };
+  return j;
+}
+
+test("VER-A-010j 書けていない・閉じていない演奏はタブの保存領域に控え、書けて閉じたら控えから外す", async () => {
+  const r = rig();
+  const journal = memoryJournal();
+  r.c.attachPerformanceJournal(journal);
+  await voice(r);
+  await r.ok("agent", "score.play", SCORE_B);
+  await r.c.savePerformances();
+  assert.equal(journal.entries().length, 1, "演奏中は控える");
+  assert.equal(journal.entries()[0]!.written, true);
+  assert.equal(journal.entries()[0]!.closed, false);
+  await r.run(2 + SCORE_LIMITS.idleCloseSeconds);
+  assert.equal((await r.file(NAME)).ended_by, "finished");
+  assert.equal(journal.entries().length, 0, "書けて閉じたら外す");
+});
+
+test("VER-A-010j 前のタブの控えを引き継ぐ: 閉じたものはそのまま書き、閉じていないものは最後に動いていた時刻で閉じて書く", async () => {
+  // 前のタブ: 保存先につながらないまま、1 つ目の演奏を閉じ、2 つ目の演奏の途中で落ちた
+  const journal = memoryJournal();
+  {
+    const inner = new MemoryPatchStore({ maxBytes: MAX_PERFORMANCE_BYTES });
+    const offline = { list: () => inner.list(), read: (x: string) => inner.read(x), remove: (x: string) => inner.remove(x), write: () => Promise.resolve({ ok: false as const, error: "unavailable" as const }) } as unknown as MemoryPatchStore;
+    const r = rig({ store: offline });
+    r.c.attachPerformanceJournal(journal);
+    await voice(r);
+    await r.ok("agent", "score.play", SCORE_B);
+    await r.ok("agent", "score.stop");
+    await r.c.savePerformances();
+    r.tick(60_000);
+    await r.ok("agent", "score.play", { notes: [{ t: 0, dur: 20, note: 60 }], length: 20 });
+    await r.c.savePerformances();
+    assert.equal(journal.entries().length, 2);
+  }
+  journal.seen = T0 + 60_000 + 5_000; // 2 つ目の演奏を始めて 5 秒後に落ちた
+  const r = rig();
+  r.c.attachPerformanceJournal(journal);
+  assert.equal(r.c.performancesPending, true);
+  await r.c.retryPerformances();
+  const names = await r.names();
+  assert.equal(names.length, 2);
+  const older = await r.file(names[1]!);
+  const newer = await r.file(names[0]!);
+  assert.equal(older.ended_by, "stopped", "閉じていたものは、そのまま");
+  assert.equal(newer.ended_by, "audio_stopped", "演奏の途中で落ちた");
+  assert.ok(Math.abs(newer.length_seconds - 5) < 1e-9, `長さは最後に動いていた時刻まで: ${newer.length_seconds}`);
+  assert.equal(newer.ended_at, new Date(T0 + 65_000).toISOString().replace(/\.\d+Z$/, "Z"));
+  assert.equal(journal.entries().length, 0, "書けたら控えから外す");
+});
+
+test("VER-A-010j 演奏し終えて続きを待っている間に落ちたら、引き継いだときに finished で閉じる。壊れた控えは捨てる", async () => {
+  const journal = memoryJournal();
+  {
+    const r = rig();
+    r.c.attachPerformanceJournal(journal);
+    await voice(r);
+    await r.ok("agent", "score.play", SCORE_B); // 0.5 秒
+    await r.run(3);
+  }
+  journal.seen = T0 + 10_000;
+  const broken = { ...journal.entries()[0]!, key: "broken", name: "20261123-000000", text: "{", closed: false };
+  journal.save([...journal.entries(), broken]);
+  const r = rig();
+  r.c.attachPerformanceJournal(journal);
+  await r.c.retryPerformances();
+  const f = await r.file(NAME);
+  assert.equal(f.ended_by, "finished");
+  assert.ok(Math.abs(f.length_seconds - 0.5) < 1e-9, "長さは演奏した分のまま");
+  assert.deepEqual(await r.names(), [NAME], "壊れた控えは書かない");
 });
 
 // ---- VER-A-010c 再演奏 ----
