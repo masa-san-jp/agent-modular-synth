@@ -118,6 +118,7 @@ async function main() {
     assert.equal(first.options.num_ctx, 20000);
     assert.equal(first.tools.length, 30, "MCP と同じツール");
     assert.ok(!first.tools.some((t) => t.function.name === "engine_start"), "人のみのコマンドは渡さない");
+    assert.ok(!JSON.stringify(first.tools).includes("\"expected_revision\":"), "既定では縮めた説明を渡す(compact)");
     assert.match(first.messages[1].content, /演奏の目標: 短い テスト/);
     ok("プログラムが LLM にツールを渡し、LLM の呼出しどおりにパッチを組む。音声が止まっている間は待つ");
 

@@ -1,7 +1,7 @@
 // 手元の LLM に演奏させるプログラム(agents/local-llm。Issue #55、DEC-027)の試験。LLM とシンセは試験用の偽物。
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { clip, createLlmClient, END_MARK, parseArgs, readStatus, run, runToolCall, toolSpecs, trimHistory, wakeReason } from "../agents/local-llm/runner.js";
+import { clip, contextBudget, createLlmClient, END_MARK, parseArgs, readStatus, run, runToolCall, toolSpecs, trimHistory, wakeReason } from "../agents/local-llm/runner.js";
 import type { ChatMessage, ChatReply, CommandSender, LlmClient, PerfStatus, ToolSpec } from "../agents/local-llm/runner.js";
 import { TOOLS } from "../src/mcp/tools.js";
 
@@ -23,7 +23,7 @@ const HISTORY: ChatMessage[] = [
   { role: "assistant", content: "", toolCalls: [{ id: "c1", name: "patch_get", arguments: { a: 1 } }] },
   { role: "tool", content: "{\"ok\":true}", toolCallId: "c1", toolName: "patch_get" },
 ];
-const SPECS: ToolSpec[] = toolSpecs().slice(0, 2);
+const SPECS: ToolSpec[] = toolSpecs("full").slice(0, 2);
 
 test("LLM の口(Ollama): 会話・ツール・文脈長を Ollama の形で送り、ツール呼出しを読む", async () => {
   const { f, sent } = fakeFetch({ message: { role: "assistant", content: "鳴らす", tool_calls: [{ function: { name: "score_play", arguments: { notes: [] } } }] } });
@@ -70,6 +70,42 @@ test("ツールの一覧は MCP と同じ(人のみのコマンドを含まな�
   assert.deepEqual(specs.map((s) => s.name), TOOLS.map((t) => t.name));
   assert.ok(!specs.some((s) => s.name === "engine_start" || s.name === "engine_release_panic" || s.name === "prompt_send"));
   assert.ok(specs.some((s) => s.name === "score_play"));
+});
+
+test("ツールの説明を縮める(compact、既定): 封筒の項目と検査だけの項目を除き、範囲と選択肢と引数の説明は残す。full は MCP と同じ", () => {
+  const full = toolSpecs("full");
+  const compact = toolSpecs();
+  assert.deepEqual(compact.map((t) => t.name), full.map((t) => t.name), "ツールは同じ 30 個");
+  assert.deepEqual(full.map((t) => t.description), TOOLS.map((t) => t.description));
+  const text = JSON.stringify(compact);
+  assert.ok(text.length < JSON.stringify(full).length * 0.5, `半分以下になる: ${text.length} / ${JSON.stringify(full).length}`);
+  for (const k of ["\"expected_revision\":", "\"idempotency_key\":", "maxItems", "minItems", "minLength", "maxLength", "\"pattern\"", "\"additionalProperties\":false", "共通コマンド", "応答の封筒"]) {
+    assert.ok(!text.includes(k), `compact に ${k} がない`);
+  }
+  const play = compact.find((t) => t.name === "score_play")!;
+  const note = (play.parameters as Obj).properties.notes.items.properties.note;
+  assert.equal(note.minimum, 0);
+  assert.equal(note.maximum, 127, "値の範囲は残す");
+  assert.match(note.description, /MIDI ノート番号/, "引数の説明は残す");
+  assert.match(play.description, /remaining/, "使い方の注意は残す");
+  assert.deepEqual((play.parameters as Obj).required, ["notes"]);
+  const add = compact.find((t) => t.name === "module_add")!;
+  assert.ok((add.parameters as Obj).properties.type.enum.includes("MOD-OSC-001"), "選択肢は残す");
+  assert.ok((add.parameters as Obj).properties.params.additionalProperties, "additionalProperties の型の指定は残す");
+  assert.match(compact.find((t) => t.name === "patch_get")!.description, /読むだけ/);
+});
+
+test("文脈長から、履歴とツールの結果に使える長さを見積もる。足りなければ知らせる", () => {
+  const b16 = contextBudget(16384);
+  assert.ok(b16.fixedTokens > 4000 && b16.fixedTokens < 7000, `ツールの説明と指示文: ${b16.fixedTokens}`);
+  assert.ok(b16.historyChars > 15000 && b16.historyChars < 20000, `履歴: ${b16.historyChars}`);
+  assert.equal(b16.tight, false);
+  assert.ok(contextBudget(32768).historyChars > b16.historyChars * 2);
+  assert.ok(contextBudget(16384, "full").historyChars < b16.historyChars, "full は説明が長い分、履歴が短い");
+  const small = contextBudget(8192);
+  assert.equal(small.tight, true);
+  assert.equal(small.historyChars, 4000, "下限");
+  assert.ok(b16.toolResultChars <= 6000);
 });
 
 test("引数の読み方と、ツール呼出しの実行(未知のツール、読めない引数、封筒の項目、長い結果の切り詰め)", async () => {

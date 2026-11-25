@@ -7,7 +7,7 @@
 // (音声の開始、緊急停止の解除、パッチの削除、上限を超える音量はできない)。
 import { buildRequest, sendCommand } from "../../src/mcp/adapter.js";
 import type { AdapterConfig } from "../../src/mcp/adapter.js";
-import { TOOLS } from "../../src/mcp/tools.js";
+import { ARGS, TABLE, TOOLS } from "../../src/mcp/tools.js";
 import type { ToolDef } from "../../src/mcp/tools.js";
 
 type Obj = Record<string, unknown>;
@@ -58,7 +58,7 @@ export interface LlmOptions {
   model: string;
   /** OpenAI 互換の API の鍵(要らないサーバーが多い)。 */
   apiKey?: string;
-  /** Ollama の文脈長(num_ctx)。ツールの説明だけで約 2.6 万文字(JSON)あるので、既定は 32768。 */
+  /** Ollama の文脈長(num_ctx)。既定 16384(ツールの説明は compact で約 4 千トークン、指示文が約 7 百トークン)。 */
   numCtx?: number;
   temperature?: number;
   timeoutMs?: number;
@@ -99,7 +99,7 @@ export function createLlmClient(o: LlmOptions): LlmClient {
             return { role: m.role, content: m.content };
           }),
           tools: tools.map((t) => ({ type: "function", function: t })),
-          options: { num_ctx: o.numCtx ?? 32768, ...(o.temperature !== undefined ? { temperature: o.temperature } : {}) },
+          options: { num_ctx: o.numCtx ?? 16384, ...(o.temperature !== undefined ? { temperature: o.temperature } : {}) },
         };
         const r = await post(`${base}/api/chat`, body);
         const msg = (r.message ?? {}) as Obj;
@@ -171,9 +171,44 @@ export function parseArgs(raw: unknown): { value: Obj | null; error?: string } {
 // ツール(シンセのコマンド)
 // ---------------------------------------------------------------------------------------
 
-/** LLM に渡すツールの一覧(MCP と同じ。エージェントに許されたコマンドだけ)。 */
-export function toolSpecs(defs: readonly ToolDef[] = TOOLS): ToolSpec[] {
-  return defs.map((t) => ({ name: t.name, description: t.description, parameters: t.inputSchema }));
+export type ToolDetail = "compact" | "full";
+
+/** どのツールにも付いている封筒の項目(楽観ロックと再送の鍵)。このプログラムは使わないので、compact では渡さない。 */
+const ENVELOPE_KEYS = ["expected_revision", "idempotency_key"];
+
+/**
+ * LLM に渡すツールの一覧(MCP と同じ 30 個。エージェントに許されたコマンドだけ)。
+ * - full: MCP アダプタと同じ説明と引数。
+ * - compact(既定): 文脈を節約する。説明は「何をするか」と、そのコマンドの使い方の注意だけ(定型句を除く)。
+ *   封筒の項目(expected_revision、idempotency_key)を除く。引数の形と、引数ごとの説明はそのまま。
+ */
+export function toolSpecs(detail: ToolDetail = "compact", defs: readonly ToolDef[] = TOOLS): ToolSpec[] {
+  if (detail === "full") return defs.map((t) => ({ name: t.name, description: t.description, parameters: t.inputSchema }));
+  return defs.map((t) => {
+    const row = TABLE.find((r) => r.command === t.command);
+    const note = ARGS[t.command]?.note;
+    const readOnly = row ? !row.changes && row.undo === "na" : false;
+    const description = [`${row?.summary ?? t.command}。`, readOnly ? "読むだけ。" : "", note ?? ""].filter(Boolean).join(" ");
+    const props = { ...((t.inputSchema.properties ?? {}) as Obj) };
+    for (const k of ENVELOPE_KEYS) delete props[k];
+    return { name: t.name, description, parameters: slimSchema({ ...t.inputSchema, properties: props }) as Obj };
+  });
+}
+
+/** 検査だけに使う項目(数の上限、文字数、書式、余分な項目の禁止)。検査はサーバーが行うので、compact では渡さない。値の範囲と選択肢は残す。 */
+const CHECK_ONLY_KEYS = new Set(["maxItems", "minItems", "minLength", "maxLength", "pattern"]);
+
+function slimSchema(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(slimSchema);
+  if (typeof v !== "object" || v === null) return v;
+  const out: Obj = {};
+  for (const [k, x] of Object.entries(v as Obj)) {
+    if (CHECK_ONLY_KEYS.has(k)) continue;
+    if (k === "additionalProperties" && x === false) continue;
+    // properties の中は項目名なので、そのまま辿る(項目名が上の語と同じでも消さない)
+    out[k] = k === "properties" && typeof x === "object" && x !== null ? Object.fromEntries(Object.entries(x as Obj).map(([pk, pv]) => [pk, slimSchema(pv)])) : slimSchema(x);
+  }
+  return out;
 }
 
 /** シンセへコマンドを送る口(試験で差し替える)。 */
@@ -211,6 +246,20 @@ export async function runToolCall(call: ToolCall, send: CommandSender, maxChars:
   if (idempotency_key !== undefined) envelope.idempotency_key = idempotency_key;
   const res = await send(tool.command, args, envelope);
   return { text: clip(JSON.stringify(res), maxChars), ok: res.ok === true, command: tool.command };
+}
+
+/**
+ * 文脈長(トークン)から、会話の履歴とツールの結果に使える長さ(文字)を見積もる。
+ * 文字とトークンの比は o200k(gpt-oss のトークナイザー)で測った値より少なめに取る:
+ * 指示文(日本語の文)は 1.64 文字/トークン → 1.5、ツールの説明(JSON)は compact 2.75・full 2.33 → 2.3、
+ * 会話の中身(ツールの結果と楽譜。2.07〜3.36)→ 2。モデルの返事のために 2048 トークンを空けておく。
+ */
+export function contextBudget(numCtx: number, detail: ToolDetail = "compact"): { fixedTokens: number; historyChars: number; toolResultChars: number; tight: boolean } {
+  const toolsChars = JSON.stringify(toolSpecs(detail).map((t) => ({ type: "function", function: t }))).length;
+  const fixedTokens = Math.ceil(systemPrompt().length / 1.5 + toolsChars / 2.3);
+  const available = numCtx - fixedTokens - 2048;
+  const historyChars = Math.max(4000, Math.floor(available * 2));
+  return { fixedTokens, historyChars, toolResultChars: Math.min(6000, Math.floor(historyChars / 3)), tight: available * 2 < 8000 };
 }
 
 // ---------------------------------------------------------------------------------------
@@ -345,6 +394,8 @@ export interface RunOptions {
   /** 予約の残りがこの秒数以下になったら、モデルを起こす。 */
   leadSeconds?: number;
   pollMs?: number;
+  /** ツールの説明の詳しさ(既定 compact)。 */
+  toolDetail?: ToolDetail;
   /** 起こす回数の上限(試験用。既定は無制限)。 */
   maxWakes?: number;
   log?: (line: string) => void;
@@ -368,7 +419,7 @@ export async function run(o: RunOptions): Promise<RunResult> {
   const maxHistory = o.maxHistoryChars ?? 40000;
   const lead = o.leadSeconds ?? 8;
   const pollMs = o.pollMs ?? 1000;
-  const tools = toolSpecs();
+  const tools = toolSpecs(o.toolDetail ?? "compact");
   const status = async (): Promise<PerfStatus | null> => readStatus(await o.send("score.get_status", {}));
 
   const st0 = await status();
