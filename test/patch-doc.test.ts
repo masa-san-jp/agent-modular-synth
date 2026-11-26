@@ -170,13 +170,13 @@ test("DX-10: 存在しないポート・逆向きの接続 → DAT-V14, DAT-V15 
 
 test("DX-11: 新しすぎる仕様版(vco1 の spec_version = 9.0)→ DAT-V07 / ERR-205", () => {
   const text = P0_TEXT.replace(
-    '{"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"',
+    '{"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"',
     '{"id": "vco1", "type": "MOD-OSC-001", "spec_version": "9.0"',
   );
   assert.notEqual(text, P0_TEXT);
   const err = rejectBoth(text, "ERR-205", "DAT-V07");
   assert.equal(err.details.found, "9.0");
-  assert.deepEqual(err.details.supported, ["0.1", "0.2"]);
+  assert.deepEqual(err.details.supported, ["0.1", "0.2", "0.3"]);
   assert.equal(err.issues[0]!.path, "modules[2].spec_version");
 });
 
@@ -337,8 +337,8 @@ test("DAT-V07: 書式が不正なら ERR-204、新しすぎれば ERR-205。先�
     doc.modules[2].spec_version = sv;
     expectError(validatePatchDocument(doc, catalog), "ERR-204", "DAT-V07");
   }
-  // 0.10 > 0.9 > 0.2(主・副を整数として比べる。§9.1)
-  for (const sv of ["0.3", "0.10", "1.0", "0.9"]) {
+  // 0.10 > 0.9 > 0.3(vco1 の現行版。主・副を整数として比べる。§9.1)
+  for (const sv of ["0.4", "0.10", "1.0", "0.9"]) {
     const doc = p0();
     doc.modules[2].spec_version = sv;
     const err = expectError(validatePatchDocument(doc, catalog), "ERR-205", "DAT-V07");
@@ -591,7 +591,7 @@ test("DAT-08: 書かれていないパラメータは既定値で補い、warnin
     modules: [
       { id: "out", type: "MOD-IO-001", spec_version: "0.2" },
       { id: "vcf1", type: "MOD-FLT-001", spec_version: "0.2", params: { res: 0.7 } },
-      { id: "vco1", type: "MOD-OSC-001", spec_version: "0.2", params: { range: 0, tune: 0, fm_amt: 0, pw: 0.5, pwm_amt: 0 } },
+      { id: "vco1", type: "MOD-OSC-001", spec_version: "0.3", params: { range: 0, tune: 0, fm_amt: 0, pw: 0.5, pwm_amt: 0 } },
     ],
     cables: [],
   };
@@ -632,7 +632,7 @@ function p0AtSpec01(): any {
   return doc;
 }
 
-test("§9.5: 仕様版 0.1 の文書 → 現行(0.2)。MOD-IO-002 に voices = 1 を補い、他は何もしない移行", () => {
+test("§9.5: 仕様版 0.1 の文書 → 現行(0.2。MOD-OSC-001 は 0.2 を経て 0.3)。MOD-IO-002 に voices = 1 を補い、他は何もしない移行", () => {
   const doc = p0AtSpec01();
   const before = structuredClone(doc);
   const r = expectOk(validatePatchDocument(doc, catalog));
@@ -643,7 +643,7 @@ test("§9.5: 仕様版 0.1 の文書 → 現行(0.2)。MOD-IO-002 に voices = 1
     modules: [
       { id: "out", type: "MOD-IO-001", spec_from: "0.1", spec_to: "0.2" },
       { id: "midi1", type: "MOD-IO-002", spec_from: "0.1", spec_to: "0.2" },
-      { id: "vco1", type: "MOD-OSC-001", spec_from: "0.1", spec_to: "0.2" },
+      { id: "vco1", type: "MOD-OSC-001", spec_from: "0.1", spec_to: "0.3" },
       { id: "vcf1", type: "MOD-FLT-001", spec_from: "0.1", spec_to: "0.2" },
       { id: "vca1", type: "MOD-AMP-001", spec_from: "0.1", spec_to: "0.2" },
       { id: "env1", type: "MOD-ENV-001", spec_from: "0.1", spec_to: "0.2" },
@@ -715,7 +715,7 @@ test("DAT-V07: 移行が登録されていない古い版(0.0)は拒否する", 
   const doc = p0();
   doc.modules[2].spec_version = "0.0";
   const err = expectError(validatePatchDocument(doc, catalog), "ERR-205", "DAT-V07");
-  assert.deepEqual(err.details, { found: "0.0", supported: ["0.1", "0.2"] });
+  assert.deepEqual(err.details, { found: "0.0", supported: ["0.1", "0.2", "0.3"] });
 });
 
 test("DAT-55・DAT-61: パッチ形式の移行は、試験専用の仮の旧版で古い版から順に適用する", () => {
@@ -744,7 +744,7 @@ test("DAT-55・DAT-61: パッチ形式の移行は、試験専用の仮の旧版
     modules: [
       { id: "out", type: "MOD-IO-001", spec_version: "0.2", params: { level: 1, mute: 0 } },
       { id: "midi1", type: "MOD-IO-002", spec_version: "0.1", params: { channel: 0, transpose: 0, cc_number: 1 } },
-      { id: "vco1", type: "MOD-OSC-001", spec_version: "0.2", params: { range: 0, tune: 0, fm_amt: 0, pw: 0.5, pwm_amt: 0 } },
+      { id: "vco1", type: "MOD-OSC-001", spec_version: "0.3", params: { range: 0, tune: 0, fm_amt: 0, pw: 0.5, pwm_amt: 0 } },
     ],
     wires: [{ id: "c1", from: "midi1.PITCH", to: "vco1.pitch" }, { id: "c2", from: "vco1.saw", to: "out.IN_L" }],
   });
