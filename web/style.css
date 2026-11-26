@@ -114,7 +114,10 @@ ul.list, ol.list { list-style: none; margin: .4rem 0 0; padding: 0; }
 
 /* 画面の切り替え(Issue #59)。RACK = エージェントの演奏を見る画面(今までどおり)。PANEL = 人が配線とつまみを操作する画面。
    同じページの中で、見せる欄と並び順だけを替える。部品は同じもの(同じコマンドを送る)。PANEL にはモジュールの追加・削除を出さない */
-#views { gap: 0; margin: 0 0 .4rem; }
+/* 見出しと同じ行に置く(ラックの位置を下げない) */
+#top { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1rem; }
+#views { display: flex; gap: 0; margin: 0 0 .4rem; }
+#views button { padding: .1rem .7rem; font-size: .75rem; }
 #views button[aria-selected="true"] { border-color: var(--led); color: var(--led); background: var(--wash-2); }
 #panel-bar { display: none; }
 #panel-bar > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -122,7 +125,7 @@ ul.list, ol.list { list-style: none; margin: .4rem 0 0; padding: 0; }
 #panel-fill { margin-left: auto; }
 body[data-view="panel"] { display: flex; flex-direction: column; }
 body[data-view="panel"] > * { order: 10; }
-body[data-view="panel"] > #blocked, body[data-view="panel"] > h1, body[data-view="panel"] > #views { order: 0; }
+body[data-view="panel"] > #blocked, body[data-view="panel"] > #top { order: 0; }
 body[data-view="panel"] > #messages { order: 1; }
 body[data-view="panel"] > #main-controls { order: 2; }
 body[data-view="panel"] > #panel-bar { order: 3; display: block; }
