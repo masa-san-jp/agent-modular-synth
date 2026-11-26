@@ -684,6 +684,7 @@ function renderStatus(): void {
   $<HTMLButtonElement>("release").disabled = !st.panic;
   $<HTMLButtonElement>("panel-release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
+  editor?.renderLive(st.audioState === "running" && w ? w.overrides : {});
   rack?.update({ activity: st.audioState === "running" && w && !st.panic ? (w.activity ?? null) : null, overrides: w?.overrides ?? {}, peak: w ? w.peak : 0, panic: st.panic });
 }
 

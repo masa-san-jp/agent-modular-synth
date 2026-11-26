@@ -81,6 +81,9 @@ input[type="range"], input[type="checkbox"] { accent-color: var(--wash-4); }
 .params { margin-top: .4rem; }
 .param { display: grid; grid-template-columns: minmax(4.5rem, 7rem) minmax(0, 1fr) 6.5rem; gap: .4rem; align-items: center; margin: .2rem 0; }
 .param input[type="range"] { width: 100%; min-width: 0; }
+/* 楽譜が動かしている値(音声側のいまの値。ラックの板の反転と同じ意味): 値の欄を明るい縁と文字にする */
+.param.moving input[type="number"] { border-color: var(--led); color: var(--led); }
+.param.moving input[type="range"] { accent-color: var(--led); }
 .param input[type="number"] { width: 100%; grid-column: 3; }
 .param input[type="checkbox"] { grid-column: 2; justify-self: start; width: 1.1rem; height: 1.1rem; }
 .param-name { overflow-wrap: anywhere; font-family: var(--mono); font-size: .9rem; }

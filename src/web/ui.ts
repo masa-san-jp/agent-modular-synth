@@ -27,6 +27,8 @@ export interface Editor {
   refreshLibrary(): void;
   /** メーター(MOD-IO-003)の読出し値を表示する。 */
   renderMeters(meters: Record<string, Record<string, unknown>> | null): void;
+  /** 楽譜が動かしているパラメータの、音声側のいまの値を表示する(ラックの板と同じ値。DEC-029)。止まれば、パッチの値に戻す。 */
+  renderLive(overrides: Readonly<Record<string, Readonly<Record<string, number>>>>): void;
 }
 
 const OUTPUT_TYPE = "MOD-IO-001"; // 常設の出力(追加・削除不可: 契約 §2.2)
@@ -162,6 +164,8 @@ export function createEditor(deps: EditorDeps): Editor {
   const confirmCancel = byId<HTMLButtonElement>("confirm-cancel");
 
   const cards = new Map<string, Card>();
+  /** 楽譜が動かしている値(DEC-029): モジュールID → いま音声側の値を出しているパラメータ名。 */
+  const liveShown = new Map<string, Set<string>>();
   const log: LogEntry[] = [];
   let dragging: HTMLInputElement | null = null;
   let dragKey: string | null = null;
@@ -299,14 +303,51 @@ export function createEditor(deps: EditorDeps): Editor {
     input.dataset.shown = text;
   }
 
+  function setControl(c: ParamControl, v: number, force: boolean): void {
+    if (c.check && c.check.checked !== (v !== 0)) c.check.checked = v !== 0;
+    if (c.select && c.select.value !== String(v)) c.select.value = String(v);
+    if (c.number) setInput(c.number, formatValue(c.info, v), force);
+    if (c.range && (force || dragging !== c.range) && Number(c.range.value) !== v) c.range.value = String(v);
+  }
+
   function syncCard(card: Card, m: PatchModule, force: boolean): void {
+    const live = liveShown.get(m.id);
     for (const c of card.controls) {
       const v = m.params[c.info.name];
-      if (v === undefined) continue;
-      if (c.check && c.check.checked !== (v !== 0)) c.check.checked = v !== 0;
-      if (c.select && c.select.value !== String(v)) c.select.value = String(v);
-      if (c.number) setInput(c.number, formatValue(c.info, v), force);
-      if (c.range && (force || dragging !== c.range) && Number(c.range.value) !== v) c.range.value = String(v);
+      if (v === undefined || live?.has(c.info.name)) continue; // 楽譜が動かしている間は、音声側のいまの値を出し続ける
+      setControl(c, v, force);
+    }
+  }
+
+  // ---- 楽譜が動かしている値(DEC-029) ----
+  const rowOf = (c: ParamControl): Element | null => (c.range ?? c.number ?? c.select ?? c.check)?.closest(".param") ?? null;
+  const controlOf = (id: string, name: string): ParamControl | undefined => cards.get(id)?.controls.find((c) => c.info.name === name);
+
+  function renderLive(overrides: Readonly<Record<string, Readonly<Record<string, number>>>>): void {
+    const patch = deps.getPatch();
+    // 楽譜が動かすのをやめたパラメータは、パッチの値に戻す
+    for (const [id, names] of liveShown) {
+      for (const name of [...names]) {
+        if (overrides[id]?.[name] !== undefined) continue;
+        names.delete(name);
+        const c = controlOf(id, name);
+        if (!c) continue;
+        rowOf(c)?.classList.remove("moving");
+        const v = patch.modules.find((m) => m.id === id)?.params[name];
+        if (v !== undefined) setControl(c, v, false);
+      }
+      if (names.size === 0) liveShown.delete(id);
+    }
+    for (const [id, o] of Object.entries(overrides)) {
+      for (const [name, v] of Object.entries(o)) {
+        const c = controlOf(id, name);
+        if (!c || !Number.isFinite(v)) continue;
+        setControl(c, v, false);
+        rowOf(c)?.classList.add("moving");
+        let names = liveShown.get(id);
+        if (!names) liveShown.set(id, (names = new Set()));
+        names.add(name);
+      }
     }
   }
 
@@ -571,5 +612,5 @@ export function createEditor(deps: EditorDeps): Editor {
     }
   }
 
-  return { render, onEvent, refreshLibrary, renderMeters };
+  return { render, onEvent, refreshLibrary, renderMeters, renderLive };
 }

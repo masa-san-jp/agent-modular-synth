@@ -1,5 +1,5 @@
 // 人が操作する画面 PANEL(Issue #59、DEC-029、product-spec §4.1)の、実際のブラウザ(ヘッドレスの Chromium)での確認。
-// npm run test:panel-browser で実行する。環境変数 PANEL_SCREENSHOT にパスを入れると、PANEL の画像を保存する(RACK は同じ名前に -rack を付ける)。
+// npm run test:panel-browser で実行する。環境変数 PANEL_SCREENSHOT にパスを入れると、PANEL の画像を保存する(RACK は同じ名前に -rack、楽譜が動かしている LFO のカードは -moving を付ける)。
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
@@ -150,6 +150,26 @@ async function main() {
     await page.click("#panel-release");
     await waitFor(async () => (await status()).panic === false, "解除");
     ok("PANEL の音量が上限になり、PANIC と RELEASE が効く");
+
+    // ---- 5b) 楽譜が動かしているパラメータは、PANEL のつまみと数値が音声側のいまの値で動き、終われば パッチの値に戻る(DEC-029) ----
+    const lfoSel = '#module-list [data-module="lfo"] .param[data-param="freq"]';
+    const shownFreq = () => page.$eval(lfoSel, (row) => ({ range: Number(row.querySelector('input[type="range"]').value), number: row.querySelector('input[type="number"]').value, moving: row.classList.contains("moving") }));
+    const patchFreq = (await synth("patch")).modules.find((m) => m.id === "lfo").params.freq;
+    const f0 = await shownFreq(); // パッチの値の表示(スライダーは刻みに丸めて出す)
+    await agent("score.play", { notes: [], length: 3, params: [{ t: 0, dur: 2, module_id: "lfo", param: "freq", value: patchFreq + 6 }] });
+    await waitFor(async () => (await shownFreq()).moving, "動いている値の表示");
+    const f1 = await shownFreq();
+    await page.waitForTimeout(600);
+    const f2 = await shownFreq();
+    if (process.env.PANEL_SCREENSHOT) await page.locator('#module-list [data-module="lfo"]').screenshot({ path: process.env.PANEL_SCREENSHOT.replace(/(\.png)?$/, "-moving.png") });
+    assert.ok(f2.range !== f0.range, `スライダーがパッチの値(${f0.range})のまま`);
+    assert.ok(f2.range > f1.range, `スライダーが動く: ${f1.range} → ${f2.range}`);
+    assert.notEqual(f2.number, f0.number, "数値の欄も動く");
+    assert.equal((await synth("patch")).modules.find((m) => m.id === "lfo").params.freq, patchFreq, "パッチの値は書き換えない");
+    await waitFor(async () => !(await shownFreq()).moving, "終わると表示を戻す", 10000);
+    const f3 = await shownFreq();
+    assert.deepEqual(f3, f0, "終わればパッチの値の表示に戻る");
+    ok("楽譜が動かしている間は、PANEL のつまみと数値が音声側のいまの値で動き、終わればパッチの値に戻る", `freq ${f1.range} → ${f2.range} → ${f3.range}`);
 
     // ---- 6) 見える文字に日本語がない(DEC-023)。RACK に戻せる ----
     const japanese = /[぀-ヿ㐀-鿿＀-￯]/;
