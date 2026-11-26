@@ -45,6 +45,7 @@ npm run test:mcp-browser # MCP クライアント → アダプタ → サーバ
 npm run test:review-browser # 独立レビュー(#24)で見つかった不具合の再発防止の確認(同上)
 npm run test:midi-browser # MIDI 機器の接続の確認(試験用の機器を使う。同上)
 npm run test:rack-browser  # ラックの表示と配色の確認(同上)
+npm run test:panel-browser # 人が操作する画面 PANEL の確認(同上)
 npm run test:score-browser # エージェントの演奏(楽譜と指示)の確認(同上)
 npm run test:reconnect-browser # サーバーを再起動したときの演奏データの保存の確認(同上)
 npm run test:local-llm-browser # 手元の LLM に演奏させるプログラムの確認(偽の LLM を使う。同上)

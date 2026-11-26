@@ -3,6 +3,7 @@
 import type { FromWorklet } from "../audio/messages.js";
 import { WorkletBackend } from "../audio/worklet-backend.js";
 import { buildCatalog } from "../control/catalog.js";
+import { fillOps } from "../view/fill.js";
 import { Controller } from "../control/controller.js";
 import type { PerformanceJournal, PerformanceJournalEntry } from "../control/controller.js";
 import { parsePatchText, serializePatchDocument } from "../control/patch-doc.js";
@@ -566,6 +567,29 @@ function demoOps(): { command: string; args: Record<string, unknown> }[] {
 
 let editor: Editor | null = null;
 
+// ---- 画面の切り替え(Issue #59)。RACK = エージェントの演奏を見る画面、PANEL = 人が配線とつまみを操作する画面 ----
+// 同じページの中で、見せる欄と並び順を替えるだけ(web/style.css)。PANEL のボタンも、RACK と同じコマンドを送る。
+type View = "rack" | "panel";
+function showView(view: View): void {
+  document.body.dataset.view = view;
+  for (const v of ["rack", "panel"] as const) $(`tab-${v}`).setAttribute("aria-selected", String(v === view));
+  render();
+}
+function setupViews(): void {
+  $("tab-rack").addEventListener("click", () => showView("rack"));
+  $("tab-panel").addEventListener("click", () => showView("panel"));
+  $("panel-panic").addEventListener("click", () => void run("engine.panic"));
+  $("panel-release").addEventListener("click", () => void run("engine.release_panic"));
+  $("panel-undo").addEventListener("click", () => void run("history.undo"));
+  $("panel-redo").addEventListener("click", () => void run("history.redo"));
+  // 一式を置く: ない種類を 1 台ずつ、1 回のまとめ適用で足す(配線しない。取り消しは 1 回)
+  $("panel-fill").addEventListener("click", () => {
+    const ops = fillOps(catalog.keys(), session.getPatch().modules);
+    if (ops.length > 0) void run("batch", { ops });
+  });
+  document.body.dataset.view = "rack";
+}
+
 // ---- MIDI 機器(Web MIDI)。画面鍵盤と同じ経路でエンジンへ渡す ----
 let midiMessages = 0;
 const midi = new MidiLink({
@@ -658,6 +682,7 @@ function renderStatus(): void {
   renderPerformance();
   $<HTMLButtonElement>("start").disabled = st.audioState === "running";
   $<HTMLButtonElement>("release").disabled = !st.panic;
+  $<HTMLButtonElement>("panel-release").disabled = !st.panic;
   editor?.renderMeters(st.audioState === "running" && w ? w.meters : null);
   rack?.update({ activity: st.audioState === "running" && w && !st.panic ? (w.activity ?? null) : null, overrides: w?.overrides ?? {}, peak: w ? w.peak : 0, panic: st.panic });
 }
@@ -774,6 +799,7 @@ function hudItems(): string[] {
 function render(force = false): void {
   renderQueued = false;
   renderStatus();
+  if (domReady) $<HTMLButtonElement>("panel-fill").disabled = fillOps(catalog.keys(), session.getPatch().modules).length === 0;
   editor?.render(force);
 }
 let renderQueued = false;
@@ -910,6 +936,7 @@ window.addEventListener("DOMContentLoaded", () => {
     })();
   });
   $("panic").addEventListener("click", () => void run("engine.panic"));
+  setupViews();
   // 緊急停止のボタンは画面の下にあるので、どこからでも Esc キーで止められるようにする(REQ-S-002: 即時に実行できる)
   window.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape" && !ev.repeat) void run("engine.panic");
