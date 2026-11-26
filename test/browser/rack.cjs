@@ -95,7 +95,7 @@ async function main() {
 
     // ---- 1) ラックが、パッチどおりの板・ジャック・ケーブルを持つ ----
     await agent("batch", { ops: PATCH });
-    await waitFor(async () => (await synth("rack.layout.panels.length")) === 41, "板の数");
+    await waitFor(async () => (await synth("rack.layout.panels.length")) === 42, "板の数");
     const patch = await synth("patch");
     const layout = await synth("rack.layout");
     assert.deepEqual(layout.panels.map((p) => p.id), patch.modules.map((m) => m.id), "板はモジュールの順");
@@ -119,7 +119,7 @@ async function main() {
     assert.ok(order.rack < 400, "ラックは、最初の画面に見えている");
     assert.equal((await page.textContent('label[for="prompt-text"]')).trim(), "prompt");
     assert.equal(await page.getAttribute("#prompt-text", "placeholder"), null, "prompt の欄に説明を書かない");
-    assert.match(await page.getAttribute("#rack", "aria-label"), /41 個のモジュールと 56 本のケーブル/);
+    assert.match(await page.getAttribute("#rack", "aria-label"), /42 個のモジュールと 57 本のケーブル/);
     ok("ラックに、パッチのモジュールが板として並び、板に全パラメータの行がある。音量と prompt が上、ユーティリティが下", `板 ${layout.panels.length} 枚、${Math.round(size.w)}×${Math.round(size.h)}px`);
 
     // ---- 2) 見た目の数値(資料の測り方): 暗部 10% 以上、白飛び 2.4% 以下、色相の幅 31° 以内 ----
@@ -137,10 +137,10 @@ async function main() {
 
     // ---- 3) LED は、音の出ているモジュールで点く。状態の帯 ----
     const act = (await synth("status")).activity;
-    assert.ok(Object.keys(act).length === 41, "全モジュールの出力の大きさが届く");
+    assert.ok(Object.keys(act).length === 42, "全モジュールの出力の大きさが届く");
     assert.ok(Object.values(act).some((v) => v >= 0.5) && Object.values(act).some((v) => v < 0.5), "点く板と、消えている板がある");
     const hud = await page.$$eval("#rack-hud div", (els) => els.map((e) => e.textContent));
-    assert.deepEqual(hud.slice(0, 1).concat(hud.slice(2)), ["audio run", "mod 41 · cbl 56", "idle", "out -20db", "hue 196°"]);
+    assert.deepEqual(hud.slice(0, 1).concat(hud.slice(2)), ["audio run", "mod 42 · cbl 57", "idle", "out -20db", "hue 196°"]);
     assert.match(hud[1], /^rev \d+$/);
     ok("LED は出力のあるモジュールで点き、状態は下の帯に等幅でまとまる", hud.join(" | "));
 
@@ -190,7 +190,7 @@ async function main() {
 
     // ---- 6) 板を押すと、そのモジュールの欄へ移る。変わったモジュールが分かる ----
     await page.selectOption("#hue", "196");
-    await waitFor(async () => (await synth("rack.layout.panels.length")) === 41, "再読込の後の板");
+    await waitFor(async () => (await synth("rack.layout.panels.length")) === 42, "再読込の後の板");
     const target = await page.evaluate(() => {
       const r = window.__synth.rack;
       const p = r.layout.panels.find((x) => x.id === "desk");
@@ -243,7 +243,7 @@ async function main() {
     await page.waitForTimeout(400);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     assert.ok(overflow <= 0, `幅 340px で横に ${overflow}px はみ出す`);
-    assert.equal(await synth("rack.layout.panels.length"), 41);
+    assert.equal(await synth("rack.layout.panels.length"), 42);
     ok("文字は地との明るさの比を保つ(本文 7:1 以上、補助 4.5:1 以上)。幅 340px でもはみ出さない", `本文 ${contrast.body.toFixed(1)}:1、補助 ${contrast.muted.toFixed(1)}:1`);
 
     // ---- 画面に文章を書かない(DEC-023): 全 20 種のモジュール、エラー、知らせ、確認を出した状態で、見える文字に日本語が 1 文字もない ----
