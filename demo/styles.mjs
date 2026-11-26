@@ -92,4 +92,23 @@ export const STYLES = {
     },
     rules: ["キックがいちばん大きい", "低音はキックを避けて刻む"],
   },
+  trance: {
+    label: "トランス",
+    ref: "kick",
+    roles: {
+      kick: { lufs: [0, 0], centroid: [40, 400] },
+      lead: { lufs: [-3, 0], centroid: [800, 6000] },
+      delay: { lufs: [-10, -5], centroid: [300, 3000] },
+      pad: { lufs: [-9, -4], centroid: [150, 2000] },
+      bass: { lufs: [-8, -3], centroid: [60, 600] },
+      perc: { lufs: [-13, -8], centroid: [2500, 10000] },
+      arp: { lufs: [-10, -5], centroid: [300, 3000] },
+      riser: { lufs: [-8, -3], centroid: [500, 8000] },
+    },
+    rules: [
+      "キックと主旋律がいちばん大きい。主旋律は鋸歯を少しずつずらして重ね、高い音域(A5 より上)で鳴らす",
+      "低音は裏拍。和音・アルペジオ・低音はフィルタで丸め、主旋律とライザーより暗く",
+      "主旋律の響きは付点 8 分のディレイ。戻りは暗く、片側へ",
+    ],
+  },
 };
