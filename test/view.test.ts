@@ -3,7 +3,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildCatalog } from "../src/control/catalog.js";
+import { EngineBackend } from "../src/control/backend.js";
+import { Session } from "../src/control/session.js";
 import { REGISTRY } from "../src/modules/registry.js";
+import { fillId, fillOps } from "../src/view/fill.js";
 import { DEFAULT_HUE_SETTING, HUE_CHOICES, HUE_PERIODS, HUE_SWEEP, hueAt, parseHueSetting } from "../src/view/hue.js";
 import { VALUE_LABEL, valueLabel } from "../src/view/labels.js";
 import { RACK, cableEnds, formatParam, layoutRack, panelAt, paramRows } from "../src/view/rack-layout.js";
@@ -174,4 +177,81 @@ test("画面に出す値の名前: 仕様の列挙型の値の名前は、すべ
     assert.match(valueLabel(l), /^[A-Z0-9]{1,8}$/, l);
   }
   assert.equal(valueLabel("未知"), "未知");
+});
+
+// ---- 人の画面(PANEL)の「一式を置く」(Issue #59、DEC-029、product-spec §4.1) ----
+
+test("一式を置く: 空のパッチ(out だけ)なら、out 以外の 19 種類を 1 台ずつ、読みやすい ID で足す。配線はしない", () => {
+  const catalog = buildCatalog(REGISTRY);
+  assert.equal(catalog.size, 20);
+  const ops = fillOps(catalog.keys(), [{ id: "out", type: "MOD-IO-001" }]);
+  assert.equal(ops.length, 19);
+  assert.ok(ops.every((o) => o.command === "module.add"));
+  assert.equal(new Set(ops.map((o) => o.args.type)).size, 19);
+  assert.ok(!ops.some((o) => o.args.type === "MOD-IO-001"));
+  assert.deepEqual(
+    ops.map((o) => o.args.id),
+    ["amp", "clk", "clk2", "dly", "env", "flt", "fnc", "io2", "io3", "lfo", "lgc", "mix", "mix2", "nse", "osc", "rnd", "sat", "seq", "utl"],
+  );
+});
+
+test("一式を置く: 既にある種類は足さない。ID が別の種類に使われていれば、ID を指定しない(自動採番)", () => {
+  const catalog = buildCatalog(REGISTRY);
+  const modules = [
+    { id: "out", type: "MOD-IO-001" },
+    { id: "vco", type: "MOD-OSC-001" },
+    { id: "vco2", type: "MOD-OSC-001" },
+    { id: "env", type: "MOD-AMP-001" }, // 読みやすい ID「env」を、別の種類が使っている
+  ];
+  const ops = fillOps(catalog.keys(), modules);
+  assert.equal(ops.length, 17);
+  assert.ok(!ops.some((o) => o.args.type === "MOD-OSC-001" || o.args.type === "MOD-AMP-001"));
+  const env = ops.find((o) => o.args.type === "MOD-ENV-001");
+  assert.equal(env?.args.id, undefined);
+  // 全種類がそろっていれば、足すものはない
+  const all = [...catalog.keys()].map((type, i) => ({ id: `x${i}`, type }));
+  assert.equal(fillOps(catalog.keys(), all).length, 0);
+  assert.equal(fillId("MOD-CLK-002"), "clk2");
+  assert.equal(fillId("bad"), null);
+});
+
+test("一式を置く: batch 1 回で足し、取り消し 1 回で元に戻る。エージェントのモジュールと配線は残り、その後のエージェントの操作も通る", () => {
+  const catalog = buildCatalog(REGISTRY);
+  const s = new Session({ catalog, backend: new EngineBackend(48000, REGISTRY), sessionId: "s-fill" });
+  let n = 0;
+  const send = (command: string, args: Record<string, unknown> | undefined, actor: "human" | "agent") =>
+    s.handle({ v: 1, request_id: `f-${++n}`, command, ...(args ? { args } : {}) }, actor);
+  // 空のパッチ
+  let r = send("batch", { ops: fillOps(catalog.keys(), s.getPatch().modules) }, "human");
+  assert.equal(r.ok, true);
+  assert.equal(s.getPatch().modules.length, 20);
+  assert.equal(new Set(s.getPatch().modules.map((m) => m.type)).size, 20);
+  assert.equal(s.getPatch().cables.length, 0);
+  assert.equal(fillOps(catalog.keys(), s.getPatch().modules).length, 0);
+  r = send("history.undo", undefined, "human");
+  assert.equal(r.ok, true);
+  assert.deepEqual(s.getPatch().modules.map((m) => m.id), ["out"]);
+  // エージェントが組んだパッチがあるとき
+  r = send(
+    "batch",
+    {
+      ops: [
+        { command: "module.add", args: { id: "vco", type: "MOD-OSC-001" } },
+        { command: "module.add", args: { id: "vco2", type: "MOD-OSC-001" } },
+        { command: "cable.connect", args: { from: { module: "vco", port: "saw" }, to: { module: "out", port: "IN_L" } } },
+      ],
+    },
+    "agent",
+  );
+  assert.equal(r.ok, true);
+  const before = s.revision;
+  r = send("batch", { ops: fillOps(catalog.keys(), s.getPatch().modules) }, "human");
+  assert.equal(r.ok, true);
+  assert.equal(s.revision, before + 1);
+  const p = s.getPatch();
+  assert.equal(p.modules.length, 21);
+  assert.equal(p.modules.filter((m) => m.type === "MOD-OSC-001").length, 2);
+  assert.equal(p.cables.length, 1);
+  r = send("param.set", { module_id: "vco2", param: "tune", value: 0.1 }, "agent");
+  assert.equal(r.ok, true, JSON.stringify(r));
 });
