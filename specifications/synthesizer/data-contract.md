@@ -1,6 +1,6 @@
 # データ契約(パッチ・自動保存・スナップショット、版互換と移行)
 
-版: 0.4 / 2026-11-20(実装で補った解釈を反映(Issue #24。`docs/contract-notes.md`、`docs/implementation-notes.md`): 時刻の書式、文字数の数え方、`issues[].path` の書式、JSON の解釈、移行のない古い仕様版、`spec_version` の表記、旧版の既定値、一覧の `readable`、保存後のやり直し、スナップショットの −0、仮の既定値。Issue #24 の修正で変わった・増えた規則も同じ版に追記: `ui` の入れ子の上限、保存文書の書式、上書きの判定、単一タブ、自動保存の時点と退避、保存先の読出しと一時ファイル。規則ID・無効例(DX)は変えていない。0.3 は #2 の改訂(Issue #10: 全18仕様 0.2、common.md 0.5)を反映: 例の `spec_version` と MOD-IO-002 の `voices`、接続できないポート、仕様版 0.1→0.2 の移行(§9.5)。0.2 は独立レビューの反映)。状態: 設計(シンセ本体は未実装)。
+版: 0.5 / 2026-11-27(MOD-OSC-001 を仕様版 0.3 へ上げた(Issue #58、DEC-028): 例の `spec_version`、§9.5 に 0.2 → 0.3 の移行。0.4 は実装で補った解釈を反映(Issue #24。`docs/contract-notes.md`、`docs/implementation-notes.md`): 時刻の書式、文字数の数え方、`issues[].path` の書式、JSON の解釈、移行のない古い仕様版、`spec_version` の表記、旧版の既定値、一覧の `readable`、保存後のやり直し、スナップショットの −0、仮の既定値。Issue #24 の修正で変わった・増えた規則も同じ版に追記: `ui` の入れ子の上限、保存文書の書式、上書きの判定、単一タブ、自動保存の時点と退避、保存先の読出しと一時ファイル。規則ID・無効例(DX)は変えていない。0.3 は #2 の改訂(Issue #10: 全18仕様 0.2、common.md 0.5)を反映: 例の `spec_version` と MOD-IO-002 の `voices`、接続できないポート、仕様版 0.1→0.2 の移行(§9.5)。0.2 は独立レビューの反映)。状態: 設計(シンセ本体は未実装)。
 要求は [requirements.md](requirements.md)(`REQ-…`。検証IDは同じ枝番の `VER-…`)、構成は [product-spec.md](product-spec.md)、判断と未決は [plans/decisions.md](../../plans/decisions.md)(`DEC-…`/`OPEN-…`)、コマンドとエラーは [operation-contract.md](operation-contract.md)(`CMD-…`/`ERR-…`)、モジュールのポート・パラメータ・内部状態は [specifications/modules/](../modules/README.md)(`MOD-…`/`COM-…`)が正本。本書はそれらを複製せずIDで参照する。
 
 本書のID: 規則 `DAT-nn`、読込時の検証規則 `DAT-Vnn`、無効な例 `DX-nn`。IDは変更しない。
@@ -248,7 +248,7 @@
 ### 9.2 互換の範囲
 - **DAT-51 下位互換(古いパッチを新しいアプリで読む)**: 公開した**すべての** `schema_version` と `spec_version` のパッチを読める(REQ-NF-006)。移行関数を消さない。
 - **DAT-52 上位互換(新しいパッチを古いアプリで読む)**: 保証しない。拒否する(ERR-205)。
-- **DAT-53** 最初の公開までの開発中は、`schema_version = 1` と各モジュール仕様の現行版の内容を変えてよい。公開後は変えず、版を上げる。#2 は公開前の改訂(Issue #10)で仕様版を `0.1` から `0.2` へ上げたので、`0.1` → `0.2` の移行を §9.5 のとおり登録する。
+- **DAT-53** 最初の公開までの開発中は、`schema_version = 1` と各モジュール仕様の現行版の内容を変えてよい。公開後は変えず、版を上げる。#2 は公開前の改訂(Issue #10)で仕様版を `0.1` から `0.2` へ上げたので、`0.1` → `0.2` の移行を §9.5 のとおり登録する。 MOD-OSC-001 は公開前の改訂(Issue #58)で `0.2` から `0.3` へ上げたので、`0.2` → `0.3` の何もしない移行を同じく登録する。
 - **DAT-54 名前の固定**: 公開後、モジュールの種別ID、ポート名、パラメータ名は変えない。変える場合は必ず版を上げて移行関数を書く(名前の変更は保存済みパッチを壊す: F-018-015)。
 
 ### 9.3 移行関数の規則
@@ -280,6 +280,13 @@
 仕様版 0.1 と 0.2 で、パラメータの既定値と名前は変わっていない。0.1 のパラメータの組は、0.2 の組から上の表で増えた名前(`voices`、`channel`)を除いたもので、DAT-08・DAT-59 の「元の `spec_version` の既定値」は 0.2 の既定値と同じ値になる。
 
 追加されたポート(MOD-IO-001 の `PRE_L`/`PRE_R`)は接続できないので、ケーブルのポート名の移行はない。スナップショット(§6)は版が違えば移行しない(作り直す)。
+
+**実施済みの改訂(MOD-OSC-001 の仕様版 0.2 → 0.3。Issue #58。1種だけ)**。移行の正本は MOD-OSC-001 §9。
+| 改訂 | 保存データへの影響 | 登録する移行(0.2 → 0.3) |
+|---|---|---|
+| MOD-OSC-001(鋸歯・矩形・三角の帯域制限: DEC-028) | パラメータ・ポート・状態変数の組は同じ。挙動だけが変わる(鋸歯・矩形・三角の段差と角の前後のサンプルが変わり、折り返し雑音が減る。正弦は同じ) | 何もしない移行(MOD-OSC-001 §9)。0.1 のパッチは 0.1 → 0.2 → 0.3 と順に移行する(DAT-56) |
+
+ほかの19種の仕様版は 0.2 のまま。
 
 **予定されている改訂**
 | 改訂 | 保存データへの影響の見込み |
@@ -323,7 +330,7 @@ MIDI-CV → VCO → ローパスフィルタ → VCA → 出力。ADSRがVCAを�
     {"id": "midi1", "type": "MOD-IO-002", "spec_version": "0.2",
      "params": {"channel": 0, "transpose": 0, "voices": 1, "cc_number": 1},
      "ui": {"x": 0, "y": 0}},
-    {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2",
+    {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3",
      "params": {"range": 0, "tune": 0.0, "fm_amt": 0.0, "pw": 0.5, "pwm_amt": 0.0},
      "ui": {"x": 10, "y": 0}},
     {"id": "vcf1", "type": "MOD-FLT-001", "spec_version": "0.2",
@@ -406,7 +413,7 @@ DX-08:
 ```json
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}],
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"}],
  "cables": []}
 ```
 DX-09:
@@ -414,8 +421,8 @@ DX-09:
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"},
-   {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.2"}],
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"},
+   {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.3"}],
  "cables": [
    {"id": "c1", "from": {"module": "vco1", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}},
    {"id": "c2", "from": {"module": "vco2", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}]}
@@ -425,7 +432,7 @@ DX-10:
 {"format": "modular-synth-patch", "schema_version": 1,
  "modules": [
    {"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"},
-   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}],
+   {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"}],
  "cables": [
    {"id": "c1", "from": {"module": "vco1", "port": "square"}, "to": {"module": "out", "port": "IN_L"}},
    {"id": "c2", "from": {"module": "out", "port": "IN_L"}, "to": {"module": "vco1", "port": "fm"}}]}

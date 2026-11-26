@@ -1,5 +1,6 @@
-// MOD-OSC-001 VCO(仕様 v0.2)。
+// MOD-OSC-001 VCO(仕様 v0.3)。
 // 位相アキュムレータ(double)から saw / pulse / tri / sine を同時に生成する。
+// saw・pulse・tri は帯域制限する(段差に PolyBLEP、角に PolyBLAMP。2 サンプルの多項式。§6、DEC-028)。
 // 主入力は pitch(N を決める)。fm・pwm・sync は副入力。エンジンごとに phase と sync_state を持つ。
 
 import { ModuleDef, ModuleState, SynthModule } from "../engine/module.js";
@@ -9,9 +10,46 @@ const F0 = 261.6256; // COM-03: C4
 const PW_MIN = 0.02;
 const PW_MAX = 0.98;
 
+/**
+ * 段差の位置 d(位相)から見た、いまの位相 ph の距離をサンプル数で返す(§6 の `dist`)。
+ * 位相の差を [-0.5, 0.5) に折り返してから dphi で割る。
+ */
+function dist(ph: number, d: number, dphi: number): number {
+  let u = ph - d;
+  if (u >= 0.5) u -= 1;
+  else if (u < -0.5) u += 1;
+  return u / dphi;
+}
+
+/** 高さ 1 の段差の補正(PolyBLEP)。段差の直前 1 サンプルと直後 1 サンプルだけが 0 でない。 */
+function blep(x: number): number {
+  if (x >= 0 && x < 1) {
+    const t = 1 - x;
+    return -0.5 * t * t;
+  }
+  if (x >= -1 && x < 0) {
+    const t = 1 + x;
+    return 0.5 * t * t;
+  }
+  return 0;
+}
+
+/** 傾きが 1 サンプルあたり 1 変わる角の補正(PolyBLAMP。blep を積分したもの)。 */
+function blamp(x: number): number {
+  if (x >= 0 && x < 1) {
+    const t = 1 - x;
+    return (t * t * t) / 6;
+  }
+  if (x >= -1 && x < 0) {
+    const t = 1 + x;
+    return (t * t * t) / 6;
+  }
+  return 0;
+}
+
 const DEF: ModuleDef = {
   specId: "MOD-OSC-001",
-  specVersion: "0.2",
+  specVersion: "0.3",
   title: "VCO(電圧制御オシレータ)",
   inputs: [
     { name: "pitch", type: "pitch", unconnected: 0 },
@@ -126,11 +164,14 @@ export class OscModule extends SynthModule {
       // 3. パルス幅
       const pwEff = clamp(pw + (pwmAmt * xPwm) / 10, PW_MIN, PW_MAX);
 
-      // 4. 波形(位相を進める前の値から)
+      // 4. 波形(位相を進める前の値から)。ナイーブな形に、段差と角の補正を足す
+      const b0 = blep(dist(ph, 0, dphi)); // 位相 0: saw は -8 V、pulse は +8 V の段差
+      const bPw = blep(dist(ph, pwEff, dphi)); // 位相 pw_eff: pulse は -8 V の段差
       const x = ph < 0.25 ? ph : ph < 0.75 ? 0.5 - ph : ph - 1;
-      this.writeOut(oSaw, c, 4 * (2 * ph - 1));
-      this.writeOut(oPulse, c, ph < pwEff ? 4 : -4);
-      this.writeOut(oTri, c, 20 * x);
+      const k = 40 * dphi; // tri の傾きの変化(1 サンプルあたり)
+      this.writeOut(oSaw, c, 4 * (2 * ph - 1) - 8 * b0);
+      this.writeOut(oPulse, c, (ph < pwEff ? 4 : -4) + 8 * b0 - 8 * bPw);
+      this.writeOut(oTri, c, 20 * x - k * blamp(dist(ph, 0.25, dphi)) + k * blamp(dist(ph, 0.75, dphi)));
       this.writeOut(oSine, c, 5 * Math.sin(2 * Math.PI * ph));
 
       // 5. 状態更新
