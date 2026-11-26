@@ -30,7 +30,7 @@ const P0: Patch = {
   modules: [
     { id: "out", type: "MOD-IO-001", spec_version: "0.2", params: { level: 1.0, mute: 0 }, ui: { x: 40, y: 0 } },
     { id: "midi1", type: "MOD-IO-002", spec_version: "0.2", params: { channel: 0, transpose: 0, voices: 1, cc_number: 1 }, ui: { x: 0, y: 0 } },
-    { id: "vco1", type: "MOD-OSC-001", spec_version: "0.2", params: { range: 0, tune: 0.0, fm_amt: 0.0, pw: 0.5, pwm_amt: 0.0 }, ui: { x: 10, y: 0 } },
+    { id: "vco1", type: "MOD-OSC-001", spec_version: "0.3", params: { range: 0, tune: 0.0, fm_amt: 0.0, pw: 0.5, pwm_amt: 0.0 }, ui: { x: 10, y: 0 } },
     { id: "vcf1", type: "MOD-FLT-001", spec_version: "0.2", params: { cutoff: 1.0, res: 0.3, cv2_level: 1.0, cv3_level: 1.0 }, ui: { x: 20, y: 0 } },
     {
       id: "vca1",
@@ -636,17 +636,17 @@ const DX: Record<string, { text: string; id: keyof typeof ERRORS; rule: string }
     rule: "DAT-V11",
   },
   "DX-08": {
-    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}], "cables": []}',
+    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"}], "cables": []}',
     id: "ERR-204",
     rule: "DAT-V09",
   },
   "DX-09": {
-    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"}, {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}, {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.2"}], "cables": [{"id": "c1", "from": {"module": "vco1", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}, {"id": "c2", "from": {"module": "vco2", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}]}',
+    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"}, {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"}, {"id": "vco2", "type": "MOD-OSC-001", "spec_version": "0.3"}], "cables": [{"id": "c1", "from": {"module": "vco1", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}, {"id": "c2", "from": {"module": "vco2", "port": "saw"}, "to": {"module": "out", "port": "IN_L"}}]}',
     id: "ERR-204",
     rule: "DAT-V16",
   },
   "DX-10": {
-    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"}, {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.2"}], "cables": [{"id": "c1", "from": {"module": "vco1", "port": "square"}, "to": {"module": "out", "port": "IN_L"}}, {"id": "c2", "from": {"module": "out", "port": "IN_L"}, "to": {"module": "vco1", "port": "fm"}}]}',
+    text: '{"format": "modular-synth-patch", "schema_version": 1, "modules": [{"id": "out", "type": "MOD-IO-001", "spec_version": "0.2"}, {"id": "vco1", "type": "MOD-OSC-001", "spec_version": "0.3"}], "cables": [{"id": "c1", "from": {"module": "vco1", "port": "square"}, "to": {"module": "out", "port": "IN_L"}}, {"id": "c2", "from": {"module": "out", "port": "IN_L"}, "to": {"module": "vco1", "port": "fm"}}]}',
     id: "ERR-204",
     rule: "DAT-V14",
   },
@@ -777,7 +777,7 @@ test("CMD-13: JSON を直接渡す読込(patch)。省略パラメータは既定
       schema_version: 1,
       modules: [
         { id: "out", type: "MOD-IO-001", spec_version: "0.2" },
-        { id: "vco1", type: "MOD-OSC-001", spec_version: "0.2", params: { tune: 0.5 } },
+        { id: "vco1", type: "MOD-OSC-001", spec_version: "0.3", params: { tune: 0.5 } },
       ],
       cables: [{ id: "c1", from: { module: "vco1", port: "saw" }, to: { module: "out", port: "IN_L" } }],
     },
@@ -789,7 +789,7 @@ test("CMD-13: JSON を直接渡す読込(patch)。省略パラメータは既定
   assert.deepEqual(patch.meta, { title: "", description: "" });
   assert.deepEqual(patch.modules, [
     { id: "out", type: "MOD-IO-001", spec_version: "0.2", params: { level: 1.0, mute: 0 } },
-    { id: "vco1", type: "MOD-OSC-001", spec_version: "0.2", params: { range: 0, tune: 0.5, fm_amt: 0.0, pw: 0.5, pwm_amt: 0.0 } },
+    { id: "vco1", type: "MOD-OSC-001", spec_version: "0.3", params: { range: 0, tune: 0.5, fm_amt: 0.0, pw: 0.5, pwm_amt: 0.0 } },
   ]);
   assert.equal(patch.cables.length, 1);
   assert.equal(r.store.calls.length, 0, "保存先は使わない");
@@ -809,7 +809,7 @@ test("DAT-9.4: 移行があった読込は result.migrated に内容を入れ、
   assert.equal(migrated.schema_to, 1);
   assert.deepEqual(
     migrated.modules.map((m) => [m.id, m.spec_from, m.spec_to]),
-    P0.modules.map((m) => [m.id, "0.1", "0.2"]),
+    P0.modules.map((m) => [m.id, "0.1", m.type === "MOD-OSC-001" ? "0.3" : "0.2"]),
   );
   assert.ok(res.warnings.some((w) => w.code === "migrated"), JSON.stringify(res.warnings));
   assertSamePatch(r.s.getPatch(), P0);

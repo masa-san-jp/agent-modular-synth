@@ -1,4 +1,4 @@
-// MOD-OSC-001 の検証例(specifications/modules/MOD-OSC-001.md §10)。
+// MOD-OSC-001 の検証例(specifications/modules/MOD-OSC-001.md §10。仕様版 0.3: 帯域制限した波形)。
 import assert from "node:assert/strict";
 import { OscModule } from "../src/modules/osc.js";
 import { InSpec, near, nearAll, stepWith, tv } from "./helpers.js";
@@ -32,7 +32,7 @@ function run(m: OscModule, steps: number, inp: (n: number) => InSpec, out: strin
 }
 
 const TV01 = [
-  [-4, 4, 0, 0],
+  [0, 0, 0, 0],
   [-3.956396, 4, 0.109011, 0.1712],
   [-3.912791, 4, 0.218021, 0.342199],
   [-3.869187, 4, 0.327032, 0.512797],
@@ -49,13 +49,13 @@ tv("TV-MOD-OSC-001-01", () => {
 tv("TV-MOD-OSC-001-02", () => {
   const m = mk(F16);
   const exp: Record<number, number[]> = {
-    0: [-4, 4, 0, 0],
+    0: [0, 0, 0, 0],
     2: [-3, 4, 2.5, 3.535534],
-    4: [-2, 4, 5, 5],
+    4: [-2, 4, 4.583333, 5],
     6: [-1, 4, 2.5, 3.535534],
-    8: [0, -4, 0, 0],
-    12: [2, -4, -5, -5],
-    16: [-4, 4, 0, 0],
+    8: [0, 0, 0, 0],
+    12: [2, -4, -4.583333, -5],
+    16: [0, 0, 0, 0],
   };
   for (let n = 0; n <= 16; n++) {
     const y = st(m, { pitch: 0 });
@@ -66,10 +66,10 @@ tv("TV-MOD-OSC-001-02", () => {
 tv("TV-MOD-OSC-001-03", () => {
   // (a)
   const a = run(mk(F16, { pw: 0.25 }), 16, () => ({ pitch: 0 }), "pulse")[0]!;
-  assert.deepEqual(a, Array.from({ length: 16 }, (_, n) => (n <= 3 ? 4 : -4)));
+  assert.deepEqual(a, Array.from({ length: 16 }, (_, n) => (n === 0 || n === 4 ? 0 : n <= 3 ? 4 : -4)));
   // (b)
   const b = run(mk(F16, { pw: 0.5, pwm_amt: 1 }), 16, () => ({ pitch: 0, pwm: 2.5 }), "pulse")[0]!;
-  assert.deepEqual(b, Array.from({ length: 16 }, (_, n) => (n <= 11 ? 4 : -4)));
+  assert.deepEqual(b, Array.from({ length: 16 }, (_, n) => (n === 0 || n === 12 ? 0 : n <= 11 ? 4 : -4)));
 });
 
 tv("TV-MOD-OSC-001-04", () => {
@@ -81,8 +81,8 @@ tv("TV-MOD-OSC-001-04", () => {
     saw.push(y[0]!);
     tri.push(y[2]!);
   }
-  nearAll(saw, [-4, -3.5, -3, -2.5, -2, -1.5, -4, -3.5, -3, -2.5], TOL);
-  nearAll(tri, [0, 1.25, 2.5, 3.75, 5, 3.75, 0, 1.25, 2.5, 3.75], TOL);
+  nearAll(saw, [0, -3.5, -3, -2.5, -2, -1.5, 0, -3.5, -3, -2.5], TOL);
+  nearAll(tri, [0, 1.25, 2.5, 3.75, 4.583333, 3.75, 0, 1.25, 2.5, 3.75], TOL);
 });
 
 tv("TV-MOD-OSC-001-05", () => {
@@ -92,18 +92,15 @@ tv("TV-MOD-OSC-001-05", () => {
     const m = mk(FS);
     const ys: number[][] = [];
     for (let n = 0; n < 4; n++) ys.push(st(m, { pitch }));
-    nearAll(ys.map((y) => y[0]!), [-4, 0, -4, 0], TOL, 0, `saw pitch=${pitch}`);
-    assert.deepEqual(ys.map((y) => y[1]!), [4, -4, 4, -4]);
-    for (const y of ys) {
-      assert.ok(Math.abs(y[2]!) < 1e-5);
-      assert.ok(Math.abs(y[3]!) < 1e-5);
-    }
+    for (const y of ys) for (let i = 0; i < 4; i++) assert.ok(Math.abs(y[i]!) < 1e-5, `pitch=${pitch} ${OUTS[i]}=${y[i]}`);
     res.push(ys);
   }
   assert.deepEqual(res[1], res[0]);
   // (c)
   const m = mk(FS);
-  st(m, { pitch: -10 });
+  const y0 = st(m, { pitch: -10 });
+  near(y0[0]!, 0, TOL);
+  near(y0[1]!, 0, TOL);
   const y1 = st(m, { pitch: -10 });
   near(y1[0]!, -3.999957, TOL);
   near(y1[2]!, 0.000106, TOL);
@@ -116,7 +113,7 @@ tv("TV-MOD-OSC-001-05", () => {
 
 tv("TV-MOD-OSC-001-06", () => {
   const p = run(mk(F16, { pw: 0.0 }), 16, () => ({ pitch: 0 }), "pulse")[0]!;
-  assert.deepEqual(p, Array.from({ length: 16 }, (_, n) => (n === 0 ? 4 : -4)));
+  nearAll(p, [-1.8496, -3.5904, ...Array(14).fill(-4)], TOL);
 });
 
 tv("TV-MOD-OSC-001-07", () => {
@@ -136,7 +133,7 @@ tv("TV-MOD-OSC-001-09", () => {
   const m = mk(F16);
   for (let n = 0; n < 10; n++) st(m, { pitch: 0 });
   m.reset();
-  nearAll(st(m, { pitch: 0 }), [-4, 4, 0, 0], TOL);
+  nearAll(st(m, { pitch: 0 }), [0, 0, 0, 0], TOL);
   nearAll(st(m, { pitch: 0 }), [-3.5, 4, 1.25, 1.913417], TOL);
   nearAll(st(m, { pitch: 0 }), [-3, 4, 2.5, 3.535534], TOL);
   assert.equal(m.param("range"), 0);
@@ -171,11 +168,11 @@ tv("TV-MOD-OSC-001-11", () => {
     for (const o of OUTS) assert.equal(m.output(o).channels, 3);
     for (let c = 0; c < 3; c++) got[c]!.push(OUTS.map((o) => m.output(o).values[c]!));
   }
-  nearAll(got[0]!.map((y) => y[0]!), [-4, -3.5, -3, -2.5, -2, -1.5], TOL);
-  nearAll(got[1]!.map((y) => y[0]!), [-4, -3, -2, -1, 0, 1], TOL);
-  nearAll(got[2]!.map((y) => y[0]!), [-4, -3.75, -3.5, -3.25, -3, -2.75], TOL);
-  nearAll(got[0]![4]!, [-2, 4, 5, 5], TOL);
-  nearAll(got[1]![4]!, [0, -4, 0, 0], TOL);
+  nearAll(got[0]!.map((y) => y[0]!), [0, -3.5, -3, -2.5, -2, -1.5], TOL);
+  nearAll(got[1]!.map((y) => y[0]!), [0, -3, -2, -1, 0, 1], TOL);
+  nearAll(got[2]!.map((y) => y[0]!), [0, -3.75, -3.5, -3.25, -3, -2.75], TOL);
+  nearAll(got[0]![4]!, [-2, 4, 4.583333, 5], TOL);
+  nearAll(got[1]![4]!, [0, 0, 0, 0], TOL);
   nearAll(got[2]![4]!, [-3, 4, 2.5, 3.535534], TOL);
   // モノとの一致(ビット同一)
   for (let c = 0; c < 3; c++) {
@@ -201,31 +198,31 @@ tv("TV-MOD-OSC-001-12", () => {
         pulse[c]!.push(m.output("pulse").values[c]!);
       }
     }
-    nearAll(saw[0]!, [-4, -3, -2, -1, 0, 1, 2, -4, -3, -2], TOL);
-    nearAll(saw[1]!, [-4, -3.75, -3.5, -3.25, -3, -2.75, -2.5, -4, -3.75, -3.5], TOL);
-    nearAll(saw[2]!, [-4, -3.5, -3, -2.5, -2, -1.5, -1, -4, -3.5, -3], TOL);
-    assert.deepEqual(pulse[0], Array.from({ length: 10 }, (_, n) => (n === 6 ? -4 : 4)));
-    assert.deepEqual(pulse[1], Array(10).fill(4));
-    assert.deepEqual(pulse[2], Array(10).fill(4));
+    nearAll(saw[0]!, [0, -3, -2, -1, 0, 1, 2, 0, -3, -2], TOL);
+    nearAll(saw[1]!, [0, -3.75, -3.5, -3.25, -3, -2.75, -2.5, 0, -3.75, -3.5], TOL);
+    nearAll(saw[2]!, [0, -3.5, -3, -2.5, -2, -1.5, -1, 0, -3.5, -3], TOL);
+    assert.deepEqual(pulse[0], Array.from({ length: 10 }, (_, n) => (n === 0 || n === 6 || n === 7 ? 0 : 4)));
+    assert.deepEqual(pulse[1], Array.from({ length: 10 }, (_, n) => (n === 0 || n === 7 ? 0 : 4)));
+    assert.deepEqual(pulse[2], Array.from({ length: 10 }, (_, n) => (n === 0 || n === 7 ? 0 : 4)));
   }
   // (b)
   {
     const m = mk(F16, { fm_amt: 0, pwm_amt: 0, pw: 0.5 });
     const saw = run(m, 8, (n) => ({ pitch: [0, 0, 0], sync: [0, n < 4 ? 0 : 10] }), "saw");
     assert.equal(saw.length, 3);
-    const free = [-4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5];
+    const free = [0, -3.5, -3, -2.5, -2, -1.5, -1, -0.5];
     nearAll(saw[0]!, free, TOL);
     nearAll(saw[2]!, free, TOL);
-    nearAll(saw[1]!, [-4, -3.5, -3, -2.5, -4, -3.5, -3, -2.5], TOL);
+    nearAll(saw[1]!, [0, -3.5, -3, -2.5, 0, -3.5, -3, -2.5], TOL);
   }
 });
 
 tv("TV-MOD-OSC-001-13", () => {
   const m = mk(F16, { fm_amt: 1 });
   const exp = [
-    [-4, 4, 0, 0],
+    [0, 0, 0, 0],
     [-3, 4, 2.5, 3.535534],
-    [-2, 4, 5, 5],
+    [-2, 4, 4.166667, 5],
     [-1, 4, 2.5, 3.535534],
   ];
   for (let n = 0; n < 4; n++) {
@@ -237,11 +234,11 @@ tv("TV-MOD-OSC-001-13", () => {
 tv("TV-MOD-OSC-001-14", () => {
   const m = mk(F16);
   const e0 = [
-    [-4, 4, 0, 0],
+    [0, 0, 0, 0],
     [-3.5, 4, 1.25, 1.913417],
   ];
   const e1 = [
-    [-4, 4, 0, 0],
+    [0, 0, 0, 0],
     [-3, 4, 2.5, 3.535534],
   ];
   for (let n = 0; n < 2; n++) {
@@ -251,4 +248,20 @@ tv("TV-MOD-OSC-001-14", () => {
     nearAll(OUTS.map((o) => m.output(o).values[1]!), e1[n]!, TOL, 0, `c=1 n=${n}`);
   }
   assert.equal(m.nonfiniteCount, 4);
+});
+
+tv("TV-MOD-OSC-001-15", () => {
+  const m = mk(FS);
+  const exp: Record<number, number[]> = {
+    45: [-2.037808, 4, 4.905395, 4.997796],
+    46: [-1.994204, 4, 4.961822, 4.999948],
+    91: [-0.032012, 3.717279, 0.080029, 0.125697],
+    92: [0.011593, -1.844141, -0.028981, -0.045523],
+    183: [2.848695, -2.869114, -0.051048, -0.080183],
+    184: [-3.099654, 3.122839, 0.057963, 0.091043],
+  };
+  for (let n = 0; n <= 184; n++) {
+    const y = st(m, { pitch: 0 });
+    if (exp[n]) nearAll(y, exp[n]!, TOL, 0, `n=${n}`);
+  }
 });

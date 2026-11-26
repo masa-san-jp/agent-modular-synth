@@ -26,6 +26,7 @@
     "bench": "npm run build && mkdir -p bench/results && node dist/src/perf/offline.js --json bench/results/offline.json",
     "bench:browser": "npm run build && node test/browser/bench.cjs",
     "agent:local": "npm run build && node dist/agents/local-llm/main.js",
+    "measure:osc-aliasing": "npm run build && node tools/measure-osc-aliasing.mjs",
     "bench:render": "npm run build && mkdir -p bench/results && node demo/make-performance.mjs demo/techno.mjs bench/results/techno.performance.json && node test/browser/bench-render.cjs bench/results/techno.performance.json --json bench/results/render.json",
     "dev": "npm run build && node dist/src/server/main.js",
     "render": "node dist/src/server/render-cli.js",

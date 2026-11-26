@@ -113,7 +113,7 @@ export interface PatchLoadOptions {
   specMigrations?: ReadonlyMap<string, readonly SpecMigrationStep[]>;
 }
 
-// ---- 移行の登録(§9.5: 仕様版 0.1 → 0.2。18種すべて) ----
+// ---- 移行の登録(§9.5: 仕様版 0.1 → 0.2。18種すべて。MOD-OSC-001 は 0.2 → 0.3 も) ----
 function addParam(name: string, value: number): SpecMigrationStep {
   return {
     from: "0.1",
@@ -124,7 +124,10 @@ function addParam(name: string, value: number): SpecMigrationStep {
 }
 const NOOP_01_02: SpecMigrationStep = { from: "0.1", to: "0.2", migrate: (params) => ({ ...params }) };
 const NOOP_CHAIN: readonly SpecMigrationStep[] = [NOOP_01_02];
+/** 帯域制限した波形への置き換え(MOD-OSC-001 §9、DEC-028)。パラメータの組と意味は同じ。 */
+const NOOP_OSC_02_03: SpecMigrationStep = { from: "0.2", to: "0.3", migrate: (params) => ({ ...params }) };
 const SPEC_MIGRATIONS: ReadonlyMap<string, readonly SpecMigrationStep[]> = new Map([
+  ["MOD-OSC-001", [NOOP_01_02, NOOP_OSC_02_03]],
   ["MOD-IO-002", [addParam("voices", 1)]], // 単音。0.1 と全出力が一致(MOD-IO-002 §9)
   ["MOD-IO-003", [addParam("channel", 1)]], // 0.1 の「1チャンネル目のみ測定」と同じ(MOD-IO-003 §9)
 ]);
