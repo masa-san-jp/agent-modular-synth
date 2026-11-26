@@ -546,8 +546,8 @@ export function createEditor(deps: EditorDeps): Editor {
     renderModules(patch, force);
     renderCables(patch);
     const h = deps.getHistory();
-    byId<HTMLButtonElement>("undo").disabled = !h.can_undo;
-    byId<HTMLButtonElement>("redo").disabled = !h.can_redo;
+    for (const id of ["undo", "panel-undo"]) byId<HTMLButtonElement>(id).disabled = !h.can_undo;
+    for (const id of ["redo", "panel-redo"]) byId<HTMLButtonElement>(id).disabled = !h.can_redo;
   }
 
   function renderMeters(meters: Record<string, Record<string, unknown>> | null): void {

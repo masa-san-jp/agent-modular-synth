@@ -10,6 +10,10 @@
 <body>
 <div id="blocked" role="alert" hidden></div>
 <h1>agent-modular-synth</h1>
+<nav id="views" class="row" role="tablist" aria-label="views">
+  <button id="tab-rack" type="button" role="tab" aria-selected="true">RACK</button>
+  <button id="tab-panel" type="button" role="tab" aria-selected="false">PANEL</button>
+</nav>
 <div id="messages" aria-live="polite">
   <div id="error" role="alert"></div>
   <div id="notice"></div>
@@ -36,9 +40,20 @@
     <button id="prompt-send" type="submit">SEND</button>
   </form>
   <ul id="prompt-list" aria-label="送った指示"></ul>
-  <div class="row">
+  <div class="row" id="perf-row">
     <span id="perf-state" class="mono"></span>
     <button id="score-stop" type="button">STOP</button>
+  </div>
+</section>
+
+<section aria-labelledby="h-panel" id="panel-bar">
+  <h2 id="h-panel">PANEL</h2>
+  <div class="row">
+    <button id="panel-panic" type="button" title="Esc">PANIC</button>
+    <button id="panel-release" type="button">RELEASE</button>
+    <button id="panel-undo" type="button">UNDO</button>
+    <button id="panel-redo" type="button">REDO</button>
+    <button id="panel-fill" type="button" title="20 種類のモジュールを 1 台ずつ置く">FILL</button>
   </div>
 </section>
 
@@ -48,7 +63,7 @@
   <div id="rack-hud" class="hud" aria-hidden="true"></div>
 </section>
 
-<section aria-labelledby="h-perf">
+<section aria-labelledby="h-perf" id="perf-section">
   <h2 id="h-perf">PERFORMANCES</h2>
   <form id="plan-form" class="row">
     <label for="plan-minutes" title="minutes">length</label>
@@ -62,7 +77,7 @@
   <ul id="performance-list" aria-label="保存された演奏"></ul>
 </section>
 
-<section aria-labelledby="h-patch">
+<section aria-labelledby="h-patch" id="patch-section">
   <h2 id="h-patch">PATCH</h2>
   <div class="row mono" id="patch"></div>
   <div class="row">
@@ -83,9 +98,9 @@
   <ul id="library" class="list"></ul>
 </section>
 
-<section aria-labelledby="h-modules">
+<section aria-labelledby="h-modules" id="modules-section">
   <h2 id="h-modules">MODULES</h2>
-  <div class="row">
+  <div class="row" id="add-row">
     <label for="add-type">type</label>
     <select id="add-type"></select>
     <label for="add-id">id</label>
@@ -95,7 +110,7 @@
   <div id="module-list"></div>
 </section>
 
-<section aria-labelledby="h-cables">
+<section aria-labelledby="h-cables" id="cables-section">
   <h2 id="h-cables">CABLES</h2>
   <div class="row">
     <label for="cable-from">out</label>
@@ -108,14 +123,14 @@
   <ul id="cable-list" class="list"></ul>
 </section>
 
-<section aria-labelledby="h-history">
+<section aria-labelledby="h-history" id="history-section">
   <h2 id="h-history">HISTORY</h2>
   <ol id="history" class="list"></ol>
 </section>
 
 <section aria-labelledby="h-util" id="utility">
   <h2 id="h-util">UTILITY</h2>
-  <div class="row">
+  <div class="row" id="panic-row">
     <button id="panic" type="button" title="Esc">PANIC</button>
     <button id="release" type="button">RELEASE</button>
   </div>
